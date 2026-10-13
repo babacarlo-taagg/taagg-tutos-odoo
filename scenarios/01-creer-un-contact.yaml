@@ -1,0 +1,59 @@
+# Exemple de scénario : créer un contact dans Odoo.
+# Chaque étape = un « texte » (dit par la voix, affiché en sous-titre) + des « actions » faites à l'écran
+# pendant que la voix parle. Liste complète des actions : .claude/skills/tuto-odoo-scenario/SKILL.md
+titre: Créer un contact dans Odoo
+sous_titre: Les bases d'Odoo — épisode 1
+depart: /odoo
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:          # écrit → dit (pour la voix seulement, pas pour les sous-titres)
+  TAAGG: Tag
+fin:
+  message: À vous de jouer !
+  lien: taagg-gui.com
+
+etapes:
+  - chapitre: Introduction
+    texte: >
+      Bonjour ! Dans ce tutoriel, nous allons voir comment créer un nouveau contact dans Odoo.
+      Cela prend moins d'une minute.
+    actions:
+      - attendre: 1
+
+  - texte: Depuis l'écran d'accueil, cliquez sur l'application Contacts.
+    actions:
+      - menu: Contacts
+
+  - chapitre: Créer la fiche
+    texte: Pour ajouter une personne, cliquez sur le bouton Nouveau, en haut à gauche.
+    actions:
+      - bouton: Nouveau
+
+  - texte: Saisissez d'abord son nom complet.
+    actions:
+      - champ: name
+        taper: Awa Diop
+
+  - texte: Ajoutez ensuite son adresse e-mail et son numéro de téléphone.
+    actions:
+      - champ: email
+        taper: awa.diop@exemple.sn
+      - champ: phone
+        taper: "+221 77 000 00 00"
+
+  - texte: >
+      Pour le pays, tapez les premières lettres, puis choisissez dans la liste qui s'affiche.
+    actions:
+      - choisir: {champ: country_id, valeur: Sénégal}
+
+  - chapitre: Enregistrer
+    texte: Tout est bon ? Cliquez sur Enregistrer. Le contact est créé !
+    actions:
+      - surligner: .o_form_button_save
+        duree: 1.5
+      - enregistrer: oui
+
+  - texte: Voilà, vous savez maintenant créer un contact dans Odoo. À bientôt pour le prochain tutoriel !
+    actions:
+      - attendre: 0.5

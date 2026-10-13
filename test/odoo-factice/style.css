@@ -1,0 +1,15 @@
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:#f4f6f8;color:#1f2933}
+.o_navbar{background:#0B415B;color:#fff;padding:12px 24px;display:flex;gap:32px;align-items:center}
+.marque{font-weight:700}.o_menu_sections{display:flex;gap:18px}.o_menu_sections a,.o_menu_sections button{color:#fff;background:none;border:0;font:inherit;text-decoration:none}
+.o_home_menu{display:flex;gap:48px;justify-content:center;padding:120px}
+.o_app{display:flex;flex-direction:column;align-items:center;gap:10px;color:#1f2933;text-decoration:none}
+.ic{width:84px;height:84px;border-radius:18px}
+.barre{display:flex;gap:16px;padding:16px 24px;background:#fff;border-bottom:1px solid #dde}
+.btn{padding:8px 16px;border-radius:6px;border:0;font:inherit;cursor:pointer}.btn-primary{background:#68C184;color:#fff}
+.o_searchview_input{flex:0 0 380px;padding:8px;border:1px solid #ccd;border-radius:6px}
+.o_list{margin:24px;background:#fff;border-collapse:collapse;width:calc(100% - 48px)}.o_list td{padding:12px;border-bottom:1px solid #eee}
+.o_form_sheet{background:#fff;margin:24px auto;max-width:900px;padding:32px;display:grid;gap:8px}
+input,textarea{padding:8px;border:1px solid #ccd;border-radius:6px;font:inherit;width:100%;box-sizing:border-box}.gros{font-size:28px}
+.o_field_many2one{position:relative}.o-autocomplete--dropdown-menu{position:absolute;background:#fff;border:1px solid #ccd;list-style:none;margin:0;padding:0;width:100%;z-index:5}
+.o-autocomplete--dropdown-item{padding:8px;cursor:pointer}.o-autocomplete--dropdown-item:hover{background:#EEF3F5}
+.o_notebook{display:flex;gap:16px;margin-top:16px;border-bottom:1px solid #dde}.nav-link{padding:8px;cursor:pointer}.nav-link.actif{border-bottom:3px solid #0B415B}

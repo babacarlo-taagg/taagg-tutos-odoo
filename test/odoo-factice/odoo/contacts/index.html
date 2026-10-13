@@ -1,0 +1,39 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Contacts - Odoo factice</title>
+<link rel="stylesheet" href="/style.css"></head><body>
+<header class="o_navbar"><span class="marque">Contacts</span>
+  <nav class="o_menu_sections"><a href="#">Contacts</a><button class="dropdown-toggle">Configuration</button></nav></header>
+<section id="liste">
+  <div class="barre"><button class="btn btn-primary" id="nouveau">Nouveau</button>
+    <input class="o_searchview_input" placeholder="Rechercher..."></div>
+  <table class="o_list"><tbody id="lignes"><tr><td>Moussa Ndiaye</td><td>moussa@exemple.sn</td></tr></tbody></table>
+</section>
+<section id="fiche" hidden>
+  <div class="barre"><button class="btn btn-primary o_form_button_save">Enregistrer</button></div>
+  <div class="o_form_sheet">
+    <div class="o_field_widget o_field_char" name="name"><input id="f_name" placeholder="ex. Awa Diop" class="gros"></div>
+    <label for="f_email">E-mail</label><div class="o_field_widget o_field_email" name="email"><input id="f_email"></div>
+    <label for="f_phone">Téléphone</label><div class="o_field_widget o_field_phone" name="phone"><input id="f_phone"></div>
+    <label for="f_country">Pays</label><div class="o_field_widget o_field_many2one" name="country_id"><input id="f_country">
+      <ul class="o-autocomplete--dropdown-menu" hidden></ul></div>
+    <div class="o_notebook"><a class="nav-link actif">Contacts et adresses</a><a class="nav-link">Notes internes</a></div>
+    <div class="o_field_widget o_field_text" name="comment"><textarea id="f_comment"></textarea></div>
+  </div>
+</section>
+<script>
+const $ = (s) => document.querySelector(s);
+$('#nouveau').onclick = () => { $('#liste').hidden = true; $('#fiche').hidden = false; };
+const pays = ['Sénégal', 'Mali', "Côte d'Ivoire", 'Guinée'];
+$('#f_country').oninput = (e) => {
+  const ul = e.target.nextElementSibling, v = e.target.value.toLowerCase();
+  ul.innerHTML = pays.filter((p) => p.toLowerCase().startsWith(v)).map((p) => `<li class="o-autocomplete--dropdown-item">${p}</li>`).join('');
+  ul.hidden = !v;
+};
+document.addEventListener('click', (e) => {
+  if (e.target.matches('.o-autocomplete--dropdown-item')) { $('#f_country').value = e.target.textContent; e.target.parentElement.hidden = true; }
+  if (e.target.matches('.nav-link')) { document.querySelectorAll('.nav-link').forEach((n) => n.classList.remove('actif')); e.target.classList.add('actif'); }
+});
+$('.o_form_button_save').onclick = () => {
+  $('#lignes').insertAdjacentHTML('afterbegin', `<tr><td>${$('#f_name').value}</td><td>${$('#f_email').value}</td></tr>`);
+  $('#fiche').hidden = true; $('#liste').hidden = false;
+};
+</script></body></html>

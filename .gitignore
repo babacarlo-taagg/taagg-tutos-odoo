@@ -1,0 +1,8 @@
+# Secrets : jamais dans Git
+.env
+# Fabriqué par l'outil
+node_modules/
+sortie/
+# Voix enregistrées à la main : lourdes, à garder sur Drive
+scenarios/*.voix/
+.DS_Store

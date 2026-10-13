@@ -1,0 +1,14 @@
+{
+  "name": "taagg-tutos-odoo",
+  "private": true,
+  "type": "module",
+  "description": "Tutoriels vidéo Odoo avec voix off : scénario -> voix -> enregistrement -> montage",
+  "dependencies": {
+    "playwright": "1.56.1",
+    "yaml": "2.8.1"
+  },
+  "scripts": {
+    "test": "node test/essai.mjs",
+    "tuto": "node tuto.mjs"
+  }
+}
