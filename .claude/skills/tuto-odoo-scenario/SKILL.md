@@ -1,6 +1,6 @@
 ---
 name: tuto-odoo-scenario
-description: Écrire le scénario YAML d'un tutoriel vidéo Odoo (texte de la voix off + gestes à l'écran, étape par étape) pour l'outil tuto.mjs. Utiliser pour rédiger, corriger ou découper un tuto Odoo, trouver le bon sélecteur d'un bouton ou d'un champ Odoo 20, ou quand un brouillon échoue sur une action.
+description: Écrire le scénario YAML d'un tutoriel vidéo Odoo (texte de la voix off + gestes à l'écran, étape par étape) pour l'outil tuto.mjs. Utiliser pour rédiger, corriger ou découper un tuto Odoo, trouver le bon sélecteur d'un bouton ou d'un champ Odoo (19 ou 20), ou quand un brouillon échoue sur une action.
 ---
 
 # Écrire un scénario de tuto Odoo
@@ -69,10 +69,12 @@ etapes:
 
 Le curseur glisse comme une main, chaque clic fait une onde verte : pas besoin d'en rajouter.
 
-## Trouver les bons noms (Odoo 20)
+## Trouver les bons noms (Odoo 19 et 20, mêmes repères)
 
 - `node tuto.mjs explorer <chemin>` liste les **champs techniques** (`name — Nom (o_field_char)`),
   les boutons, onglets et menus, et enregistre `sortie/explorer.png`. Toujours partir de là.
+- La base de tournage est en Odoo 19 **Enterprise** (Studio, Documents, Paie… installés) : l'interface diffère un peu de la Community 20 de TAAGG ; toujours vérifier avec `explorer`.
+- Avec la clé API, `fields_get` sur le modèle donne la liste exacte des champs et leur type.
 - Champs : le nom technique est l'attribut `name` de `.o_field_widget` (stable, ne dépend pas de la langue).
 - Repères Odoo 20 utiles : `.o_form_button_save` (enregistrer), `.o_form_button_cancel` (annuler),
   `.o_list_button_add` / `bouton: Nouveau`, `.o_searchview_input`, `.o_notebook .nav-link`,
