@@ -30,8 +30,11 @@ etapes:
     actions:
       - bouton: Nouveau
 
-  - texte: Saisissez d'abord son nom complet.
+  - texte: >
+      Awa est une personne, et non une entreprise : cochez donc Personne.
+      Puis saisissez son nom complet.
     actions:
+      - cliquer_texte: Personne
       - champ: name
         taper: Awa Diop
 
@@ -43,7 +46,7 @@ etapes:
         taper: "+221 77 000 00 00"
 
   - texte: >
-      Pour le pays, tapez les premières lettres, puis choisissez dans la liste qui s'affiche.
+      Dans l'adresse, pour le pays, tapez les premières lettres, puis choisissez dans la liste qui s'affiche.
     actions:
       - choisir: {champ: country_id, valeur: Sénégal}
 

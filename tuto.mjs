@@ -46,6 +46,16 @@ function arreter(message) {
 
 const pause = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// Odoo garde une connexion ouverte en permanence (notifications) : attendre « réseau calme » ne finit jamais.
+// On attend que la page soit chargée et que l'indicateur de chargement d'Odoo ait disparu.
+async function attendreOdoo(page, max = 10000) {
+  await page.waitForLoadState('load', { timeout: max }).catch(() => {});
+  await page
+    .waitForFunction(() => !document.querySelector('.o_loading_indicator, .o_blockUI'), null, { timeout: max, polling: 100 })
+    .catch(() => {});
+  await pause(400);
+}
+
 function ffmpeg(args) {
   try {
     execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', ...args], { stdio: ['ignore', 'inherit', 'inherit'] });
@@ -232,7 +242,8 @@ async function connexion(navigateur, sc) {
   await page.goto(urlOdoo('/web/login' + base));
   await page.fill('input[name="login"]', login);
   await page.fill('input[name="password"]', process.env.ODOO_MOT_DE_PASSE || '');
-  await Promise.all([page.waitForURL((u) => !u.pathname.startsWith('/web/login'), { timeout: 20000 }).catch(() => {}), page.click('button[type="submit"]')]);
+  // Entrée dans le mot de passe : la page de connexion peut aussi avoir la recherche du site web
+  await Promise.all([page.waitForURL((u) => !u.pathname.startsWith('/web/login'), { timeout: 20000 }).catch(() => {}), page.press('input[name="password"]', 'Enter')]);
   if (new URL(page.url()).pathname.startsWith('/web/login')) arreter('Connexion à Odoo refusée : vérifiez ODOO_LOGIN / ODOO_MOT_DE_PASSE / ODOO_BASE.');
   const etat = await ctx.storageState();
   await ctx.close();
@@ -303,7 +314,7 @@ class Realisateur {
     const p = this.page;
     if ('aller' in a) {
       await p.goto(urlOdoo(a.aller));
-      await p.waitForLoadState('networkidle').catch(() => {});
+      await attendreOdoo(p);
       await pause(500);
     } else if ('cliquer' in a) {
       await this.cliquer(p.locator(a.cliquer).first());
@@ -317,13 +328,13 @@ class Realisateur {
       const niveaux = String(a.menu).split('>').map((s) => s.trim());
       const appli = niveaux.shift();
       await p.goto(urlOdoo('/odoo'));
-      await p.waitForLoadState('networkidle').catch(() => {});
+      await attendreOdoo(p);
       await this.cliquer(p.locator('.o_app').filter({ hasText: appli }).first());
       for (const n of niveaux) {
-        await p.waitForLoadState('networkidle').catch(() => {});
+        await attendreOdoo(p);
         await this.cliquer(p.locator('.o_menu_sections .dropdown-toggle, .o_menu_sections a, .dropdown-item').filter({ hasText: n }).first());
       }
-      await p.waitForLoadState('networkidle').catch(() => {});
+      await attendreOdoo(p);
     } else if ('onglet' in a) {
       await this.cliquer(p.locator('.o_notebook .nav-link').filter({ hasText: a.onglet }).first());
     } else if ('champ' in a && 'taper' in a) {
@@ -343,10 +354,10 @@ class Realisateur {
       await this.cliquer(this.champ(a.cocher).locator('input[type="checkbox"], label').first());
     } else if ('rechercher' in a) {
       await this.taper(p.locator('.o_searchview_input').first(), a.rechercher, true);
-      await p.waitForLoadState('networkidle').catch(() => {});
+      await attendreOdoo(p);
     } else if ('enregistrer' in a) {
       await this.cliquer(p.locator('.o_form_button_save').first());
-      await p.waitForLoadState('networkidle').catch(() => {});
+      await attendreOdoo(p);
     } else if ('surligner' in a) {
       await this.surligner(p.locator(a.surligner).first(), a.duree ?? 2.5);
     } else if ('surligner_champ' in a) {
@@ -387,7 +398,7 @@ async function tourner(sc, pistes, dossier, visible) {
   const horloge = () => (Date.now() - t0) / 1000;
 
   await page.goto(urlOdoo(sc.depart));
-  await page.waitForLoadState('networkidle').catch(() => {});
+  await attendreOdoo(page);
   await pause(800);
   const debut = horloge();
   const journal = [];
@@ -588,7 +599,7 @@ async function explorer(chemin) {
   const ctx = await navigateur.newContext({ viewport: { width: 1600, height: 900 }, locale: 'fr-FR', storageState: etat });
   const page = await ctx.newPage();
   await page.goto(urlOdoo(chemin));
-  await page.waitForLoadState('networkidle').catch(() => {});
+  await attendreOdoo(page);
   await pause(1000);
   const infos = await page.evaluate(() => {
     const vu = (el) => !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
