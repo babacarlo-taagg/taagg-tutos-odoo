@@ -15,7 +15,7 @@
 //   ELEVENLABS_API_KEY, ELEVENLABS_VOICE_ID, ELEVENLABS_MODELE
 //   OPENAI_API_KEY, OPENAI_VOIX
 
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -47,13 +47,22 @@ function arreter(message) {
 const pause = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // Odoo garde une connexion ouverte en permanence (notifications) : attendre « réseau calme » ne finit jamais.
-// On attend que la page soit chargée et que l'indicateur de chargement d'Odoo ait disparu.
-async function attendreOdoo(page, max = 10000) {
+// On attend que la page soit chargée, que l'écran d'Odoo soit affiché (vue, accueil ou fiche)
+// et que l'indicateur de chargement ait disparu.
+async function attendreOdoo(page, max = 15000) {
   await page.waitForLoadState('load', { timeout: max }).catch(() => {});
   await page
-    .waitForFunction(() => !document.querySelector('.o_loading_indicator, .o_blockUI'), null, { timeout: max, polling: 100 })
+    .waitForFunction(
+      () => {
+        if (document.querySelector('.o_loading_indicator, .o_blockUI')) return false;
+        if (!document.querySelector('.o_web_client')) return true; // pas l'interface Odoo (site, page de test)
+        return !!document.querySelector('.o_action_manager > .o_action, .o_home_menu, .o_action_manager .o_view_controller');
+      },
+      null,
+      { timeout: max, polling: 100 },
+    )
     .catch(() => {});
-  await pause(400);
+  await pause(600);
 }
 
 function ffmpeg(args) {
@@ -289,7 +298,8 @@ class Realisateur {
     await this.page.mouse.down();
     await pause(70);
     await this.page.mouse.up();
-    await pause(450);
+    await pause(250);
+    await attendreOdoo(this.page, 8000); // le clic a pu ouvrir un autre écran
   }
 
   async taper(loc, texte, entree) {
@@ -298,6 +308,12 @@ class Realisateur {
     await loc.pressSequentially(String(texte), { delay: 55 });
     if (entree) await this.page.keyboard.press('Enter');
     await pause(300);
+  }
+
+  texteVisible(texte) {
+    // dans un menu déplié en priorité, sinon n'importe où à l'écran
+    return this.page.locator('.o-dropdown--menu .dropdown-item, .o-dropdown--menu .dropdown-header, body *:not(:has(*))')
+      .filter({ hasText: texte }).filter({ visible: true }).first();
   }
 
   saisie(nomChamp) {
@@ -335,6 +351,14 @@ class Realisateur {
         await this.cliquer(p.locator('.o_menu_sections .dropdown-toggle, .o_menu_sections a, .dropdown-item').filter({ hasText: n }).first());
       }
       await attendreOdoo(p);
+    } else if ('ouvrir_menu' in a) {
+      // déplie un menu du haut (Clients, Configuration…) sans rien choisir dedans ;
+      // si un autre menu est déjà ouvert, le premier clic ne ferait que le fermer
+      if (await p.locator('.o-dropdown--menu').count()) {
+        await p.keyboard.press('Escape');
+        await pause(250);
+      }
+      await this.cliquer(p.locator('.o_menu_sections .dropdown-toggle').filter({ hasText: a.ouvrir_menu }).first());
     } else if ('onglet' in a) {
       await this.cliquer(p.locator('.o_notebook .nav-link').filter({ hasText: a.onglet }).first());
     } else if ('champ' in a && 'taper' in a) {
@@ -364,6 +388,11 @@ class Realisateur {
       await this.surligner(this.champ(a.surligner_champ), a.duree ?? 2.5);
     } else if ('survoler' in a) {
       await this.viser(p.locator(a.survoler).first());
+    } else if ('survoler_texte' in a) {
+      await this.viser(this.texteVisible(a.survoler_texte));
+      await pause(400);
+    } else if ('surligner_texte' in a) {
+      await this.surligner(this.texteVisible(a.surligner_texte), a.duree ?? 2.5);
     } else if ('touche' in a) {
       await p.keyboard.press(a.touche);
       await pause(300);
@@ -379,21 +408,64 @@ class Realisateur {
   }
 }
 
+// Caméra : capture d'écran continue de Chromium (CDP), chaque image horodatée.
+// L'enregistrement vidéo intégré de Playwright prend du retard sur l'horloge (≈ 13 s après 3 min),
+// ce qui décale l'image par rapport à la voix. Ici on écrit 30 images par seconde d'horloge réelle :
+// la dernière image reçue est répétée tant que l'écran ne change pas.
+class Camera {
+  constructor(page, fichier, [l, h], t0) {
+    this.page = page;
+    this.t0 = t0;
+    this.ips = SORTIE_HD.ips;
+    this.ecrites = 0;
+    this.derniere = null;
+    this.ffmpeg = spawn('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-f', 'image2pipe', '-c:v', 'mjpeg', '-framerate', String(this.ips), '-i', '-',
+      '-vf', `scale=${l}:${h},format=yuv420p`, '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '14', fichier], { stdio: ['pipe', 'inherit', 'inherit'] });
+    this.fini = new Promise((ok) => this.ffmpeg.on('exit', ok));
+    this.taille = [l, h];
+  }
+
+  async demarrer() {
+    this.cdp = await this.page.context().newCDPSession(this.page);
+    this.cdp.on('Page.screencastFrame', ({ data, metadata, sessionId }) => {
+      this.remplir((metadata.timestamp ?? Date.now() / 1000) * 1000);
+      this.derniere = Buffer.from(data, 'base64');
+      this.cdp.send('Page.screencastFrameAck', { sessionId }).catch(() => {});
+    });
+    await this.cdp.send('Page.startScreencast', { format: 'jpeg', quality: 92, maxWidth: this.taille[0], maxHeight: this.taille[1], everyNthFrame: 1 });
+    this.minuterie = setInterval(() => this.remplir(Date.now() - 150), 100);
+  }
+
+  remplir(jusqua) {
+    // répète l'image courante jusqu'à l'instant donné (en ms d'horloge)
+    if (!this.derniere) return;
+    const cible = Math.floor(((jusqua - this.t0) / 1000) * this.ips);
+    while (this.ecrites < cible) {
+      this.ffmpeg.stdin.write(this.derniere);
+      this.ecrites++;
+    }
+  }
+
+  async arreter() {
+    clearInterval(this.minuterie);
+    await this.cdp.send('Page.stopScreencast').catch(() => {});
+    this.remplir(Date.now());
+    this.ffmpeg.stdin.end();
+    await this.fini;
+  }
+}
+
 async function tourner(sc, pistes, dossier, visible) {
   const navigateur = await chromium.launch({ headless: !visible });
   const etat = await connexion(navigateur, sc);
-  const dBrut = path.join(dossier, 'brut');
-  fs.rmSync(dBrut, { recursive: true, force: true });
   const [l, h] = sc.ecran;
-  const ctx = await navigateur.newContext({
-    viewport: { width: l, height: h },
-    locale: 'fr-FR',
-    storageState: etat,
-    recordVideo: { dir: dBrut, size: { width: l, height: h } },
-  });
+  const ctx = await navigateur.newContext({ viewport: { width: l, height: h }, locale: 'fr-FR', storageState: etat });
   await ctx.addInitScript(DECOR);
-  const t0 = Date.now();
   const page = await ctx.newPage();
+  const t0 = Date.now();
+  const brut = path.join(dossier, 'brut.mp4');
+  const camera = new Camera(page, brut, sc.ecran, t0);
+  await camera.demarrer();
   const r = new Realisateur(page);
   const horloge = () => (Date.now() - t0) / 1000;
 
@@ -407,11 +479,13 @@ async function tourner(sc, pistes, dossier, visible) {
     console.log(`  étape ${i + 1}/${sc.etapes.length} : ${e.texte.slice(0, 60)}…`);
     for (const action of e.actions) {
       try {
+        const t = horloge();
         await r.jouer(action);
+        if (process.env.TUTO_TRACE) console.log(`    ${(t - debut).toFixed(1)} s → +${(horloge() - t).toFixed(1)} s  ${JSON.stringify(action)}`);
       } catch (err) {
         const capture = path.join(dossier, `erreur-etape-${i + 1}.png`);
         await page.screenshot({ path: capture }).catch(() => {});
-        await ctx.close();
+        await camera.arreter();
         await navigateur.close();
         arreter(`Étape ${i + 1}, action ${JSON.stringify(action)} : ${err.message.split('\n')[0]}\n  Capture de l'écran au moment de l'erreur : ${capture}`);
       }
@@ -422,10 +496,8 @@ async function tourner(sc, pistes, dossier, visible) {
   }
   await pause(800);
   const fin = horloge();
-  const video = page.video();
-  await ctx.close();
+  await camera.arreter();
   await navigateur.close();
-  const brut = await video.path();
   return { brut, coupe: [debut, fin], etapes: journal };
 }
 

@@ -1,0 +1,326 @@
+# CPT-01 · Tour d'horizon de la Comptabilité
+# État de départ attendu : base « Les Délices de Maïmouna », société « correction les délices de maimouna »
+# sélectionnée, tableau de bord avec le filtre Favoris (6 journaux), 1 facture client non payée,
+# 1 facture fournisseur à payer. Aucune donnée n'est modifiée pendant cette capsule.
+titre: Tour d'horizon de la Comptabilité
+sous_titre: Formation Comptabilité Odoo · CPT-01
+depart: /odoo
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+  CPT-01: capsule un
+  CPT-02: capsule deux
+fin:
+  message: "Prochaine capsule : les paramètres généraux"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette formation à la comptabilité avec Odoo.
+      Dans cette première capsule, nous allons faire le tour de l'application Comptabilité :
+      à quoi sert chaque écran, où trouver chaque menu, et comment s'y retrouver dès le premier jour.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de ces dix minutes, vous saurez lire le tableau de bord, vous saurez où se trouvent
+      les factures, les paiements, les rapports et les réglages, et vous serez prêt à paramétrer
+      votre comptabilité dans les capsules suivantes.
+    actions:
+      - attendre: 1
+  - texte: >
+      Pour toute la formation, nous travaillons avec une entreprise d'exemple :
+      Les Délices de Maïmouna, une entreprise sénégalaise qui tient sa comptabilité en francs CFA,
+      selon le plan comptable SYSCOHADA.
+    actions:
+      - surligner_texte: correction les délices de maimouna
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 1 : ouvrir l'application
+  - partie: "1. Ouvrir la Comptabilité"
+    texte: >
+      Tout commence sur l'écran d'accueil d'Odoo, qui regroupe toutes les applications de l'entreprise :
+      les ventes, les achats, le stock, les employés, et bien sûr la comptabilité.
+    actions:
+      - surligner: '.o_app:has-text("Comptabilité")'
+        duree: 2.5
+  - texte: Cliquez sur l'icône Comptabilité.
+    actions:
+      - cliquer: '.o_app:has-text("Comptabilité")'
+  - texte: >
+      Vous arrivez sur le tableau de bord. C'est votre point de départ chaque matin :
+      il résume en un coup d'œil ce qui demande votre attention.
+    actions:
+      - attendre: 1.5
+  - texte: >
+      En haut, la barre de menus : Tableau de bord, Clients, Fournisseurs, Comptabilité, Révision,
+      Analyse et Configuration. Nous allons les ouvrir un par un dans quelques instants.
+    actions:
+      - surligner: '.o_menu_sections'
+        duree: 4
+
+  # ------------------------------------------------------------------ partie 2 : le tableau de bord
+  - partie: "2. Le tableau de bord"
+    texte: >
+      Le tableau de bord est fait de cartes. Chaque carte correspond à un journal, c'est-à-dire
+      un registre où sont classées les opérations d'un même type.
+    actions:
+      - attendre: 1
+  - texte: >
+      La carte Ventes regroupe les factures que vous envoyez à vos clients.
+      Le bouton Nouveau permet de créer une facture directement d'ici.
+    actions:
+      - surligner: '.o_kanban_record:has-text("Ventes")'
+        duree: 3
+  - texte: >
+      À droite, Odoo vous indique les factures non payées et celles en retard, avec leur montant.
+      Dans notre exemple, une facture client de cent dix-huit mille francs CFA attend encore son paiement.
+    actions:
+      - surligner_texte: Non payé
+        duree: 3
+  - texte: >
+      Le graphique en dessous montre ce que vos clients vous doivent, semaine par semaine :
+      ce qui est déjà dû, ce qui arrive cette semaine, et ce qui viendra plus tard.
+      C'est un outil simple pour prévoir vos rentrées d'argent.
+    actions:
+      - survoler: '.o_kanban_record:has-text("Ventes") .o_dashboard_graph, .o_kanban_record:has-text("Ventes") canvas'
+      - attendre: 1
+  - texte: >
+      La carte Achats fonctionne de la même manière, mais pour vos fournisseurs :
+      ici, une facture de vingt-trois mille six cents francs CFA est à payer.
+    actions:
+      - surligner: '.o_kanban_record:has-text("Achats")'
+        duree: 3
+  - texte: >
+      Le bouton Charger permet d'envoyer une facture fournisseur reçue en PDF :
+      Odoo la lit et pré-remplit la saisie pour vous. Nous le verrons dans la capsule consacrée aux achats.
+    actions:
+      - surligner_texte: Charger
+        duree: 2.5
+  - texte: >
+      La carte Banque sert à relier votre compte bancaire, pour importer vos relevés
+      et rapprocher chaque mouvement de la facture qui lui correspond.
+    actions:
+      - surligner: '.o_kanban_record:has-text("Banque")'
+        duree: 3
+  - texte: >
+      Viennent ensuite les opérations diverses, pour les écritures qui ne sont ni des ventes ni des achats,
+      les déclarations fiscales, et le journal des salaires.
+    actions:
+      - surligner: '.o_kanban_record:has-text("Opérations diverses")'
+        duree: 1.8
+      - surligner: '.o_kanban_record:has-text("Déclarations fiscales")'
+        duree: 1.8
+      - surligner: '.o_kanban_record:has-text("Salaires")'
+        duree: 1.8
+  - texte: >
+      Remarquez la carte Déclarations fiscales : elle propose une petite liste de démarrage,
+      définir les données de la société, définir les périodes, revoir le plan comptable.
+      Ce sont exactement les sujets des prochaines capsules.
+    actions:
+      - surligner_texte: Définir les données de la société
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 3 : clients et fournisseurs
+  - partie: "3. Clients et fournisseurs"
+    texte: >
+      Passons aux menus. Le menu Clients regroupe tout ce qui concerne l'argent qui entre.
+    actions:
+      - ouvrir_menu: Clients
+  - texte: >
+      Les factures clients, les avoirs, c'est-à-dire les factures d'annulation ou de remboursement,
+      les paiements reçus, les produits que vous vendez, et la liste de vos clients.
+    actions:
+      - survoler_texte: Factures clients
+      - survoler_texte: Avoirs
+      - survoler_texte: Paiements
+      - survoler_texte: Produits
+  - texte: >
+      Le menu Fournisseurs est construit sur le même modèle, pour l'argent qui sort :
+      factures fournisseurs, notes de crédit, paiements, dépenses des employés, produits achetés
+      et liste des fournisseurs.
+    actions:
+      - ouvrir_menu: Fournisseurs
+      - survoler_texte: Factures fournisseurs
+      - survoler_texte: Notes de crédit
+      - survoler_texte: Dépenses de l'employé
+  - texte: Revenons au menu Clients, et ouvrons les factures clients.
+    actions:
+      - ouvrir_menu: Clients
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Factures clients")'
+  - texte: >
+      Chaque ligne est une facture, avec son numéro, son client, sa date, son échéance, son montant
+      et son statut. La barre de recherche, en haut, permet de filtrer et de regrouper ces factures.
+    actions:
+      - surligner: '.o_list_renderer .o_data_row'
+        duree: 3
+      - surligner: '.o_searchview'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 4 : une facture et son écriture
+  - partie: "4. Une facture et son écriture"
+    texte: >
+      Ouvrons cette facture, adressée à la Boutique Les Almadies, pour comprendre ce que fait Odoo
+      derrière chaque vente.
+    actions:
+      - cliquer: '.o_list_renderer .o_data_row'
+  - texte: >
+      En haut à droite, le statut. Une facture commence en brouillon : on peut encore tout modifier.
+      Une fois validée, elle passe en comptabilisé : elle est alors enregistrée dans les comptes.
+    actions:
+      - surligner: '.o_statusbar_status'
+        duree: 3.5
+  - texte: >
+      Au centre, les lignes de facture. Ici, une fournée de cent pains de mie, vendue cent mille francs CFA
+      hors taxes, avec une TVA à dix-huit pour cent.
+      Remarquez la colonne Compte : sept cent un mille cent, le compte des ventes de marchandises.
+    actions:
+      - surligner: '.o_field_widget[name="invoice_line_ids"] .o_data_row'
+        duree: 4
+  - texte: >
+      En bas, les totaux : cent mille francs hors taxes, dix-huit mille francs de TVA,
+      soit cent dix-huit mille francs CFA à encaisser.
+    actions:
+      - surligner_champ: tax_totals
+        duree: 3.5
+  - texte: >
+      Les boutons du haut permettent d'envoyer la facture, de l'imprimer, d'enregistrer un paiement
+      ou de créer un avoir. Chacun aura sa capsule dans le parcours consacré aux ventes.
+    actions:
+      - surligner: '.o_statusbar_buttons'
+        duree: 3
+  - texte: >
+      Et maintenant, le plus important pour un comptable : l'onglet Écritures comptables.
+    actions:
+      - onglet: Écritures comptables
+  - texte: >
+      En validant la facture, Odoo a créé tout seul l'écriture correspondante.
+      Le compte client, quatre cent onze mille cent, est débité de cent dix-huit mille francs :
+      le client nous doit cette somme.
+    actions:
+      - surligner: '.o_notebook .tab-pane.active .o_list_renderer'
+        duree: 4
+  - texte: >
+      En face, le compte de ventes est crédité de cent mille francs, et le compte de TVA facturée,
+      quatre cent quarante-trois mille cent, de dix-huit mille francs : c'est la TVA que l'entreprise
+      devra reverser à l'État.
+    actions:
+      - attendre: 1
+  - texte: >
+      Le total des débits est égal au total des crédits : l'écriture est équilibrée.
+      C'est le principe de la partie double, et Odoo le respecte toujours.
+      Retenez l'idée : vous faites la facture, Odoo fait l'écriture comptable.
+    actions:
+      - attendre: 1
+  - texte: Revenons à la liste des factures.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Factures clients")'
+
+  # ------------------------------------------------------------------ partie 5 : le menu du comptable
+  - partie: "5. Comptabilité, Révision, Analyse"
+    texte: >
+      Les trois menus suivants sont ceux du comptable. Le menu Comptabilité contient les pièces comptables,
+      c'est-à-dire toutes les écritures enregistrées, quelle que soit leur origine.
+    actions:
+      - ouvrir_menu: Comptabilité
+      - survoler_texte: Pièces comptables
+  - texte: >
+      On y trouve aussi les immobilisations et les emprunts, puis les outils de clôture :
+      le lettrage, qui relie une facture à son paiement, les déclarations fiscales,
+      et les dates de verrouillage, qui empêchent de modifier une période déjà close.
+    actions:
+      - survoler_texte: Immobilisations
+      - survoler_texte: Lettrer
+      - survoler_texte: Dates de verrouillage
+  - texte: >
+      Le menu Révision sert à contrôler les comptes avant la clôture : audit des journaux,
+      écritures de régularisation, comme les charges et produits constatés d'avance,
+      et la piste d'audit, qui garde l'historique de chaque modification.
+    actions:
+      - ouvrir_menu: Révision
+      - survoler_texte: Audit du journal
+      - survoler_texte: Charges constatées d'avance
+      - survoler_texte: Piste d'audit
+  - texte: >
+      Le menu Analyse rassemble les rapports : le bilan, le compte de résultat,
+      la balance, les grands livres, les échéanciers clients et fournisseurs, et la déclaration de TVA.
+    actions:
+      - ouvrir_menu: Analyse
+      - survoler_texte: Bilan
+      - survoler_texte: Compte de résultat
+      - survoler_texte: Balance comptable
+  - texte: Ouvrons par exemple la balance comptable.
+    actions:
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Balance comptable")'
+  - texte: >
+      La balance liste chaque compte du plan SYSCOHADA qui a bougé, avec ses débits, ses crédits et son solde.
+      En haut, vous choisissez la période, et vous pouvez exporter le rapport en PDF ou en tableur
+      pour votre expert-comptable.
+    actions:
+      - attendre: 1
+      - defiler: 300
+      - attendre: 1
+      - defiler: -300
+
+  # ------------------------------------------------------------------ partie 6 : configuration
+  - partie: "6. La configuration"
+    texte: >
+      Dernier menu, et non des moindres : Configuration. C'est ici que l'on règle la comptabilité
+      une fois pour toutes, avant de commencer à facturer.
+    actions:
+      - ouvrir_menu: Configuration
+  - texte: >
+      Les paramètres généraux, le plan comptable, les taxes, les journaux, les positions fiscales,
+      les conditions de paiement, les niveaux de relance et les catégories de produits.
+      Chacun de ces réglages aura sa propre capsule dans le premier parcours de la formation.
+    actions:
+      - survoler_texte: Paramètres
+      - survoler_texte: Plan comptable
+      - survoler_texte: Taxes
+      - survoler_texte: Journaux
+      - survoler_texte: Positions fiscales
+      - survoler_texte: Conditions de paiement
+      - survoler_texte: Niveaux de relance
+      - touche: Escape
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Avant de terminer, trois pièges fréquents. Premier piège : se tromper de société.
+      Cette base contient deux sociétés. Le nom affiché en haut à droite indique celle dans laquelle
+      vous travaillez. Vérifiez-le toujours avant de saisir une facture.
+    actions:
+      - cliquer: '.o_menu_sections a:has-text("Tableau de bord"), .o_menu_sections .dropdown-toggle:has-text("Tableau de bord")'
+      - surligner_texte: correction les délices de maimouna
+        duree: 3.5
+  - texte: >
+      Deuxième piège : croire que des journaux ont disparu. Le tableau de bord n'affiche par défaut
+      que les journaux favoris. Retirez le filtre Favoris dans la barre de recherche pour les voir tous.
+    actions:
+      - surligner: '.o_searchview'
+        duree: 3
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Le tableau de bord résume vos ventes, vos achats et votre banque.
+      Les menus Clients et Fournisseurs servent au quotidien : factures et paiements.
+      Et chaque facture validée crée automatiquement son écriture comptable.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Les menus Comptabilité, Révision et Analyse sont ceux du comptable : écritures, contrôles et rapports.
+      Et le menu Configuration contient tous les réglages, que nous allons maintenant voir un par un.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : ouvrez votre propre base, repérez les cartes de votre tableau de bord,
+      puis ouvrez la balance comptable du mois en cours.
+      Dans la prochaine capsule, nous réglerons ensemble les paramètres généraux de la comptabilité.
+      À tout de suite !
+    actions:
+      - attendre: 1

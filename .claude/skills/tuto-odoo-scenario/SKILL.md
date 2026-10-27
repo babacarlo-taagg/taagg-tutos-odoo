@@ -56,6 +56,9 @@ etapes:
 |---|---|
 | `aller: /odoo/contacts` | ouvre une adresse (relative à `ODOO_URL`) |
 | `menu: Ventes > Commandes > Devis` | écran d'accueil → clique l'appli → puis chaque menu du haut |
+| `ouvrir_menu: Configuration` | déplie un menu du haut sans rien choisir (pour faire visiter son contenu) |
+| `survoler_texte: Plan comptable` | pointe le curseur sur un texte visible (d'abord dans le menu déplié) |
+| `surligner_texte: Non payé` + `duree: 3` | cadre vert autour d'un texte visible |
 | `bouton: Nouveau` | clique le bouton qui porte ce libellé |
 | `cliquer_texte: Notes internes` | clique le premier élément qui affiche exactement ce texte (`exact: false` pour « contient ») |
 | `cliquer: '<sélecteur>'` | clique un sélecteur Playwright (`.o_form_button_save`, `text=Archiver`, `button:has-text("Confirmer")`) |
@@ -90,7 +93,25 @@ Le curseur glisse comme une main, chaque clic fait une onde verte : pas besoin d
 - Modules TAAGG (`taagg_*`) : les noms de champs sont dans le dépôt `babacarlo-taagg/taagg-odoo`
   (`addons/<module>/models/*.py`, vues dans `views/*.xml`).
 
+## Visiter un menu (capsules « tour d'horizon »)
+
+```yaml
+- texte: Le menu Clients regroupe les factures, les avoirs et les paiements.
+  actions:
+    - ouvrir_menu: Clients
+    - survoler_texte: Factures clients
+    - survoler_texte: Avoirs
+- texte: Ouvrons les factures clients.
+  actions:
+    - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Factures clients")'
+```
+Les textes sont cherchés « contenant » (sans tenir compte des majuscules) : choisir un texte qui
+n'apparaît qu'une fois à l'écran. Retour en arrière : `cliquer: '.breadcrumb-item a:has-text("Factures clients")'`.
+
 ## Quand le brouillon échoue
+
+Lancer avec `TUTO_TRACE=1` pour voir l'heure et la durée de chaque action.
+
 
 L'outil s'arrête sur l'étape fautive et enregistre `erreur-etape-N.png`. Causes habituelles :
 1. Le bouton porte un autre libellé → relancer `explorer` sur cette page.
