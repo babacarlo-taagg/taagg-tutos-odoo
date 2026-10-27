@@ -14,7 +14,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 
 | Code | Capsule | Ce qu'on apprend | Écrans | État |
 |---|---|---|---|---|
-| CPT-01 | Tour d'horizon de la Comptabilité | le tableau de bord, les journaux, les 6 menus et à quoi ils servent | Tableau de bord | ☐ |
+| CPT-01 | Tour d’horizon de la Comptabilité | le tableau de bord, les journaux, les 6 menus et à quoi ils servent | Tableau de bord | ✎ |
 | CPT-02 | Les paramètres généraux | société, devise XOF, arrondis, présentation des factures, fonctions à activer | Configuration › Paramètres | ☐ |
 | CPT-03 | Le plan comptable SYSCOHADA | classes 1 à 9, lire un compte, créer un compte, groupes et étiquettes | Plan comptable, Groupes de comptes | ☐ |
 | CPT-04 | Les journaux | ventes, achats, banque, caisse, opérations diverses ; créer un journal de caisse | Journaux | ☐ |
