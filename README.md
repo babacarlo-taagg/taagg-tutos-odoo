@@ -36,6 +36,7 @@ Options : `--voix elevenlabs|openai|fichiers|muet`, `--sans-sous-titres`, `--vis
 | `tuto-odoo-scenario` | écrire le scénario : pédagogie, texte pour l'oreille, actions, sélecteurs Odoo 20 |
 | `tuto-odoo-voix` | choisir et produire la voix (ElevenLabs, OpenAI, HeyGen, micro), prononciation |
 | `tuto-odoo-montage` | contrôle qualité, générique, version verticale, vignette, textes YouTube |
+| `formation-odoo` | formation complète en capsules de 10 min : programme, structure, données de démo, série |
 
 Il suffit de demander à Claude, dans ce dépôt : « Fais-moi un tuto sur la création d'un devis ».
 

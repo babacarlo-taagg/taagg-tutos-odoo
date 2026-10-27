@@ -533,6 +533,19 @@ function monter(sc, pistes, prise, dossier, options) {
   fs.writeFileSync(srtEcran, sous.map((s, i) => `${i + 1}\n${horodatage(s.debut)} --> ${horodatage(s.fin)}\n${s.texte}\n`).join('\n'));
   const corps = path.join(dossier, 'corps.mp4');
   const vf = [];
+  // bandeau « Partie N — … » en haut à droite pendant 5 s, au début des étapes qui ont « partie »
+  const gras = police(true);
+  sc.etapes.forEach((e, i) => {
+    if (!e.partie) return;
+    const f = path.join(dossier, `partie-${i + 1}.txt`);
+    fs.writeFileSync(f, e.partie);
+    const [t0, t1] = [prise.etapes[i].debut, prise.etapes[i].debut + 5];
+    const quand = `enable='between(t,${t0.toFixed(2)},${t1.toFixed(2)})'`;
+    // même texte deux fois : d'abord invisible sur un cadre vert plus large, puis en blanc sur fond bleu
+    const pol = gras ? `fontfile='${gras}':` : '';
+    vf.push(`drawtext=${pol}textfile='${f}':fontsize=40:fontcolor=white@0:box=1:boxcolor=${COULEURS.accent}:boxborderw=29:x=w-tw-72:y=118:${quand}`);
+    vf.push(`drawtext=${pol}textfile='${f}':fontsize=40:fontcolor=white:box=1:boxcolor=${COULEURS.fond}:boxborderw=24:x=w-tw-72:y=118:${quand}`);
+  });
   if (!options.sansSousTitres) {
     const style = 'FontName=Inter,FontSize=15,PrimaryColour=&H00FFFFFF,OutlineColour=&H005B410B,BackColour=&H995B410B,BorderStyle=3,Outline=6,Shadow=0,MarginV=28';
     vf.push(`subtitles='${srtEcran.replace(/'/g, "\\'")}':force_style='${style}'`);
@@ -571,7 +584,8 @@ function monter(sc, pistes, prise, dossier, options) {
   fs.writeFileSync(srt, sous.map((s, i) => `${i + 1}\n${horodatage(s.debut + decalage)} --> ${horodatage(s.fin + decalage)}\n${s.texte}\n`).join('\n'));
   const chapitres = [];
   sc.etapes.forEach((e, i) => {
-    if (e.chapitre) chapitres.push(`${mmss(i === 0 ? 0 : prise.etapes[i].debut + decalage)} ${e.chapitre}`);
+    const titre = e.chapitre || e.partie;
+    if (titre) chapitres.push(`${mmss(i === 0 ? 0 : prise.etapes[i].debut + decalage)} ${titre}`);
   });
   if (chapitres.length) {
     fs.writeFileSync(final.replace(/\.mp4$/, '-chapitres.txt'), chapitres.join('\n') + '\n');

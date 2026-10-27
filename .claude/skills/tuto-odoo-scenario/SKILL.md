@@ -44,6 +44,10 @@ etapes:
     apres: 0.6                              # silence après la phrase (s), défaut 0,6
     actions:
       - menu: Comptabilité > Configuration > Taxes
+  - partie: "2. Créer une taxe"             # bandeau en haut à droite pendant 5 s (+ chapitre YouTube)
+    texte: Créons maintenant notre propre taxe.
+    actions:
+      - bouton: Nouveau
 ```
 
 ## Actions disponibles

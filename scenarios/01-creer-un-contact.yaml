@@ -25,7 +25,7 @@ etapes:
     actions:
       - menu: Contacts
 
-  - chapitre: Créer la fiche
+  - partie: Créer la fiche
     texte: Pour ajouter une personne, cliquez sur le bouton Nouveau, en haut à gauche.
     actions:
       - bouton: Nouveau
