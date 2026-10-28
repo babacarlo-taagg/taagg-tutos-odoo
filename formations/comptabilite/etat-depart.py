@@ -40,7 +40,15 @@ def cpt_02():
     return odoo('res.company', 'read', [SOCIETE], fields=['street', 'city', 'external_report_layout_id', 'display_invoice_amount_total_words'])
 
 
-CAPSULES = {'CPT-02': cpt_02}
+def cpt_03():
+    # le compte 702110 « Ventes de pâtisseries » est créé à l'écran : on l'enlève s'il existe (jamais utilisé)
+    ids = odoo('account.account', 'search', [['code', 'in', ['702110']]], context={'allowed_company_ids': [SOCIETE]})
+    if ids:
+        odoo('account.account', 'unlink', ids)
+    return odoo('account.account', 'search_count', [['code', '=', '702110']], context={'allowed_company_ids': [SOCIETE]})
+
+
+CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''

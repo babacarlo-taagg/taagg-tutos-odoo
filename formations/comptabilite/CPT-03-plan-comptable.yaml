@@ -1,0 +1,259 @@
+# CPT-03 · Le plan comptable SYSCOHADA
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-03`) :
+#   société 1 sélectionnée, le compte 702110 « Ventes de pâtisseries » n'existe pas.
+# Ce que la capsule crée : le compte 702110 « Ventes de pâtisseries » (type Revenus), gardé pour la suite.
+# Remarque : le menu « Groupes de comptes » n'est visible qu'en mode développeur dans cette base ;
+# les classes se montrent avec le panneau de gauche du plan comptable.
+titre: Le plan comptable SYSCOHADA
+sous_titre: Formation Comptabilité Odoo · CPT-03
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+  HAO: hache-a-o
+fin:
+  message: "Prochaine capsule : les journaux"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette troisième capsule de la formation à la comptabilité avec Odoo.
+      Aujourd'hui, nous ouvrons le cœur de la comptabilité : le plan comptable.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez à quoi servent les neuf classes du plan SYSCOHADA,
+      lire le numéro d'un compte, et créer un nouveau compte quand votre entreprise en a besoin.
+    actions:
+      - attendre: 1
+  - texte: >
+      Dans la capsule précédente, nous avons réglé les paramètres généraux. Nous avons vu que la base
+      suit le pack Sénégal SYSCOHADA : c'est lui qui a installé le plan comptable que nous allons parcourir.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : ouvrir le plan comptable
+  - partie: "1. Ouvrir le plan comptable"
+    texte: >
+      Le plan comptable, c'est la liste de tous les comptes dans lesquels Odoo range les opérations.
+      Il se trouve dans le menu Configuration.
+    actions:
+      - ouvrir_menu: Configuration
+      - survoler_texte: Plan comptable
+  - texte: Cliquez sur Plan comptable.
+    actions:
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Plan comptable")'
+  - texte: >
+      Plus de mille cent comptes ! Pas d'inquiétude : une petite entreprise n'en utilise
+      que quelques dizaines. Les autres sont là, prêts à servir le jour où vous en aurez besoin.
+    actions:
+      - surligner: '.o_pager'
+        duree: 3
+  - texte: >
+      Chaque ligne est un compte : son code, son nom, son type, et une case qui dit
+      si l'on peut lettrer le compte, c'est-à-dire relier une facture à son paiement.
+    actions:
+      - surligner: '.o_list_renderer thead'
+        duree: 4
+
+  # ------------------------------------------------------------------ partie 2 : les neuf classes
+  - partie: "2. Les neuf classes"
+    texte: >
+      À gauche, les comptes sont rangés en neuf classes, numérotées de un à neuf.
+      Le premier chiffre d'un compte indique toujours sa classe.
+    actions:
+      - surligner: '.o_search_panel'
+        duree: 3
+  - texte: >
+      La classe un, ce sont les ressources durables : le capital apporté par les associés,
+      les réserves et les emprunts à long terme.
+    actions:
+      - cliquer: '.o_search_panel_label_title:text-is("1"), .o_search_panel_category_value header:has-text("1")'
+  - texte: >
+      La classe deux, l'actif immobilisé : ce que l'entreprise garde plusieurs années,
+      comme les bâtiments, les véhicules ou le four de la boulangerie.
+    actions:
+      - cliquer: '.o_search_panel_label_title:text-is("2"), .o_search_panel_category_value header:has-text("2")'
+  - texte: >
+      La classe trois, les stocks : la farine, le sucre, et les produits prêts à vendre.
+    actions:
+      - cliquer: '.o_search_panel_label_title:text-is("3"), .o_search_panel_category_value header:has-text("3")'
+  - texte: >
+      La classe quatre, les tiers : toutes les personnes avec qui l'entreprise a des comptes à régler.
+      Les clients, les fournisseurs, le personnel, et l'État, pour la TVA.
+    actions:
+      - cliquer: '.o_search_panel_label_title:text-is("4"), .o_search_panel_category_value header:has-text("4")'
+  - texte: >
+      La classe cinq, la trésorerie : l'argent disponible, à la banque et dans la caisse.
+    actions:
+      - cliquer: '.o_search_panel_label_title:text-is("5"), .o_search_panel_category_value header:has-text("5")'
+  - texte: >
+      Ces cinq premières classes forment le bilan : la photo de ce que l'entreprise possède
+      et de ce qu'elle doit, à une date donnée.
+    actions:
+      - attendre: 1
+  - texte: >
+      La classe six regroupe les charges, c'est-à-dire tout ce que l'entreprise dépense pour travailler :
+      achats, loyer, salaires, électricité.
+    actions:
+      - cliquer: '.o_search_panel_label_title:text-is("6"), .o_search_panel_category_value header:has-text("6")'
+  - texte: >
+      La classe sept regroupe les produits : ce que l'activité rapporte, d'abord les ventes.
+      Les produits moins les charges donnent le résultat de l'exercice.
+    actions:
+      - cliquer: '.o_search_panel_label_title:text-is("7"), .o_search_panel_category_value header:has-text("7")'
+  - texte: >
+      Cliquez sur la petite flèche : chaque classe se déplie en sous-ensembles.
+      Le 70 regroupe les ventes, le 71 les subventions d'exploitation, et ainsi de suite.
+    actions:
+      - surligner: '.o_search_panel_category_value:has(header:has-text("7")) ul'
+        duree: 3
+  - texte: >
+      Enfin, la classe huit sert aux opérations exceptionnelles, dites hors activités ordinaires,
+      comme la vente d'un ancien véhicule. Et la classe neuf, aux engagements hors bilan
+      et à la comptabilité analytique.
+    actions:
+      - cliquer: '.o_search_panel_label_title:text-is("8"), .o_search_panel_category_value header:has-text("8")'
+      - attendre: 1.5
+      - cliquer: '.o_search_panel_label_title:text-is("9"), .o_search_panel_category_value header:has-text("9")'
+  - texte: Revenons à la liste complète avec Tous.
+    actions:
+      - cliquer: '.o_search_panel_label_title:text-is("Tous"), .o_search_panel_category_value header:has-text("Tous")'
+
+  # ------------------------------------------------------------------ partie 3 : lire un compte
+  - partie: "3. Lire un compte"
+    texte: >
+      Prenons un compte que nous connaissons déjà : quatre cent onze mille cent, le compte Clients.
+      Tapez son numéro dans la barre de recherche.
+    actions:
+      - rechercher: "411100"
+  - texte: >
+      Le numéro se lit de gauche à droite, du plus général au plus précis.
+      Quatre : la classe des tiers. Quarante et un : les clients. Quatre cent onze : le compte Clients proprement dit.
+      Les derniers chiffres permettent de détailler encore, si besoin.
+    actions:
+      - surligner: '.o_data_row td[name="code"]'
+        duree: 5
+  - texte: Ouvrons ce compte.
+    actions:
+      - cliquer: '.o_data_row td[name="name"]'
+  - texte: >
+      En haut, le nom et le code. Juste en dessous, le type : ici, Client.
+      Le type est essentiel : il dit à Odoo où placer le compte dans le bilan ou le compte de résultat.
+    actions:
+      - surligner_champ: code
+        duree: 2
+      - surligner_champ: account_type
+        duree: 3
+  - texte: >
+      Autoriser le lettrage est coché : on pourra relier chaque facture client à son paiement,
+      et savoir à tout moment qui nous doit encore de l'argent.
+    actions:
+      - surligner_champ: reconcile
+        duree: 3.5
+  - texte: >
+      Les taxes par défaut et les étiquettes servent à des usages plus avancés,
+      comme le tableau des flux de trésorerie. Nous les retrouverons plus tard.
+    actions:
+      - surligner_champ: tax_ids
+        duree: 2
+      - surligner_champ: tag_ids
+        duree: 2
+  - texte: Revenons au plan comptable, et effaçons la recherche.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Plan comptable")'
+      - cliquer: '.o_searchview_facet .o_facet_remove'
+
+  # ------------------------------------------------------------------ partie 4 : créer un compte
+  - partie: "4. Créer un compte"
+    texte: >
+      Les Délices de Maïmouna veulent suivre à part les ventes de pâtisseries, pour savoir
+      ce qu'elles rapportent par rapport au pain. Il faut pour cela un compte de vente dédié.
+    actions:
+      - attendre: 1
+  - texte: >
+      Avant de créer un compte, cherchez toujours s'il n'existe pas déjà.
+      Les ventes de produits fabriqués par l'entreprise sont dans le sept cent deux.
+    actions:
+      - rechercher: "7021"
+  - texte: >
+      Il existe un compte général des ventes de produits finis, mais rien pour les pâtisseries.
+      Nous allons donc créer un sous-compte : sept cent deux mille cent dix.
+    actions:
+      - surligner: '.o_data_row:has-text("702100")'
+        duree: 3
+  - texte: Cliquez sur Nouveau.
+    actions:
+      - bouton: Nouveau
+  - texte: >
+      Tapez le nom du compte, Ventes de pâtisseries, puis son code, sept cent deux mille cent dix.
+    actions:
+      - champ: name
+        taper: Ventes de pâtisseries
+      - champ: code
+        taper: "702110"
+      - touche: Tab
+  - texte: >
+      Regardez le type : Odoo a choisi tout seul Revenus, comme pour les autres comptes sept cent deux.
+      Vérifiez-le quand même à chaque création.
+    actions:
+      - surligner_champ: account_type
+        duree: 3.5
+  - texte: >
+      Un compte de ventes n'a pas besoin de lettrage : la case reste décochée. Enregistrez.
+    actions:
+      - surligner_champ: reconcile
+        duree: 2
+      - enregistrer: oui
+  - texte: >
+      Revenons à la liste : le nouveau compte apparaît juste à côté de ses voisins.
+      Il pourra maintenant être choisi sur les produits de pâtisserie et sur les factures.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Plan comptable")'
+      - surligner: '.o_data_row:has-text("702110")'
+        duree: 3.5
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : créer un compte qui existe déjà, sous un autre nom.
+      Les opérations se retrouvent alors éparpillées. Cherchez toujours avant de créer.
+    actions:
+      - surligner: '.o_searchview'
+        duree: 2.5
+  - texte: >
+      Deuxième piège : se tromper de type. Un compte de vente rangé en charges fausse le résultat.
+      Le type doit correspondre à la classe du compte.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : vouloir supprimer un compte qui a déjà servi. Odoo le refuse, et c'est normal.
+      Si un compte ne doit plus être utilisé, on l'archive en décochant Actif sur sa fiche.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Le plan SYSCOHADA range les comptes en neuf classes.
+      Les classes un à cinq forment le bilan, les classes six et sept le résultat.
+    actions:
+      - cliquer: '.o_searchview_facet .o_facet_remove'
+      - surligner: '.o_search_panel'
+        duree: 2.5
+  - texte: >
+      Un numéro de compte se lit du général au précis. Le type dit où le compte apparaît dans les états financiers.
+      Et avant de créer un compte, on cherche toujours s'il existe déjà.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : retrouvez le compte de caisse, dans la classe cinq, puis créez le compte
+      sept cent deux mille cent vingt, Ventes de viennoiseries.
+      Dans la prochaine capsule, nous verrons les journaux. À tout de suite !
+    actions:
+      - attendre: 1
