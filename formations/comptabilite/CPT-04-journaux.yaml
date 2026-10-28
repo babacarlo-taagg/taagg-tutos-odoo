@@ -106,10 +106,11 @@ etapes:
     actions:
       - cliquer: '.oe_stat_button:has-text("Pièces comptables"), button:has-text("Pièces comptables")'
   - texte: >
-      Voici notre facture à la Boutique Les Almadies. Son numéro commence par le préfixe du journal,
-      I-N-V, puis l'année, puis un compteur. Odoo le donne tout seul, sans trou ni doublon.
+      Les lignes sont regroupées par pièce. Voici notre facture à la Boutique Les Almadies, avec ses trois lignes.
+      Son numéro commence par le préfixe du journal, I-N-V, puis l'année, puis un compteur.
+      Odoo le donne tout seul, sans trou ni doublon.
     actions:
-      - surligner: '.o_data_row:has-text("INV/2026/00001")'
+      - surligner: '.o_group_header:has-text("INV/2026/00001")'
         duree: 4
   - texte: >
       Revenons à la liste. Le journal des achats fonctionne de la même façon pour les factures fournisseurs,
