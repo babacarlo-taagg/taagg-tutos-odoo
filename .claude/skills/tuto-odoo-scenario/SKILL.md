@@ -63,7 +63,7 @@ etapes:
 | `cliquer_texte: Notes internes` | clique le premier élément qui affiche exactement ce texte (`exact: false` pour « contient ») |
 | `cliquer: '<sélecteur>'` | clique un sélecteur Playwright (`.o_form_button_save`, `text=Archiver`, `button:has-text("Confirmer")`) |
 | `champ: name` + `taper: Awa Diop` | tape lettre par lettre dans le champ technique `name` (`entree: true` pour valider) |
-| `choisir: {champ: country_id, valeur: Sénégal}` | liste déroulante ou champ relié : tape puis choisit dans la liste |
+| `choisir: {champ: country_id, valeur: Sénégal}` | liste déroulante ou champ relié : tape puis choisit dans la liste (marche aussi pour les listes de choix d'Odoo 19, ex. `{champ: type, valeur: Espèces}`) |
 | `cocher: is_company` | coche une case |
 | `onglet: Notes internes` | ouvre un onglet de la fiche |
 | `rechercher: Awa` | tape dans la barre de recherche + Entrée |

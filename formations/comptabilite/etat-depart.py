@@ -1,9 +1,10 @@
 """Remet la base de tournage dans l'état de départ d'une capsule, par l'API (jamais à l'écran).
 
 Usage : python3 formations/comptabilite/etat-depart.py CPT-02
-Lit ODOO_URL, ODOO_BASE, ODOO_LOGIN_API et ODOO_CLE_API dans le .env du projet.
+Lit ODOO_URL, ODOO_BASE, ODOO_LOGIN_API et ODOO_CLE_API dans l'environnement, sinon dans le .env du projet.
 """
 import json
+import os
 import pathlib
 import sys
 import urllib.request
@@ -11,6 +12,7 @@ import urllib.request
 ICI = pathlib.Path(__file__).resolve().parents[2]
 ENV = dict(l.split('=', 1) for l in (ICI / '.env').read_text().splitlines() if '=' in l and not l.startswith('#'))
 ENV = {k.strip(): v.split('#')[0].strip() for k, v in ENV.items()}
+ENV.update({k: v for k, v in os.environ.items() if k.startswith('ODOO_')})  # les variables d'environnement passent avant le .env
 SOCIETE = 1  # « correction les délices de maimouna »
 
 
@@ -48,7 +50,19 @@ def cpt_03():
     return odoo('account.account', 'search_count', [['code', '=', '702110']], context={'allowed_company_ids': [SOCIETE]})
 
 
-CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03}
+def cpt_04():
+    # le journal « Caisse boutique » (préfixe CAI) est créé à l'écran : on l'enlève s'il existe et n'a jamais servi
+    ids = odoo('account.journal', 'search', [['code', '=', 'CAI'], ['company_id', '=', SOCIETE]], context={'active_test': False})
+    if ids:
+        odoo('account.journal', 'unlink', ids)
+    # et le compte que Odoo crée avec lui (571001 « Caisse boutique »)
+    comptes = odoo('account.account', 'search', [['code', '=like', '5710%'], ['name', '=', 'Caisse boutique']], context={'allowed_company_ids': [SOCIETE]})
+    if comptes:
+        odoo('account.account', 'unlink', comptes)
+    return odoo('account.journal', 'search_count', [['code', '=', 'CAI'], ['company_id', '=', SOCIETE]]), len(comptes)
+
+
+CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''

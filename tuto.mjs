@@ -381,7 +381,8 @@ class Realisateur {
         await select.first().selectOption({ label: valeur });
       } else {
         await this.taper(this.saisie(champ), valeur);
-        const choix = p.locator('.o-autocomplete--dropdown-item, .ui-menu-item').filter({ hasText: valeur }).first();
+        // .o_select_menu_item : listes de choix d'Odoo 19 (Type d'un journal, d'un compte…)
+        const choix = p.locator('.o-autocomplete--dropdown-item, .ui-menu-item, .o_select_menu_item').filter({ hasText: valeur }).first();
         await this.cliquer(choix);
       }
     } else if ('cocher' in a) {

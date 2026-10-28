@@ -1,0 +1,222 @@
+# CPT-04 · Les journaux
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-04`) :
+#   société 1 sélectionnée, aucun journal de caisse (pas de journal au préfixe CAI).
+# Ce que la capsule crée : le journal « Caisse boutique » (type Espèces, préfixe CAI) et son compte
+#   571001 « Caisse boutique », créé par Odoo (un journal Espèces n'accepte que des comptes « Banque et espèces »),
+#   gardé pour les capsules suivantes (CPT-08 moyens de paiement, CPT-20 la caisse).
+titre: Les journaux
+sous_titre: Formation Comptabilité Odoo · CPT-04
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : les taxes et la TVA au Sénégal"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette quatrième capsule de la formation à la comptabilité avec Odoo.
+      Aujourd'hui, nous parlons des journaux.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez à quoi sert chaque journal, comment il est réglé,
+      et vous aurez créé un journal de caisse pour suivre l'argent liquide de la boutique.
+    actions:
+      - attendre: 1
+  - texte: >
+      Dans la capsule précédente, nous avons parcouru le plan comptable : la liste des comptes.
+      Les journaux, eux, répondent à une autre question : dans quel registre classer chaque opération ?
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : à quoi sert un journal
+  - partie: "1. À quoi sert un journal"
+    texte: >
+      Les journaux se trouvent dans le menu Configuration.
+    actions:
+      - ouvrir_menu: Configuration
+      - survoler_texte: Journaux
+  - texte: Cliquez sur Journaux.
+    actions:
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Journaux")'
+  - texte: >
+      Un journal, c'est un registre où l'on classe les opérations d'un même genre :
+      toutes les ventes ensemble, tous les achats ensemble, tous les mouvements de banque ensemble.
+    actions:
+      - surligner: '.o_list_renderer'
+        duree: 3.5
+  - texte: >
+      Chaque journal a un préfixe, une petite abréviation. Elle sert à numéroter les pièces :
+      la première facture de vente de l'année porte ainsi le numéro I-N-V, barre, deux mille vingt-six, barre, un.
+    actions:
+      - surligner: '.o_list_renderer thead th:has-text("Préfixe")'
+        duree: 2
+      - surligner: '.o_data_row:has-text("INV") td[name="code"]'
+        duree: 3
+  - texte: >
+      Les quatre journaux du quotidien sont Ventes, Achats, Banque et Opérations diverses.
+      Les autres ont été créés automatiquement par Odoo pour ses calculs : différence de change,
+      TVA, valorisation du stock. On n'y touche pas.
+    actions:
+      - surligner: '.o_data_row:has-text("Ventes")'
+        duree: 1.2
+      - surligner: '.o_data_row:has-text("Achats")'
+        duree: 1.2
+      - surligner: '.o_data_row:has-text("BNK1")'
+        duree: 1.2
+      - surligner: '.o_data_row:has-text("MISC")'
+        duree: 1.2
+
+  # ------------------------------------------------------------------ partie 2 : ventes et achats
+  - partie: "2. Ventes et achats"
+    texte: >
+      Ouvrons le journal des ventes.
+    actions:
+      - cliquer: '.o_data_row:has-text("INV") td[name="name"]'
+  - texte: >
+      Son type est Ventes : il reçoit toutes les factures clients et les avoirs.
+      Son préfixe est I-N-V.
+    actions:
+      - surligner_champ: type
+        duree: 2.5
+      - surligner_champ: code
+        duree: 2
+  - texte: >
+      Le compte des revenus par défaut est le sept cent un mille cent, vente de marchandises.
+      Odoo l'utilise quand un produit n'a pas son propre compte de vente.
+      Vous voyez le lien avec le plan comptable de la capsule précédente.
+    actions:
+      - surligner_champ: default_account_id
+        duree: 4
+  - texte: >
+      Séquence dédiée aux avoirs est cochée : les avoirs ont leur propre numérotation,
+      séparée de celle des factures. C'est plus clair pour vos contrôles.
+    actions:
+      - surligner_champ: refund_sequence
+        duree: 3
+  - texte: >
+      Revenons à la liste. Le journal des achats fonctionne de la même façon pour les factures fournisseurs,
+      avec le compte six cent un mille cent, achats de marchandises, par défaut.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Journaux")'
+      - surligner: '.o_data_row:has-text("BILL")'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 3 : banque et opérations diverses
+  - partie: "3. Banque et opérations diverses"
+    texte: >
+      Le journal Banque enregistre tout ce qui passe sur le compte bancaire de l'entreprise.
+      Il est relié au compte cinq cent vingt et un, banque, de la classe cinq : la trésorerie.
+    actions:
+      - surligner: '.o_data_row:has-text("BNK1")'
+        duree: 3.5
+  - texte: >
+      Si l'entreprise a plusieurs comptes bancaires, chacun a son propre journal.
+      Nous verrons comment relier un compte bancaire dans une prochaine capsule.
+    actions:
+      - attendre: 1
+  - texte: >
+      Enfin, le journal des opérations diverses reçoit les écritures saisies à la main,
+      qui ne sont ni des ventes, ni des achats, ni des mouvements de banque : une correction,
+      une régularisation de fin d'année, par exemple.
+    actions:
+      - surligner: '.o_data_row:has-text("MISC")'
+        duree: 3.5
+
+  # ------------------------------------------------------------------ partie 4 : créer un journal de caisse
+  - partie: "4. Créer un journal de caisse"
+    texte: >
+      Il manque un journal important : la caisse. La boutique encaisse chaque jour des espèces,
+      et cet argent ne passe pas par la banque. Il lui faut son propre registre.
+    actions:
+      - attendre: 1
+  - texte: Cliquez sur Nouveau.
+    actions:
+      - bouton: Nouveau
+  - texte: "Donnez-lui un nom clair : Caisse boutique."
+    actions:
+      - champ: name
+        taper: Caisse boutique
+  - texte: >
+      Pour le type, choisissez Espèces.
+    actions:
+      - choisir: {champ: type, valeur: Espèces}
+  - texte: >
+      Odoo propose un préfixe. Remplaçons-le par une abréviation plus parlante : C-A-I, pour caisse.
+      Les pièces de caisse seront numérotées C-A-I, barre, l'année, barre, un numéro.
+    actions:
+      - champ: code
+        taper: CAI
+  - texte: >
+      Le champ le plus important est le compte d'espèces : c'est là que l'argent de la caisse sera compté.
+      Laissez-le vide. À l'enregistrement, Odoo va créer lui-même un compte rien que pour cette caisse.
+    actions:
+      - surligner_champ: default_account_id
+        duree: 4
+  - texte: >
+      Les autres réglages proposés par Odoo conviennent. Enregistrez.
+    actions:
+      - enregistrer: oui
+  - texte: >
+      Voilà le compte créé : cinq cent soixante et onze mille un, Caisse boutique.
+      Il est rangé au cinq cent soixante et onze, le compte de caisse du plan SYSCOHADA, dans la classe cinq.
+    actions:
+      - surligner_champ: default_account_id
+        duree: 4
+  - texte: >
+      Revenons à la liste : la caisse boutique a rejoint les autres journaux.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Journaux")'
+      - surligner: '.o_data_row:has-text("Caisse boutique")'
+        duree: 3
+  - texte: >
+      Et sur le tableau de bord, une nouvelle carte est apparue. C'est d'ici que l'on enregistrera
+      les entrées et les sorties d'espèces, dans une capsule dédiée à la caisse.
+    actions:
+      - cliquer: '.o_menu_sections a:has-text("Tableau de bord"), .o_menu_sections .dropdown-toggle:has-text("Tableau de bord")'
+      - surligner: '.o_kanban_record:has-text("Caisse boutique")'
+        duree: 4
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : mélanger la caisse et la banque dans le même journal.
+      Vous ne pourriez plus vérifier combien il doit y avoir dans le tiroir-caisse.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : changer le préfixe d'un journal en cours d'année. Les numéros des pièces
+      deviennent incohérents. Choisissez un préfixe court et clair dès la création.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : modifier ou archiver les journaux créés automatiquement par Odoo,
+      comme Différence de change ou TVA sur encaissements. Odoo en a besoin pour ses calculs.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Un journal est un registre qui regroupe les opérations d'un même genre.
+      Les quatre journaux du quotidien sont Ventes, Achats, Banque et Opérations diverses.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Chaque journal a un type, un préfixe pour numéroter ses pièces, et un compte par défaut.
+      Et pour l'argent liquide, on crée un journal de type Espèces : Odoo lui crée son compte dans le cinq cent soixante et onze.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : ouvrez le journal des achats et repérez son préfixe et son compte par défaut,
+      puis créez le journal de caisse de votre propre boutique.
+      Dans la prochaine capsule, nous verrons les taxes et la TVA au Sénégal. À tout de suite !
+    actions:
+      - attendre: 1
