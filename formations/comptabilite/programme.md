@@ -14,7 +14,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 
 | Code | Capsule | Ce qu'on apprend | Écrans | État |
 |---|---|---|---|---|
-| CPT-01 | Tour d’horizon de la Comptabilité | le tableau de bord, les journaux, les 6 menus et à quoi ils servent | Tableau de bord | ✎ |
+| CPT-01 | Tour d’horizon de la Comptabilité | le tableau de bord, les journaux, les 6 menus et à quoi ils servent | Tableau de bord | 🎙 8:19 |
 | CPT-02 | Les paramètres généraux | société, devise XOF, arrondis, présentation des factures, fonctions à activer | Configuration › Paramètres | ☐ |
 | CPT-03 | Le plan comptable SYSCOHADA | classes 1 à 9, lire un compte, créer un compte, groupes et étiquettes | Plan comptable, Groupes de comptes | ☐ |
 | CPT-04 | Les journaux | ventes, achats, banque, caisse, opérations diverses ; créer un journal de caisse | Journaux | ☐ |
@@ -74,6 +74,12 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | CPT-33 | Clôturer l'exercice | dates de verrouillage, sécuriser les écritures, report à nouveau | Clôture | ☐ |
 
 **33 capsules ≈ 5 h 30 de formation.**
+
+## Journal de production
+
+- **CPT-01** (28 octobre 2026) : version finale avec la voix de Babacar LO (clone ElevenLabs
+  « Babacar LO (naturel) », vitesse 1,0), 8 min 19 s, 44 étapes, ≈ 7 700 caractères de voix.
+  Contrôle qualité fait (images clés, synchro voix et image, son à −16 LUFS). À publier.
 
 ## Ordre de tournage proposé
 
