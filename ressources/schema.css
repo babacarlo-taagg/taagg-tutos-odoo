@@ -23,3 +23,26 @@ h1 small { display: block; font-size: 32px; font-weight: 500; color: var(--gris)
 .note { font-size: 30px; color: var(--gris); }
 .bandeau { background: var(--vert-clair); border-left: 10px solid var(--vert); border-radius: 16px; padding: 22px 32px; font-size: 32px; }
 .carte.forte .num { background: var(--vert); color: var(--bleu); }
+/* comparaison en deux colonnes : <div class="colonnes"><div class="carte">…<ul class="liste">…</ul></div>… */
+.colonnes { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; flex: 1; }
+.liste { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 22px; }
+.liste li { font-size: 32px; line-height: 1.3; padding-left: 52px; position: relative; color: var(--bleu); }
+.liste li::before { content: ""; position: absolute; left: 0; top: 6px; width: 30px; height: 30px; border-radius: 50%; background: var(--vert); }
+.liste.moins li::before { background: #D9DEE1; }
+.carte.forte .liste li { color: #fff; }
+/* points à retenir : <ol class="points"><li><b>…</b> …</li></ol> */
+.points { list-style: none; padding: 0; counter-reset: p; display: grid; grid-template-columns: 1fr 1fr; gap: 28px 48px; }
+.points li { counter-increment: p; background: #fff; border-radius: 22px; padding: 30px 32px 30px 120px; position: relative;
+  font-size: 32px; line-height: 1.3; box-shadow: 0 8px 24px rgba(11,65,91,.08); min-height: 150px; display: flex; align-items: center; }
+.points li::before { content: counter(p); position: absolute; left: 32px; top: 50%; transform: translateY(-50%); width: 64px; height: 64px;
+  border-radius: 50%; background: var(--vert); color: var(--bleu); font-weight: 800; font-size: 34px; display: grid; place-items: center; }
+/* mise en page : contenu centré au-dessus de la bande des sous-titres, cartes de même hauteur */
+body { justify-content: center; padding-left: 90px; padding-right: 90px; }
+.rangee, .colonnes { flex: 0 0 auto; }
+.rangee { align-items: stretch; gap: 18px; }
+.fleche { align-self: center; flex-basis: 48px; }
+.rangee .carte { padding: 32px 24px; min-height: 360px; }
+.rangee:has(> .carte:nth-of-type(5)) .carte h2 { font-size: 33px; }
+.rangee:has(> .carte:nth-of-type(5)) .carte p { font-size: 27px; }
+.colonnes .carte { min-height: 0; padding: 40px 44px; }
+.colonnes .carte h2 { margin-bottom: 8px; }

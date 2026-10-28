@@ -66,7 +66,8 @@ async function attendreOdoo(page, max = 15000) {
       () => {
         if (document.querySelector('.o_loading_indicator, .o_blockUI')) return false;
         if (!document.querySelector('.o_web_client')) return true; // pas l'interface Odoo (site, page de test)
-        return !!document.querySelector('.o_action_manager > .o_action, .o_home_menu, .o_action_manager .o_view_controller');
+        // écrans Odoo, ou aperçu du site dans l'appli Site Web (une iframe, sans .o_action)
+        return !!document.querySelector('.o_action_manager > .o_action, .o_home_menu, .o_action_manager .o_view_controller, .o_action_manager iframe');
       },
       null,
       { timeout: max, polling: 100 },

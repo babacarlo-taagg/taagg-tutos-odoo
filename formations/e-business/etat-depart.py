@@ -93,20 +93,29 @@ CLIENTS = [
     {'name': 'Moussa Ndiaye', 'email': 'moussa.ndiaye@exemple.sn', 'phone': '+221 77 000 00 01', 'city': 'Pikine'},
     {'name': 'Khady Sarr', 'email': 'khady.sarr@exemple.sn', 'phone': '+221 77 000 00 02', 'city': 'Dakar'},
 ]
+# La TVA est arrondie sur le total de la commande : ces paniers tombent sur des totaux ronds
+# (28 000, 20 000 et 26 000 F) ; vérifier le total affiché si on les change.
 COMMANDES = [  # (repère, client, [(produit, quantité)])
-    ('EB-DEMO-1', 'Awa Diop', [("Gâteau d'anniversaire", 1), ('Macaron', 12)]),
-    ('EB-DEMO-2', 'Moussa Ndiaye', [('Croissant', 10), ('Pain au chocolat (Chocolatine)', 10)]),
-    ('EB-DEMO-3', 'Khady Sarr', [('Fraisier', 1), ('Éclair au chocolat', 6)]),
+    ('EB-DEMO-1', 'Awa Diop', [("Gâteau d'anniversaire", 1), ('Croissant', 10)]),
+    ('EB-DEMO-2', 'Moussa Ndiaye', [('Forêt Noire', 1), ('Croissant', 10)]),
+    ('EB-DEMO-3', 'Khady Sarr', [('Fraisier', 1), ('Paris-Brest', 4)]),
 ]
 
 
 def site_et_coordonnees():
     print('Site : nom, logo, prix TTC, coordonnées fictives')
     valeurs = {'name': 'Les Délices de Maïmouna', 'show_line_subtotals_tax_selection': 'tax_included'}
+    # vendeur des commandes du site : le compte fictif « Formateur TAAGG » (jamais une vraie personne)
+    formateur = odoo('res.users', 'search', [('login', '=', ENV.get('ODOO_LOGIN', ''))])
+    if formateur:
+        valeurs['salesperson_id'] = formateur[0]
     logo = image('logo-delices-maimouna.png')
     if logo:
         valeurs['logo'] = logo
-    ecrire('website', [SITE], valeurs, 'nom « Les Délices de Maïmouna », logo, prix affichés TTC')
+    ecrire('website', [SITE], valeurs, 'nom « Les Délices de Maïmouna », logo, prix affichés TTC, vendeur Formateur TAAGG')
+    # filtres de la boutique : masquer les caractéristiques qui ne concernent pas la pâtisserie
+    inutiles = odoo('product.attribute', 'search', [('name', 'in', ['Taille', 'Type de poisson', 'Poissons gras', 'Type de viande', 'Type', 'Parfum / Saveur'])])
+    ecrire('product.attribute', inutiles, {'visibility': 'hidden'}, f'{len(inutiles)} filtres inutiles masqués dans la boutique')
     # en-tête et pied de page : remplacer les coordonnées de démonstration d'Odoo
     # (écrire avec website_id dans le contexte crée une copie propre au site, comme l'éditeur)
     ctx = dict(CTX, website_id=SITE)
@@ -178,10 +187,18 @@ def clients_et_commandes():
         print(f'  · commande en ligne {repere} de {client}')
         if VOIR:
             continue
+        # sans messages dans l'historique : ils seraient signés du compte API (une vraie personne)
+        silence = dict(CTX, tracking_disable=True, mail_create_nolog=True, mail_notrack=True, mail_notify_force_send=False)
         cmd = odoo('sale.order', 'create', {
             'partner_id': ids[client], 'website_id': SITE, 'client_order_ref': repere,
-            'order_line': [(0, 0, {'product_id': produits[p], 'product_uom_qty': q}) for p, q in lignes]})
-        odoo('sale.order', 'action_confirm', [cmd])
+            'user_id': odoo('website', 'read', [SITE], ['salesperson_id'])[0]['salesperson_id'][0],
+            'order_line': [(0, 0, {'product_id': produits[p], 'product_uom_qty': q}) for p, q in lignes]}, context=silence)
+        odoo('sale.order', 'action_confirm', [cmd], context=silence)
+        auteurs = odoo('mail.message', 'search_read', [('model', '=', 'sale.order'), ('res_id', '=', cmd)], fields=['author_id'])
+        if auteurs:
+            print(f'    ⚠ {len(auteurs)} message(s) dans l’historique de la commande : vérifier l’auteur affiché')
+        total = odoo('sale.order', 'read', [cmd], ['amount_total'])[0]['amount_total']
+        print(f'    total {total:,.0f} F'.replace(',', ' ') + ('' if total % 500 == 0 else '  ⚠ total pas rond'))
 
 
 def paniers_de_tournage():

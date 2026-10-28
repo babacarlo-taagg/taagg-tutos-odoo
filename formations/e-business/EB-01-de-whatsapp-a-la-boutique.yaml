@@ -1,0 +1,268 @@
+# EB-01 · De WhatsApp à la boutique en ligne
+# État de départ : python3 formations/e-business/etat-depart.py EB-01
+#   site « Les Délices de Maïmouna » (logo, prix TTC, coordonnées fictives), 17 produits publiés dans
+#   3 catégories (Gâteaux, Pâtisseries, Viennoiseries), 3 commandes en ligne confirmées
+#   (Awa Diop 28 000 F, Moussa Ndiaye 20 000 F, Khady Sarr 26 000 F), aucun panier du formateur.
+# Pendant la capsule : le Fraisier est ajouté au panier du formateur (annulé par etat-depart.py).
+# Images : formations/e-business/images/ (compétence tuto-odoo-illustrations).
+titre: De WhatsApp à la boutique en ligne
+sous_titre: Formation E-Business Odoo · EB-01
+depart: /shop
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+  EB-01: capsule un
+  Maïmouna: Maïmouna
+  eCommerce: e-commerce
+  E-Business: i-business
+  FCFA: francs CFA
+fin:
+  message: "Prochaine capsule : construire son site"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche (≈ 50 s)
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans la formation E-Business avec Odoo.
+      Vous vendez déjà sur WhatsApp ? Alors vous connaissez la journée type :
+      les messages arrivent sans arrêt, il faut renvoyer les photos, redonner les prix,
+      noter chaque commande… et le soir, on ne sait plus très bien qui a payé.
+    actions:
+      - illustration: images/eb-01-ambiance-whatsapp-provisoire.png
+        zoom: 1.08
+  - texte: >
+      Dans cette première capsule, nous allons voir ce que change une vraie boutique en ligne,
+      suivre pas à pas le chemin d'une cliente sur le site, puis découvrir où arrivent les commandes dans Odoo.
+      À la fin, vous saurez vous repérer dans l'application Site Web.
+    actions:
+      - attendre: 1
+  - texte: >
+      Cette formation suit le programme E-Business de TAAGG School, en cinq étapes :
+      créer sa boutique, encaisser et livrer, attirer des clients, vendre et piloter,
+      et enfin faire grandir son activité.
+    actions:
+      - illustration: images/eb-01-formation.png
+        zoom: 1.02
+  - texte: >
+      Pendant tout le parcours, nous suivons une entreprise d'exemple : Les Délices de Maïmouna,
+      une pâtisserie de Dakar qui vendait ses gâteaux sur WhatsApp, et qui ouvre aujourd'hui sa boutique en ligne.
+    actions:
+      - surligner: 'header .navbar-brand'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 1 : WhatsApp ou boutique (≈ 1 min 30)
+  - partie: "1. WhatsApp ou boutique en ligne ?"
+    texte: >
+      Commençons par la question la plus simple : qu'est-ce qui change, concrètement ?
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Sur WhatsApp, c'est vous qui faites tout le travail. Vous répondez à chaque message, un par un.
+      Vous renvoyez les mêmes photos et les mêmes prix dix fois par jour.
+      Vous notez la commande dans un cahier, et vous vérifiez les paiements le soir.
+    actions:
+      - illustration: images/eb-01-whatsapp-boutique.png
+        zoom: 1.02
+  - texte: >
+      Avec une boutique en ligne, c'est le site qui travaille. Le catalogue est ouvert jour et nuit.
+      La cliente trouve seule les photos et les prix, toujours à jour.
+      Sa commande s'enregistre directement dans Odoo, avec le paiement et la livraison.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      WhatsApp ne disparaît pas pour autant. Il change de rôle : il devient le moyen de faire connaître
+      votre boutique. Vous y partagez le lien d'un gâteau, et la vente se fait sur le site.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 2 : le chemin d'une cliente (≈ 3 min)
+  - partie: "2. Le chemin d'une cliente"
+    texte: >
+      Suivons maintenant Awa, une cliente. Elle découvre la boutique, choisit un gâteau,
+      le met dans son panier, indique son adresse, paie, et reçoit sa confirmation.
+    actions:
+      - illustration: images/eb-01-parcours-client.png
+        zoom: 1.02
+  - texte: >
+      Ce chemin s'appelle le tunnel d'achat. Chaque étape doit être simple :
+      si la cliente hésite ou se perd en route, elle abandonne son panier.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Voici la boutique des Délices de Maïmouna, comme Awa la voit sur son téléphone ou son ordinateur.
+      En haut, le logo et le menu du site. Au centre, les produits, avec leur photo et leur prix.
+    actions:
+      - survoler: 'header .navbar-brand'
+      - surligner: '#products_grid'
+        duree: 3
+  - texte: >
+      Les produits sont rangés en catégories : Gâteaux, Pâtisseries et Viennoiseries.
+      Awa cherche un gâteau d'anniversaire : elle ouvre la catégorie Gâteaux.
+    actions:
+      - surligner_texte: Pâtisseries
+        duree: 1.5
+      - cliquer_texte: Gâteaux
+  - texte: >
+      Les prix sont affichés taxes comprises : c'est ce que la cliente paiera vraiment.
+      Elle clique sur le Fraisier pour voir sa fiche.
+    actions:
+      - surligner: '.oe_product:has-text("Fraisier")'
+        duree: 2
+      - cliquer: '.oe_product:has-text("Fraisier") .oe_product_image_link'
+  - texte: >
+      La fiche du produit montre la photo en grand, le nom, le prix, dix-huit mille francs CFA,
+      et le bouton qui compte le plus dans toute la boutique : Ajouter au panier.
+    actions:
+      - surligner: '#product_details h1'
+        duree: 1.5
+      - surligner: '#add_to_cart, a:has-text("Ajouter au panier")'
+        duree: 2.5
+  - texte: >
+      Awa clique sur Ajouter au panier. Regardez en haut : le petit panier affiche maintenant un article.
+    actions:
+      - bouton: Ajouter au panier
+      - attendre: 1
+      - surligner: 'header a[href="/shop/cart"]'
+        duree: 2
+  - texte: Elle clique sur ce panier pour vérifier sa commande.
+    actions:
+      - cliquer: 'header a[href="/shop/cart"]'
+  - texte: >
+      Le panier récapitule tout : le gâteau, la quantité qu'elle peut encore changer,
+      et à droite, le total, taxes comprises.
+    actions:
+      - surligner: '.o_cart_product'
+        duree: 2
+      - surligner_texte: Total
+        duree: 2.5
+  - texte: >
+      En haut, regardez ces trois mots : Commande, Adresse, Paiement. Ce sont les étapes du tunnel d'achat.
+      Awa est à la première ; le bouton Payer l'emmène vers son adresse, puis vers le paiement.
+    actions:
+      - surligner: '.o_wizard'
+        duree: 3
+      - survoler_texte: Payer
+  - texte: >
+      Nous paramétrerons ensemble l'adresse, la livraison et le paiement dans les parcours un et deux.
+      Pour aujourd'hui, arrêtons-nous ici, et passons de l'autre côté du comptoir.
+    actions:
+      - attendre: 0.5
+
+  # ------------------------------------------------------------------ partie 3 : les coulisses (≈ 3 min)
+  - partie: "3. Les coulisses : l'application Site Web"
+    texte: >
+      Côté Maïmouna, tout se passe dans Odoo. Ouvrez l'écran d'accueil, puis cliquez sur l'application Site Web.
+    actions:
+      - aller: /odoo
+      - cliquer: '.o_app:has-text("Site Web")'
+  - texte: >
+      Odoo affiche votre site, exactement comme vos clients le voient.
+      La page d'accueil est encore vide : nous la construirons dans la prochaine capsule.
+      Au-dessus, quatre menus : Site, eCommerce, Analyse et Configuration.
+    actions:
+      - surligner: '.o_menu_sections'
+        duree: 3.5
+  - texte: >
+      Le menu Site sert à construire le site : les pages, le menu, et le référencement sur Google.
+    actions:
+      - ouvrir_menu: Site
+      - survoler_texte: Pages
+      - survoler_texte: Optimisation SEO
+  - texte: >
+      Le menu eCommerce, c'est le cœur de la boutique. On y trouve les commandes, les paniers abandonnés,
+      les clients, les produits, et les promotions.
+    actions:
+      - ouvrir_menu: eCommerce
+      - survoler_texte: Paniers abandonnés
+      - survoler_texte: Catégories d'eCommerce
+      - survoler_texte: Remise & Fidélité
+  - texte: >
+      Le menu Analyse vous dit qui visite votre site, quelles pages sont vues, et ce qui se vend.
+    actions:
+      - ouvrir_menu: Analyse
+      - survoler_texte: Visiteurs
+  - texte: >
+      Et Configuration regroupe les réglages de la boutique : les moyens de paiement, les modes de livraison
+      et les paramètres. Nous y passerons beaucoup de temps dans les prochaines capsules.
+    actions:
+      - ouvrir_menu: Configuration
+      - survoler_texte: Fournisseurs de paiement
+      - survoler_texte: Modes de livraison
+  - texte: Ouvrons maintenant les commandes, dans le menu eCommerce.
+    actions:
+      - ouvrir_menu: eCommerce
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Commandes"):not(:has-text("non"))'
+  - texte: >
+      Voici les dernières commandes passées sur le site : Awa Diop, Moussa Ndiaye et Khady Sarr.
+      Pour chacune, vous voyez la date, la cliente ou le client, et le montant.
+    actions:
+      - surligner: '.o_list_table tbody'
+        duree: 3
+      - surligner_texte: 28 000
+        duree: 2
+  - texte: >
+      Remarquez les deux filtres en haut : Confirmé, et Depuis le site web.
+      Cette liste ne montre que les ventes faites en ligne, pas celles du comptoir.
+    actions:
+      - surligner: '.o_searchview_facet:has-text("site web")'
+        duree: 2.5
+  - texte: Ouvrons la commande d'Awa.
+    actions:
+      - cliquer_texte: Awa Diop
+  - texte: >
+      Tout y est : la cliente, ce qu'elle a commandé, un gâteau d'anniversaire et dix croissants,
+      les prix, la TVA et le total de vingt-huit mille francs CFA.
+      Plus besoin de cahier : rien ne se perd.
+    actions:
+      - surligner: '.o_field_widget[name="order_line"]'
+        duree: 3
+      - surligner: '.oe_subtotal_footer, .o_sale_order_total, [name="tax_totals"]'
+        duree: 2
+  - texte: >
+      Et Odoo a déjà préparé la suite. Le bouton Livraison, en haut, ouvre le bon de livraison
+      que votre livreur emportera. Nous verrons tout cela en détail dans le parcours deux.
+    actions:
+      - surligner: '.oe_stat_button:has-text("Livraison")'
+        duree: 3
+
+  # ------------------------------------------------------------------ pièges (≈ 1 min)
+  - chapitre: Pièges fréquents
+    texte: >
+      Avant de terminer, trois pièges fréquents.
+      Premier piège : un produit qui n'est pas publié n'apparaît pas dans la boutique.
+      Si une cliente ne trouve pas un gâteau, vérifiez d'abord qu'il est bien publié.
+    actions:
+      - aller: /shop/category/gateaux-1
+  - texte: >
+      Deuxième piège : ouvrir la boutique trop tôt, avec des prix faux ou des produits sans photo.
+      Une cliente qui voit une image grise ne commande pas. Préparez vos produits avant de partager le lien.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : ne jamais tester. Avant de lancer la boutique, passez vous-même une commande d'essai,
+      depuis votre téléphone, du premier clic jusqu'au paiement.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice (≈ 1 min)
+  - chapitre: À retenir
+    texte: >
+      Retenons l'essentiel. Un : la boutique en ligne vend pour vous, à toute heure.
+      Deux : le tunnel d'achat mène la cliente du produit jusqu'au paiement.
+      Trois : les commandes arrivent dans l'application Site Web, menu eCommerce, Commandes.
+      Quatre : WhatsApp sert à faire venir les clients vers votre boutique.
+    apres: 1.2
+    actions:
+      - illustration: images/eb-01-recap.png
+        zoom: 1.02
+  - chapitre: Exercice
+    texte: >
+      À vous de jouer : ouvrez la boutique de votre base, ajoutez un produit à votre panier,
+      puis retrouvez les commandes dans l'application Site Web.
+      Dans la prochaine capsule, nous construirons le site des Délices de Maïmouna : le thème, les couleurs
+      et la page d'accueil. À tout de suite !
+    actions:
+      - attendre: 1
