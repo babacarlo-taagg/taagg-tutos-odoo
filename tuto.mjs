@@ -15,6 +15,7 @@
 //   ODOO_URL, ODOO_BASE, ODOO_LOGIN, ODOO_MOT_DE_PASSE
 //   ELEVENLABS_API_KEY, ELEVENLABS_VOICE_ID, ELEVENLABS_MODELE
 //   OPENAI_API_KEY, OPENAI_VOIX
+//   CHROMIUM_CHEMIN (facultatif : navigateur déjà installé, ex. /opt/pw-browsers/chromium dans le cloud)
 
 import { execFileSync, spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -465,7 +466,7 @@ class Camera {
 }
 
 async function tourner(sc, pistes, dossier, visible) {
-  const navigateur = await chromium.launch({ headless: !visible });
+  const navigateur = await chromium.launch({ headless: !visible, executablePath: process.env.CHROMIUM_CHEMIN || undefined });
   const etat = await connexion(navigateur, sc);
   const [l, h] = sc.ecran;
   const ctx = await navigateur.newContext({ viewport: { width: l, height: h }, locale: 'fr-FR', storageState: etat });
@@ -689,7 +690,7 @@ function mmss(s) {
 
 async function explorer(chemin) {
   const sc = { ecran: [1600, 900] };
-  const navigateur = await chromium.launch();
+  const navigateur = await chromium.launch({ executablePath: process.env.CHROMIUM_CHEMIN || undefined });
   const etat = await connexion(navigateur, sc);
   const ctx = await navigateur.newContext({ viewport: { width: 1600, height: 900 }, locale: 'fr-FR', storageState: etat });
   const page = await ctx.newPage();
