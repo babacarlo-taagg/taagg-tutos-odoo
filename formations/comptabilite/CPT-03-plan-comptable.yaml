@@ -73,25 +73,25 @@ etapes:
       La classe un, ce sont les ressources durables : le capital apporté par les associés,
       les réserves et les emprunts à long terme.
     actions:
-      - cliquer: '.o_search_panel_label_title:text-is("1"), .o_search_panel_category_value header:has-text("1")'
+      - cliquer: '.o_search_panel_label[data-tooltip="1"]'
   - texte: >
       La classe deux, l'actif immobilisé : ce que l'entreprise garde plusieurs années,
       comme les bâtiments, les véhicules ou le four de la boulangerie.
     actions:
-      - cliquer: '.o_search_panel_label_title:text-is("2"), .o_search_panel_category_value header:has-text("2")'
+      - cliquer: '.o_search_panel_label[data-tooltip="2"]'
   - texte: >
       La classe trois, les stocks : la farine, le sucre, et les produits prêts à vendre.
     actions:
-      - cliquer: '.o_search_panel_label_title:text-is("3"), .o_search_panel_category_value header:has-text("3")'
+      - cliquer: '.o_search_panel_label[data-tooltip="3"]'
   - texte: >
       La classe quatre, les tiers : toutes les personnes avec qui l'entreprise a des comptes à régler.
       Les clients, les fournisseurs, le personnel, et l'État, pour la TVA.
     actions:
-      - cliquer: '.o_search_panel_label_title:text-is("4"), .o_search_panel_category_value header:has-text("4")'
+      - cliquer: '.o_search_panel_label[data-tooltip="4"]'
   - texte: >
       La classe cinq, la trésorerie : l'argent disponible, à la banque et dans la caisse.
     actions:
-      - cliquer: '.o_search_panel_label_title:text-is("5"), .o_search_panel_category_value header:has-text("5")'
+      - cliquer: '.o_search_panel_label[data-tooltip="5"]'
   - texte: >
       Ces cinq premières classes forment le bilan : la photo de ce que l'entreprise possède
       et de ce qu'elle doit, à une date donnée.
@@ -101,29 +101,29 @@ etapes:
       La classe six regroupe les charges, c'est-à-dire tout ce que l'entreprise dépense pour travailler :
       achats, loyer, salaires, électricité.
     actions:
-      - cliquer: '.o_search_panel_label_title:text-is("6"), .o_search_panel_category_value header:has-text("6")'
+      - cliquer: '.o_search_panel_label[data-tooltip="6"]'
   - texte: >
       La classe sept regroupe les produits : ce que l'activité rapporte, d'abord les ventes.
       Les produits moins les charges donnent le résultat de l'exercice.
     actions:
-      - cliquer: '.o_search_panel_label_title:text-is("7"), .o_search_panel_category_value header:has-text("7")'
+      - cliquer: '.o_search_panel_label[data-tooltip="7"]'
   - texte: >
       Cliquez sur la petite flèche : chaque classe se déplie en sous-ensembles.
       Le 70 regroupe les ventes, le 71 les subventions d'exploitation, et ainsi de suite.
     actions:
-      - surligner: '.o_search_panel_category_value:has(header:has-text("7")) ul'
+      - surligner: 'li.o_search_panel_category_value:has(> header [data-tooltip="7"]) > ul'
         duree: 3
   - texte: >
       Enfin, la classe huit sert aux opérations exceptionnelles, dites hors activités ordinaires,
       comme la vente d'un ancien véhicule. Et la classe neuf, aux engagements hors bilan
       et à la comptabilité analytique.
     actions:
-      - cliquer: '.o_search_panel_label_title:text-is("8"), .o_search_panel_category_value header:has-text("8")'
+      - cliquer: '.o_search_panel_label[data-tooltip="8"]'
       - attendre: 1.5
-      - cliquer: '.o_search_panel_label_title:text-is("9"), .o_search_panel_category_value header:has-text("9")'
+      - cliquer: '.o_search_panel_label[data-tooltip="9"]'
   - texte: Revenons à la liste complète avec Tous.
     actions:
-      - cliquer: '.o_search_panel_label_title:text-is("Tous"), .o_search_panel_category_value header:has-text("Tous")'
+      - cliquer: '.o_search_panel_label[data-tooltip="Tous"]'
 
   # ------------------------------------------------------------------ partie 3 : lire un compte
   - partie: "3. Lire un compte"
