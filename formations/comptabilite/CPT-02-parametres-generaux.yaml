@@ -1,0 +1,288 @@
+# CPT-02 · Les paramètres généraux de la Comptabilité
+# État de départ attendu (à remettre par l'API avant chaque tournage) :
+#   société 1 « correction les délices de maimouna » sélectionnée, adresse vide (street, city),
+#   aucune mise en page de document choisie (external_report_layout_id vide),
+#   « Montant total de la facture en toutes lettres » décoché (display_invoice_amount_total_words = False).
+# Ce que la capsule change, et qu'on garde pour les capsules suivantes :
+#   l'adresse de la société (Rue 22, Médina, Dakar), la mise en page « Bold »,
+#   le montant en toutes lettres sur les factures.
+titre: Les paramètres généraux de la Comptabilité
+sous_titre: Formation Comptabilité Odoo · CPT-02
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+  CPT-02: capsule deux
+  CPT-03: capsule trois
+  XOF: iks o èf
+  NINEA: ninéa
+fin:
+  message: "Prochaine capsule : le plan comptable SYSCOHADA"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette deuxième capsule de la formation à la comptabilité avec Odoo.
+      Aujourd'hui, nous réglons les paramètres généraux : ceux qu'on règle une seule fois,
+      avant d'émettre la première facture.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de ces quelques minutes, vous saurez compléter la fiche de votre société,
+      choisir la présentation de vos factures, vérifier les taxes, la devise et les arrondis,
+      et activer les fonctions utiles au Sénégal.
+    actions:
+      - attendre: 1
+  - texte: >
+      Dans la capsule précédente, nous avons fait le tour de l'application Comptabilité,
+      et nous avons vu que tous les réglages se trouvent dans le menu Configuration. C'est là que nous allons.
+    actions:
+      - surligner: '.o_menu_sections'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 1 : ouvrir les paramètres
+  - partie: "1. Ouvrir les paramètres"
+    texte: >
+      Ouvrez le menu Configuration. Tout en haut, la première ligne s'appelle Paramètres.
+    actions:
+      - ouvrir_menu: Configuration
+      - survoler_texte: Paramètres
+  - texte: Cliquez dessus.
+    actions:
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Paramètres")'
+  - texte: >
+      Voici la page des paramètres. À gauche, la liste des applications installées :
+      Odoo a ouvert directement celle de la Comptabilité.
+    actions:
+      - surligner: '.settings_tab'
+        duree: 3
+  - texte: >
+      La page est longue, mais elle est rangée en sections : taxes, devises, factures clients,
+      paiements, et ainsi de suite. Pour retrouver un réglage, tapez simplement son nom dans la barre de recherche.
+    actions:
+      - surligner: '.o_searchview'
+        duree: 3
+  - texte: >
+      En haut à gauche, deux boutons très importants : Enregistrer, pour garder vos changements,
+      et Ignorer, pour les annuler. Rien n'est pris en compte tant que vous n'avez pas enregistré.
+    actions:
+      - surligner: '.o_form_button_save'
+        duree: 2.5
+      - surligner: 'button:has-text("Ignorer")'
+        duree: 2
+  - texte: >
+      Remarquez aussi ce petit immeuble à côté de certains titres. Il signifie que le réglage
+      est propre à la société dans laquelle vous travaillez : chaque société a le sien.
+    actions:
+      - surligner: '.o_setting_right_pane:has-text("Taxes par défaut") .fa-building-o'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 2 : la fiche de la société
+  - partie: "2. La fiche de la société"
+    texte: >
+      Commençons par l'entreprise elle-même. Son nom, son adresse et son numéro fiscal
+      apparaîtront sur toutes vos factures : ils doivent être exacts.
+    actions:
+      - cliquer: '.settings_tab .tab[data-key="general_settings"]'
+  - texte: >
+      Dans les paramètres généraux, la section Sociétés affiche la société en cours.
+      Cliquez sur Mettre à jour les informations.
+    actions:
+      - surligner_texte: Mettre à jour les informations
+        duree: 2
+      - cliquer_texte: Mettre à jour les informations
+  - texte: >
+      La fiche de la société s'ouvre. Complétons l'adresse : la rue, puis la ville, Dakar.
+      Le pays, le Sénégal, est déjà renseigné.
+    actions:
+      - champ: street
+        taper: Rue 22, Médina
+      - champ: city
+        taper: Dakar
+  - texte: >
+      Le champ numéro de TVA reçoit votre identifiant fiscal, le NINEA au Sénégal.
+      Recopiez-le exactement comme sur vos documents officiels : vos clients professionnels en ont besoin.
+    actions:
+      - surligner_champ: vat
+        duree: 3.5
+  - texte: >
+      Juste en dessous, la devise de la société : XOF, c'est-à-dire le franc CFA.
+      Toute la comptabilité est tenue dans cette devise.
+    actions:
+      - surligner_champ: currency_id
+        duree: 3
+  - texte: >
+      Vous pouvez aussi ajouter le logo, le téléphone et le site web. Enregistrez avec la petite icône
+      en forme de nuage, en haut.
+    actions:
+      - surligner_champ: logo
+        duree: 2
+      - enregistrer: oui
+  - texte: Revenons aux paramètres grâce au fil d'Ariane, en haut à gauche.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Paramètres")'
+
+  # ------------------------------------------------------------------ partie 3 : la présentation des factures
+  - partie: "3. La présentation des factures"
+    texte: >
+      Odoo nous ramène à la Comptabilité. Retournons dans les paramètres généraux,
+      section Sociétés, et cliquez sur Configurer la mise en page du document.
+      C'est ici que l'on choisit l'allure de vos factures, devis et bons de commande.
+    actions:
+      - cliquer: '.settings_tab .tab[data-key="general_settings"]'
+      - cliquer_texte: Configurer la mise en page du document
+  - texte: >
+      En haut, plusieurs modèles de mise en page. À droite, un aperçu se met à jour à chaque choix.
+    actions:
+      - surligner: '.modal .o_field_widget[name="report_layout_id"]'
+        duree: 2.5
+      - surligner: '.modal .o_field_widget[name="preview"]'
+        duree: 2.5
+  - texte: >
+      Choisissons le modèle Bold : les titres sont plus marqués, la facture se lit d'un coup d'œil.
+    actions:
+      - cliquer: '.modal .o_field_widget[name="report_layout_id"] :text-is("Bold")'
+      - attendre: 1.5
+  - texte: >
+      Vous pouvez aussi déposer votre logo et choisir les couleurs de l'entreprise :
+      elles seront reprises dans tous vos documents.
+    actions:
+      - surligner_champ: logo
+        duree: 2
+      - surligner_champ: primary_color
+        duree: 2
+  - texte: >
+      Le format de papier est le A4, celui qu'on utilise au Sénégal. Cliquez sur Continuer pour valider.
+    actions:
+      - surligner_champ: paperformat_id
+        duree: 2
+      - cliquer: '.modal-footer button:has-text("Continuer")'
+
+  # ------------------------------------------------------------------ partie 4 : taxes, devise et arrondis
+  - partie: "4. Taxes, devise et arrondis"
+    texte: >
+      Revenons maintenant à la Comptabilité, dans la colonne de gauche.
+    actions:
+      - cliquer: '.settings_tab .tab[data-key="account"]'
+  - texte: >
+      Première section : la localisation fiscale. Elle indique que la base suit le pack Sénégal, SYSCOHADA :
+      le plan comptable, les taxes et les rapports légaux ont été installés à partir de lui.
+    actions:
+      - surligner_texte: Sénégal - SYSCOHADA
+        duree: 3.5
+  - texte: >
+      Les taxes par défaut sont celles qu'Odoo propose quand vous créez un nouveau produit :
+      ici, la TVA à dix-huit pour cent, à la vente comme à l'achat.
+      C'est le taux normal au Sénégal, ce qui vous évite de le choisir à chaque fois.
+    actions:
+      - surligner_champ: sale_tax_id
+        duree: 2.5
+      - surligner_champ: purchase_tax_id
+        duree: 2.5
+  - texte: >
+      Juste en dessous, Prix hors taxes : les prix de vos produits sont saisis sans la TVA,
+      et Odoo ajoute la taxe sur la facture.
+    actions:
+      - surligner_champ: account_price_include
+        duree: 3
+  - texte: >
+      La méthode d'arrondi décide comment Odoo arrondit la TVA. Arrondir par taxe calcule
+      la TVA sur le total de la facture, puis l'arrondit une seule fois.
+      C'est le réglage le plus juste : on le garde.
+    actions:
+      - surligner_champ: tax_calculation_rounding_method
+        duree: 4
+  - texte: >
+      Un peu plus bas, la devise principale : le franc CFA. Ouvrons la liste des devises pour voir comment il est réglé.
+    actions:
+      - surligner_champ: currency_id
+        duree: 2
+      - cliquer: '.o_setting_right_pane:has-text("Devise principale") a:has-text("Devises"), .o_setting_right_pane:has-text("Devise principale") button:has-text("Devises")'
+  - texte: >
+      Le franc CFA n'a pas de centimes : les montants sont arrondis au franc près, sans virgule.
+      Odoo le sait déjà, il n'y a rien à changer.
+    actions:
+      - surligner: '.o_data_row:has-text("XOF")'
+        duree: 3.5
+  - texte: Revenons aux paramètres.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Paramètres")'
+
+  # ------------------------------------------------------------------ partie 5 : les fonctions à activer
+  - partie: "5. Les fonctions à activer"
+    texte: >
+      Dernière étape : les fonctions à activer. Descendons jusqu'à la section Factures clients.
+    actions:
+      - defiler: '.o_setting_right_pane:has-text("Montant total de la facture en toutes lettres")'
+  - texte: >
+      Au Sénégal, une facture indique souvent son montant en toutes lettres :
+      « Arrêtée la présente facture à la somme de cent dix-huit mille francs CFA ».
+      Cochez Montant total de la facture en toutes lettres, et Odoo l'écrira pour vous.
+    actions:
+      - surligner_texte: Montant total de la facture en toutes lettres
+        duree: 2.5
+      - cocher: display_invoice_amount_total_words
+  - texte: >
+      Taxes dans la devise de la société est déjà coché. Les autres fonctions de cette page,
+      comme l'arrondi des paiements en espèces ou les conditions générales, auront leur propre capsule.
+    actions:
+      - surligner_texte: Taxes dans la devise de la société
+        duree: 2.5
+      - surligner_texte: Arrondi des paiements en espèces
+        duree: 2.5
+  - texte: >
+      Enfin, tout en bas, les périodes fiscales : l'exercice se termine le trente et un décembre,
+      comme le prévoit le SYSCOHADA. Là encore, rien à changer.
+    actions:
+      - defiler: '.o_field_widget[name="fiscalyear_last_month"]'
+      - surligner_champ: fiscalyear_last_month
+        duree: 3
+  - texte: >
+      Nous avons modifié un réglage : n'oubliez surtout pas de cliquer sur Enregistrer.
+    actions:
+      - cliquer: '.o_form_button_save'
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : quitter la page sans enregistrer.
+      Vos changements sont alors perdus. Cherchez toujours le bouton Enregistrer avant de partir.
+    actions:
+      - surligner: '.o_form_button_save'
+        duree: 2.5
+  - texte: >
+      Deuxième piège : régler la mauvaise société. Les réglages marqués d'un petit immeuble ne valent
+      que pour la société affichée en haut à droite. Vérifiez-la avant de modifier quoi que ce soit.
+    actions:
+      - surligner_texte: correction les délices de maimouna
+        duree: 3
+  - texte: >
+      Troisième piège : toucher à la localisation fiscale ou à la devise une fois que la comptabilité a commencé.
+      Ces deux choix se font au tout début. Ensuite, on n'y revient plus.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Les paramètres se trouvent dans Configuration, puis Paramètres.
+      La fiche de la société porte son adresse, son NINEA et sa devise, le franc CFA.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      La mise en page du document définit l'allure de vos factures. Les taxes par défaut et la méthode d'arrondi
+      sont déjà adaptées au Sénégal. Et après chaque changement, on enregistre.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : complétez la fiche de votre propre société, choisissez une mise en page pour vos factures,
+      et activez le montant en toutes lettres.
+      Dans la prochaine capsule, nous découvrirons le plan comptable SYSCOHADA. À tout de suite !
+    actions:
+      - attendre: 1
