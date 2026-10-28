@@ -102,6 +102,16 @@ etapes:
       - surligner_champ: refund_sequence
         duree: 3
   - texte: >
+      En haut, le bouton Pièces comptables ouvre tout ce qui a été enregistré dans ce journal.
+    actions:
+      - cliquer: '.oe_stat_button:has-text("Pièces comptables"), button:has-text("Pièces comptables")'
+  - texte: >
+      Voici notre facture à la Boutique Les Almadies. Son numéro commence par le préfixe du journal,
+      I-N-V, puis l'année, puis un compteur. Odoo le donne tout seul, sans trou ni doublon.
+    actions:
+      - surligner: '.o_data_row:has-text("INV/2026/00001")'
+        duree: 4
+  - texte: >
       Revenons à la liste. Le journal des achats fonctionne de la même façon pour les factures fournisseurs,
       avec le compte six cent un mille cent, achats de marchandises, par défaut.
     actions:
@@ -171,6 +181,14 @@ etapes:
       - surligner_champ: default_account_id
         duree: 4
   - texte: >
+      Les onglets Paiements entrants et Paiements sortants listent les façons d'encaisser et de payer
+      avec cette caisse. Nous les réglerons dans la capsule consacrée aux moyens de paiement.
+    actions:
+      - surligner: '.o_notebook .nav-link:has-text("Paiements entrants")'
+        duree: 2
+      - surligner: '.o_notebook .nav-link:has-text("Paiements sortants")'
+        duree: 2
+  - texte: >
       Revenons à la liste : la caisse boutique a rejoint les autres journaux.
     actions:
       - cliquer: '.breadcrumb-item a:has-text("Journaux")'
@@ -183,6 +201,14 @@ etapes:
       - cliquer: '.o_menu_sections a:has-text("Tableau de bord"), .o_menu_sections .dropdown-toggle:has-text("Tableau de bord")'
       - surligner: '.o_kanban_record:has-text("Caisse boutique")'
         duree: 4
+  - texte: >
+      Vous l'avez compris : chaque carte du tableau de bord est un journal.
+      Ventes, Achats, Banque, Caisse : le tableau de bord est la vitrine de vos journaux.
+    actions:
+      - surligner: '.o_kanban_record:has-text("Ventes")'
+        duree: 1.5
+      - surligner: '.o_kanban_record:has-text("Achats")'
+        duree: 1.5
 
   # ------------------------------------------------------------------ pièges fréquents
   - partie: "Les pièges à éviter"
