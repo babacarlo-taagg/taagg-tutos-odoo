@@ -464,8 +464,12 @@ class Camera {
   }
 }
 
+// Chromium déjà installé ailleurs (environnement cloud) : CHROMIUM_CHEMIN dans .env
+const lancerChromium = (options = {}) =>
+  chromium.launch({ ...options, ...(process.env.CHROMIUM_CHEMIN ? { executablePath: process.env.CHROMIUM_CHEMIN } : {}) });
+
 async function tourner(sc, pistes, dossier, visible) {
-  const navigateur = await chromium.launch({ headless: !visible });
+  const navigateur = await lancerChromium({ headless: !visible });
   const etat = await connexion(navigateur, sc);
   const [l, h] = sc.ecran;
   const ctx = await navigateur.newContext({ viewport: { width: l, height: h }, locale: 'fr-FR', storageState: etat });
@@ -689,7 +693,7 @@ function mmss(s) {
 
 async function explorer(chemin) {
   const sc = { ecran: [1600, 900] };
-  const navigateur = await chromium.launch();
+  const navigateur = await lancerChromium();
   const etat = await connexion(navigateur, sc);
   const ctx = await navigateur.newContext({ viewport: { width: 1600, height: 900 }, locale: 'fr-FR', storageState: etat });
   const page = await ctx.newPage();
