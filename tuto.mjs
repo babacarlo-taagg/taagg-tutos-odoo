@@ -24,6 +24,14 @@ import { fileURLToPath } from 'node:url';
 import YAML from 'yaml';
 import { chromium } from 'playwright';
 
+// Derrière un proxy (environnement cloud), le fetch de Node ne le suit que si NODE_USE_ENV_PROXY=1
+// est posé au démarrage : on se relance alors avec ce réglage.
+if ((process.env.HTTPS_PROXY || process.env.https_proxy) && !process.env.NODE_USE_ENV_PROXY) {
+  const { spawnSync } = await import('node:child_process');
+  const r = spawnSync(process.execPath, process.argv.slice(1), { stdio: 'inherit', env: { ...process.env, NODE_USE_ENV_PROXY: '1', NODE_NO_WARNINGS: '1' } });
+  process.exit(r.status ?? 1);
+}
+
 const ICI = path.dirname(fileURLToPath(import.meta.url));
 const LOGO = path.join(ICI, 'ressources/logo_taagg_sombre.png');
 const COULEURS = { fond: '#0B415B', accent: '#68C184', texte: '#FFFFFF' };
