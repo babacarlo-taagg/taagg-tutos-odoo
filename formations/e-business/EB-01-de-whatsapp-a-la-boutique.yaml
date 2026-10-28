@@ -12,6 +12,7 @@ voix:
   moteur: elevenlabs
   vitesse: 1.0
 prononciation:
+  TAAGG School: l'école Tag
   TAAGG: Tag
   EB-01: capsule un
   Maïmouna: Maïmouna

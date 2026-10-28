@@ -27,6 +27,10 @@ Les formations TAAGG utilisent **la voix de Babacar LO**, clonée dans ElevenLab
 - clonage : `node tuto.mjs cloner-voix voix-source/babacar-lo-echantillon.mp3 "Babacar LO"`
   (écrit `ELEVENLABS_VOICE_ID` dans `.env`) ;
 - il faut `ELEVENLABS_API_KEY` dans `.env` et `api.elevenlabs.io` dans les domaines autorisés de l'environnement cloud.
+- Voix clonée dans le compte : **« Babacar LO (naturel) »**, identifiant `YqeSIPMrI8Xhr78yPGXy`
+  (à mettre dans `ELEVENLABS_VOICE_ID` ; la retrouver au besoin avec `GET /v2/voices?voice_type=personal`).
+- Ce clone imite une parole naturelle : il glisse parfois un « euh » ou répète un mot (« tout le, tout le travail »).
+  **Toujours vérifier par transcription** avant de livrer (voir « Contrôler la voix » plus bas).
 - Nettoyage d'un nouvel enregistrement avant clonage :
   `ffmpeg -i brut.m4a -ac 1 -af "highpass=f=70,afftdn=nf=-30,loudnorm=I=-18:TP=-2:LRA=11,aresample=44100,alimiter=limit=0.7:level=false" echantillon.mp3`
 
@@ -53,7 +57,22 @@ Une génération = un appel : demander l'accord avant de lancer toute la série.
 3. Nettoyer si besoin : `ffmpeg -i 01.m4a -af "highpass=f=80,afftdn=nf=-25,silenceremove=start_periods=1:start_threshold=-45dB,areverse,silenceremove=start_periods=1:start_threshold=-45dB,areverse" 01.mp3`
 4. Ranger dans `scenarios/<nom>.voix/` et lancer `--voix fichiers`.
 
+## Contrôler la voix (obligatoire avant de livrer)
+
+Faire retranscrire la piste finale par ElevenLabs (quelques centimes) et la comparer au texte :
+```bash
+ffmpeg -i sortie/<nom>/son.m4a -ac 1 -b:a 64k son.mp3
+curl -sS -H "xi-api-key: $ELEVENLABS_API_KEY" -F model_id=scribe_v1 -F language_code=fra -F file=@son.mp3 \
+  https://api.elevenlabs.io/v1/speech-to-text
+```
+Chercher : « euh », mots répétés, sigles mal dits, noms propres déformés. Pour refaire une seule phrase :
+déplacer son fichier `sortie/<nom>/voix/NN-elevenlabs-*.mp3` (NN = numéro de l'étape, en partant de 1)
+dans `sortie/<nom>/voix-ecartees/`, relancer `--seulement-voix`, retranscrire ce fichier, puis retourner la vidéo.
+
 ## Prononciation et rythme
+
+- Règles connues : `TAAGG School: l'école Tag` (sinon on entend « Tax School »), `TAAGG: Tag`,
+  `E-Business: i-business`, `eCommerce: e-commerce`, `FCFA: francs CFA`.
 
 - `prononciation:` dans le scénario remplace un mot écrit par sa forme dite, **pour la voix seulement**
   (les sous-titres gardent l'orthographe) : `TAAGG: Tag`, `FCFA: francs CFA`, `CRM: cé-erre-èm`.
