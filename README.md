@@ -24,6 +24,7 @@ node tuto.mjs scenarios/01-creer-un-contact.yaml --brouillon   # vérifier les g
 node tuto.mjs scenarios/01-creer-un-contact.yaml --seulement-voix   # écouter la voix
 node tuto.mjs scenarios/01-creer-un-contact.yaml           # vidéo finale → sortie/
 node tuto.mjs scenarios/01-creer-un-contact.yaml --remonter    # refaire seulement le montage
+node tuto.mjs schema formations/e-business/images/eb-01-parcours.html  # schéma HTML → PNG 1920×1080
 ```
 
 Options : `--voix elevenlabs|openai|fichiers|muet`, `--sans-sous-titres`, `--visible` (voir le navigateur).
@@ -36,6 +37,7 @@ Options : `--voix elevenlabs|openai|fichiers|muet`, `--sans-sous-titres`, `--vis
 | `tuto-odoo-scenario` | écrire le scénario : pédagogie, texte pour l'oreille, actions, sélecteurs Odoo 20 |
 | `tuto-odoo-voix` | choisir et produire la voix (ElevenLabs, OpenAI, HeyGen, micro), prononciation |
 | `tuto-odoo-montage` | contrôle qualité, générique, version verticale, vignette, textes YouTube |
+| `tuto-odoo-illustrations` | schémas HTML aux couleurs TAAGG et images d'ambiance IA, action `illustration:` |
 | `formation-odoo` | formation complète en capsules de 10 min : programme, structure, données de démo, série |
 
 Il suffit de demander à Claude, dans ce dépôt : « Fais-moi un tuto sur la création d'un devis ».

@@ -49,6 +49,7 @@ dans Odoo en attendant que la voix ait fini : la voix et l'image sont toujours s
    les regarder (curseur visible, bon écran au bon moment, sous-titres lisibles, aucune donnée
    personnelle réelle), et vérifier la durée. Corriger puis relivrer.
 9. **Livrer** → compétence `tuto-odoo-montage` (textes YouTube, vignette, version courte verticale).
+10. **Images** (si une idée ne se voit pas à l’écran) → compétence `tuto-odoo-illustrations` : schémas HTML et images d’ambiance, action `illustration:`.
 
 ## Fichiers produits (`sortie/<nom-du-scenario>/`)
 

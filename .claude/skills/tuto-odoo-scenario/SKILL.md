@@ -73,8 +73,26 @@ etapes:
 | `touche: Escape` | appuie sur une touche |
 | `defiler: 400` ou `defiler: '<sélecteur>'` | fait défiler la page |
 | `attendre: 1.5` | pause (secondes) |
+| `illustration: images/eb-01-tunnel.png` (+ `duree: 6`, `zoom: 1.04`) | image plein écran (schéma, ambiance) avec léger zoom ; sans `duree`, reste jusqu'à la fin de la phrase — voir `tuto-odoo-illustrations` |
 
 Le curseur glisse comme une main, chaque clic fait une onde verte : pas besoin d'en rajouter.
+
+## Montrer une image (schéma ou ambiance)
+
+Quand l'écran Odoo ne suffit pas (parcours client, circuit de l'argent, comparaison) :
+```yaml
+- texte: >
+    Avant d'ouvrir Odoo, regardons le chemin d'une commande : la cliente choisit un gâteau,
+    paie avec son téléphone, et Ibou le livre à moto.
+  actions:
+    - illustration: images/eb-01-parcours-client.png   # chemin relatif au scénario
+      zoom: 1.03
+- texte: Retrouvons maintenant cette commande dans Odoo.
+  actions:
+    - menu: Site Web > eCommerce > Commandes
+```
+Au plus une image par minute, jamais pour décorer : règles, fabrication et coûts dans la compétence
+`tuto-odoo-illustrations`.
 
 ## Trouver les bons noms (Odoo 19 et 20, mêmes repères)
 

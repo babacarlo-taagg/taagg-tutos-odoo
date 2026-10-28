@@ -16,12 +16,15 @@ const serveur = http.createServer((req, res) => {
 });
 serveur.listen(0, async () => {
   const env = { ...process.env, ODOO_URL: `http://127.0.0.1:${serveur.address().port}`, ODOO_LOGIN: '' };
-  const r = await new Promise((ok) => {
+  const tourner = (scenario, ...options) => new Promise((ok) => {
     import('node:child_process').then(({ spawn }) => {
-      const p = spawn(process.execPath, [path.join(ICI, '..', 'tuto.mjs'), path.join(ICI, '..', 'scenarios', '01-creer-un-contact.yaml'), '--voix', 'muet', ...process.argv.slice(2)], { env, stdio: 'inherit' });
+      const p = spawn(process.execPath, [path.join(ICI, '..', 'tuto.mjs'), scenario, '--voix', 'muet', ...options], { env, stdio: 'inherit' });
       p.on('exit', ok);
     });
   });
+  let r = await tourner(path.join(ICI, '..', 'scenarios', '01-creer-un-contact.yaml'), ...process.argv.slice(2));
+  // action « illustration » (image plein écran)
+  if (!r) r = await tourner(path.join(ICI, 'essai-illustration.yaml'), '--brouillon');
   serveur.close();
   process.exit(r);
 });

@@ -1,0 +1,15 @@
+# Essai de l'action « illustration » (lancé par npm test, voix muette, brouillon)
+titre: Essai illustration
+depart: /odoo
+etapes:
+  - texte: Une image pendant une durée fixe, avec un léger zoom.
+    actions:
+      - illustration: images/essai-illustration.png
+        duree: 1.5
+  - texte: Une image qui reste jusqu'à la fin de l'étape, sans zoom.
+    actions:
+      - illustration: images/essai-illustration.png
+        zoom: 1
+  - texte: Retour à l'écran Odoo.
+    actions:
+      - attendre: 0.5

@@ -10,6 +10,7 @@
 //                 [--seulement-voix] [--remonter] [--sans-sous-titres] [--visible]
 //   node tuto.mjs explorer <chemin Odoo, ex. /odoo/contacts/new>
 //   node tuto.mjs cloner-voix <enregistrement.mp3> "<nom de la voix>"   (crée la voix dans ElevenLabs)
+//   node tuto.mjs schema <schema.html> [image.png]   (capture un schéma HTML en PNG 1920×1080)
 //
 // Réglages (variables d'environnement ou fichier .env à côté de ce script, jamais versionné) :
 //   ODOO_URL, ODOO_BASE, ODOO_LOGIN, ODOO_MOT_DE_PASSE
@@ -114,6 +115,10 @@ function chargerScenario(fichier) {
   sc.etapes.forEach((e, i) => {
     if (!e.texte) arreter(`Étape ${i + 1} : il manque le « texte » (ce que dit la voix).`);
     e.actions = e.actions || [];
+    for (const a of e.actions) {
+      if ('illustration' in a && !fs.existsSync(path.resolve(path.dirname(fichier), a.illustration)))
+        arreter(`Étape ${i + 1} : image introuvable « ${a.illustration} » (chemin relatif au scénario).`);
+    }
   });
   sc.ecran = sc.ecran || [1600, 900];
   sc.depart = sc.depart || '/odoo';
@@ -221,7 +226,10 @@ const DECOR = `
         border-radius:50%;background:rgba(104,193,132,.45);border:2px solid #68C184;animation:tuto-onde .55s ease-out forwards}
       @keyframes tuto-onde{from{transform:scale(.3);opacity:1}to{transform:scale(1.6);opacity:0}}
       .tuto-cadre{position:fixed;z-index:2147483645;pointer-events:none;border:4px solid #68C184;border-radius:10px;
-        box-shadow:0 0 0 9999px rgba(11,65,91,.28);transition:opacity .3s}\`;
+        box-shadow:0 0 0 9999px rgba(11,65,91,.28);transition:opacity .3s}
+      #tuto-illustration{position:fixed;inset:0;z-index:2147483647;background:#0B415B;overflow:hidden;
+        pointer-events:none;opacity:0;transition:opacity .45s}
+      #tuto-illustration img{width:100%;height:100%;object-fit:contain;transform-origin:50% 50%}\`;
     document.head.appendChild(st);
     const c = document.createElement('div');
     c.id = 'tuto-curseur';
@@ -249,6 +257,21 @@ const DECOR = `
     document.body.appendChild(d);
     setTimeout(() => { d.style.opacity = 0; setTimeout(() => d.remove(), 350); }, ms);
   };
+  // image plein écran (schéma, ambiance) avec un lent zoom avant ; cache aussi le curseur
+  window.__tutoIllustration = (src, zoom, ms) => {
+    document.getElementById('tuto-illustration')?.remove();
+    const d = document.createElement('div'); d.id = 'tuto-illustration';
+    const img = document.createElement('img'); img.src = src; d.appendChild(img);
+    document.body.appendChild(d);
+    return img.decode().catch(() => {}).then(() => {
+      img.animate([{ transform: 'scale(1)' }, { transform: \`scale(\${zoom})\` }], { duration: ms, easing: 'linear', fill: 'forwards' });
+      requestAnimationFrame(() => { d.style.opacity = 1; });
+    });
+  };
+  window.__tutoRetirerIllustration = () => {
+    const d = document.getElementById('tuto-illustration'); if (!d) return false;
+    d.style.opacity = 0; setTimeout(() => d.remove(), 500); return true;
+  };
 })();`;
 
 async function connexion(navigateur, sc) {
@@ -269,8 +292,9 @@ async function connexion(navigateur, sc) {
 }
 
 class Realisateur {
-  constructor(page) {
+  constructor(page, dossierScenario = '.') {
     this.page = page;
+    this.dossierScenario = dossierScenario;
     this.x = -50;
     this.y = -50;
   }
@@ -335,9 +359,30 @@ class Realisateur {
     await pause(secondes * 1000);
   }
 
-  async jouer(a) {
+  async illustrer(a, finEtape) {
+    // « illustration: images/eb-01-tunnel.png » ; sans « duree », l'image reste jusqu'à la fin de l'étape
+    const fichier = path.resolve(this.dossierScenario, a.illustration);
+    const type = { '.png': 'png', '.jpg': 'jpeg', '.jpeg': 'jpeg', '.webp': 'webp', '.svg': 'svg+xml' }[path.extname(fichier).toLowerCase()] || 'png';
+    const src = `data:image/${type};base64,${fs.readFileSync(fichier).toString('base64')}`;
+    const zoom = a.zoom ?? 1.06;
+    const ms = (a.duree ?? Math.max(finEtape, 1)) * 1000;
+    await this.page.evaluate(([s, z, m]) => window.__tutoIllustration(s, z, m), [src, zoom, ms + 500]);
+    await pause(500);
+    if (a.duree != null) {
+      await pause(a.duree * 1000);
+      await this.retirerIllustration();
+    }
+  }
+
+  async retirerIllustration() {
+    if (await this.page.evaluate(() => window.__tutoRetirerIllustration?.()).catch(() => false)) await pause(500);
+  }
+
+  async jouer(a, finEtape = 0) {
     const p = this.page;
-    if ('aller' in a) {
+    if ('illustration' in a) {
+      await this.illustrer(a, finEtape);
+    } else if ('aller' in a) {
       await p.goto(urlOdoo(a.aller));
       await attendreOdoo(p);
       await pause(500);
@@ -429,7 +474,7 @@ class Camera {
     this.ecrites = 0;
     this.derniere = null;
     this.ffmpeg = spawn('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-f', 'image2pipe', '-c:v', 'mjpeg', '-framerate', String(this.ips), '-i', '-',
-      '-vf', `scale=${l}:${h},format=yuv420p`, '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '14', fichier], { stdio: ['pipe', 'inherit', 'inherit'] });
+      '-vf', `scale=${l}:${h},setsar=1,format=yuv420p`, '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '14', fichier], { stdio: ['pipe', 'inherit', 'inherit'] });
     this.fini = new Promise((ok) => this.ffmpeg.on('exit', ok));
     this.taille = [l, h];
   }
@@ -479,7 +524,7 @@ async function tourner(sc, pistes, dossier, visible) {
   const brut = path.join(dossier, 'brut.mp4');
   const camera = new Camera(page, brut, sc.ecran, t0);
   await camera.demarrer();
-  const r = new Realisateur(page);
+  const r = new Realisateur(page, path.dirname(sc.fichier));
   const horloge = () => (Date.now() - t0) / 1000;
 
   await page.goto(urlOdoo(sc.depart));
@@ -493,7 +538,7 @@ async function tourner(sc, pistes, dossier, visible) {
     for (const action of e.actions) {
       try {
         const t = horloge();
-        await r.jouer(action);
+        await r.jouer(action, a + pistes[i].duree - horloge());
         if (process.env.TUTO_TRACE) console.log(`    ${(t - debut).toFixed(1)} s → +${(horloge() - t).toFixed(1)} s  ${JSON.stringify(action)}`);
       } catch (err) {
         const capture = path.join(dossier, `erreur-etape-${i + 1}.png`);
@@ -505,6 +550,7 @@ async function tourner(sc, pistes, dossier, visible) {
     }
     const reste = a + pistes[i].duree + (e.apres ?? 0.6) - horloge();
     if (reste > 0) await pause(reste * 1000);
+    await r.retirerIllustration(); // une image sans « duree » s'efface à la fin de son étape
     journal.push({ debut: a - debut, fin: horloge() - debut });
   }
   await pause(800);
@@ -586,7 +632,7 @@ function monter(sc, pistes, prise, dossier, options) {
   const ecran = path.join(dossier, 'ecran.mp4');
   ffmpeg([
     '-ss', debut.toFixed(3), '-i', prise.brut, '-t', longueur.toFixed(3),
-    '-vf', `scale=${l}:${h}:flags=lanczos,fps=${ips},format=yuv420p`,
+    '-vf', `scale=${l}:${h}:flags=lanczos,setsar=1,fps=${ips},format=yuv420p`,
     '-c:v', 'libx264', '-crf', '18', '-preset', 'medium', '-an', ecran,
   ]);
 
@@ -726,6 +772,20 @@ async function explorer(chemin) {
 
 // ---------------------------------------------------------------- cloner une voix (ElevenLabs)
 
+// ---------------------------------------------------------------- schéma HTML → PNG 1920×1080
+
+async function schema(fichier, sortie) {
+  if (!fichier || !fs.existsSync(fichier)) arreter(`Schéma introuvable : ${fichier}`);
+  const cible = sortie || fichier.replace(/\.html?$/, '.png');
+  const navigateur = await lancerChromium();
+  const page = await navigateur.newPage({ viewport: { width: SORTIE_HD.l, height: SORTIE_HD.h } });
+  await page.goto('file://' + path.resolve(fichier));
+  await page.evaluate(() => document.fonts.ready);
+  await page.screenshot({ path: cible });
+  await navigateur.close();
+  console.log(`✓ Image : ${cible}`);
+}
+
 async function clonerVoix(fichier, nom) {
   const cle = process.env.ELEVENLABS_API_KEY;
   if (!cle) arreter('Renseignez ELEVENLABS_API_KEY dans le fichier .env du projet.');
@@ -759,6 +819,7 @@ async function main() {
     return;
   }
   if (args[0] === 'explorer') return explorer(args[1] || '/odoo');
+  if (args[0] === 'schema') return schema(args[1], args[2]);
   if (args[0] === 'cloner-voix') return clonerVoix(args[1], args[2] || 'Voix TAAGG');
 
   const option = (nom) => args.includes(nom);

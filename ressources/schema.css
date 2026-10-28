@@ -1,0 +1,25 @@
+/* Schémas des tutos TAAGG : une page HTML = une image 1920×1080 (node tuto.mjs schema fichier.html).
+   Garder libre la bande du bas (200 px) : les sous-titres s'y affichent. */
+:root { --bleu: #0B415B; --vert: #68C184; --vert-clair: #E8F5EC; --gris: #5B6B73; --fond: #F7F9FA; --blanc: #fff; --orange: #F2A541; }
+* { box-sizing: border-box; margin: 0; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; }
+body { background: var(--fond); color: var(--bleu); font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+  padding: 90px 120px 200px; display: flex; flex-direction: column; gap: 56px; }
+h1 { font-size: 64px; font-weight: 800; letter-spacing: -1px; }
+h1 small { display: block; font-size: 32px; font-weight: 500; color: var(--gris); margin-top: 12px; letter-spacing: 0; }
+.rangee { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex: 1; }
+.carte { background: var(--blanc); border-radius: 28px; padding: 36px 32px; box-shadow: 0 10px 30px rgba(11,65,91,.10);
+  border-top: 10px solid var(--vert); flex: 1; display: flex; flex-direction: column; gap: 18px; min-height: 340px; }
+.carte .num { width: 64px; height: 64px; border-radius: 50%; background: var(--bleu); color: #fff; font-size: 34px;
+  font-weight: 800; display: grid; place-items: center; }
+.carte .ico { font-size: 64px; line-height: 1; }
+.carte h2 { font-size: 38px; font-weight: 800; }
+.carte p { font-size: 28px; line-height: 1.35; color: var(--gris); }
+.carte.forte { background: var(--bleu); color: #fff; border-top-color: var(--orange); }
+.carte.forte p { color: #DCE7EC; }
+.fleche { flex: 0 0 56px; height: 56px; color: var(--vert); }
+.chiffre { font-size: 44px; font-weight: 800; color: var(--bleu); }
+.chiffre.vert { color: var(--vert); }
+.note { font-size: 30px; color: var(--gris); }
+.bandeau { background: var(--vert-clair); border-left: 10px solid var(--vert); border-radius: 16px; padding: 22px 32px; font-size: 32px; }
+.carte.forte .num { background: var(--vert); color: var(--bleu); }
