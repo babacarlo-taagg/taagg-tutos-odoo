@@ -6,3 +6,5 @@ sortie/
 # Voix enregistrées à la main : lourdes, à garder sur Drive
 scenarios/*.voix/
 .DS_Store
+# Enregistrements de voix (données personnelles) : jamais dans Git
+voix-source/

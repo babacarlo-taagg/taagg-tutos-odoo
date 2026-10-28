@@ -9,6 +9,7 @@
 //   node tuto.mjs <scenario.yaml> [--voix elevenlabs|openai|fichiers|muet] [--brouillon]
 //                 [--seulement-voix] [--remonter] [--sans-sous-titres] [--visible]
 //   node tuto.mjs explorer <chemin Odoo, ex. /odoo/contacts/new>
+//   node tuto.mjs cloner-voix <enregistrement.mp3> "<nom de la voix>"   (crée la voix dans ElevenLabs)
 //
 // Réglages (variables d'environnement ou fichier .env à côté de ce script, jamais versionné) :
 //   ODOO_URL, ODOO_BASE, ODOO_LOGIN, ODOO_MOT_DE_PASSE
@@ -711,16 +712,42 @@ async function explorer(chemin) {
   console.log(`\nCapture d'écran : ${capture}`);
 }
 
+// ---------------------------------------------------------------- cloner une voix (ElevenLabs)
+
+async function clonerVoix(fichier, nom) {
+  const cle = process.env.ELEVENLABS_API_KEY;
+  if (!cle) arreter('Renseignez ELEVENLABS_API_KEY dans le fichier .env du projet.');
+  if (!fichier || !fs.existsSync(fichier)) arreter(`Enregistrement introuvable : ${fichier}`);
+  const d = duree(fichier);
+  if (d < 60) console.log(`  ⚠ L'enregistrement ne dure que ${d.toFixed(0)} s : 1 à 3 minutes donnent une voix plus fidèle.`);
+  const form = new FormData();
+  form.append('name', nom);
+  form.append('description', 'Voix off des formations vidéo Odoo TAAGG');
+  form.append('remove_background_noise', 'true');
+  form.append('labels', JSON.stringify({ language: 'fr', use_case: 'informative_educational' }));
+  form.append('files', new Blob([fs.readFileSync(fichier)], { type: 'audio/mpeg' }), path.basename(fichier));
+  const r = await fetch('https://api.elevenlabs.io/v1/voices/add', { method: 'POST', headers: { 'xi-api-key': cle }, body: form });
+  if (!r.ok) arreter(`ElevenLabs a refusé le clonage (${r.status}) : ${await r.text()}`);
+  const { voice_id } = await r.json();
+  // la voix devient la voix par défaut du projet
+  const fEnv = path.join(ICI, '.env');
+  const env = fs.existsSync(fEnv) ? fs.readFileSync(fEnv, 'utf8') : '';
+  const ligne = `ELEVENLABS_VOICE_ID=${voice_id}`;
+  fs.writeFileSync(fEnv, /^ELEVENLABS_VOICE_ID=.*$/m.test(env) ? env.replace(/^ELEVENLABS_VOICE_ID=.*$/m, ligne) : env.replace(/\n?$/, '\n') + ligne + '\n');
+  console.log(`✓ Voix « ${nom} » créée (${voice_id}) et enregistrée comme voix du projet dans .env`);
+}
+
 // ---------------------------------------------------------------- chef d'orchestre
 
 async function main() {
   lireEnv();
   const args = process.argv.slice(2);
   if (!args.length || args.includes('--aide')) {
-    console.log(fs.readFileSync(fileURLToPath(import.meta.url), 'utf8').split('\n').slice(1, 18).join('\n').replace(/^\/\/ ?/gm, ''));
+    console.log(fs.readFileSync(fileURLToPath(import.meta.url), 'utf8').split('\n').slice(1).filter((l, i, t) => t.slice(0, i + 1).every((x) => x.startsWith('//'))).join('\n').replace(/^\/\/ ?/gm, ''));
     return;
   }
   if (args[0] === 'explorer') return explorer(args[1] || '/odoo');
+  if (args[0] === 'cloner-voix') return clonerVoix(args[1], args[2] || 'Voix TAAGG');
 
   const option = (nom) => args.includes(nom);
   const valeur = (nom) => (args.includes(nom) ? args[args.indexOf(nom) + 1] : undefined);

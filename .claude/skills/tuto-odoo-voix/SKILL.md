@@ -20,6 +20,16 @@ Les pistes sont gardées en cache (`sortie/<nom>/voix/`) : modifier une phrase n
 Ne jamais écrire de clé dans un fichier versionné : seulement dans `.env` (ignoré par Git).
 Si la clé manque, l'outil le dit clairement : demander à Babacar de la mettre dans `.env`, ne pas la lui faire coller dans la conversation.
 
+## Voix retenue : celle de Babacar (décision du 28 octobre 2026)
+
+Les formations TAAGG utilisent **la voix de Babacar LO**, clonée dans ElevenLabs :
+- échantillon nettoyé dans `voix-source/babacar-lo-echantillon.mp3` (3 min, jamais versionné : donnée personnelle) ;
+- clonage : `node tuto.mjs cloner-voix voix-source/babacar-lo-echantillon.mp3 "Babacar LO"`
+  (écrit `ELEVENLABS_VOICE_ID` dans `.env`) ;
+- il faut `ELEVENLABS_API_KEY` dans `.env` et `api.elevenlabs.io` dans les domaines autorisés de l'environnement cloud.
+- Nettoyage d'un nouvel enregistrement avant clonage :
+  `ffmpeg -i brut.m4a -ac 1 -af "highpass=f=70,afftdn=nf=-30,loudnorm=I=-18:TP=-2:LRA=11,aresample=44100,alimiter=limit=0.7:level=false" echantillon.mp3`
+
 ## Choisir la voix (une fois pour toute la série)
 
 - Même voix, même vitesse pour tous les épisodes d'une série.
