@@ -430,7 +430,7 @@ class Camera {
     this.ecrites = 0;
     this.derniere = null;
     this.ffmpeg = spawn('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', '-f', 'image2pipe', '-c:v', 'mjpeg', '-framerate', String(this.ips), '-i', '-',
-      '-vf', `scale=${l}:${h},format=yuv420p`, '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '14', fichier], { stdio: ['pipe', 'inherit', 'inherit'] });
+      '-vf', `scale=${l}:${h},setsar=1,format=yuv420p`, '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '14', fichier], { stdio: ['pipe', 'inherit', 'inherit'] });
     this.fini = new Promise((ok) => this.ffmpeg.on('exit', ok));
     this.taille = [l, h];
   }
@@ -583,7 +583,7 @@ function monter(sc, pistes, prise, dossier, options) {
   const ecran = path.join(dossier, 'ecran.mp4');
   ffmpeg([
     '-ss', debut.toFixed(3), '-i', prise.brut, '-t', longueur.toFixed(3),
-    '-vf', `scale=${l}:${h}:flags=lanczos,fps=${ips},format=yuv420p`,
+    '-vf', `scale=${l}:${h}:flags=lanczos,setsar=1,fps=${ips},format=yuv420p`,
     '-c:v', 'libx264', '-crf', '18', '-preset', 'medium', '-an', ecran,
   ]);
 
@@ -654,7 +654,8 @@ function monter(sc, pistes, prise, dossier, options) {
     ], 4);
     ffmpeg([
       '-i', intro, '-i', corps, '-i', outro,
-      '-filter_complex', '[0:v][0:a][1:v][1:a][2:v][2:a]concat=n=3:v=1:a=1[v][a]',
+      // setsar=1 : une image de travers dans la capture (rapport de pixels ≠ 1) ferait échouer l'assemblage
+      '-filter_complex', '[0:v]setsar=1[v0];[1:v]setsar=1[v1];[2:v]setsar=1[v2];[v0][0:a][v1][1:a][v2][2:a]concat=n=3:v=1:a=1[v][a]',
       '-map', '[v]', '-map', '[a]', '-c:v', 'libx264', '-crf', '18', '-preset', 'medium', '-movflags', '+faststart',
       '-c:a', 'aac', '-b:a', '192k', final,
     ]);

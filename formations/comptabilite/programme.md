@@ -16,7 +16,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 |---|---|---|---|---|
 | CPT-01 | Tour d’horizon de la Comptabilité | le tableau de bord, les journaux, les 6 menus et à quoi ils servent | Tableau de bord | 🎙 8:19 |
 | CPT-02 | Les paramètres généraux | société, devise XOF, arrondis, présentation des factures, fonctions à activer | Configuration › Paramètres | 🎙 6:46 |
-| CPT-03 | Le plan comptable SYSCOHADA | classes 1 à 9, lire un compte, créer un compte, groupes et étiquettes | Plan comptable, Groupes de comptes | ☐ |
+| CPT-03 | Le plan comptable SYSCOHADA | classes 1 à 9, lire un compte, créer un compte, groupes et étiquettes | Plan comptable (panneau des classes) | 🎙 6:10 |
 | CPT-04 | Les journaux | ventes, achats, banque, caisse, opérations diverses ; créer un journal de caisse | Journaux | ☐ |
 | CPT-05 | Les taxes : la TVA au Sénégal | TVA 18 %, 10 %, exonérée ; créer une taxe, taxes par défaut, groupes de taxes | Taxes, Groupes de taxes | ☐ |
 | CPT-06 | Positions fiscales | clients locaux / étrangers : remplacer automatiquement taxes et comptes | Positions fiscales | ☐ |
@@ -84,6 +84,10 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
   Change la base (on garde ces réglages pour la suite) : adresse « Rue 22, Médina, Dakar », mise en page
   des documents « Bold », montant des factures en toutes lettres. Retourner : `python3 formations/comptabilite/etat-depart.py CPT-02` d'abord.
   Contrôle qualité fait (images clés, synchro, −16 LUFS, prononciation NINEA / XOF / SYSCOHADA vérifiée). À publier.
+- **CPT-03** (28 octobre 2026) : version finale, 6 min 10 s, 40 étapes, ≈ 5 500 caractères de voix.
+  Crée le compte 702110 « Ventes de pâtisseries » (gardé). Le menu « Groupes de comptes » n'existe qu'en mode
+  développeur dans cette base : les classes sont montrées avec le panneau de gauche du plan comptable.
+  Contrôle qualité fait. À publier.
 
 ## Ordre de tournage proposé
 
