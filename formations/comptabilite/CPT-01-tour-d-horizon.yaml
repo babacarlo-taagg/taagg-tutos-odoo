@@ -290,7 +290,7 @@ etapes:
   # ------------------------------------------------------------------ pièges fréquents
   - partie: "Les pièges à éviter"
     texte: >
-      Avant de terminer, trois pièges fréquents. Premier piège : se tromper de société.
+      Avant de terminer, deux pièges fréquents. Premier piège : se tromper de société.
       Cette base contient deux sociétés. Le nom affiché en haut à droite indique celle dans laquelle
       vous travaillez. Vérifiez-le toujours avant de saisir une facture.
     actions:

@@ -732,7 +732,8 @@ async function clonerVoix(fichier, nom) {
   const form = new FormData();
   form.append('name', nom);
   form.append('description', 'Voix off des formations vidéo Odoo TAAGG');
-  form.append('remove_background_noise', 'true');
+  // pas de débruitage ElevenLabs : un enregistrement de téléphone est déjà débruité, en refaire donne un son « vieille radio »
+  form.append('remove_background_noise', 'false');
   form.append('labels', JSON.stringify({ language: 'fr', use_case: 'informative_educational' }));
   form.append('files', new Blob([fs.readFileSync(fichier)], { type: 'audio/mpeg' }), path.basename(fichier));
   const r = await fetch('https://api.elevenlabs.io/v1/voices/add', { method: 'POST', headers: { 'xi-api-key': cle }, body: form });

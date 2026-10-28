@@ -27,8 +27,11 @@ Les formations TAAGG utilisent **la voix de Babacar LO**, clonée dans ElevenLab
 - clonage : `node tuto.mjs cloner-voix voix-source/babacar-lo-echantillon.mp3 "Babacar LO"`
   (écrit `ELEVENLABS_VOICE_ID` dans `.env`) ;
 - il faut `ELEVENLABS_API_KEY` dans `.env` et `api.elevenlabs.io` dans les domaines autorisés de l'environnement cloud.
-- Nettoyage d'un nouvel enregistrement avant clonage :
-  `ffmpeg -i brut.m4a -ac 1 -af "highpass=f=70,afftdn=nf=-30,loudnorm=I=-18:TP=-2:LRA=11,aresample=44100,alimiter=limit=0.7:level=false" echantillon.mp3`
+- Voix retenue : clone « Babacar LO (naturel) » (28 octobre 2026), fait avec le nettoyage léger ci-dessous.
+- Nettoyage d'un nouvel enregistrement avant clonage — **léger** : un téléphone débruite déjà le son ;
+  débruiter encore (`afftdn`, puis le débruitage d'ElevenLabs) donne une voix étouffée, « vieille radio ».
+  `ffmpeg -i brut.m4a -ac 1 -af "highpass=f=60,loudnorm=I=-18:TP=-2:LRA=11,aresample=44100" -c:a libmp3lame -b:a 192k echantillon.mp3`
+  N'ajouter `afftdn=nf=-30` que si l'on entend vraiment un souffle ou un bruit de fond.
 
 ## Choisir la voix (une fois pour toute la série)
 
