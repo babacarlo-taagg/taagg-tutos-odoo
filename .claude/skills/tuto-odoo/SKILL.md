@@ -25,6 +25,12 @@ dans Odoo en attendant que la voix ait fini : la voix et l'image sont toujours s
    ```
    Il faut aussi `ffmpeg` et un Chromium (`npx playwright install chromium` si absent).
    Dans une session Claude dans le cloud, Chromium est déjà là : ne pas lancer `playwright install`.
+   Dans le cloud, ce Chromium est plus récent que celui attendu par Playwright : mettre
+   `CHROMIUM_CHEMIN=/opt/pw-browsers/chromium` dans `.env` (sinon « Executable doesn't exist »).
+   Les réglages peuvent aussi venir des variables d'environnement de l'environnement cloud
+   (`ODOO_URL`, `ODOO_BASE`, `ODOO_LOGIN`, `ODOO_MOT_DE_PASSE`, `ODOO_LOGIN_API`, `ODOO_CLE_API`,
+   `ELEVENLABS_API_KEY`, `ELEVENLABS_VOICE_ID`, `CHROMIUM_CHEMIN`) : `tuto.mjs` les lit en priorité.
+   Vérifier la connexion : `node tuto.mjs explorer /odoo`.
 3. **Repérer les écrans** : `node tuto.mjs explorer /odoo/contacts/new` liste les boutons, champs
    (nom technique + libellé), onglets et menus de la page, et enregistre `sortie/explorer.png`.
    Lire la capture pour voir l'écran réel. Répéter pour chaque écran du tuto.
@@ -45,9 +51,13 @@ dans Odoo en attendant que la voix ait fini : la voix et l'image sont toujours s
    node tuto.mjs scenarios/NN-sujet.yaml --voix openai
    node tuto.mjs scenarios/NN-sujet.yaml --remonter    # refait seulement le montage (sous-titres, générique, musique)
    ```
-8. **Contrôler avant de livrer** : extraire 5–6 images (`ffmpeg -ss <t> -i video.mp4 -frames:v 1 t.png`),
+8. **Contrôler avant de livrer** : extraire 5–6 images (`ffmpeg -nostdin -ss <t> -i video.mp4 -frames:v 1 t.png` ;
+   les temps des étapes sont dans `sortie/<nom>/prise.json`, + 4 s de générique dans la version finale),
    les regarder (curseur visible, bon écran au bon moment, sous-titres lisibles, aucune donnée
    personnelle réelle), et vérifier la durée. Corriger puis relivrer.
+   Synchro : le premier sous-titre et le début de la voix (`silencedetect`) doivent coïncider, de même la fin.
+   Prononciation des sigles : transcrire les pistes concernées (`sortie/<nom>/voix/NN-elevenlabs-*.mp3`)
+   avec l'API speech-to-text d'ElevenLabs (`model_id=scribe_v1`) et vérifier que le mot est reconnu.
 9. **Livrer** → compétence `tuto-odoo-montage` (textes YouTube, vignette, version courte verticale).
 
 ## Fichiers produits (`sortie/<nom-du-scenario>/`)

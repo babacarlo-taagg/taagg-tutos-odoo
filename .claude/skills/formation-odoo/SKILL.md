@@ -61,6 +61,9 @@ La base de tournage est partagée et chaque tournage la modifie (une facture cr�
 - Préparer ou remettre cet état **par l'API** avant le tournage (JSON-RPC avec `ODOO_LOGIN_API` +
   `ODOO_CLE_API` du `.env`, base `edu-correction-les-delices-de-maimouna`), jamais à la main à l'écran.
   Préférer archiver ou annuler plutôt que supprimer.
+- Ranger cette remise à zéro dans `formations/<module>/etat-depart.py` (une fonction par capsule,
+  exemple : `python3 formations/comptabilite/etat-depart.py CPT-02`) et la lancer avant chaque tournage,
+  brouillon compris.
 - Les noms tapés à l'écran doivent être nouveaux à chaque tournage (sinon doublons) : prévoir un
   suffixe ou nettoyer avant de retourner.
 - L'exercice 2025 est verrouillé : toutes les pièces filmées sont datées de l'exercice en cours.
@@ -76,3 +79,6 @@ La base de tournage est partagée et chaque tournage la modifie (une facture cr�
 4. Version finale, contrôle qualité et textes de publication (compétence `tuto-odoo-montage`),
    playlist « Formation Comptabilité Odoo », titres `CPT-07 · Paramétrer les taxes`.
 5. Mettre à jour l'avancement dans `programme.md` et pousser.
+
+Pour chaque capsule, le texte à faire relire se tire du scénario : une ligne numérotée par étape,
+les titres de partie en intertitres, et le nombre de caractères (≈ 15 caractères par seconde de voix).
