@@ -31,7 +31,7 @@ etapes:
       les messages arrivent sans arrêt, il faut renvoyer les photos, redonner les prix,
       noter chaque commande… et le soir, on ne sait plus très bien qui a payé.
     actions:
-      - illustration: images/eb-01-ambiance-whatsapp-provisoire.png
+      - illustration: images/eb-01-ambiance-whatsapp.jpg
         zoom: 1.08
   - texte: >
       Dans cette première capsule, nous allons voir ce que change une vraie boutique en ligne,

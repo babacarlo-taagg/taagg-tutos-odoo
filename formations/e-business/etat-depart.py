@@ -116,6 +116,14 @@ def site_et_coordonnees():
     # filtres de la boutique : masquer les caractéristiques qui ne concernent pas la pâtisserie
     inutiles = odoo('product.attribute', 'search', [('name', 'in', ['Taille', 'Type de poisson', 'Poissons gras', 'Type de viande', 'Type', 'Parfum / Saveur'])])
     ecrire('product.attribute', inutiles, {'visibility': 'hidden'}, f'{len(inutiles)} filtres inutiles masqués dans la boutique')
+    # filtre « Fourchette de prix » : il affiche les prix hors taxes (1 à 20 339 F), source de confusion
+    ctx = dict(CTX, website_id=SITE)
+    filtre = odoo('ir.ui.view', 'search', [('key', '=', 'website_sale.filter_products_price'), ('website_id', 'in', [False, SITE])],
+                  order='website_id', context=dict(ctx, active_test=False))
+    if filtre:
+        print('  · filtre « Fourchette de prix » masqué')
+        if not VOIR:
+            odoo('ir.ui.view', 'write', [filtre[-1]], {'active': False}, context=ctx)
     # en-tête et pied de page : remplacer les coordonnées de démonstration d'Odoo
     # (écrire avec website_id dans le contexte crée une copie propre au site, comme l'éditeur)
     ctx = dict(CTX, website_id=SITE)
@@ -154,7 +162,7 @@ def catalogue():
                 raise SystemExit(f'✗ {nom} : {ttc} F TTC impossible avec la TVA 18 % en francs entiers, choisir un autre prix')
             valeurs = {'list_price': ht, 'public_categ_ids': [(6, 0, cat)], 'is_published': True,
                        'taxes_id': [(6, 0, [5])]}  # TVA 18 %
-            photo = image(f'produits/{slug(nom)}.png')
+            photo = image(f'produits/{slug(nom)}.jpg')
             if photo:
                 valeurs['image_1920'] = photo
             ecrire('product.template', [pid], valeurs, f'{nom} : {ttc:,} F TTC'.replace(',', ' ') + (', photo' if photo else ''))
