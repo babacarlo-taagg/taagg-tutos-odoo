@@ -16,7 +16,7 @@ Illustrations (schémas, images d'ambiance) : compétence `tuto-odoo-illustratio
 > Facturation). Tout ce qui est filmé ici existe en **Community**, sauf ce qui est marqué **[E]**
 > (Enterprise uniquement).
 
-### Modules à installer dans la base de tournage (aucun n'est installé au 28/10/2026)
+### Modules installés dans la base de tournage le 28/10/2026 (avec l'accord de Babacar)
 
 | Module | Pour | Capsules |
 |---|---|---|
@@ -38,7 +38,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 
 | Code | Capsule | Ce qu'on apprend | Écrans | État |
 |---|---|---|---|---|
-| EB-01 | De WhatsApp à la boutique en ligne | ce que change une boutique en ligne ; le parcours d'un client sur le site ; les menus Site Web (Site, eCommerce, Rapports, Configuration) ; où arrivent les commandes | Site Web, Boutique, Commandes | ☐ |
+| EB-01 | De WhatsApp à la boutique en ligne | ce que change une boutique en ligne ; le parcours d'un client sur le site ; les menus Site Web (Site, eCommerce, Analyse, Configuration) ; où arrivent les commandes | Site Web, Boutique, Commandes | ✎ |
 | EB-02 | Construire son site | thème, couleurs, logo, page d'accueil avec des blocs, version téléphone, publier | Éditeur du site | ☐ |
 | EB-03 | Les pages qui donnent confiance | À propos, Contact, Livraison et retours, Conditions de vente ; menu et pied de page | Pages, Menus | ☐ |
 | EB-04 | Mettre ses produits en ligne | fiche produit pour la boutique : photo, prix TTC, description, publier / dépublier | Produits | ☐ |
@@ -94,7 +94,7 @@ cadre légal du commerce en ligne au Sénégal ; plan de croissance 12 mois ; pr
 ## Ce qui est Enterprise dans la base de tournage (à ne pas filmer comme « standard »)
 
 Marketing Automation, Social Marketing, WhatsApp, Studio, tableau de bord des ventes du site
-(`website_sale_dashboard`), Assistance (Helpdesk) : **[E]**, non utilisés dans les capsules ci-dessus.
+(`website_sale_dashboard`, installé automatiquement avec eCommerce : EB-20 utilisera les rapports Community), Assistance (Helpdesk) : **[E]**, non utilisés dans les capsules ci-dessus.
 
 ## Ordre de tournage proposé
 
