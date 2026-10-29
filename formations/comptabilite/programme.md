@@ -17,7 +17,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | CPT-01 | Tour d’horizon de la Comptabilité | le tableau de bord, les journaux, les 6 menus et à quoi ils servent | Tableau de bord | 🎙 8:19 |
 | CPT-02 | Les paramètres généraux | société, devise XOF, arrondis, présentation des factures, fonctions à activer | Configuration › Paramètres | 🎙 6:46 |
 | CPT-03 | Le plan comptable SYSCOHADA | classes 1 à 9, lire un compte, créer un compte, groupes et étiquettes | Plan comptable (panneau des classes) | 🎙 6:10 |
-| CPT-04 | Les journaux | ventes, achats, banque, caisse, opérations diverses ; créer un journal de caisse | Journaux | ☐ |
+| CPT-04 | Les journaux | ventes, achats, banque, caisse, opérations diverses ; créer un journal de caisse | Journaux | 🎙 5:58 |
 | CPT-05 | Les taxes : la TVA au Sénégal | TVA 18 %, 10 %, exonérée ; créer une taxe, taxes par défaut, groupes de taxes | Taxes, Groupes de taxes | ☐ |
 | CPT-06 | Positions fiscales | clients locaux / étrangers : remplacer automatiquement taxes et comptes | Positions fiscales | ☐ |
 | CPT-07 | Conditions de paiement et exercice fiscal | « 30 % à la commande, solde à 60 jours », escompte ; exercices fiscaux | Conditions de paiement, Exercices fiscaux | ☐ |
@@ -88,6 +88,10 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
   Crée le compte 702110 « Ventes de pâtisseries » (gardé). Le menu « Groupes de comptes » n'existe qu'en mode
   développeur dans cette base : les classes sont montrées avec le panneau de gauche du plan comptable.
   Contrôle qualité fait. À publier.
+- **CPT-04** (29 octobre 2026) : version finale, 5 min 58 s, 36 étapes, ≈ 5 300 caractères de voix.
+  Crée le journal « Caisse boutique » (Espèces, préfixe CAI) et son compte 571001, créé par Odoo : un journal
+  Espèces n'accepte que des comptes « Banque et espèces », et le 571100 du plan est en « Actifs circulants ».
+  Gardés pour CPT-08 et CPT-20. Contrôle qualité fait. À publier.
 
 ## Ordre de tournage proposé
 
