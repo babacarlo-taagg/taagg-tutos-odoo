@@ -73,9 +73,35 @@ etapes:
 | `touche: Escape` | appuie sur une touche |
 | `defiler: 400` ou `defiler: '<sélecteur>'` | fait défiler la page |
 | `attendre: 1.5` | pause (secondes) |
+| `double_cliquer: 'site >> #wrap img'` | double-clic (ouvrir la médiathèque sur une image du site) |
+| `remplacer_texte: {dans: 'site >> #wrap h1', texte: Nos gâteaux}` | sélectionne tout le texte (triple-clic) et tape le nouveau |
+| `taper_dans: {dans: '.modal input', texte: produit}` | tape dans n'importe quel champ visé par un sélecteur |
 | `illustration: images/eb-01-tunnel.png` (+ `duree: 6`, `zoom: 1.04`) | image plein écran (schéma, ambiance) avec léger zoom ; sans `duree`, reste jusqu'à la fin de la phrase — voir `tuto-odoo-illustrations` |
 
 Le curseur glisse comme une main, chaque clic fait une onde verte : pas besoin d'en rajouter.
+
+## L'éditeur de site (appli Site Web › Modifier)
+
+La page du site est affichée dans un **cadre** (iframe) : préfixer le sélecteur par `site >> ` pour viser dedans,
+et par `blocs >> ` pour viser un modèle dans la fenêtre « Insérer un bloc ». Valable pour `cliquer`,
+`double_cliquer`, `surligner`, `survoler`, `defiler`, `remplacer_texte`, `taper_dans`.
+```yaml
+- texte: Cliquez sur Modifier, puis sur la catégorie Contenu.
+  actions:
+    - bouton: Modifier
+    - cliquer: '.o_snippet:has-text("Contenu")'           # ouvre « Insérer un bloc »
+- texte: Choisissez ce modèle avec un titre, un texte et une image.
+  actions:
+    - cliquer: 'blocs >> .o_snippet_preview_wrap:has-text("Améliorez votre")'
+- texte: Remplaçons le titre.
+  actions:
+    - remplacer_texte: {dans: 'site >> #wrap h2', texte: Des gâteaux faits maison}
+```
+Repères Odoo 19 : onglets du panneau `.o-snippets-tabs button:has-text("Thème")` (Blocs, Style, Thème) ;
+catégories `.o_snippet:has-text("Intro")` ; recherche de bloc `.modal input[placeholder*="Rechercher"]` ;
+bloc des produits de la boutique `blocs >> .o_snippet_preview_wrap:has([data-snippet="s_dynamic_snippet_products"])` ;
+médiathèque : double-clic sur l'image, puis `.modal .o_existing_attachment_cell` ; après avoir sélectionné
+un élément du site, le panneau passe sur « Style » : recliquer sur « Blocs » avant d'insérer un autre bloc.
 
 ## Montrer une image (schéma ou ambiance)
 

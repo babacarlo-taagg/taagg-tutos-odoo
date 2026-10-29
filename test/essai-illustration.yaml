@@ -13,3 +13,11 @@ etapes:
   - texte: Retour à l'écran Odoo.
     actions:
       - attendre: 0.5
+  - texte: Dans l'éditeur de site, on remplace un titre et on ouvre une image.
+    actions:
+      - aller: /odoo/site
+      - remplacer_texte: {dans: 'site >> #wrap h1', texte: Les gâteaux de Maïmouna}
+      - double_cliquer: 'site >> #wrap img'
+      - surligner: 'site >> #wrap h1'
+        duree: 1
+      - taper_dans: {dans: '.panneau .recherche', texte: produit}

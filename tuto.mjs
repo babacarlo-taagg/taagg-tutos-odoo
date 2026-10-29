@@ -214,7 +214,7 @@ async function preparerVoix(sc, moteur, dossier) {
 // Curseur visible, onde au clic et cadre de surlignage, injectés dans chaque page.
 const DECOR = `
 (() => {
-  if (window.__tuto) return;
+  if (window.__tuto || window.top !== window) return; // pas dans les cadres (aperçu du site) : un seul curseur
   window.__tuto = true;
   const poser = () => {
     if (document.getElementById('tuto-curseur')) return;
@@ -245,12 +245,20 @@ const DECOR = `
     c.style.left = ev.clientX + 'px'; c.style.top = ev.clientY + 'px';
     sessionStorage.setItem('tuto-pos', JSON.stringify([ev.clientX, ev.clientY]));
   }, true);
-  addEventListener('mousedown', (ev) => {
+  // position et clic posés par l'outil : les gestes faits dans un cadre (aperçu du site dans l'éditeur)
+  // n'envoient pas d'événement souris à la page principale
+  window.__tutoPos = (x, y) => {
+    const c = document.getElementById('tuto-curseur'); if (!c) return poser();
+    c.style.left = x + 'px'; c.style.top = y + 'px';
+    sessionStorage.setItem('tuto-pos', JSON.stringify([x, y]));
+  };
+  window.__tutoOnde = (x, y) => {
     document.getElementById('tuto-curseur')?.classList.add('appui');
+    setTimeout(() => document.getElementById('tuto-curseur')?.classList.remove('appui'), 150);
     const o = document.createElement('div'); o.className = 'tuto-onde';
-    o.style.left = ev.clientX + 'px'; o.style.top = ev.clientY + 'px';
+    o.style.left = x + 'px'; o.style.top = y + 'px';
     document.body.appendChild(o); setTimeout(() => o.remove(), 600);
-  }, true);
+  };
   addEventListener('mouseup', () => document.getElementById('tuto-curseur')?.classList.remove('appui'), true);
   window.__tutoCadre = (r, ms) => {
     const d = document.createElement('div'); d.className = 'tuto-cadre';
@@ -310,7 +318,9 @@ class Realisateur {
     for (let i = 1; i <= pas; i++) {
       const t = i / pas;
       const e = t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2; // accélère puis freine, comme une main
-      await this.page.mouse.move(x0 + (x - x0) * e, y0 + (y - y0) * e);
+      const [xi, yi] = [x0 + (x - x0) * e, y0 + (y - y0) * e];
+      await this.page.mouse.move(xi, yi);
+      await this.page.evaluate(([a, b]) => window.__tutoPos?.(a, b), [xi, yi]).catch(() => {});
       await pause(16);
     }
     this.x = x;
@@ -327,13 +337,25 @@ class Realisateur {
     return b;
   }
 
-  async cliquer(loc) {
+  async cliquer(loc, nombre = 1) {
     await this.viser(loc);
-    await this.page.mouse.down();
-    await pause(70);
-    await this.page.mouse.up();
+    await this.page.evaluate(([a, b]) => window.__tutoOnde?.(a, b), [this.x, this.y]).catch(() => {});
+    // nombre = 2 : double-clic (ouvrir une image) ; 3 : triple-clic (sélectionner tout un titre)
+    await this.page.mouse.click(this.x, this.y, { clickCount: nombre, delay: 70 });
     await pause(250);
     await attendreOdoo(this.page, 8000); // le clic a pu ouvrir un autre écran
+  }
+
+  // Raccourcis pour viser dans les cadres de l'éditeur de site :
+  //   « site >> h1 »   → dans la page du site affichée par l'appli Site Web
+  //   « blocs >> … »   → dans la fenêtre « Insérer un bloc » (aperçus des modèles)
+  loc(selecteur) {
+    const cadres = {
+      site: '.o_iframe_container iframe:not(.o_ignore_in_tour)',
+      blocs: 'iframe.o_add_snippet_iframe',
+    };
+    const m = String(selecteur).match(/^(site|blocs)\s*>>\s*(.*)$/s);
+    return this.page.locator(m ? `${cadres[m[1]]} >> internal:control=enter-frame >> ${m[2]}` : selecteur).first();
   }
 
   async taper(loc, texte, entree) {
@@ -388,7 +410,19 @@ class Realisateur {
       await attendreOdoo(p);
       await pause(500);
     } else if ('cliquer' in a) {
-      await this.cliquer(p.locator(a.cliquer).first());
+      await this.cliquer(this.loc(a.cliquer));
+    } else if ('double_cliquer' in a) {
+      await this.cliquer(this.loc(a.double_cliquer), 2);
+    } else if ('remplacer_texte' in a) {
+      // sélectionne tout le texte d'un titre ou d'un paragraphe (triple-clic) et tape le nouveau texte
+      const { dans, texte } = a.remplacer_texte;
+      await this.cliquer(this.loc(dans), 3);
+      await p.keyboard.type(String(texte), { delay: 45 });
+      await pause(300);
+    } else if ('taper_dans' in a) {
+      // tape dans n'importe quel champ visé par un sélecteur (recherche d'une fenêtre, etc.)
+      const { dans, texte } = a.taper_dans;
+      await this.taper(this.loc(dans), texte, a.entree);
     } else if ('bouton' in a) {
       const role = p.getByRole('button', { name: a.bouton, exact: false });
       await this.cliquer((await role.count()) ? role.first() : p.getByText(a.bouton, { exact: true }).first());
@@ -438,11 +472,11 @@ class Realisateur {
       await this.cliquer(p.locator('.o_form_button_save').first());
       await attendreOdoo(p);
     } else if ('surligner' in a) {
-      await this.surligner(p.locator(a.surligner).first(), a.duree ?? 2.5);
+      await this.surligner(this.loc(a.surligner), a.duree ?? 2.5);
     } else if ('surligner_champ' in a) {
       await this.surligner(this.champ(a.surligner_champ), a.duree ?? 2.5);
     } else if ('survoler' in a) {
-      await this.viser(p.locator(a.survoler).first());
+      await this.viser(this.loc(a.survoler));
     } else if ('survoler_texte' in a) {
       await this.viser(this.texteVisible(a.survoler_texte));
       await pause(400);
@@ -453,7 +487,7 @@ class Realisateur {
       await pause(300);
     } else if ('defiler' in a) {
       if (typeof a.defiler === 'number') await p.mouse.wheel(0, a.defiler);
-      else await p.locator(a.defiler).first().scrollIntoViewIfNeeded();
+      else await this.loc(a.defiler).scrollIntoViewIfNeeded();
       await pause(500);
     } else if ('attendre' in a) {
       await pause(a.attendre * 1000);
