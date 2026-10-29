@@ -39,7 +39,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | Code | Capsule | Ce qu'on apprend | Écrans | État |
 |---|---|---|---|---|
 | EB-01 | De WhatsApp à la boutique en ligne | ce que change une boutique en ligne ; le parcours d'un client sur le site ; les menus Site Web (Site, eCommerce, Analyse, Configuration) ; où arrivent les commandes | Site Web, Boutique, Commandes | 🎙 |
-| EB-02 | Construire son site | thème, couleurs, logo, page d'accueil avec des blocs, version téléphone, publier | Éditeur du site | ☐ |
+| EB-02 | Construire son site | thème, couleurs, logo, page d'accueil avec des blocs, version téléphone, publier | Éditeur du site | ✎ |
 | EB-03 | Les pages qui donnent confiance | À propos, Contact, Livraison et retours, Conditions de vente ; menu et pied de page | Pages, Menus | ☐ |
 | EB-04 | Mettre ses produits en ligne | fiche produit pour la boutique : photo, prix TTC, description, publier / dépublier | Produits | ☐ |
 | EB-05 | Organiser son catalogue | catégories de la boutique, variantes (gâteau 6, 8 ou 12 parts), filtres, ordre d'affichage | Catégories, Attributs | ☐ |

@@ -10,6 +10,8 @@ Règles : compétence `tuto-odoo-illustrations`. Babacar valide chaque image ava
 | `eb-01-whatsapp-boutique.png` | EB-01 | WhatsApp ou boutique : qui fait le travail | ☐ |
 | `eb-01-parcours-client.png` | EB-01 | le tunnel d'achat d'Awa, en 5 étapes | ☐ |
 | `eb-01-recap.png` | EB-01 | les 4 points à retenir | ☐ |
+| `eb-02-page-qui-vend.png` | EB-02 | les 3 idées d'une page d'accueil qui vend | ☐ |
+| `eb-02-recap.png` | EB-02 | les 4 points à retenir | ☐ |
 | `logo-delices-maimouna.png` | toutes | logo fictif de la boutique d'exemple (posé sur le site par `etat-depart.py`) | ☐ |
 
 ## Images IA (sans texte)

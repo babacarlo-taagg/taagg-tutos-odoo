@@ -1,0 +1,250 @@
+# EB-02 · Construire son site
+# État de départ : python3 formations/e-business/etat-depart.py EB-02
+#   même boutique qu'EB-01 (logo, 17 produits avec photos, prix TTC), page d'accueil VIDE, couleurs d'origine
+#   (violet), 4 photos dans la médiathèque (fraisier, gâteau d'anniversaire, forêt noire, tartelette).
+# Pendant la capsule : la palette « caramel » est choisie et la page d'accueil reçoit 2 blocs, puis est
+#   sauvegardée. Relancer etat-depart.py avant chaque prise (et avant de retourner EB-01).
+# Images : formations/e-business/images/ (compétence tuto-odoo-illustrations).
+titre: Construire son site
+sous_titre: Formation E-Business Odoo · EB-02
+depart: /odoo
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG School: l'école Tag
+  TAAGG: Tag
+  EB-02: capsule deux
+  eCommerce: e-commerce
+  E-Business: i-business
+  FCFA: francs CFA
+  /shop: barre oblique shop
+fin:
+  message: "Prochaine capsule : les pages qui donnent confiance"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche (≈ 45 s)
+  - chapitre: Introduction
+    texte: >
+      Bienvenue dans la deuxième capsule de la formation E-Business.
+      Votre boutique existe, mais sa page d'accueil est vide. C'est pourtant la première chose que voient
+      vos clients quand vous partagez votre lien sur WhatsApp.
+    actions:
+      - attendre: 1
+  - texte: >
+      Une page d'accueil qui vend tient en trois idées : une accroche claire avec un bouton pour commander,
+      vos produits avec leur photo et leur prix, et les couleurs de votre boutique.
+    actions:
+      - illustration: images/eb-02-page-qui-vend.png
+        zoom: 1.02
+  - texte: >
+      Dans cette capsule, nous allons construire cette page pour Les Délices de Maïmouna,
+      vérifier son affichage sur téléphone, puis l'enregistrer. Tout se fait à la souris, sans écrire une ligne de code.
+    actions:
+      - attendre: 0.5
+
+  # ------------------------------------------------------------------ partie 1 : l'éditeur (≈ 1 min 30)
+  - partie: "1. Ouvrir l'éditeur"
+    texte: >
+      Ouvrez l'application Site Web. Odoo affiche la page d'accueil : pour l'instant, seulement le menu
+      en haut et le pied de page en bas.
+    actions:
+      - cliquer: '.o_app:has-text("Site Web")'
+      - attendre: 1
+  - texte: Pour la changer, cliquez sur Modifier, en haut à droite.
+    actions:
+      - cliquer: 'button:has-text("Modifier")'
+      - attendre: 1.5
+  - texte: >
+      À droite s'ouvre le panneau de l'éditeur, avec trois onglets : Blocs, pour ajouter du contenu,
+      Style, pour régler l'élément que vous avez sélectionné, et Thème, pour l'apparence de tout le site.
+    actions:
+      - surligner: '.o-snippets-tabs'
+        duree: 4
+  - texte: >
+      Au centre, votre page, telle que vos clients la verront. La zone bleue vous invite à y déposer un premier bloc.
+    actions:
+      - surligner: 'site >> #wrap'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 2 : les couleurs (≈ 1 min 30)
+  - partie: "2. Les couleurs du site"
+    texte: Commençons par les couleurs. Ouvrez l'onglet Thème.
+    actions:
+      - cliquer: '.o-snippets-tabs button:has-text("Thème")'
+  - texte: >
+      En haut, les couleurs principales du site. Odoo les utilise partout : les boutons, les titres,
+      le menu et le pied de page.
+    actions:
+      - surligner_texte: Principal
+        duree: 3
+  - texte: >
+      Ce bouton propose des palettes toutes prêtes. Choisissez des couleurs qui ressemblent à votre activité :
+      pour une pâtisserie, des tons chauds, caramel et crème.
+    actions:
+      - cliquer: 'button.o-hb-select-toggle:has(.fa-paint-brush), button.o-hb-select-toggle >> nth=0'
+      - attendre: 1
+      # palette « caramel » visée par son nom (des copies invisibles des pastilles existent dans la page)
+      - survoler: .o-dropdown--menu [data-action-value="'default-light-11'"]
+  - texte: >
+      Un clic suffit : tout le site change de couleurs. Regardez le menu et le bouton Contactez-nous, en haut.
+    actions:
+      - cliquer: .o-dropdown--menu [data-action-value="'default-light-11'"]
+      - attendre: 4
+      - surligner: 'site >> header'
+        duree: 2.5
+  - texte: >
+      Le logo, lui, se change en cliquant dessus, en haut à gauche de la page.
+      Celui des Délices de Maïmouna est déjà en place.
+    actions:
+      - survoler: 'site >> header .navbar-brand'
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ partie 3 : la page d'accueil (≈ 4 min)
+  - partie: "3. La page d'accueil"
+    texte: >
+      Passons à la page d'accueil. Revenez dans l'onglet Blocs : les blocs y sont rangés par familles.
+      Ouvrez la famille Contenu.
+    actions:
+      - cliquer: '.o-snippets-tabs button:has-text("Blocs")'
+      - cliquer: '.o_snippet:has-text("Contenu")'
+      - attendre: 1.5
+  - texte: >
+      Odoo propose des dizaines de modèles. Choisissez un bloc simple : un titre, un texte, un bouton et une image.
+    actions:
+      - survoler: 'blocs >> .o_snippet_preview_wrap:has-text("Améliorez votre")'
+      - cliquer: 'blocs >> .o_snippet_preview_wrap:has-text("Améliorez votre")'
+      - attendre: 1.5
+  - texte: >
+      Le bloc apparaît sur la page, avec un texte d'exemple. Tout se modifie directement, comme dans un traitement de texte.
+    actions:
+      - surligner: 'site >> #wrap section'
+        duree: 2.5
+  - texte: >
+      Cliquez trois fois sur le titre pour le sélectionner, puis tapez le vôtre :
+      des gâteaux faits maison, livrés chez vous.
+    actions:
+      - remplacer_texte: {dans: 'site >> #wrap section h2', texte: "Des gâteaux faits maison, livrés chez vous"}
+  - texte: >
+      Faites de même pour le texte. Dites en une phrase ce que vous vendez, et pourquoi vous choisir.
+    actions:
+      - remplacer_texte: {dans: 'site >> #wrap section p >> nth=0', texte: "Fraisiers, forêts noires, gâteaux d'anniversaire : commandez en ligne, nous livrons à moto dans tout Dakar."}
+  - texte: >
+      Le deuxième paragraphe rassure sur le paiement : Wave, Orange Money, ou à la livraison.
+    actions:
+      - remplacer_texte: {dans: 'site >> #wrap section p >> nth=1', texte: "Payez par Wave, Orange Money ou à la livraison."}
+  - texte: >
+      Le bouton est l'élément le plus important : il doit mener à la boutique. Cliquez dessus, puis sur Modifier.
+    actions:
+      - cliquer: 'site >> #wrap section a.btn'
+      - attendre: 0.5
+      - cliquer: '.o-we-linkpopover button:has-text("Modifier"), .o-we-linkpopover a:has-text("Modifier")'
+  - texte: >
+      Changez son texte en Commander un gâteau. Dans l'adresse, tapez /shop : c'est l'adresse de la boutique.
+      Puis cliquez sur Appliquer.
+    actions:
+      - taper_dans: {dans: '.o-we-linkpopover input.o_we_label_link', texte: Commander un gâteau}
+      - taper_dans: {dans: '.o-we-linkpopover input.o-autocomplete--input', texte: /shop}
+      - cliquer: '.o-we-linkpopover .o_we_apply_link'
+  - texte: >
+      Reste l'image d'exemple, qui ne parle pas de gâteaux. Double-cliquez dessus pour ouvrir la médiathèque.
+    actions:
+      - double_cliquer: 'site >> #wrap section img'
+      - attendre: 1
+  - texte: >
+      Choisissez une vraie photo de vos produits : ici, le fraisier. Une photo de votre travail donne
+      toujours plus envie qu'une image d'illustration.
+    actions:
+      - survoler: '.modal .o_existing_attachment_cell:has(img[title="fraisier.jpg"])'
+      - cliquer: '.modal .o_existing_attachment_cell:has(img[title="fraisier.jpg"])'
+      - attendre: 1.5
+  - texte: >
+      Ajoutons un deuxième bloc : vos produits. Revenez dans Blocs, ouvrez la famille Catalogue,
+      et tapez produit dans la recherche.
+    actions:
+      - cliquer: '.o-snippets-tabs button:has-text("Blocs")'
+      - cliquer: '.o_snippet:has-text("Catalogue")'
+      - attendre: 1
+      - taper_dans: {dans: '.modal input[placeholder*="Rechercher"]', texte: produit}
+      - attendre: 1.5
+  - texte: >
+      Choisissez ce bloc Produits. Il affiche automatiquement les produits de la boutique, avec leur photo et leur prix.
+    actions:
+      - cliquer: 'blocs >> .o_snippet_preview_wrap:has([data-snippet="s_dynamic_snippet_products"])'
+      - attendre: 3
+      - defiler: 'site >> .s_dynamic_snippet_products'
+  - texte: >
+      Son grand avantage : quand vous ajouterez un nouveau gâteau dans la boutique, il apparaîtra ici tout seul.
+    actions:
+      - surligner: 'site >> .s_dynamic_snippet_products'
+        duree: 3
+  - texte: >
+      Changez son titre en Nos gâteaux du moment, puis remplacez la phrase d'exemple en dessous.
+    actions:
+      - remplacer_texte: {dans: 'site >> .s_dynamic_snippet_products h2', texte: Nos gâteaux du moment}
+      - remplacer_texte: {dans: 'site >> .s_dynamic_snippet_products p >> nth=0', texte: "Commandez avant midi, livrés le jour même à Dakar."}
+
+  # ------------------------------------------------------------------ partie 4 : téléphone et enregistrement (≈ 1 min 30)
+  - partie: "4. Téléphone et enregistrement"
+    texte: >
+      Vos clients arriveront surtout par WhatsApp, donc depuis leur téléphone.
+      Cliquez sur l'icône du téléphone, en haut du panneau, pour voir la page comme eux.
+    actions:
+      - cliquer: '.o-snippets-top-actions button >> nth=2'
+      - attendre: 2
+  - texte: >
+      Les blocs se placent les uns sous les autres, automatiquement. Vérifiez que les textes restent courts
+      et que le bouton se voit bien.
+    actions:
+      - defiler: 'site >> .s_dynamic_snippet_products'
+      - attendre: 2
+  - texte: Revenez à l'affichage normal, puis cliquez sur Sauvegarder. Sans cela, rien n'est enregistré.
+    actions:
+      - cliquer: '.o-snippets-top-actions button >> nth=2'
+      - attendre: 1
+      - cliquer: '.o-snippets-top-actions button:has-text("Sauvegarder")'
+      - attendre: 3
+  - texte: >
+      La page est enregistrée. Votre cliente voit maintenant l'accroche, le bouton pour commander,
+      et les gâteaux du moment.
+    actions:
+      - defiler: 'site >> #wrap section'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ pièges (≈ 1 min)
+  - chapitre: Pièges fréquents
+    texte: >
+      Trois pièges fréquents. Premier piège : fermer l'éditeur sans sauvegarder.
+      Le bouton Ignorer annule toutes vos modifications : cliquez toujours sur Sauvegarder avant de partir.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : laisser des textes ou des images d'exemple. Une phrase qui parle d'entreprise ou de bureaux,
+      sur le site d'une pâtisserie, fait fuir les clients. Relisez chaque bloc.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : un bouton qui ne mène nulle part. Après avoir sauvegardé, cliquez vous-même sur
+      Commander un gâteau et vérifiez qu'il ouvre bien la boutique.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice (≈ 1 min)
+  - chapitre: À retenir
+    texte: >
+      Retenons l'essentiel. Un : le bouton Modifier ouvre l'éditeur, avec ses onglets Blocs, Style et Thème.
+      Deux : dans Thème, la palette change les couleurs de tout le site en un clic.
+      Trois : une bonne page d'accueil commence par une accroche avec un bouton vers la boutique, puis le bloc Produits.
+      Quatre : vérifiez sur téléphone, puis sauvegardez.
+    apres: 1.2
+    actions:
+      - illustration: images/eb-02-recap.png
+        zoom: 1.02
+  - chapitre: Exercice
+    texte: >
+      À vous de jouer : choisissez une palette pour votre site, puis construisez votre page d'accueil
+      avec une accroche, un bouton vers la boutique et le bloc Produits.
+      Dans la prochaine capsule, nous ajouterons les pages qui donnent confiance : à propos, contact et livraison.
+    actions:
+      - attendre: 1

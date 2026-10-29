@@ -223,17 +223,59 @@ def paniers_de_tournage():
         if not VOIR:
             odoo('sale.order', 'action_cancel', paniers)
 
+ACCUEIL_VIDE = '''<t name="Homepage" t-name="website.homepage">
+    <t t-call="website.layout" pageName.f="homepage">
+        <div id="wrap" class="oe_structure oe_empty"/>
+    </t>
+</t>'''
+
+# fichiers de style du site qui retiennent les couleurs, polices… choisies dans l'onglet Thème
+# (contenu d'origine gardé dans donnees/, relevé le 29/10/2026)
+STYLES = {
+    '/_custom/web.assets_frontend/website/static/src/scss/options/user_values.scss': 'user_values.scss',
+    '/_custom/web.assets_frontend/website/static/src/scss/options/colors/user_theme_color_palette.scss': 'user_theme_color_palette.scss',
+}
+
+# photos proposées dans la médiathèque de l'éditeur (double-clic sur une image du site)
+MEDIATHEQUE = ['fraisier.jpg', 'gateau-d-anniversaire.jpg', 'foret-noire.jpg', 'tartelette-aux-fruits.jpg']
+
+
+def accueil_et_theme():
+    print("Site : page d'accueil vide, thème d'origine, médiathèque")
+    ctx = dict(CTX, website_id=SITE)
+    vue = odoo('ir.ui.view', 'search', [('key', '=', 'website.homepage'), ('website_id', '=', SITE)], context=ctx)
+    ecrire('ir.ui.view', vue, {'arch_db': ACCUEIL_VIDE}, "page d'accueil vidée (« Glissez un bloc ici »)")
+    for url, nom in STYLES.items():
+        piece = odoo('ir.attachment', 'search', [('url', '=', url), ('website_id', '=', SITE)])
+        contenu = base64.b64encode((ICI / 'donnees' / nom).read_bytes()).decode()
+        ecrire('ir.attachment', piece, {'datas': contenu}, f"style d'origine : {nom}")
+    for nom in MEDIATHEQUE:
+        if odoo('ir.attachment', 'search', [('name', '=', nom), ('res_model', '=', 'ir.ui.view')]):
+            continue
+        print(f'  · photo {nom} ajoutée à la médiathèque')
+        if not VOIR:
+            odoo('ir.attachment', 'create', {'name': nom, 'datas': image(f'produits/{nom}'), 'res_model': 'ir.ui.view',
+                                             'res_id': 0, 'public': True, 'mimetype': 'image/jpeg'})
+
 # ---------------------------------------------------------------- capsules
 
 def eb_01():
     """EB-01 · De WhatsApp à la boutique en ligne : boutique présentable, 3 commandes passées."""
     site_et_coordonnees()
+    accueil_et_theme()
     catalogue()
     clients_et_commandes()
     paniers_de_tournage()
 
 
-CAPSULES = {'EB-01': eb_01}
+def eb_02():
+    """EB-02 · Construire son site : même boutique qu'EB-01, page d'accueil vide, couleurs d'origine,
+    4 photos dans la médiathèque. Le tournage remplit la page d'accueil et change les couleurs :
+    relancer ce script avant chaque prise (et avant de retourner EB-01)."""
+    eb_01()
+
+
+CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02}
 
 if __name__ == '__main__':
     code = next((a.upper() for a in sys.argv[1:] if not a.startswith('--')), None)
