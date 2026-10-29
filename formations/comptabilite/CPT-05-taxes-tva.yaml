@@ -121,13 +121,39 @@ etapes:
       - surligner_champ: price_include_override
         duree: 3.5
 
-  # ------------------------------------------------------------------ partie 3 : créer une taxe TTC
-  - partie: "3. Créer une TVA toutes taxes comprises"
+  # ------------------------------------------------------------------ partie 3 : la TVA à reverser
+  - partie: "3. La TVA à reverser"
+    texte: >
+      Comparons avec la TVA à dix-huit pour cent sur les achats. Revenons à la liste.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Taxes")'
+      - cliquer: '.o_data_row:has-text("18%"):has-text("Achats") td[name="name"]'
+  - texte: >
+      Même taux, mais un autre compte : quatre cent quarante-cinq mille deux cents, la TVA récupérable sur les achats.
+      C'est la TVA que vous avez payée à vos fournisseurs, et que l'État vous doit.
+    actions:
+      - surligner_champ: invoice_repartition_line_ids
+        duree: 5
+  - texte: >
+      Chaque mois, on fait la différence. Les Délices de Maïmouna ont facturé dix-huit mille francs de TVA
+      à leur client, et payé trois mille six cents francs de TVA à leur fournisseur.
+    actions:
+      - attendre: 1.5
+  - texte: >
+      Elles doivent donc reverser à l'État la différence : quatorze mille quatre cents francs.
+      Odoo fait ce calcul pour vous, grâce aux deux comptes que nous venons de voir.
+    actions:
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ partie 4 : créer une taxe TTC
+  - partie: "4. Créer une TVA toutes taxes comprises"
     texte: >
       En boutique, les prix affichés sont souvent toutes taxes comprises : un gâteau à onze mille huit cents francs,
-      TVA comprise. Il nous faut donc une TVA à dix-huit pour cent incluse dans le prix.
+      TVA comprise. Il nous faut donc une TVA à dix-huit pour cent incluse dans le prix, pour les ventes.
+      Revenons à la TVA dix-huit pour cent sur les ventes.
     actions:
-      - attendre: 1
+      - cliquer: '.breadcrumb-item a:has-text("Taxes")'
+      - cliquer: '.o_data_row:has-text("18%"):has-text("Ventes") td[name="name"]'
   - texte: >
       Le plus sûr n'est pas de partir de zéro, mais de dupliquer la taxe existante :
       la copie garde le bon compte et les grilles de la déclaration. Ouvrez le menu Actions, l'engrenage.
@@ -194,6 +220,7 @@ etapes:
       - attendre: 0.5
   - texte: >
       Une taxe dit comment elle se calcule, dans quel compte va la TVA, et dans quel groupe elle s'affiche.
+      La TVA à reverser, c'est la TVA facturée moins la TVA récupérable.
       Et pour créer une taxe, on duplique une taxe existante.
     actions:
       - attendre: 0.5
