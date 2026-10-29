@@ -132,6 +132,7 @@ etapes:
       Même taux, mais un autre compte : quatre cent quarante-cinq mille deux cents, la TVA récupérable sur les achats.
       C'est la TVA que vous avez payée à vos fournisseurs, et que l'État vous doit.
     actions:
+      - onglet: Définition
       - surligner_champ: invoice_repartition_line_ids
         duree: 5
   - texte: >
