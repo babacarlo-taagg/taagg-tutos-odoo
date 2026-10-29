@@ -103,6 +103,11 @@ bloc des produits de la boutique `blocs >> .o_snippet_preview_wrap:has([data-sni
 médiathèque : double-clic sur l'image, puis `.modal .o_existing_attachment_cell` ; après avoir sélectionné
 un élément du site, le panneau passe sur « Style » : recliquer sur « Blocs » avant d'insérer un autre bloc.
 
+Piège vécu (EB-02) : en tapant une adresse de lien, Odoo ouvre une liste de suggestions qui recouvre
+« Appliquer » ; le clic tombe sur une suggestion (`/shop/brownie-30` au lieu de `/shop`). Fermer la liste
+d'abord (clic sur le champ du libellé), puis Appliquer. **Après la prise, vérifier par l'API ce qui a été
+enregistré** (lien, texte, réglage) : l'image peut sembler juste alors que la donnée est fausse.
+
 ## Montrer une image (schéma ou ambiance)
 
 Quand l'écran Odoo ne suffit pas (parcours client, circuit de l'argent, comparaison) :

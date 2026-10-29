@@ -146,6 +146,9 @@ etapes:
     actions:
       - taper_dans: {dans: '.o-we-linkpopover input.o_we_label_link', texte: Commander un gâteau}
       - taper_dans: {dans: '.o-we-linkpopover input.o-autocomplete--input', texte: /shop}
+      # la liste de suggestions (/shop/brownie-30…) recouvre « Appliquer » : la fermer en cliquant sur le libellé
+      - cliquer: '.o-we-linkpopover input.o_we_label_link'
+      - attendre: 0.5
       - cliquer: '.o-we-linkpopover .o_we_apply_link'
   - texte: >
       Reste l'image d'exemple, qui ne parle pas de gâteaux. Double-cliquez dessus pour ouvrir la médiathèque.
