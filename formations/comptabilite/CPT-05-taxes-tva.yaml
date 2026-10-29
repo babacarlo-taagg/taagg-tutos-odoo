@@ -1,0 +1,205 @@
+# CPT-05 · Les taxes : la TVA au Sénégal
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-05`) :
+#   société 1 sélectionnée, pas de taxe « 18% TTC » ni de copie « (copie) ».
+# Ce que la capsule crée : la taxe de vente « 18% TTC » (copie de « 18% », prix toutes taxes comprises), gardée.
+# On duplique la taxe existante plutôt que d'en créer une de zéro : la copie garde le compte 443100
+# et les grilles de la déclaration de TVA.
+titre: "Les taxes : la TVA au Sénégal"
+sous_titre: Formation Comptabilité Odoo · CPT-05
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+  TTC: té-té-cé
+  HT: hache-té
+fin:
+  message: "Prochaine capsule : les positions fiscales"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette cinquième capsule de la formation à la comptabilité avec Odoo.
+      Aujourd'hui, nous parlons des taxes, et surtout de la TVA au Sénégal.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez lire une taxe dans Odoo, comprendre où va la TVA dans les comptes,
+      et créer une taxe en toute sécurité : ici, une TVA à dix-huit pour cent incluse dans le prix.
+    actions:
+      - attendre: 1
+  - texte: >
+      Dans la capsule précédente, nous avons vu les journaux. Chaque facture que nous y enregistrerons
+      portera des taxes : il est temps de les comprendre.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : les taxes de la base
+  - partie: "1. Les taxes du Sénégal"
+    texte: >
+      Les taxes se trouvent dans le menu Configuration.
+    actions:
+      - ouvrir_menu: Configuration
+      - survoler_texte: Taxes
+  - texte: Cliquez sur Taxes.
+    actions:
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Taxes")'
+  - texte: >
+      Le pack Sénégal a déjà installé les taxes utiles. Chacune existe en deux versions :
+      une pour les ventes, une pour les achats.
+    actions:
+      - surligner: '.o_list_renderer'
+        duree: 3
+  - texte: >
+      La TVA à dix-huit pour cent, c'est le taux normal : il s'applique à la plupart des ventes,
+      comme le pain et les gâteaux des Délices de Maïmouna.
+    actions:
+      - surligner: '.o_data_row:has-text("18%"):has-text("Ventes")'
+        duree: 3
+  - texte: >
+      La TVA à dix pour cent est un taux réduit, réservé à quelques activités,
+      comme les prestations des établissements d'hébergement touristique agréés.
+    actions:
+      - surligner: '.o_data_row:has-text("10%"):has-text("Ventes")'
+        duree: 3
+  - texte: >
+      Enfin, les taxes à zéro pour cent : l'exonération, pour les opérations que le Code général des impôts
+      dispense de TVA, et l'exportation. Pour savoir si une vente est exonérée, demandez à votre expert-comptable.
+    actions:
+      - surligner: '.o_data_row:has-text("exonéré"):has-text("Ventes")'
+        duree: 2.5
+      - surligner: '.o_data_row:has-text("exportation")'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 2 : lire une taxe
+  - partie: "2. Lire une taxe"
+    texte: Ouvrons la TVA à dix-huit pour cent sur les ventes.
+    actions:
+      - cliquer: '.o_data_row:has-text("18%"):has-text("Ventes") td[name="name"]'
+  - texte: >
+      Le type de taxe dit si elle s'applique aux ventes ou aux achats. Ce n'est pas un détail :
+      la TVA de vos ventes, vous la devez à l'État. Celle de vos achats, vous pouvez la récupérer.
+    actions:
+      - surligner_champ: type_tax_use
+        duree: 4
+  - texte: >
+      Le calcul est un pourcentage, et le montant est de dix-huit.
+    actions:
+      - surligner_champ: amount_type
+        duree: 2
+      - surligner_champ: amount
+        duree: 2
+  - texte: >
+      En dessous, la répartition dit où Odoo range l'argent. La base, c'est le montant hors taxes.
+      Et cent pour cent de la taxe va au compte quatre cent quarante-trois mille cent : la TVA facturée sur les ventes.
+    actions:
+      - surligner_champ: invoice_repartition_line_ids
+        duree: 5
+  - texte: >
+      Les petites étiquettes à droite sont les grilles de la déclaration de TVA : grâce à elles,
+      Odoo remplira la déclaration tout seul. Nous le verrons dans le parcours consacré à la fiscalité.
+    actions:
+      - surligner: '.o_field_widget[name="invoice_repartition_line_ids"] td[name="tag_ids"]'
+        duree: 3.5
+  - texte: Passons à l'onglet Options avancées.
+    actions:
+      - onglet: Options avancées
+  - texte: >
+      Le groupe de taxes, ici T.V.A. dix-huit pour cent, regroupe les taxes de même nature.
+      C'est lui qui donne la ligne de TVA dans le total de vos factures.
+    actions:
+      - surligner_champ: tax_group_id
+        duree: 4
+  - texte: >
+      Et Inclus dans le prix est sur Par défaut : la taxe s'ajoute au prix hors taxes,
+      comme nous l'avons réglé dans les paramètres généraux.
+    actions:
+      - surligner_champ: price_include_override
+        duree: 3.5
+
+  # ------------------------------------------------------------------ partie 3 : créer une taxe TTC
+  - partie: "3. Créer une TVA toutes taxes comprises"
+    texte: >
+      En boutique, les prix affichés sont souvent toutes taxes comprises : un gâteau à onze mille huit cents francs,
+      TVA comprise. Il nous faut donc une TVA à dix-huit pour cent incluse dans le prix.
+    actions:
+      - attendre: 1
+  - texte: >
+      Le plus sûr n'est pas de partir de zéro, mais de dupliquer la taxe existante :
+      la copie garde le bon compte et les grilles de la déclaration. Ouvrez le menu Actions, l'engrenage.
+    actions:
+      - cliquer: 'button[data-tooltip="Actions"]'
+  - texte: Cliquez sur Dupliquer.
+    actions:
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Dupliquer")'
+  - texte: >
+      Odoo crée une copie. Renommons-la : dix-huit pour cent, T-T-C.
+    actions:
+      - champ: name
+        taper: 18% TTC
+  - texte: >
+      Dans les options avancées, réglez Inclus dans le prix sur Toutes taxes comprises.
+    actions:
+      - onglet: Options avancées
+      - choisir: {champ: price_include_override, valeur: Toutes taxes comprises}
+  - texte: >
+      Désormais, pour ce gâteau à onze mille huit cents francs, Odoo retrouvera tout seul
+      dix mille francs hors taxes et mille huit cents francs de TVA. Enregistrez.
+    actions:
+      - surligner_champ: price_include_override
+        duree: 2.5
+      - enregistrer: oui
+  - texte: >
+      Vérifions dans l'onglet Définition : la nouvelle taxe utilise bien le compte quatre cent quarante-trois mille cent.
+    actions:
+      - onglet: Définition
+      - surligner_champ: invoice_repartition_line_ids
+        duree: 3.5
+  - texte: >
+      Revenons à la liste : la TVA dix-huit pour cent T-T-C a rejoint les autres taxes de vente.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Taxes")'
+      - surligner: '.o_data_row:has-text("18% TTC")'
+        duree: 3
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : créer une taxe de zéro et oublier son compte.
+      La TVA se retrouve alors mélangée au chiffre d'affaires. Dupliquez toujours une taxe existante.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : choisir une taxe d'achat sur une facture de vente, ou l'inverse.
+      La TVA atterrit dans le mauvais compte, et votre déclaration est fausse.
+    actions:
+      - surligner: '.o_list_renderer td[name="type_tax_use"]'
+        duree: 2.5
+  - texte: >
+      Troisième piège : utiliser la TVA T-T-C sur un prix saisi hors taxes. Le client paierait moins
+      que prévu. Choisissez une seule façon de saisir vos prix, et gardez-la.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Au Sénégal, la TVA normale est de dix-huit pour cent, le taux réduit de dix pour cent,
+      et certaines opérations sont exonérées. Chaque taxe existe pour les ventes et pour les achats.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Une taxe dit comment elle se calcule, dans quel compte va la TVA, et dans quel groupe elle s'affiche.
+      Et pour créer une taxe, on duplique une taxe existante.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : ouvrez la TVA à dix-huit pour cent sur les achats, et retrouvez le compte où Odoo range
+      la TVA récupérable. Puis créez, par duplication, une TVA dix-huit pour cent T-T-C pour les achats.
+      Dans la prochaine capsule, nous verrons les positions fiscales. À tout de suite !
+    actions:
+      - attendre: 1

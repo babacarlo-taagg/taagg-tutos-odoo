@@ -62,7 +62,16 @@ def cpt_04():
     return odoo('account.journal', 'search_count', [['code', '=', 'CAI'], ['company_id', '=', SOCIETE]]), len(comptes)
 
 
-CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04}
+def cpt_05():
+    # la taxe « 18% TTC » est créée à l'écran en dupliquant « 18% » (ventes) : on enlève les copies
+    ids = odoo('account.tax', 'search', [['company_id', '=', SOCIETE], '|', ['name', '=', '18% TTC'], ['name', 'like', '(copie)']],
+               context={'active_test': False, 'lang': 'fr_FR'})  # nom traduit : chercher en français
+    if ids:
+        odoo('account.tax', 'unlink', ids)
+    return len(ids)
+
+
+CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''
