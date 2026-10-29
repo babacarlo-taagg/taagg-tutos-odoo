@@ -113,6 +113,8 @@ def site_et_coordonnees():
     if logo:
         valeurs['logo'] = logo
     ecrire('website', [SITE], valeurs, 'nom « Les Délices de Maïmouna », logo, prix affichés TTC, vendeur Formateur TAAGG')
+    # e-mail de la société (factures, e-mails, page Contact) : adresse fictive, jamais une vraie personne
+    ecrire('res.company', [1], {'email': EMAIL}, f'e-mail de la société : {EMAIL}')
     # filtres de la boutique : masquer les caractéristiques qui ne concernent pas la pâtisserie
     inutiles = odoo('product.attribute', 'search', [('name', 'in', ['Taille', 'Type de poisson', 'Poissons gras', 'Type de viande', 'Type', 'Parfum / Saveur'])])
     ecrire('product.attribute', inutiles, {'visibility': 'hidden'}, f'{len(inutiles)} filtres inutiles masqués dans la boutique')
