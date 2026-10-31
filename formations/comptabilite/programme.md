@@ -18,7 +18,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | CPT-02 | Les paramètres généraux | société, devise XOF, arrondis, présentation des factures, fonctions à activer | Configuration › Paramètres | 🎙 6:46 |
 | CPT-03 | Le plan comptable SYSCOHADA | classes 1 à 9, lire un compte, créer un compte, groupes et étiquettes | Plan comptable (panneau des classes) | 🎙 6:10 |
 | CPT-04 | Les journaux | ventes, achats, banque, caisse, opérations diverses ; créer un journal de caisse | Journaux | 🎙 5:58 |
-| CPT-05 | Les taxes : la TVA au Sénégal | TVA 18 %, 10 %, exonérée ; créer une taxe, taxes par défaut, groupes de taxes | Taxes, Groupes de taxes | ☐ |
+| CPT-05 | Les taxes : la TVA au Sénégal | TVA 18 %, 10 %, exonérée ; créer une taxe, taxes par défaut, groupes de taxes | Taxes | 🎙 5:49 |
 | CPT-06 | Positions fiscales | clients locaux / étrangers : remplacer automatiquement taxes et comptes | Positions fiscales | ☐ |
 | CPT-07 | Conditions de paiement et exercice fiscal | « 30 % à la commande, solde à 60 jours », escompte ; exercices fiscaux | Conditions de paiement, Exercices fiscaux | ☐ |
 | CPT-08 | Banque, caisse et moyens de paiement | relier un compte bancaire, modes de paiement, arrondi des paiements en espèces | Journaux, Modes de paiement | ☐ |
@@ -92,6 +92,12 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
   Crée le journal « Caisse boutique » (Espèces, préfixe CAI) et son compte 571001, créé par Odoo : un journal
   Espèces n'accepte que des comptes « Banque et espèces », et le 571100 du plan est en « Actifs circulants ».
   Gardés pour CPT-08 et CPT-20. Contrôle qualité fait. À publier.
+- **CPT-05** (31 octobre 2026) : version finale, 5 min 49 s, 35 étapes, ≈ 5 000 caractères de voix.
+  Crée la taxe de vente « 18% TTC » par duplication de « 18% » (gardée). Une phrase (étape 20) a été
+  régénérée : la voix clonée avait ajouté un « euh » (repéré par la transcription de contrôle).
+- **Mise en ligne** (31 octobre 2026) : CPT-01 à CPT-05 déposées sur Drive et ajoutées en brouillon dans le cours
+  taagg-school.com « Bloc 4 — Finance & RH », section « Module comptabilité » (une leçon vidéo + une fiche
+  article par capsule). Les liens Drive des vidéos se collent à la main (le connecteur n'a pas le droit).
 
 ## Ordre de tournage proposé
 
