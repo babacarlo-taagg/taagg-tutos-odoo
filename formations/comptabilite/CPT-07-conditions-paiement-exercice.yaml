@@ -3,7 +3,7 @@
 #   pas de condition « 50 % à la commande, solde à 30 jours » ; la Boutique Les Almadies n'a pas de
 #   condition de paiement sur sa fiche.
 # Ce que la capsule crée : la condition « 50 % à la commande, solde à 30 jours », appliquée à la
-#   Boutique Les Almadies. Les deux sont remises à zéro par etat-depart.py avant chaque tournage.
+#   Boutique Les Almadies, et une facture brouillon pour elle. Tout est remis à zéro par etat-depart.py.
 # On ne touche pas aux dates de verrouillage (on les regarde, puis Ignorer).
 titre: Conditions de paiement et exercice fiscal
 sous_titre: Formation Comptabilité Odoo · CPT-07
@@ -153,6 +153,34 @@ etapes:
       - enregistrer: oui
       - surligner_champ: property_payment_term_id
         duree: 3
+  - texte: >
+      Vérifions-le sur une nouvelle facture. Menu Clients, Factures clients, Nouveau,
+      et choisissez la Boutique Les Almadies.
+    actions:
+      - ouvrir_menu: Clients
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Factures clients")'
+      - bouton: Nouveau
+      - choisir: {champ: partner_id, valeur: Boutique Les Almadies}
+  - texte: >
+      La condition s'est remplie toute seule : cinquante pour cent à la commande, solde à trente jours.
+    actions:
+      - surligner_champ: invoice_payment_term_id
+        duree: 3.5
+  - texte: Ajoutons une fournée de cent pains de mie, à cent mille francs hors taxes.
+    actions:
+      - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_field_x2many_list_row_add a'
+      - choisir: {champ: product_id, valeur: Pain de mie}
+      - champ: price_unit
+        taper: "100000"
+      - touche: Tab
+  - texte: >
+      Dans l'onglet Écritures comptables, la créance du client est coupée en deux :
+      deux fois cinquante-neuf mille francs, avec deux dates d'échéance différentes.
+      C'est grâce à elles qu'Odoo saura, plus tard, si le client est en retard.
+    actions:
+      - onglet: Écritures comptables
+      - surligner: '.o_notebook .tab-pane.active .o_list_renderer'
+        duree: 5
 
   # ------------------------------------------------------------------ partie 5 : l'exercice fiscal
   - partie: "5. L'exercice fiscal"
@@ -182,8 +210,9 @@ etapes:
     actions:
       - ouvrir_menu: Comptabilité
       - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Dates de verrouillage")'
+      - cliquer: '.modal-title'
   - texte: >
-      Le verrouillage global est au trente et un décembre deux mille vingt-cinq : l'exercice deux mille vingt-cinq
+      La ligne Tout verrouiller est au trente et un décembre deux mille vingt-cinq : l'exercice deux mille vingt-cinq
       est clôturé, plus personne ne peut y modifier une écriture. C'est ce qui protège des comptes déjà déclarés.
     actions:
       - surligner: '.modal .o_field_widget[name="fiscalyear_lock_date"]'

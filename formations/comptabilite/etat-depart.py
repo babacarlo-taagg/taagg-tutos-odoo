@@ -86,6 +86,9 @@ def cpt_06():
 def cpt_07():
     # la condition « 50 % à la commande, solde à 30 jours » est créée à l'écran et posée sur la Boutique Les Almadies
     odoo('res.partner', 'write', [BOUTIQUE_ALMADIES], {'property_payment_term_id': False}, context={'allowed_company_ids': [SOCIETE]})
+    brouillons = odoo('account.move', 'search', [['partner_id', '=', BOUTIQUE_ALMADIES], ['state', '=', 'draft']])
+    if brouillons:  # la facture brouillon de la démonstration (la facture INV/2026/00001, validée, ne bouge pas)
+        odoo('account.move', 'unlink', brouillons)
     ids = odoo('account.payment.term', 'search', [['name', 'ilike', '50 % à la commande']], context={'active_test': False, 'lang': 'fr_FR'})
     if ids:
         odoo('account.payment.term', 'unlink', ids)
