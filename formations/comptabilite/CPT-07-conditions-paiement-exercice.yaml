@@ -1,0 +1,231 @@
+# CPT-07 · Conditions de paiement et exercice fiscal
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-07`) :
+#   pas de condition « 50 % à la commande, solde à 30 jours » ; la Boutique Les Almadies n'a pas de
+#   condition de paiement sur sa fiche.
+# Ce que la capsule crée : la condition « 50 % à la commande, solde à 30 jours », appliquée à la
+#   Boutique Les Almadies. Les deux sont remises à zéro par etat-depart.py avant chaque tournage.
+# On ne touche pas aux dates de verrouillage (on les regarde, puis Ignorer).
+titre: Conditions de paiement et exercice fiscal
+sous_titre: Formation Comptabilité Odoo · CPT-07
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : banque, caisse et moyens de paiement"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette septième capsule de la formation à la comptabilité avec Odoo.
+      Aujourd'hui, deux réglages qui touchent au temps : les conditions de paiement, et l'exercice fiscal.
+    actions:
+      - attendre: 1
+  - texte: >
+      Les conditions de paiement disent quand le client doit payer : tout de suite, à trente jours,
+      ou en plusieurs fois. Odoo s'en sert pour calculer les échéances, et pour savoir qui est en retard.
+    actions:
+      - attendre: 1
+  - texte: >
+      Dans la capsule précédente, nous avons vu les positions fiscales. Les conditions de paiement
+      se trouvent juste en dessous, dans le menu Configuration.
+    actions:
+      - ouvrir_menu: Configuration
+      - survoler_texte: Conditions de paiement
+
+  # ------------------------------------------------------------------ partie 1 : lire une condition
+  - partie: "1. Lire une condition de paiement"
+    texte: Ouvrez Conditions de paiement.
+    actions:
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Conditions de paiement")'
+  - texte: >
+      Odoo en propose déjà plusieurs : paiement immédiat, quinze jours, trente jours, fin du mois suivant.
+      Elles sont prêtes à l'emploi.
+    actions:
+      - surligner: '.o_list_renderer'
+        duree: 3.5
+  - texte: Ouvrons « trente pour cent maintenant, le solde à soixante jours ».
+    actions:
+      - cliquer: '.o_data_row:has-text("30% maintenant") td[name="name"]'
+  - texte: >
+      Une condition est faite d'échéances. Ici, deux lignes : trente pour cent tout de suite,
+      zéro jour après la facture, puis soixante-dix pour cent, soixante jours après.
+    actions:
+      - surligner_champ: line_ids
+        duree: 5
+  - texte: >
+      À droite, l'aperçu calcule un exemple : pour une facture de mille francs, trois cents francs
+      à payer aujourd'hui, et sept cents francs dans soixante jours. Odoo fera le même calcul sur chaque facture.
+    actions:
+      - surligner_champ: example_preview
+        duree: 5
+  - texte: >
+      Afficher les dates des versements est coché : l'échéancier sera imprimé sur la facture.
+      Le client sait exactement quoi payer, et quand.
+    actions:
+      - surligner_champ: display_on_invoice
+        duree: 3.5
+
+  # ------------------------------------------------------------------ partie 2 : créer une condition
+  - partie: "2. Créer une condition de paiement"
+    texte: >
+      Pour les gâteaux d'anniversaire et de mariage, les Délices de Maïmouna demandent la moitié à la commande,
+      et le reste à trente jours. Créons cette condition.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Conditions de paiement")'
+      - bouton: Nouveau
+  - texte: "Son nom : cinquante pour cent à la commande, solde à trente jours."
+    actions:
+      - champ: name
+        taper: 50 % à la commande, solde à 30 jours
+  - texte: >
+      Odoo propose une seule ligne, cent pour cent tout de suite. Remplaçons cent par cinquante.
+    actions:
+      - cliquer: '.o_field_widget[name="line_ids"] .o_data_row td[name="value_amount"]'
+      - champ: value_amount
+        taper: "50"
+      - touche: Tab
+  - texte: >
+      Ajoutons la deuxième échéance avec Ajouter une ligne. Odoo complète tout seul le solde, cinquante pour cent.
+      Il ne reste qu'à dire quand : trente jours après la facture.
+    actions:
+      - cliquer: '.o_field_widget[name="line_ids"] .o_field_x2many_list_row_add a'
+      - champ: nb_days
+        taper: "30"
+      - touche: Tab
+  - texte: >
+      L'aperçu le confirme : cinq cents francs aujourd'hui, cinq cents francs dans trente jours.
+      Enregistrez.
+    actions:
+      - surligner_champ: example_preview
+        duree: 3.5
+      - enregistrer: oui
+
+  # ------------------------------------------------------------------ partie 3 : l'escompte
+  - partie: "3. L'escompte"
+    texte: >
+      L'escompte, c'est une petite remise offerte au client qui paie en avance. Revenons à la liste,
+      et ouvrons « deux, sept, net trente ».
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Conditions de paiement")'
+      - cliquer: '.o_data_row:has-text("2/7 Net 30") td[name="name"]'
+  - texte: >
+      La case Escompte est cochée : deux pour cent si le client paie dans les sept jours.
+      Sinon, il paie le montant complet à trente jours.
+    actions:
+      - surligner_champ: early_discount
+        duree: 2
+      - surligner_champ: discount_percentage
+        duree: 2
+      - surligner_champ: discount_days
+        duree: 2
+  - texte: >
+      L'aperçu montre les deux cas : neuf cent quatre-vingts francs s'il paie vite, mille francs sinon.
+      Odoo enregistrera tout seul l'escompte accordé quand le paiement arrivera à temps.
+    actions:
+      - surligner_champ: example_preview_discount
+        duree: 4.5
+
+  # ------------------------------------------------------------------ partie 4 : appliquer à un client
+  - partie: "4. Appliquer une condition à un client"
+    texte: >
+      Pour qu'une condition s'applique toute seule, on l'inscrit sur la fiche du client.
+      Ouvrons la Boutique Les Almadies. Menu Clients, puis Clients.
+    actions:
+      - ouvrir_menu: Clients
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Clients")'
+      - rechercher: Almadies
+      - cliquer: '.o_kanban_record:has-text("Boutique Les Almadies"), .o_data_row:has-text("Boutique Les Almadies")'
+  - texte: >
+      Dans l'onglet Ventes et Achats, choisissez la condition de paiement : cinquante pour cent à la commande.
+    actions:
+      - onglet: Ventes & Achats
+      - choisir: {champ: property_payment_term_id, valeur: 50 % à la commande}
+  - texte: >
+      Enregistrez. Désormais, chaque nouvelle facture de ce client portera cette condition,
+      et ses deux échéances, sans rien avoir à choisir.
+    actions:
+      - enregistrer: oui
+      - surligner_champ: property_payment_term_id
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 5 : l'exercice fiscal
+  - partie: "5. L'exercice fiscal"
+    texte: >
+      Passons au temps comptable. L'exercice fiscal, c'est la période de douze mois sur laquelle on fait les comptes.
+      Il se règle dans Configuration, Paramètres.
+    actions:
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Paramètres")'
+  - texte: >
+      Tout en bas, dans Périodes fiscales : le dernier jour est le trente et un décembre.
+      L'exercice va donc du premier janvier au trente et un décembre, comme le prévoit le SYSCOHADA.
+    actions:
+      - defiler: '.o_field_widget[name="fiscalyear_last_month"]'
+      - surligner_champ: fiscalyear_last_month
+        duree: 2.5
+      - surligner_champ: fiscalyear_last_day
+        duree: 2
+  - texte: >
+      La case Exercices fiscaux sert aux cas particuliers, par exemple un premier exercice plus long
+      quand l'entreprise est créée en cours d'année. Chez Maïmouna, on n'en a pas besoin.
+    actions:
+      - surligner_champ: group_fiscal_year
+        duree: 3.5
+  - texte: >
+      Dernier point : les dates de verrouillage. Ouvrez le menu Comptabilité, puis Dates de verrouillage.
+    actions:
+      - ouvrir_menu: Comptabilité
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Dates de verrouillage")'
+  - texte: >
+      Le verrouillage global est au trente et un décembre deux mille vingt-cinq : l'exercice deux mille vingt-cinq
+      est clôturé, plus personne ne peut y modifier une écriture. C'est ce qui protège des comptes déjà déclarés.
+    actions:
+      - surligner: '.modal .o_field_widget[name="fiscalyear_lock_date"]'
+        duree: 5
+  - texte: >
+      Nous verrons comment poser ces verrous dans la capsule sur la clôture. Ici, on ne change rien : Ignorer.
+    actions:
+      - cliquer: '.modal-footer button:has-text("Ignorer")'
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : des échéances qui ne font pas cent pour cent.
+      Laissez Odoo compléter le solde, et vérifiez toujours l'aperçu.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : changer la condition sur une facture déjà envoyée. Le client a reçu d'autres dates.
+      Fixez la condition sur la fiche du client, avant la première facture.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : saisir une pièce dans un exercice verrouillé. Odoo la refuse.
+      Vérifiez la date de vos pièces, surtout en début d'année.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Une condition de paiement est faite d'échéances, en pourcentage et en jours.
+      L'aperçu montre le calcul, et l'escompte récompense le client qui paie vite.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      On inscrit la condition sur la fiche du client pour qu'elle s'applique toute seule.
+      Et l'exercice fiscal va du premier janvier au trente et un décembre, l'exercice passé étant verrouillé.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : créez la condition « quarante pour cent à la commande, quarante pour cent à trente jours,
+      le solde à soixante jours », et vérifiez l'aperçu.
+      Dans la prochaine capsule, nous verrons la banque, la caisse et les moyens de paiement. À tout de suite !
+    actions:
+      - attendre: 1

@@ -14,6 +14,7 @@ ENV = dict(l.split('=', 1) for l in (ICI / '.env').read_text().splitlines() if '
 ENV = {k.strip(): v.split('#')[0].strip() for k, v in ENV.items()}
 ENV.update({k: v for k, v in os.environ.items() if k.startswith('ODOO_')})  # les variables d'environnement passent avant le .env
 SOCIETE = 1  # « correction les délices de maimouna »
+BOUTIQUE_ALMADIES = 12  # le client de la facture INV/2026/00001
 
 
 def appel(service, methode, *args):
@@ -82,7 +83,16 @@ def cpt_06():
     return len(clients), len(factures)
 
 
-CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06}
+def cpt_07():
+    # la condition « 50 % à la commande, solde à 30 jours » est créée à l'écran et posée sur la Boutique Les Almadies
+    odoo('res.partner', 'write', [BOUTIQUE_ALMADIES], {'property_payment_term_id': False}, context={'allowed_company_ids': [SOCIETE]})
+    ids = odoo('account.payment.term', 'search', [['name', 'ilike', '50 % à la commande']], context={'active_test': False, 'lang': 'fr_FR'})
+    if ids:
+        odoo('account.payment.term', 'unlink', ids)
+    return len(ids)
+
+
+CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''
