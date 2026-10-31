@@ -8,3 +8,4 @@ scenarios/*.voix/
 .DS_Store
 # Enregistrements de voix (données personnelles) : jamais dans Git
 voix-source/
+livraison/
