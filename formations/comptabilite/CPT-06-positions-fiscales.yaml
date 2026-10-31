@@ -97,7 +97,7 @@ etapes:
         duree: 4
   - texte: Ouvrons la taxe zéro pour cent, exportation.
     actions:
-      - cliquer: '.o_data_row:has-text("exportation") td[name="name"]'
+      - cliquer: '.o_data_row:has-text("exportation") td:has-text("0% EX")'
   - texte: >
       Dans cette version d'Odoo, c'est la taxe elle-même qui porte la règle :
       elle s'applique dans la position International, et elle remplace les taxes de son champ Remplace.
