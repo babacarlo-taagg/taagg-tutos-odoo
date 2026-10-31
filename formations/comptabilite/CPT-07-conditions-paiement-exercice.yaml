@@ -175,7 +175,7 @@ etapes:
       - touche: Tab
   - texte: >
       Dans l'onglet Écritures comptables, la créance du client est coupée en deux :
-      deux fois cinquante-neuf mille francs, avec deux dates d'échéance différentes.
+      versement un et versement deux, de cinquante-neuf mille francs chacun, avec chacun sa propre échéance.
       C'est grâce à elles qu'Odoo saura, plus tard, si le client est en retard.
     actions:
       - onglet: Écritures comptables
