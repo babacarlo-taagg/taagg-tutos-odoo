@@ -1,7 +1,7 @@
 # CPT-06 · Les positions fiscales
 # État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-06`) :
 #   société 1 sélectionnée, pas de client « Pâtisserie de Banjul » ni de facture brouillon pour lui.
-# Ce que la capsule crée : le client « Pâtisserie de Banjul » (Gambie) et une facture brouillon,
+# Ce que la capsule crée : le client « Pâtisserie de Banjul » (Gambie), une facture et une facture fournisseur brouillon,
 #   tous deux enlevés par etat-depart.py avant chaque tournage.
 # Odoo 19 : la correspondance des taxes se lit sur la taxe de remplacement (champ « Remplace »),
 #   et le bouton Taxes de la position fiscale les liste.
@@ -90,6 +90,23 @@ etapes:
       - surligner: '.o_data_row:has-text("importation")'
         duree: 2.5
   - texte: >
+      La colonne Remplace dit précisément quelles taxes sont remplacées : dix-huit pour cent, dix pour cent,
+      et même la TVA dix-huit pour cent T-T-C que nous avons créée dans la capsule précédente.
+    actions:
+      - surligner: '.o_data_row:has-text("exportation") td[name="original_tax_ids"]'
+        duree: 4
+  - texte: Ouvrons la taxe zéro pour cent, exportation.
+    actions:
+      - cliquer: '.o_data_row:has-text("exportation") td[name="name"]'
+  - texte: >
+      Dans cette version d'Odoo, c'est la taxe elle-même qui porte la règle :
+      elle s'applique dans la position International, et elle remplace les taxes de son champ Remplace.
+    actions:
+      - surligner_champ: fiscal_position_ids
+        duree: 3
+      - surligner_champ: original_tax_ids
+        duree: 3
+  - texte: >
       Revenons à la position. L'onglet Correspondance de comptes sert de la même façon à remplacer un compte,
       par exemple un compte de ventes à l'export à la place du compte de ventes habituel. Ici, il est vide.
     actions:
@@ -166,6 +183,33 @@ etapes:
       - surligner: '.o_statusbar_status'
         duree: 2.5
 
+  # ------------------------------------------------------------------ partie 4 : côté achats
+  - partie: "4. Et pour les achats"
+    texte: >
+      Le même mécanisme vaut pour les achats. Imaginons que la Pâtisserie de Banjul vende aussi du beurre
+      aux Délices de Maïmouna. Menu Fournisseurs, Factures fournisseurs, puis Nouveau.
+    actions:
+      - ouvrir_menu: Fournisseurs
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Factures fournisseurs")'
+      - bouton: Nouveau
+  - texte: >
+      Choisissez le fournisseur : la Pâtisserie de Banjul. Une même fiche peut servir de client et de fournisseur.
+    actions:
+      - choisir: {champ: partner_id, valeur: Pâtisserie de Banjul}
+  - texte: "Ajoutez une ligne : du beurre doux, pour cinquante mille francs."
+    actions:
+      - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_field_x2many_list_row_add a'
+      - choisir: {champ: product_id, valeur: Beurre doux}
+      - champ: price_unit
+        taper: "50000"
+      - touche: Tab
+  - texte: >
+      Là encore, Odoo a remplacé la TVA à dix-huit pour cent sur les achats par zéro pour cent, importation.
+      Vous n'avez rien eu à corriger.
+    actions:
+      - surligner: '.o_field_widget[name="invoice_line_ids"] .o_data_row td[name="tax_ids"]'
+        duree: 4
+
   # ------------------------------------------------------------------ pièges fréquents
   - partie: "Les pièges à éviter"
     texte: >
@@ -197,8 +241,9 @@ etapes:
     actions:
       - attendre: 0.5
   - texte: >
-      Votre exercice : créez un fournisseur au Mali, faites-lui une facture fournisseur en brouillon,
-      et vérifiez que la TVA est remplacée par zéro pour cent, importation.
+      Votre exercice : créez un client au Mali, faites-lui une facture en brouillon, et vérifiez
+      que la TVA est remplacée par zéro pour cent, exportation. Puis ouvrez une facture d'un client sénégalais,
+      et retrouvez la position National dans l'onglet Autres informations.
       Dans la prochaine capsule, nous verrons les conditions de paiement et l'exercice fiscal. À tout de suite !
     actions:
       - attendre: 1
