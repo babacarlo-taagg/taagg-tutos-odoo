@@ -19,7 +19,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | CPT-03 | Le plan comptable SYSCOHADA | classes 1 à 9, lire un compte, créer un compte, groupes et étiquettes | Plan comptable (panneau des classes) | 🎙 6:10 |
 | CPT-04 | Les journaux | ventes, achats, banque, caisse, opérations diverses ; créer un journal de caisse | Journaux | 🎙 5:58 |
 | CPT-05 | Les taxes : la TVA au Sénégal | TVA 18 %, 10 %, exonérée ; créer une taxe, taxes par défaut, groupes de taxes | Taxes | 🎙 5:49 |
-| CPT-06 | Positions fiscales | clients locaux / étrangers : remplacer automatiquement taxes et comptes | Positions fiscales | ☐ |
+| CPT-06 | Positions fiscales | clients locaux / étrangers : remplacer automatiquement taxes et comptes | Positions fiscales | 🎙 6:00 |
 | CPT-07 | Conditions de paiement et exercice fiscal | « 30 % à la commande, solde à 60 jours », escompte ; exercices fiscaux | Conditions de paiement, Exercices fiscaux | ☐ |
 | CPT-08 | Banque, caisse et moyens de paiement | relier un compte bancaire, modes de paiement, arrondi des paiements en espèces | Journaux, Modes de paiement | ☐ |
 | CPT-09 | Produits et catégories : où va l'argent | comptes de produits et de charges par catégorie et par article | Catégories de produits, Produits | ☐ |
@@ -98,6 +98,9 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 - **Mise en ligne** (31 octobre 2026) : CPT-01 à CPT-05 déposées sur Drive et ajoutées en brouillon dans le cours
   taagg-school.com « Bloc 4 — Finance & RH », section « Module comptabilité » (une leçon vidéo + une fiche
   article par capsule). Les liens Drive des vidéos se collent à la main (le connecteur n'a pas le droit).
+- **CPT-06** (31 octobre 2026) : version finale, 6 min 00 s, 39 étapes, ≈ 5 000 caractères de voix.
+  Odoo 19 : la règle de remplacement est portée par la taxe (champs Position fiscale et Remplace).
+  Démonstration avec le client « Pâtisserie de Banjul » (Gambie), retiré par etat-depart.py. CPT-01 à CPT-05 publiées.
 
 ## Ordre de tournage proposé
 
