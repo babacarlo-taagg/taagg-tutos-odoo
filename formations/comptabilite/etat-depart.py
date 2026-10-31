@@ -71,7 +71,18 @@ def cpt_05():
     return len(ids)
 
 
-CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05}
+def cpt_06():
+    # le client « Pâtisserie de Banjul » et sa facture brouillon sont créés à l'écran : on les enlève
+    clients = odoo('res.partner', 'search', [['name', '=', 'Pâtisserie de Banjul']], context={'active_test': False})
+    factures = odoo('account.move', 'search', [['partner_id', 'in', clients], ['state', '=', 'draft']]) if clients else []
+    if factures:
+        odoo('account.move', 'unlink', factures)
+    if clients:
+        odoo('res.partner', 'unlink', clients)
+    return len(clients), len(factures)
+
+
+CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''

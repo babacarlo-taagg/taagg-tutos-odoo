@@ -1,0 +1,203 @@
+# CPT-06 · Les positions fiscales
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-06`) :
+#   société 1 sélectionnée, pas de client « Pâtisserie de Banjul » ni de facture brouillon pour lui.
+# Ce que la capsule crée : le client « Pâtisserie de Banjul » (Gambie) et une facture brouillon,
+#   tous deux enlevés par etat-depart.py avant chaque tournage.
+# Odoo 19 : la correspondance des taxes se lit sur la taxe de remplacement (champ « Remplace »),
+#   et le bouton Taxes de la position fiscale les liste.
+titre: Les positions fiscales
+sous_titre: Formation Comptabilité Odoo · CPT-06
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : les conditions de paiement et l'exercice fiscal"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette sixième capsule de la formation à la comptabilité avec Odoo.
+      Aujourd'hui, les positions fiscales.
+    actions:
+      - attendre: 1
+  - texte: >
+      Les Délices de Maïmouna commencent à livrer un client en Gambie. Une vente à l'étranger
+      ne porte pas la TVA sénégalaise de dix-huit pour cent. Comment éviter de corriger chaque facture à la main ?
+    actions:
+      - attendre: 1
+  - texte: >
+      C'est le rôle des positions fiscales. À la fin de cette capsule, vous saurez ce qu'elles font,
+      comment Odoo les choisit tout seul, et comment les vérifier sur une facture.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : à quoi ça sert
+  - partie: "1. À quoi sert une position fiscale"
+    texte: >
+      Dans la capsule précédente, nous avons vu les taxes. Une position fiscale, c'est une règle
+      qui remplace automatiquement certaines taxes, ou certains comptes, selon le client ou le fournisseur.
+    actions:
+      - ouvrir_menu: Configuration
+      - survoler_texte: Positions fiscales
+  - texte: Ouvrez Configuration, puis Positions fiscales.
+    actions:
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Positions fiscales")'
+  - texte: >
+      Le pack Sénégal en a installé deux. National, pour les clients et fournisseurs du Sénégal :
+      les taxes restent celles prévues sur les produits.
+    actions:
+      - surligner: '.o_data_row:has-text("National")'
+        duree: 3
+  - texte: >
+      Et International, pour tous les autres pays : c'est elle qui nous intéresse.
+    actions:
+      - surligner: '.o_data_row:has-text("International")'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 2 : lire une position fiscale
+  - partie: "2. Lire une position fiscale"
+    texte: Ouvrons la position International.
+    actions:
+      - cliquer: '.o_data_row:has-text("International") td[name="name"]'
+  - texte: >
+      Détecter automatiquement est coché : Odoo choisira cette position tout seul,
+      d'après le pays inscrit sur la fiche du client.
+    actions:
+      - surligner_champ: auto_apply
+        duree: 3.5
+  - texte: >
+      Le champ Pays est vide : la position s'applique donc à tous les pays qui ne sont pas couverts
+      par une autre position. Ici, tous sauf le Sénégal.
+    actions:
+      - surligner_champ: country_id
+        duree: 3.5
+  - texte: >
+      Le bouton Taxes, en haut, montre les taxes de remplacement. Ouvrons-le.
+    actions:
+      - cliquer: '.oe_stat_button:has-text("Taxes"), button:has-text("Taxes")'
+  - texte: >
+      Pour les ventes, la TVA à dix-huit ou à dix pour cent est remplacée par zéro pour cent, exportation.
+      Pour les achats à l'étranger, par zéro pour cent, importation.
+    actions:
+      - surligner: '.o_data_row:has-text("exportation")'
+        duree: 3
+      - surligner: '.o_data_row:has-text("importation")'
+        duree: 2.5
+  - texte: >
+      Revenons à la position. L'onglet Correspondance de comptes sert de la même façon à remplacer un compte,
+      par exemple un compte de ventes à l'export à la place du compte de ventes habituel. Ici, il est vide.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("International")'
+      - surligner_champ: account_ids
+        duree: 4
+
+  # ------------------------------------------------------------------ partie 3 : la démonstration
+  - partie: "3. Un client à l'étranger"
+    texte: >
+      Voyons-la à l'œuvre. Créons d'abord le client. Ouvrez le menu Clients, puis Clients.
+    actions:
+      - ouvrir_menu: Clients
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Clients")'
+  - texte: Cliquez sur Nouveau. C'est une société.
+    actions:
+      - bouton: Nouveau
+      - cliquer: '.o_field_widget[name="company_type"] input[data-value="company"], .o_field_widget[name="company_type"] label:has-text("Société")'
+  - texte: >
+      Son nom : Pâtisserie de Banjul. Et le plus important pour la position fiscale : le pays, la Gambie.
+    actions:
+      - champ: name
+        taper: Pâtisserie de Banjul
+      - choisir: {champ: country_id, valeur: Gambie}
+  - texte: >
+      Dans l'onglet Ventes et Achats, le champ Position fiscale est vide : c'est normal.
+      Vide, il laisse Odoo choisir la position d'après le pays. Rempli, il l'impose pour ce client.
+    actions:
+      - onglet: Ventes & Achats
+      - surligner_champ: property_account_position_id
+        duree: 4
+  - texte: Enregistrez le client.
+    actions:
+      - enregistrer: oui
+  - texte: >
+      Faisons-lui maintenant une facture. Menu Clients, Factures clients, puis Nouveau.
+    actions:
+      - ouvrir_menu: Clients
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Factures clients")'
+      - bouton: Nouveau
+  - texte: Choisissez le client, la Pâtisserie de Banjul.
+    actions:
+      - choisir: {champ: partner_id, valeur: Pâtisserie de Banjul}
+  - texte: >
+      Ajoutons une ligne : une fournée de cent pains de mie, à cent mille francs.
+    actions:
+      - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_field_x2many_list_row_add a'
+      - choisir: {champ: product_id, valeur: Pain de mie}
+      - champ: price_unit
+        taper: "100000"
+      - touche: Tab
+  - texte: >
+      Regardez la colonne Taxes : Odoo n'a pas mis dix-huit pour cent, mais zéro pour cent, exportation.
+      Il a reconnu un client étranger, et appliqué la position International.
+    actions:
+      - surligner: '.o_field_widget[name="invoice_line_ids"] .o_data_row td[name="tax_ids"]'
+        duree: 4
+  - texte: >
+      Le total le confirme : cent mille francs, sans TVA. Pour la Boutique Les Almadies, à Dakar,
+      la même fournée était facturée cent dix-huit mille francs.
+    actions:
+      - surligner_champ: tax_totals
+        duree: 4
+  - texte: >
+      Pour vérifier quelle position a été appliquée, ouvrez l'onglet Autres informations.
+    actions:
+      - onglet: Autres informations
+      - surligner_champ: fiscal_position_id
+        duree: 3.5
+  - texte: >
+      International, comme prévu. La facture reste en brouillon : nous verrons comment la valider
+      dans le parcours consacré aux ventes. Enregistrez.
+    actions:
+      - enregistrer: oui
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : oublier le pays sur la fiche du client.
+      Sans pays, Odoo ne peut rien détecter, et la TVA à dix-huit pour cent reste appliquée.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : changer le client d'une facture après avoir saisi les lignes.
+      Vérifiez toujours la colonne Taxes avant de valider.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : imposer une position fiscale sur une fiche client sans raison.
+      Elle l'emporte sur la détection automatique, même si le client change de pays.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Une position fiscale remplace automatiquement des taxes ou des comptes.
+      Le pack Sénégal en prévoit deux : National et International.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Odoo la choisit d'après le pays du client, si Détecter automatiquement est coché.
+      Et pour vérifier, on regarde la colonne Taxes de la facture et l'onglet Autres informations.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : créez un fournisseur au Mali, faites-lui une facture fournisseur en brouillon,
+      et vérifiez que la TVA est remplacée par zéro pour cent, importation.
+      Dans la prochaine capsule, nous verrons les conditions de paiement et l'exercice fiscal. À tout de suite !
+    actions:
+      - attendre: 1
