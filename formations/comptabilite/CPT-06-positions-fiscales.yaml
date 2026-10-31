@@ -196,6 +196,13 @@ etapes:
       Choisissez le fournisseur : la Pâtisserie de Banjul. Une même fiche peut servir de client et de fournisseur.
     actions:
       - choisir: {champ: partner_id, valeur: Pâtisserie de Banjul}
+  - texte: >
+      Sur les factures fournisseurs, la colonne Produit est masquée. Affichons-la,
+      avec la petite icône à droite des titres de colonnes.
+    actions:
+      - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_optional_columns_dropdown_toggle'
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Produit")'
+      - touche: Escape
   - texte: "Ajoutez une ligne : du beurre doux, pour cinquante mille francs."
     actions:
       - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_field_x2many_list_row_add a'
