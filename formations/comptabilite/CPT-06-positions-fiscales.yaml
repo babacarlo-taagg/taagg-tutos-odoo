@@ -160,10 +160,11 @@ etapes:
       - surligner_champ: fiscal_position_id
         duree: 3.5
   - texte: >
-      International, comme prévu. La facture reste en brouillon : nous verrons comment la valider
-      dans le parcours consacré aux ventes. Enregistrez.
+      International, comme prévu. Odoo a déjà enregistré la facture, en brouillon :
+      nous verrons comment la valider dans le parcours consacré aux ventes.
     actions:
-      - enregistrer: oui
+      - surligner: '.o_statusbar_status'
+        duree: 2.5
 
   # ------------------------------------------------------------------ pièges fréquents
   - partie: "Les pièges à éviter"
