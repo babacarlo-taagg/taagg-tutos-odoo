@@ -1,0 +1,186 @@
+# CPT-09 · Produits et catégories : où va l'argent
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-09`) :
+#   catégorie « Pâtisseries Individuelles » : compte des revenus 701100 ;
+#   catégorie « Intrants Cuisine / Patisserie » : compte de charges 601100 ;
+#   aucune facture brouillon pour la Boutique Les Almadies. Le compte 702110 (CPT-03) existe.
+# Ce que la capsule change : les deux comptes de catégorie (702110 et 602100) et une facture brouillon,
+#   remis à zéro par etat-depart.py avant chaque tournage.
+titre: "Produits et catégories : où va l'argent"
+sous_titre: Formation Comptabilité Odoo · CPT-09
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+fin:
+  message: "Parcours 1 terminé ! Prochaine capsule : créer et valider une facture client"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette neuvième capsule, la dernière du parcours consacré au paramétrage.
+      Aujourd'hui, une question simple : quand vous vendez un gâteau, dans quel compte va l'argent ?
+    actions:
+      - attendre: 1
+  - texte: >
+      La réponse dépend du produit, et de sa catégorie. À la fin de cette capsule, vous saurez régler les comptes
+      d'une catégorie de produits, vérifier le résultat sur une facture, et faire une exception pour un produit.
+    actions:
+      - attendre: 1
+  - texte: >
+      Dans la capsule sur le plan comptable, nous avons créé le compte sept cent deux mille cent dix,
+      Ventes de pâtisseries. Il est temps de nous en servir.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : la règle
+  - partie: "1. La règle : produit, catégorie, journal"
+    texte: >
+      Sur chaque ligne de facture, Odoo choisit le compte dans cet ordre. D'abord le compte inscrit sur le produit,
+      s'il y en a un. Sinon, celui de sa catégorie. Et en dernier recours, le compte par défaut du journal.
+    actions:
+      - attendre: 1.5
+  - texte: >
+      En pratique, on règle presque tout au niveau des catégories : une seule fois pour des dizaines de produits.
+      Ouvrez Configuration, puis Catégories de produits.
+    actions:
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Catégories de produits")'
+  - texte: >
+      Les Délices de Maïmouna rangent leurs produits en catégories : pâtisseries individuelles, gâteaux et tartes,
+      viennoiseries, et les intrants, c'est-à-dire les matières premières de la cuisine.
+    actions:
+      - surligner: '.o_list_renderer'
+        duree: 4
+
+  # ------------------------------------------------------------------ partie 2 : une catégorie de vente
+  - partie: "2. Les comptes d'une catégorie de vente"
+    texte: Ouvrons Pâtisseries Individuelles.
+    actions:
+      - cliquer: '.o_data_row:has-text("Pâtisseries Individuelles") td[name="display_name"], .o_data_row:has-text("Pâtisseries Individuelles") td.o_data_cell'
+  - texte: >
+      Le compte des revenus est le sept cent un mille cent, vente de marchandises. Or, dans le SYSCOHADA,
+      une marchandise, c'est un bien acheté puis revendu tel quel.
+    actions:
+      - surligner_champ: property_account_income_categ_id
+        duree: 4
+  - texte: >
+      Les pâtisseries, elles, sont fabriquées par la boutique : ce sont des produits finis, qui vont au sept cent deux.
+      Choisissons notre compte, sept cent deux mille cent dix, Ventes de pâtisseries.
+    actions:
+      - choisir: {champ: property_account_income_categ_id, valeur: "702110"}
+  - texte: >
+      Le compte de charges sert quand la boutique achète un produit de cette catégorie. Ici, elle n'en achète pas :
+      on le laisse. Enregistrez.
+    actions:
+      - surligner_champ: property_account_expense_categ_id
+        duree: 3
+      - enregistrer: oui
+
+  # ------------------------------------------------------------------ partie 3 : une catégorie d'achats
+  - partie: "3. Les comptes d'une catégorie d'achats"
+    texte: >
+      Côté achats, même logique. Revenons à la liste, et ouvrons les intrants : la farine, le beurre, les œufs.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Catégories de produits")'
+      - cliquer: '.o_data_row:has-text("Intrants") td.o_data_cell'
+  - texte: >
+      Leur compte de charges est le six cent un mille cent, achats de marchandises. Mais la farine n'est pas revendue :
+      elle est transformée. C'est une matière première.
+    actions:
+      - surligner_champ: property_account_expense_categ_id
+        duree: 4
+  - texte: >
+      Choisissez donc le six cent deux mille cent, achats de matières premières. Enregistrez.
+    actions:
+      - choisir: {champ: property_account_expense_categ_id, valeur: "602100"}
+      - enregistrer: oui
+  - texte: >
+      Pourquoi c'est important ? Parce que le compte de résultat sépare ce que vous revendez et ce que vous fabriquez.
+      Un mauvais compte, et c'est la lecture de votre marge qui est faussée.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 4 : vérifier sur une facture
+  - partie: "4. Vérifier sur une facture"
+    texte: >
+      Vérifions sur une facture. Menu Clients, Factures clients, Nouveau, pour la Boutique Les Almadies.
+    actions:
+      - ouvrir_menu: Clients
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Factures clients")'
+      - bouton: Nouveau
+      - choisir: {champ: partner_id, valeur: Boutique Les Almadies}
+  - texte: Ajoutons un millefeuille, de la catégorie Pâtisseries Individuelles.
+    actions:
+      - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_field_x2many_list_row_add a'
+      - choisir: {champ: product_id, valeur: Millefeuille}
+      - touche: Tab
+  - texte: >
+      Regardez la colonne Compte : sept cent deux mille cent dix, Ventes de pâtisseries.
+      Vous n'avez rien choisi : Odoo l'a trouvé grâce à la catégorie du produit.
+    actions:
+      - surligner: '.o_field_widget[name="invoice_line_ids"] .o_data_row td[name="account_id"]'
+        duree: 5
+
+  # ------------------------------------------------------------------ partie 5 : l'exception par produit
+  - partie: "5. Une exception pour un produit"
+    texte: >
+      Et si un produit doit faire exception ? Ouvrons la fiche du millefeuille. Menu Clients, Produits.
+    actions:
+      - ouvrir_menu: Clients
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Produits")'
+      - rechercher: Millefeuille
+      - cliquer: '.o_kanban_record:has-text("Millefeuille"), .o_data_row:has-text("Millefeuille")'
+  - texte: >
+      Sa catégorie, Pâtisseries Individuelles, est en haut. Ouvrez l'onglet Comptabilité.
+    actions:
+      - surligner_champ: categ_id
+        duree: 2.5
+      - onglet: Comptabilité
+  - texte: >
+      Le compte des revenus est vide : c'est la catégorie qui décide. Si vous le remplissez, le produit l'emporte
+      sur sa catégorie. Réservez-le aux vrais cas particuliers, par exemple une boisson achetée et revendue telle quelle.
+    actions:
+      - surligner_champ: property_account_income_id
+        duree: 5
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : un produit sans catégorie. Il part au compte par défaut du journal,
+      souvent le mauvais. Donnez une catégorie à chaque produit.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : croire qu'un changement de catégorie corrige les factures passées. Il ne vaut que pour
+      les nouvelles lignes. Réglez les catégories avant de commencer à facturer.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : mettre un compte sur chaque produit. Le jour où il faut changer, il faut ouvrir les fiches
+      une par une. Réglez par catégorie, et gardez les exceptions rares.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Odoo cherche le compte sur le produit, puis sur sa catégorie, puis sur le journal.
+      On règle donc les comptes au niveau des catégories : produits finis au sept cent deux, matières premières au six cent deux.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      On vérifie sur une facture, dans la colonne Compte. Et le compte d'un produit ne sert qu'aux exceptions.
+      Le parcours consacré au paramétrage est terminé : votre comptabilité est prête à travailler.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : réglez la catégorie Viennoiseries sur le compte sept cent deux mille cent vingt,
+      Ventes de viennoiseries, créé dans l'exercice de la capsule trois. Puis vérifiez-le sur une facture de croissants.
+      Dans la prochaine capsule, nous ouvrirons le parcours des ventes : créer et valider une facture client. À tout de suite !
+    actions:
+      - attendre: 1

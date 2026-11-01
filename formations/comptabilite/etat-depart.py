@@ -123,8 +123,22 @@ def cpt_08():
     return len(ribs), len(wave), len(comptes), len(arrondis)
 
 
+def cpt_09():
+    # les comptes des catégories « Pâtisseries Individuelles » (revenus) et « Intrants » (charges) sont changés à l'écran
+    patisseries = odoo('product.category', 'search', [['name', '=', 'Pâtisseries Individuelles']])
+    intrants = odoo('product.category', 'search', [['name', 'ilike', 'Intrants Cuisine']])
+    vente_marchandises = odoo('account.account', 'search', [['code', '=', '701100']], context={'allowed_company_ids': [SOCIETE]})
+    achat_biens = odoo('account.account', 'search', [['code', '=', '601100']], context={'allowed_company_ids': [SOCIETE]})
+    odoo('product.category', 'write', patisseries, {'property_account_income_categ_id': vente_marchandises[0]}, context={'allowed_company_ids': [SOCIETE]})
+    odoo('product.category', 'write', intrants, {'property_account_expense_categ_id': achat_biens[0]}, context={'allowed_company_ids': [SOCIETE]})
+    brouillons = odoo('account.move', 'search', [['partner_id', '=', BOUTIQUE_ALMADIES], ['state', '=', 'draft']])
+    if brouillons:  # la facture brouillon de la démonstration
+        odoo('account.move', 'unlink', brouillons)
+    return len(patisseries), len(intrants), len(brouillons)
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''
