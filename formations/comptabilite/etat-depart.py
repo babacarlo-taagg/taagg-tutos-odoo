@@ -102,7 +102,9 @@ def cpt_08():
     ribs = odoo('res.partner.bank', 'search', [['acc_number', '=', 'SN012 01001 012345678901 23']], context={'active_test': False})
     if ribs:
         # Odoo archive le compte au lieu de l'effacer : on libère le numéro pour pouvoir le recréer à l'écran
+        # (un compte « approuvé » ne se renomme pas : on retire d'abord l'autorisation d'envoyer de l'argent)
         for rib in ribs:
+            odoo('res.partner.bank', 'write', [rib], {'allow_out_payment': False})
             odoo('res.partner.bank', 'write', [rib], {'acc_number': f'archive-tournage-{rib}', 'active': False})
     wave = odoo('account.journal', 'search', [['code', '=', 'WAV'], ['company_id', '=', SOCIETE]], context={'active_test': False})
     if wave:
