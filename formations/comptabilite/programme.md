@@ -21,7 +21,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | CPT-05 | Les taxes : la TVA au Sénégal | TVA 18 %, 10 %, exonérée ; créer une taxe, taxes par défaut, groupes de taxes | Taxes | 🎙 5:49 |
 | CPT-06 | Positions fiscales | clients locaux / étrangers : remplacer automatiquement taxes et comptes | Positions fiscales | 🎙 6:00 |
 | CPT-07 | Conditions de paiement et exercice fiscal | « 30 % à la commande, solde à 60 jours », escompte ; exercices fiscaux | Conditions de paiement, Exercices fiscaux | 🎙 6:00 |
-| CPT-08 | Banque, caisse et moyens de paiement | relier un compte bancaire, modes de paiement, arrondi des paiements en espèces | Journaux, Modes de paiement | ☐ |
+| CPT-08 | Banque, caisse et moyens de paiement | relier un compte bancaire, modes de paiement, arrondi des paiements en espèces | Journaux, Modes de paiement | 🎙 5:57 |
 | CPT-09 | Produits et catégories : où va l'argent | comptes de produits et de charges par catégorie et par article | Catégories de produits, Produits | ☐ |
 
 ## Parcours 2 — Ventes et clients
@@ -104,6 +104,10 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 - **CPT-07** (31 octobre 2026) : version finale, 6 min 00 s, 36 étapes, ≈ 5 200 caractères de voix.
   Crée la condition « 50 % à la commande, solde à 30 jours », la pose sur la Boutique Les Almadies et montre
   une facture brouillon coupée en deux versements de 59 000 F ; tout est remis à zéro par etat-depart.py.
+- **CPT-08** (1er novembre 2026) : version finale, 5 min 57 s, 36 étapes, ≈ 5 000 caractères de voix.
+  Numéro de compte fictif sur le journal Banque, journal Wave (compte 521005), option et arrondi au 5 F
+  (758800 / 658800), démonstration 2 398 F → 2 400 F. Tout est défait par etat-depart.py ; piège : Odoo archive
+  un numéro de compte supprimé (et refuse de le renommer tant qu'il est « approuvé »).
 
 ## Ordre de tournage proposé
 
