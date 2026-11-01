@@ -61,7 +61,7 @@ etapes:
     actions:
       - champ: bank_account_id
         taper: SN012 01001 012345678901 23
-      - cliquer: '.o-autocomplete--dropdown-item:has-text("Créer")'
+      - cliquer: '.o-autocomplete--dropdown-item:has-text(''Créer "SN012'')'
   - texte: >
       Pourquoi c'est utile ? Ce numéro s'imprime sur vos factures, pour que vos clients sachent où virer l'argent.
       Et il permet de reconnaître les relevés de ce compte quand vous les importerez.
