@@ -57,18 +57,11 @@ etapes:
       - surligner_champ: bank_account_id
         duree: 2.5
   - texte: >
-      Tapez le numéro du compte. Ici, un numéro fictif. Puis cliquez sur Créer et modifier.
+      Tapez le numéro du compte. Ici, un numéro fictif. Puis cliquez sur Créer.
     actions:
       - champ: bank_account_id
         taper: SN012 01001 012345678901 23
-      - cliquer: '.o-autocomplete--dropdown-item:has-text("Créer et modifier")'
-  - texte: >
-      Odoo ouvre la fiche du compte, déjà remplie : le numéro, et le titulaire, votre société.
-      Vous pourriez aussi y indiquer la banque. Enregistrez la fiche.
-    actions:
-      - surligner: '.modal .o_form_view'
-        duree: 3.5
-      - cliquer: '.modal-footer button:has-text("Enregistrer")'
+      - cliquer: '.o-autocomplete--dropdown-item:has-text(''Créer "SN012'')'
   - texte: >
       Pourquoi c'est utile ? Ce numéro s'imprime sur vos factures, pour que vos clients sachent où virer l'argent.
       Et il permet de reconnaître les relevés de ce compte quand vous les importerez.

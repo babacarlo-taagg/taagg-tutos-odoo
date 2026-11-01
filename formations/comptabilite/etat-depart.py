@@ -101,7 +101,9 @@ def cpt_08():
     odoo('account.journal', 'write', banque, {'bank_account_id': False})
     ribs = odoo('res.partner.bank', 'search', [['acc_number', '=', 'SN012 01001 012345678901 23']], context={'active_test': False})
     if ribs:
-        odoo('res.partner.bank', 'unlink', ribs)
+        # Odoo archive le compte au lieu de l'effacer : on libère le numéro pour pouvoir le recréer à l'écran
+        for rib in ribs:
+            odoo('res.partner.bank', 'write', [rib], {'acc_number': f'archive-tournage-{rib}', 'active': False})
     wave = odoo('account.journal', 'search', [['code', '=', 'WAV'], ['company_id', '=', SOCIETE]], context={'active_test': False})
     if wave:
         odoo('account.journal', 'unlink', wave)
