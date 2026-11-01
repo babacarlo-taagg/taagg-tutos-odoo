@@ -80,13 +80,19 @@ etapes:
       - surligner_champ: property_account_expense_categ_id
         duree: 3
       - enregistrer: oui
+  - texte: >
+      Le bouton Produits, en haut, montre les douze produits de cette catégorie : éclairs, millefeuille, macarons…
+      Tous iront désormais au sept cent deux mille cent dix, d'un seul réglage.
+    actions:
+      - cliquer: '.oe_stat_button:has-text("Produits")'
+      - attendre: 2.5
 
   # ------------------------------------------------------------------ partie 3 : une catégorie d'achats
   - partie: "3. Les comptes d'une catégorie d'achats"
     texte: >
       Côté achats, même logique. Revenons à la liste, et ouvrons les intrants : la farine, le beurre, les œufs.
     actions:
-      - cliquer: '.breadcrumb-item a:has-text("Catégories de produits")'
+      - cliquer: '.breadcrumb-item a:has-text("Catégories")'
       - cliquer: '.o_data_row:has-text("Intrants") td.o_data_cell'
   - texte: >
       Leur compte de charges est le six cent un mille cent, achats de marchandises. Mais la farine n'est pas revendue :
@@ -124,6 +130,22 @@ etapes:
       Vous n'avez rien choisi : Odoo l'a trouvé grâce à la catégorie du produit.
     actions:
       - surligner: '.o_field_widget[name="invoice_line_ids"] .o_data_row td[name="account_id"]'
+        duree: 5
+  - texte: >
+      Ajoutons aussi un croissant. Sa catégorie, les viennoiseries, n'a pas encore été réglée :
+      il part encore au sept cent un mille cent. C'est justement l'objet de votre exercice.
+    actions:
+      - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_field_x2many_list_row_add a'
+      - choisir: {champ: product_id, valeur: Croissant}
+      - touche: Tab
+      - surligner: '.o_field_widget[name="invoice_line_ids"] .o_data_row:has-text("Croissant") td[name="account_id"]'
+        duree: 3
+  - texte: >
+      L'onglet Écritures comptables le confirme : le millefeuille au sept cent deux mille cent dix,
+      le croissant au sept cent un mille cent, et la TVA au quatre cent quarante-trois mille cent.
+    actions:
+      - onglet: Écritures comptables
+      - surligner: '.o_notebook .tab-pane.active .o_list_renderer'
         duree: 5
 
   # ------------------------------------------------------------------ partie 5 : l'exception par produit
