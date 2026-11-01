@@ -330,6 +330,13 @@ class Realisateur {
     return this.champ(nomChamp).locator('input, textarea, [contenteditable="true"]').first();
   }
 
+  // dans une liste en cours de saisie (lignes de facture…), le champ visé est celui de la ligne ouverte
+  async saisieActive(nomChamp) {
+    const ligne = this.page.locator(`.o_selected_row .o_field_widget[name="${nomChamp}"]`);
+    if (await ligne.count()) return ligne.first().locator('input, textarea, [contenteditable="true"]').first();
+    return this.saisie(nomChamp);
+  }
+
   async surligner(loc, secondes) {
     const b = await this.viser(loc);
     await this.page.evaluate(([r, ms]) => window.__tutoCadre?.(r, ms), [b, secondes * 1000]);
@@ -372,7 +379,7 @@ class Realisateur {
     } else if ('onglet' in a) {
       await this.cliquer(p.locator('.o_notebook .nav-link').filter({ hasText: a.onglet }).first());
     } else if ('champ' in a && 'taper' in a) {
-      await this.taper(this.saisie(a.champ), a.taper, a.entree);
+      await this.taper(await this.saisieActive(a.champ), a.taper, a.entree);
     } else if ('choisir' in a) {
       const { champ, valeur } = a.choisir;
       const select = this.champ(champ).locator('select');
@@ -380,7 +387,7 @@ class Realisateur {
         await this.cliquer(select.first());
         await select.first().selectOption({ label: valeur });
       } else {
-        await this.taper(this.saisie(champ), valeur);
+        await this.taper(await this.saisieActive(champ), valeur);
         // .o_select_menu_item : listes de choix d'Odoo 19 (Type d'un journal, d'un compte…)
         const choix = p.locator('.o-autocomplete--dropdown-item, .ui-menu-item, .o_select_menu_item').filter({ hasText: valeur }).first();
         await this.cliquer(choix);
