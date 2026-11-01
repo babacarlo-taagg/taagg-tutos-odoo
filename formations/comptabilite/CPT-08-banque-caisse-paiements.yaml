@@ -114,6 +114,7 @@ etapes:
     actions:
       - champ: code
         taper: WAV
+      - onglet: Pièces comptables
       - surligner_champ: default_account_id
         duree: 3
   - texte: Enregistrez.
@@ -123,6 +124,7 @@ etapes:
       Voici le compte créé, dans le cinq cent vingt et un, avec le nom Wave. Chaque encaissement Wave
       ira désormais sur ce journal, et son solde devra correspondre à celui affiché dans l'application Wave.
     actions:
+      - onglet: Pièces comptables
       - surligner_champ: default_account_id
         duree: 5
 
