@@ -40,7 +40,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 |---|---|---|---|---|
 | EB-01 | De WhatsApp à la boutique en ligne | ce que change une boutique en ligne ; le parcours d'un client sur le site ; les menus Site Web (Site, eCommerce, Analyse, Configuration) ; où arrivent les commandes | Site Web, Boutique, Commandes | 🎙 |
 | EB-02 | Construire son site | thème, couleurs, logo, page d'accueil avec des blocs, version téléphone, publier | Éditeur du site | 🎙 |
-| EB-03 | Les pages qui donnent confiance | créer et publier les pages À propos et Livraison et retours (ajoutées au menu), compléter la page Contact, remplacer les textes d'exemple du pied de page (les Conditions de vente, texte juridique, ne sont pas filmées) | Nouveau › Page, Pages, pied de page | ✎ |
+| EB-03 | Les pages qui donnent confiance | créer et publier les pages À propos et Livraison et retours (ajoutées au menu), compléter la page Contact, remplacer les textes d'exemple du pied de page (les Conditions de vente, texte juridique, ne sont pas filmées) | Nouveau › Page, Pages, pied de page | 🎙 |
 | EB-04 | Mettre ses produits en ligne | fiche produit pour la boutique : photo, prix TTC, description, publier / dépublier | Produits | ☐ |
 | EB-05 | Organiser son catalogue | catégories de la boutique, variantes (gâteau 6, 8 ou 12 parts), filtres, ordre d'affichage | Catégories, Attributs | ☐ |
 | EB-06 | Le tunnel d'achat | les étapes du client : panier, adresse, livraison, paiement, confirmation ; les réglages de la boutique (compte client, téléphone obligatoire…) | Paramètres eCommerce, Boutique | ☐ |
@@ -82,7 +82,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | EB-22 | Réapprovisionner sans rupture | fournisseurs, règles de réassort automatique, bons d'achat | Achats, Inventaire | ☐ |
 | EB-23 | Prête pour le lancement | nom de domaine, check-list avant d'ouvrir, test sur téléphone | Paramètres du site | ☐ |
 
-**23 capsules ≈ 4 h de formation.** EB-01 : 6 min 46, EB-02 : 5 min 43 (voix de Babacar, vitesse 1,0) — à publier.
+**23 capsules ≈ 4 h de formation.** EB-01 : 6 min 46, EB-02 : 5 min 43, EB-03 : 6 min 48 (voix de Babacar, vitesse 1,0) — à publier.
 
 ## Hors Odoo (pas de capsule filmée dans Odoo)
 
