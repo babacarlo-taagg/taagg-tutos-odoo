@@ -423,11 +423,19 @@ class Realisateur {
     } else if ('remplacer_texte' in a) {
       // sélectionne tout le texte d'un titre ou d'un paragraphe (triple-clic) et tape le nouveau texte
       const { dans, texte } = a.remplacer_texte;
-      // 1er clic : l'éditeur sélectionne d'abord la colonne ou le bloc (sinon le triple-clic devient
-      // un double-clic qui ne sélectionne qu'un mot) ; puis triple-clic pour tout le texte
-      await this.cliquer(this.loc(dans));
+      // un clic pour placer le curseur dans le texte, puis sélection de TOUT le texte de l'élément
+      // (le triple-clic ne suffit pas : dans une colonne pas encore choisie, il ne prend qu'un mot)
+      const cible = this.loc(dans);
+      await this.cliquer(cible);
       await pause(300);
-      await this.cliquer(this.loc(dans), 3);
+      await cible.evaluate((el) => {
+        const sel = el.ownerDocument.getSelection();
+        const r = el.ownerDocument.createRange();
+        r.selectNodeContents(el);
+        sel.removeAllRanges();
+        sel.addRange(r);
+      });
+      await pause(400);
       await p.keyboard.type(String(texte), { delay: 45 });
       await pause(300);
       // vérifier que le texte est bien entré (sinon la vidéo montrerait un faux résultat sans erreur)

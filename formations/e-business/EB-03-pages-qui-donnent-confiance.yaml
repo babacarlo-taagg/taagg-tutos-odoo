@@ -182,11 +182,18 @@ etapes:
       - cliquer: '.o_website_publish_container'
       - attendre: 1.5
   - texte: >
-      Regardez le menu du site : À propos et Livraison et retours y sont apparus tout seuls,
-      parce que l'option Ajouter au menu était activée.
+      Les deux pages ont été ajoutées au menu, parce que l'option Ajouter au menu était activée.
     actions:
       - surligner: 'site >> header .navbar-nav >> nth=0'
-        duree: 3.5
+        duree: 2.5
+  - texte: >
+      Comme le menu est plein, Odoo les range sous le petit plus, à droite : cliquez dessus pour les voir.
+    actions:
+      - survoler: 'site >> header .o_extra_menu_items a >> visible=true'
+      - attendre: 2.5
+      - cliquer: 'site >> header .o_extra_menu_items a >> visible=true'
+      - attendre: 3
+      - touche: Escape
 
   # ------------------------------------------------------------------ partie 3 : contact et pied de page (≈ 2 min 30)
   - partie: "3. Contact et pied de page"
