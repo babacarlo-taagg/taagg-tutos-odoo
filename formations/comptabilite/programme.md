@@ -22,7 +22,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | CPT-06 | Positions fiscales | clients locaux / étrangers : remplacer automatiquement taxes et comptes | Positions fiscales | 🎙 6:00 |
 | CPT-07 | Conditions de paiement et exercice fiscal | « 30 % à la commande, solde à 60 jours », escompte ; exercices fiscaux | Conditions de paiement, Exercices fiscaux | 🎙 6:00 |
 | CPT-08 | Banque, caisse et moyens de paiement | relier un compte bancaire, modes de paiement, arrondi des paiements en espèces | Journaux, Modes de paiement | 🎙 5:57 |
-| CPT-09 | Produits et catégories : où va l'argent | comptes de produits et de charges par catégorie et par article | Catégories de produits, Produits | ☐ |
+| CPT-09 | Produits et catégories : où va l'argent | comptes de produits et de charges par catégorie et par article | Catégories de produits, Produits | 🎙 5:28 |
 
 ## Parcours 2 — Ventes et clients
 
@@ -108,6 +108,11 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
   Numéro de compte fictif sur le journal Banque, journal Wave (compte 521005), option et arrondi au 5 F
   (758800 / 658800), démonstration 2 398 F → 2 400 F. Tout est défait par etat-depart.py ; piège : Odoo archive
   un numéro de compte supprimé (et refuse de le renommer tant qu'il est « approuvé »).
+- **CPT-09** (1er novembre 2026) : version finale, 5 min 28 s, 29 étapes, ≈ 4 700 caractères de voix.
+  Catégories « Pâtisseries Individuelles » → 702110 et « Intrants » → 602100 ; facture millefeuille (702110) +
+  croissant (701100). Remis à zéro par etat-depart.py. **Parcours 1 terminé** (CPT-01 à CPT-09).
+- Base de tournage : le 1er novembre 2026, la société a été renommée « © Les Délices de Maïmouna » (hors tournage).
+  Les scénarios CPT-01, 02 et 07 surlignent l'ancien nom : à adapter avant de les retourner.
 
 ## Ordre de tournage proposé
 
