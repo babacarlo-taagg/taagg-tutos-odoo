@@ -138,7 +138,7 @@ etapes:
       - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_field_x2many_list_row_add a'
       - choisir: {champ: product_id, valeur: Croissant}
       - touche: Tab
-      - surligner: '.o_field_widget[name="invoice_line_ids"] .o_data_row:last-child td[name="account_id"]'
+      - surligner: ':nth-match(.o_field_widget[name="invoice_line_ids"] .o_data_row, 2) td[name="account_id"]'
         duree: 3
   - texte: >
       L'onglet Écritures comptables le confirme : le millefeuille au sept cent deux mille cent dix,
