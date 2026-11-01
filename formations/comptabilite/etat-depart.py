@@ -95,7 +95,29 @@ def cpt_07():
     return len(ids)
 
 
-CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07}
+def cpt_08():
+    # numéro de compte du journal Banque, journal Wave (et son compte), option et arrondi des espèces : on défait tout
+    banque = odoo('account.journal', 'search', [['code', '=', 'BNK1'], ['company_id', '=', SOCIETE]])
+    odoo('account.journal', 'write', banque, {'bank_account_id': False})
+    ribs = odoo('res.partner.bank', 'search', [['acc_number', '=', 'SN012 01001 012345678901 23']], context={'active_test': False})
+    if ribs:
+        odoo('res.partner.bank', 'unlink', ribs)
+    wave = odoo('account.journal', 'search', [['code', '=', 'WAV'], ['company_id', '=', SOCIETE]], context={'active_test': False})
+    if wave:
+        odoo('account.journal', 'unlink', wave)
+    comptes = odoo('account.account', 'search', [['code', '=like', '521%'], ['name', '=', 'Wave']], context={'allowed_company_ids': [SOCIETE]})
+    if comptes:
+        odoo('account.account', 'unlink', comptes)
+    arrondis = odoo('account.cash.rounding', 'search', [['name', '=', 'Arrondi au 5 F']], context={'active_test': False})
+    if arrondis:
+        odoo('account.cash.rounding', 'unlink', arrondis)
+    reglages = odoo('res.config.settings', 'create', {'group_cash_rounding': False}, context={'allowed_company_ids': [SOCIETE]})
+    odoo('res.config.settings', 'execute', [reglages], context={'allowed_company_ids': [SOCIETE]})
+    return len(ribs), len(wave), len(comptes), len(arrondis)
+
+
+CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
+            'CPT-08': cpt_08}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''

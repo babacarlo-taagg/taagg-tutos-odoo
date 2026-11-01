@@ -1,0 +1,214 @@
+# CPT-08 · Banque, caisse et moyens de paiement
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-08`) :
+#   journal Banque sans numéro de compte ; pas de journal « Wave » (préfixe WAV) ;
+#   option « Arrondi des paiements en espèces » désactivée, aucun arrondi « Arrondi au 5 F ».
+# Ce que la capsule crée (tout est remis à zéro par etat-depart.py) : le numéro de compte fictif
+#   SN012 01001 012345678901 23 sur le journal Banque, le journal Wave et son compte (521…),
+#   l'option d'arrondi et l'arrondi « Arrondi au 5 F » (758800 / 658800).
+titre: Banque, caisse et moyens de paiement
+sous_titre: Formation Comptabilité Odoo · CPT-08
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : produits et catégories, où va l'argent"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette huitième capsule de la formation à la comptabilité avec Odoo.
+      Aujourd'hui, l'argent qui entre et qui sort : la banque, la caisse, et les moyens de paiement.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez relier le compte bancaire de l'entreprise, régler les moyens de paiement,
+      suivre un portefeuille Wave comme un compte en banque, et arrondir les paiements en espèces.
+    actions:
+      - attendre: 1
+  - texte: >
+      Dans la capsule sur les journaux, nous avons créé la caisse de la boutique. Elle apparaît sur le tableau de bord,
+      à côté de la carte Banque. Commençons par la banque.
+    actions:
+      - surligner: '.o_kanban_record:has-text("Banque")'
+        duree: 2
+      - surligner: '.o_kanban_record:has-text("Caisse boutique")'
+        duree: 2
+
+  # ------------------------------------------------------------------ partie 1 : relier le compte bancaire
+  - partie: "1. Relier le compte bancaire"
+    texte: >
+      Ouvrez Configuration, puis Journaux, et ouvrez le journal Banque.
+    actions:
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Journaux")'
+      - cliquer: '.o_data_row:has-text("BNK1") td[name="name"]'
+  - texte: >
+      Le compte bancaire, cinq cent vingt et un mille un, est déjà relié : c'est là qu'Odoo range l'argent de la banque.
+      Il manque le numéro du compte, celui de votre relevé d'identité bancaire.
+    actions:
+      - surligner_champ: default_account_id
+        duree: 3
+      - surligner_champ: bank_account_id
+        duree: 2.5
+  - texte: >
+      Tapez le numéro du compte. Ici, un numéro fictif. Puis cliquez sur Créer.
+    actions:
+      - champ: bank_account_id
+        taper: SN012 01001 012345678901 23
+      - cliquer: '.o-autocomplete--dropdown-item:has-text("Créer")'
+  - texte: >
+      Pourquoi c'est utile ? Ce numéro s'imprime sur vos factures, pour que vos clients sachent où virer l'argent.
+      Et il permet de reconnaître les relevés de ce compte quand vous les importerez.
+    actions:
+      - surligner_champ: bank_account_id
+        duree: 3.5
+  - texte: >
+      Juste en dessous, l'origine des relevés bancaires. Pour l'instant, rien n'est choisi :
+      nous verrons l'import des relevés dans le parcours consacré à la trésorerie. Enregistrez.
+    actions:
+      - surligner_champ: bank_statements_source
+        duree: 3
+      - enregistrer: oui
+
+  # ------------------------------------------------------------------ partie 2 : les moyens de paiement
+  - partie: "2. Les moyens de paiement"
+    texte: >
+      Ouvrez l'onglet Paiements entrants. Il liste les façons dont l'argent arrive sur ce journal.
+    actions:
+      - onglet: Paiements entrants
+  - texte: >
+      Paiement manuel, c'est le cas général : un virement ou un chèque que vous enregistrez vous-même.
+      La ligne Demo est un fournisseur de paiement en ligne de test : il ne sert pas au quotidien.
+    actions:
+      - surligner: '.o_notebook .tab-pane.active .o_list_renderer'
+        duree: 5
+  - texte: >
+      L'onglet Paiements sortants fait de même pour l'argent qui part : les paiements aux fournisseurs.
+    actions:
+      - onglet: Paiements sortants
+      - surligner: '.o_notebook .tab-pane.active .o_list_renderer'
+        duree: 3
+  - texte: >
+      Et Wave, ou Orange Money ? Au Sénégal, beaucoup de clients paient par mobile money. Pour la comptabilité,
+      le portefeuille marchand de la boutique est un compte de plus, avec son propre solde. Il lui faut donc son propre journal.
+    actions:
+      - attendre: 1.5
+  - texte: Revenons aux journaux, et cliquez sur Nouveau.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Journaux")'
+      - bouton: Nouveau
+  - texte: "Son nom : Wave. Son type : Banque."
+    actions:
+      - champ: name
+        taper: Wave
+      - choisir: {champ: type, valeur: Banque}
+  - texte: >
+      Un préfixe parlant : W-A-V. Et comme pour la caisse, on laisse le compte vide :
+      Odoo va créer un compte de trésorerie rien que pour Wave.
+    actions:
+      - champ: code
+        taper: WAV
+      - surligner_champ: default_account_id
+        duree: 3
+  - texte: Enregistrez.
+    actions:
+      - enregistrer: oui
+  - texte: >
+      Voici le compte créé, dans le cinq cent vingt et un, avec le nom Wave. Chaque encaissement Wave
+      ira désormais sur ce journal, et son solde devra correspondre à celui affiché dans l'application Wave.
+    actions:
+      - surligner_champ: default_account_id
+        duree: 5
+
+  # ------------------------------------------------------------------ partie 3 : arrondi des espèces
+  - partie: "3. Arrondir les paiements en espèces"
+    texte: >
+      Dernier réglage : l'arrondi des espèces. En boutique, on ne rend pas la monnaie au franc près.
+      Si un gâteau coûte deux mille trois cent quatre-vingt-dix-huit francs, le client paie deux mille quatre cents.
+    actions:
+      - attendre: 1.5
+  - texte: Ouvrez Configuration, puis Paramètres.
+    actions:
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Paramètres")'
+  - texte: >
+      Dans la section Factures clients, cochez Arrondi des paiements en espèces, puis Enregistrer.
+    actions:
+      - defiler: '.o_field_widget[name="group_cash_rounding"]'
+      - cocher: group_cash_rounding
+      - cliquer: '.o_form_button_save'
+      - attendre: 2
+  - texte: >
+      Un nouveau menu est apparu : Configuration, Arrondi des paiements en espèces. Ouvrons-le, puis Nouveau.
+    actions:
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Arrondi des paiements en espèces")'
+      - bouton: Nouveau
+  - texte: >
+      Son nom : arrondi au cinq francs. La précision : cinq. Odoo arrondira chaque total au multiple de cinq francs le plus proche.
+    actions:
+      - champ: name
+        taper: Arrondi au 5 F
+      - champ: rounding
+        taper: "5"
+  - texte: >
+      Pour la stratégie, choisissez Ajouter une ligne d'arrondi : la différence apparaît sur une ligne à part,
+      et la TVA reste exacte.
+    actions:
+      - choisir: {champ: strategy, valeur: Ajouter une ligne}
+  - texte: >
+      Cette ligne a besoin de deux comptes : les autres produits divers, sept cent cinquante-huit mille huit cents,
+      quand l'arrondi vous fait gagner quelques francs, et les autres charges diverses, six cent cinquante-huit mille huit cents,
+      quand il vous en fait perdre.
+    actions:
+      - choisir: {champ: profit_account_id, valeur: "758800"}
+      - choisir: {champ: loss_account_id, valeur: "658800"}
+  - texte: >
+      Méthode d'arrondi : au plus proche. Enregistrez. L'arrondi se choisira ensuite sur les factures payées en espèces,
+      dans l'onglet Autres informations.
+    actions:
+      - choisir: {champ: rounding_method, valeur: Au plus proche}
+      - enregistrer: oui
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : encaisser un paiement Wave dans le journal Banque.
+      Le solde de la banque devient faux, et celui de Wave aussi. Un portefeuille, un journal.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : se tromper d'un chiffre dans le numéro de compte bancaire. Il est imprimé sur vos factures :
+      vos clients vireraient l'argent au mauvais endroit. Recopiez-le depuis votre relevé d'identité bancaire.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : choisir la stratégie Modifier le montant des taxes pour l'arrondi. La TVA ne correspond plus
+      au taux. Préférez la ligne d'arrondi.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Le journal Banque porte le numéro de votre compte bancaire, imprimé sur vos factures.
+      Les onglets Paiements entrants et sortants listent les moyens de paiement.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Un portefeuille Wave ou Orange Money a son propre journal de type Banque.
+      Et l'arrondi des espèces évite les francs impossibles à rendre, sur une ligne à part.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : créez le journal Orange Money de votre boutique, avec le préfixe O-M,
+      et vérifiez le compte qu'Odoo lui a créé.
+      Dans la prochaine capsule, nous verrons les produits et leurs catégories : où va l'argent de chaque vente. À tout de suite !
+    actions:
+      - attendre: 1
