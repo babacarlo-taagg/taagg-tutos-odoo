@@ -112,6 +112,9 @@ def cpt_08():
     comptes = odoo('account.account', 'search', [['code', '=like', '521%'], ['name', '=', 'Wave']], context={'allowed_company_ids': [SOCIETE]})
     if comptes:
         odoo('account.account', 'unlink', comptes)
+    brouillons = odoo('account.move', 'search', [['partner_id', '=', BOUTIQUE_ALMADIES], ['state', '=', 'draft']])
+    if brouillons:  # la facture brouillon de la démonstration de l'arrondi
+        odoo('account.move', 'unlink', brouillons)
     arrondis = odoo('account.cash.rounding', 'search', [['name', '=', 'Arrondi au 5 F']], context={'active_test': False})
     if arrondis:
         odoo('account.cash.rounding', 'unlink', arrondis)

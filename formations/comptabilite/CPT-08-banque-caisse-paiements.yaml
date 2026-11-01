@@ -4,7 +4,8 @@
 #   option « Arrondi des paiements en espèces » désactivée, aucun arrondi « Arrondi au 5 F ».
 # Ce que la capsule crée (tout est remis à zéro par etat-depart.py) : le numéro de compte fictif
 #   SN012 01001 012345678901 23 sur le journal Banque, le journal Wave et son compte (521…),
-#   l'option d'arrondi et l'arrondi « Arrondi au 5 F » (758800 / 658800).
+#   l'option d'arrondi, l'arrondi « Arrondi au 5 F » (758800 / 658800) et une facture brouillon
+#   (Boutique Les Almadies, brownie à 2 032 F HT → 2 398 F → 2 400 F).
 titre: Banque, caisse et moyens de paiement
 sous_titre: Formation Comptabilité Odoo · CPT-08
 depart: /odoo/accounting
@@ -172,11 +173,43 @@ etapes:
       - choisir: {champ: profit_account_id, valeur: "758800"}
       - choisir: {champ: loss_account_id, valeur: "658800"}
   - texte: >
-      Méthode d'arrondi : au plus proche. Enregistrez. L'arrondi se choisira ensuite sur les factures payées en espèces,
-      dans l'onglet Autres informations.
+      Méthode d'arrondi : au plus proche. Enregistrez.
     actions:
       - choisir: {champ: rounding_method, valeur: Au plus proche}
       - enregistrer: oui
+  - texte: >
+      Voyons-le sur une facture payée en espèces. Menu Clients, Factures clients, Nouveau,
+      pour la Boutique Les Almadies.
+    actions:
+      - ouvrir_menu: Clients
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Factures clients")'
+      - bouton: Nouveau
+      - choisir: {champ: partner_id, valeur: Boutique Les Almadies}
+  - texte: Ajoutons un brownie, à deux mille trente-deux francs hors taxes.
+    actions:
+      - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_field_x2many_list_row_add a'
+      - choisir: {champ: product_id, valeur: Brownie}
+      - champ: price_unit
+        taper: "2032"
+      - touche: Tab
+  - texte: >
+      Avec la TVA à dix-huit pour cent, le total fait deux mille trois cent quatre-vingt-dix-huit francs :
+      impossible à rendre en pièces.
+    actions:
+      - surligner_champ: tax_totals
+        duree: 3.5
+  - texte: >
+      Dans l'onglet Autres informations, choisissez l'arrondi au cinq francs.
+    actions:
+      - onglet: Autres informations
+      - choisir: {champ: invoice_cash_rounding_id, valeur: Arrondi au 5 F}
+  - texte: >
+      Revenons aux lignes : le total est maintenant de deux mille quatre cents francs. Les deux francs d'écart
+      sont sur une ligne d'arrondi, et la TVA reste de trois cent soixante-six francs.
+    actions:
+      - onglet: Lignes de facture
+      - surligner_champ: tax_totals
+        duree: 5
 
   # ------------------------------------------------------------------ pièges fréquents
   - partie: "Les pièges à éviter"
