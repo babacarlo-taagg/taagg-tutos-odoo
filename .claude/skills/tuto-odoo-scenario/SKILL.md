@@ -74,7 +74,7 @@ etapes:
 | `defiler: 400` ou `defiler: '<sélecteur>'` | fait défiler la page |
 | `attendre: 1.5` | pause (secondes) |
 | `double_cliquer: 'site >> #wrap img'` | double-clic (ouvrir la médiathèque sur une image du site) |
-| `remplacer_texte: {dans: 'site >> #wrap h1', texte: Nos gâteaux}` | sélectionne tout le texte (triple-clic) et tape le nouveau |
+| `remplacer_texte: {dans: 'site >> #wrap h1', texte: Nos gâteaux}` | clic puis triple-clic (tout le texte), tape le nouveau, **vérifie** qu'il est bien écrit (sinon erreur) |
 | `taper_dans: {dans: '.modal input', texte: produit}` | tape dans n'importe quel champ visé par un sélecteur |
 | `illustration: images/eb-01-tunnel.png` (+ `duree: 6`, `zoom: 1.04`) | image plein écran (schéma, ambiance) avec léger zoom ; sans `duree`, reste jusqu'à la fin de la phrase — voir `tuto-odoo-illustrations` |
 
@@ -107,6 +107,10 @@ Piège vécu (EB-02) : en tapant une adresse de lien, Odoo ouvre une liste de su
 « Appliquer » ; le clic tombe sur une suggestion (`/shop/brownie-30` au lieu de `/shop`). Fermer la liste
 d'abord (clic sur le champ du libellé), puis Appliquer. **Après la prise, vérifier par l'API ce qui a été
 enregistré** (lien, texte, réglage) : l'image peut sembler juste alors que la donnée est fausse.
+
+Pièges vécus (EB-03) : une page créée par « Nouveau › Page » est **Non publiée** (interrupteur
+`.o_website_publish_container` en haut) ; la liste de suggestions d'adresse peut s'ouvrir vers le haut :
+la fermer en cliquant sur le mot « ou » (`.o-we-linkpopover :text-is("ou")`), jamais sur un champ.
 
 ## Montrer une image (schéma ou ambiance)
 

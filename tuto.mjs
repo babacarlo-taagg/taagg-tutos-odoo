@@ -346,6 +346,13 @@ class Realisateur {
     await attendreOdoo(this.page, 8000); // le clic a pu ouvrir un autre écran
   }
 
+  // le texte tapé se trouve-t-il dans la zone visée (même cadre) ? l'élément d'origine a pu être remplacé
+  async texteDe(selecteur, debut) {
+    const m = String(selecteur).match(/^(site|blocs)\s*>>/);
+    const zone = m ? this.loc(`${m[1]} >> body`) : this.page.locator('body');
+    return (await zone.innerText().catch(() => '')).replace(/\s+/g, ' ').includes(debut.replace(/\s+/g, ' '));
+  }
+
   // Raccourcis pour viser dans les cadres de l'éditeur de site :
   //   « site >> h1 »   → dans la page du site affichée par l'appli Site Web
   //   « blocs >> … »   → dans la fenêtre « Insérer un bloc » (aperçus des modèles)
@@ -416,9 +423,16 @@ class Realisateur {
     } else if ('remplacer_texte' in a) {
       // sélectionne tout le texte d'un titre ou d'un paragraphe (triple-clic) et tape le nouveau texte
       const { dans, texte } = a.remplacer_texte;
+      // 1er clic : l'éditeur sélectionne d'abord la colonne ou le bloc (sinon le triple-clic devient
+      // un double-clic qui ne sélectionne qu'un mot) ; puis triple-clic pour tout le texte
+      await this.cliquer(this.loc(dans));
+      await pause(300);
       await this.cliquer(this.loc(dans), 3);
       await p.keyboard.type(String(texte), { delay: 45 });
       await pause(300);
+      // vérifier que le texte est bien entré (sinon la vidéo montrerait un faux résultat sans erreur)
+      const debut = String(texte).slice(0, 20);
+      if (!(await this.texteDe(dans, debut))) throw new Error(`le texte « ${debut}… » n'a pas été écrit dans ${dans}`);
     } else if ('taper_dans' in a) {
       // tape dans n'importe quel champ visé par un sélecteur (recherche d'une fenêtre, etc.)
       const { dans, texte } = a.taper_dans;

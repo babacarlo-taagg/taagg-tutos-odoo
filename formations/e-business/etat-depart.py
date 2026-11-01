@@ -275,7 +275,62 @@ def eb_02():
     eb_01()
 
 
-CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02}
+PAGES_EB03 = ['/a-propos', '/livraison-et-retours']   # pages créées pendant le tournage d'EB-03
+
+
+def site_fin_eb02():
+    """Le site tel qu'à la fin d'EB-02 : page d'accueil construite, palette caramel (relevés le 31/10/2026)."""
+    print("Site : page d'accueil et couleurs de la fin d'EB-02")
+    ctx = dict(CTX, website_id=SITE)
+    vue = odoo('ir.ui.view', 'search', [('key', '=', 'website.homepage'), ('website_id', '=', SITE)], context=ctx)
+    ecrire('ir.ui.view', vue, {'arch_db': (ICI / 'donnees' / 'eb02-accueil.xml').read_text(encoding='utf-8')},
+           "page d'accueil d'EB-02 (accroche + Nos gâteaux du moment)")
+    for url, nom in STYLES.items():
+        piece = odoo('ir.attachment', 'search', [('url', '=', url), ('website_id', '=', SITE)])
+        contenu = base64.b64encode((ICI / 'donnees' / f'eb02-{nom}').read_bytes()).decode()
+        ecrire('ir.attachment', piece, {'datas': contenu}, f'couleurs EB-02 : {nom}')
+
+
+def pages_de_confiance_a_refaire():
+    """Défait ce que le tournage d'EB-03 crée ou change : pages, menus, Contact, pied de page, copyright."""
+    print('Pages de confiance : remises à faire (état avant EB-03)')
+    ctx = dict(CTX, website_id=SITE)
+    # pages des tournages précédents (y compris /a-propos-1, -2… et celles déjà archivées)
+    domaine = ['|'] * (len(PAGES_EB03) - 1) + [('url', '=like', f'{u}%') for u in PAGES_EB03] + [('website_id', '=', SITE)]
+    pages = odoo('website.page', 'search_read', domaine, fields=['url', 'active'], context=dict(CTX, active_test=False))
+    pages = [pg for pg in pages if not pg['url'].startswith('/archive-')]
+    if pages:
+        ids = [pg['id'] for pg in pages]
+        menus = odoo('website.menu', 'search', [('page_id', 'in', ids)])
+        print(f'  · {len(menus)} entrée(s) de menu retirée(s) (créées par le tournage)')
+        if not VOIR and menus:
+            odoo('website.menu', 'unlink', menus)
+        print(f"  · {len(pages)} page(s) archivée(s), adresse libérée : " + ', '.join(pg['url'] for pg in pages))
+        if not VOIR:
+            for pg in pages:  # l'adresse /a-propos redevient libre pour la prochaine prise
+                odoo('website.page', 'write', [pg['id']], {'active': False, 'url': f"/archive-{pg['id']}{pg['url']}"})
+    for cle, fichier in (('website.contactus', 'contact-origine.xml'), ('website.footer_custom', 'pied-de-page-origine.xml')):
+        vue = odoo('ir.ui.view', 'search', [('key', '=', cle), ('website_id', '=', SITE)], context=ctx)
+        ecrire('ir.ui.view', vue, {'arch_db': (ICI / 'donnees' / fichier).read_text(encoding='utf-8')}, f'{cle} remis comme avant')
+    # copie propre au site de la ligne « Copyright © Nom de l'entreprise » : archivée → texte d'origine
+    copie = odoo('ir.ui.view', 'search', [('key', '=', 'website.footer_copyright_company_name'), ('website_id', '=', SITE)], context=ctx)
+    ecrire('ir.ui.view', copie, {'active': False}, 'ligne de copyright d\'origine')
+    if not odoo('ir.attachment', 'search', [('name', '=', 'maimouna-boutique.jpg'), ('res_model', '=', 'ir.ui.view')]):
+        print('  · photo maimouna-boutique.jpg ajoutée à la médiathèque')
+        if not VOIR:
+            odoo('ir.attachment', 'create', {'name': 'maimouna-boutique.jpg', 'datas': image('eb-01-ambiance-whatsapp.jpg'),
+                                             'res_model': 'ir.ui.view', 'res_id': 0, 'public': True, 'mimetype': 'image/jpeg'})
+
+
+def eb_03():
+    """EB-03 · Les pages qui donnent confiance : le site de la fin d'EB-02, sans pages À propos / Livraison,
+    page Contact et pied de page encore remplis d'exemples d'Odoo (« Ma société », « Nous sommes une équipe… »)."""
+    eb_01()
+    site_fin_eb02()
+    pages_de_confiance_a_refaire()
+
+
+CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03}
 
 if __name__ == '__main__':
     code = next((a.upper() for a in sys.argv[1:] if not a.startswith('--')), None)

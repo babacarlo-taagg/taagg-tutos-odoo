@@ -12,6 +12,8 @@ Règles : compétence `tuto-odoo-illustrations`. Babacar valide chaque image ava
 | `eb-01-recap.png` | EB-01 | les 4 points à retenir | ☐ |
 | `eb-02-page-qui-vend.png` | EB-02 | les 3 idées d'une page d'accueil qui vend | ☐ |
 | `eb-02-recap.png` | EB-02 | les 4 points à retenir | ☐ |
+| `eb-03-questions-cliente.png` | EB-03 | les 4 questions d'une cliente avant de payer | ☐ |
+| `eb-03-recap.png` | EB-03 | les 4 points à retenir | ☐ |
 | `logo-delices-maimouna.png` | toutes | logo fictif de la boutique d'exemple (posé sur le site par `etat-depart.py`) | ☐ |
 
 ## Images IA (sans texte)
@@ -23,6 +25,7 @@ Variante retenue entre parenthèses ; converties en JPEG (qualité 3) pour garde
 | Image | Capsule | Scène | Validée |
 |---|---|---|---|
 | `eb-01-ambiance-whatsapp.jpg` (3) | EB-01 | Maïmouna dans sa pâtisserie de la Médina, téléphone en main, débordée par les commandes WhatsApp ; agrandie en 1920×1080 | ☐ |
+| `eb-01-ambiance-whatsapp.jpg` aussi dans la médiathèque de la base sous le nom `maimouna-boutique.jpg` | EB-03 | photo de la page À propos | ☐ |
 | `produits/<produit>.jpg` (17) | toutes | photo de chaque produit publié, fond clair, planche de bois, lumière du jour (posées par `etat-depart.py`) | ☐ |
 
 Demande type des photos produits (seul le sujet change) :

@@ -1,0 +1,269 @@
+# EB-03 · Les pages qui donnent confiance
+# État de départ : python3 formations/e-business/etat-depart.py EB-03
+#   le site de la fin d'EB-02 (accroche + « Nos gâteaux du moment », palette caramel), pas de page À propos ni
+#   Livraison et retours, page Contact (« Ma société », « 3575 Fake Buena Vista Avenue ») et pied de page
+#   (« Nous sommes une équipe de passionnés… », « Copyright © Nom de l'entreprise ») encore remplis d'exemples ;
+#   photo maimouna-boutique.jpg dans la médiathèque.
+# Pendant la capsule : 2 pages créées (/a-propos, /livraison-et-retours) et ajoutées au menu, page Contact et
+#   pied de page modifiés et sauvegardés. Relancer etat-depart.py avant chaque prise.
+# Images : formations/e-business/images/ (compétence tuto-odoo-illustrations).
+titre: Les pages qui donnent confiance
+sous_titre: Formation E-Business Odoo · EB-03
+depart: /odoo
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG School: l'école Tag
+  TAAGG: Tag
+  EB-03: capsule trois
+  eCommerce: e-commerce
+  E-Business: i-business
+  FCFA: francs CFA
+  F CFA: francs CFA
+  /shop: barre oblique shop
+fin:
+  message: "Prochaine capsule : mettre ses produits en ligne"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche (≈ 50 s)
+  - chapitre: Introduction
+    texte: >
+      Bienvenue dans la troisième capsule de la formation E-Business.
+      Sur WhatsApp, vos clients vous connaissent déjà. Sur votre site, une cliente qui vous découvre
+      ne sait rien de vous : avant de payer, elle a besoin d'être rassurée.
+    actions:
+      - attendre: 1
+  - texte: >
+      Avant de payer, elle se pose quatre questions : qui êtes-vous ? Comment vous joindre ?
+      Quand serai-je livrée ? Et si ça ne va pas ? Chaque question a sa réponse sur une page de votre site.
+    actions:
+      - illustration: images/eb-03-questions-cliente.png
+        zoom: 1.02
+  - texte: >
+      Dans cette capsule, nous allons créer la page À propos et la page Livraison et retours,
+      compléter la page Contact, et remplacer les textes d'exemple du pied de page.
+    actions:
+      - attendre: 0.5
+
+  # ------------------------------------------------------------------ partie 1 : page À propos (≈ 3 min)
+  - partie: "1. La page À propos"
+    texte: >
+      Ouvrez l'application Site Web. Pour créer une page, cliquez sur Nouveau, en haut à droite, puis sur Page.
+    actions:
+      - cliquer: '.o_app:has-text("Site Web")'
+      - attendre: 1
+      - cliquer: 'button:has-text("Nouveau")'
+      - attendre: 1
+      - cliquer: 'a:has-text("Créer une nouvelle page"), button:has-text("Créer une nouvelle page")'
+      - attendre: 1.5
+  - texte: >
+      Odoo propose des modèles de pages, mais ils sont remplis de textes d'exemple. Choisissez plutôt Page vierge :
+      vous ajouterez seulement les blocs dont vous avez besoin.
+    actions:
+      - survoler: '.modal :text("Page vierge")'
+      - cliquer: '.modal :text("Page vierge")'
+      - attendre: 1
+  - texte: >
+      Donnez un titre à la page : À propos. Laissez Ajouter au menu activé, pour que la page apparaisse
+      dans le menu du site. Puis cliquez sur Créer.
+    actions:
+      - taper_dans: {dans: '.modal input.form-control >> visible=true', texte: À propos}
+      - surligner_texte: Ajouter au menu
+        duree: 2
+      - cliquer: '.modal button:has-text("Créer") >> visible=true'
+      - attendre: 3
+  - texte: >
+      La page est créée, vide, et l'éditeur est déjà ouvert. Dans l'onglet Blocs, ouvrez la famille Contenu
+      et choisissez le bloc avec un titre, un texte et une image, comme pour la page d'accueil.
+    actions:
+      - cliquer: '.o-snippets-tabs button:has-text("Blocs")'
+      - cliquer: '.o_snippet:has-text("Contenu")'
+      - attendre: 1.5
+      - cliquer: 'blocs >> .o_snippet_preview_wrap:has-text("Améliorez votre")'
+      - attendre: 1.5
+  - texte: >
+      Le titre raconte qui vous êtes, en une phrase.
+    actions:
+      - remplacer_texte: {dans: 'site >> #wrap section h2', texte: "Maïmouna, pâtissière dans la Médina"}
+  - texte: >
+      Puis votre histoire, simplement : depuis quand, où, et ce qui vous rend différente.
+    actions:
+      - remplacer_texte: {dans: 'site >> #wrap section p >> nth=0', texte: "Tout a commencé dans la cuisine familiale, rue 22. Aujourd'hui, notre petite équipe prépare chaque matin vos gâteaux avec des produits frais."}
+  - texte: >
+      Ajoutez vos engagements : ce sont eux qui donnent confiance.
+    actions:
+      - remplacer_texte: {dans: 'site >> #wrap section p >> nth=1', texte: "Nos engagements : fait maison, ingrédients frais, livraison soignée."}
+  - texte: >
+      Le bouton renvoie vers la boutique. Cliquez dessus, puis sur Modifier : texte Voir nos gâteaux,
+      adresse /shop, puis Appliquer.
+    actions:
+      - cliquer: 'site >> #wrap section a.btn'
+      - attendre: 0.5
+      - cliquer: '.o-we-linkpopover button:has-text("Modifier"), .o-we-linkpopover a:has-text("Modifier")'
+      - taper_dans: {dans: '.o-we-linkpopover input.o_we_label_link', texte: Voir nos gâteaux}
+      - taper_dans: {dans: '.o-we-linkpopover input.o-autocomplete--input', texte: /shop}
+      # la liste de suggestions (vers le haut ou le bas) peut recouvrir les champs : la fermer en cliquant
+      # sur le petit mot « ou » à droite de l'adresse, qu'elle ne recouvre jamais
+      - cliquer: '.o-we-linkpopover :text-is("ou")'
+      - attendre: 0.5
+      - cliquer: '.o-we-linkpopover .o_we_apply_link'
+  - texte: >
+      Enfin, une vraie photo : double-cliquez sur l'image et choisissez une photo de vous dans votre boutique.
+      Une cliente fait plus facilement confiance à un visage qu'à un logo.
+    actions:
+      - double_cliquer: 'site >> #wrap section img'
+      - attendre: 1
+      - cliquer: '.modal .o_existing_attachment_cell:has(img[title="maimouna-boutique.jpg"])'
+      - attendre: 1.5
+  - texte: Cliquez sur Sauvegarder. La page À propos est prête.
+    actions:
+      - cliquer: '.o-snippets-top-actions button:has-text("Sauvegarder")'
+      - attendre: 3
+  - texte: >
+      Attention : en haut, Odoo indique Non publié. Pour l'instant, vous seul voyez cette page.
+      Cliquez sur l'interrupteur pour la publier : vos clients pourront la lire.
+    actions:
+      - surligner: '.o_website_publish_container'
+        duree: 2.5
+      - cliquer: '.o_website_publish_container'
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ partie 2 : livraison et retours (≈ 3 min)
+  - partie: "2. Livraison et retours"
+    texte: >
+      Deuxième page, la plus importante pour une boutique en ligne : Livraison et retours.
+      Même chemin : Nouveau, Page, Page vierge.
+    actions:
+      - cliquer: 'button:has-text("Nouveau")'
+      - attendre: 1
+      - cliquer: 'a:has-text("Créer une nouvelle page"), button:has-text("Créer une nouvelle page")'
+      - attendre: 1.5
+      - cliquer: '.modal :text("Page vierge")'
+      - attendre: 1
+  - texte: Tapez le titre, Livraison et retours, puis cliquez sur Créer.
+    actions:
+      - taper_dans: {dans: '.modal input.form-control >> visible=true', texte: Livraison et retours}
+      - cliquer: '.modal button:has-text("Créer") >> visible=true'
+      - attendre: 3
+  - texte: >
+      Cette fois, choisissez dans la famille Colonnes le bloc avec trois points numérotés :
+      un pour la livraison, un pour les délais, un pour les problèmes.
+    actions:
+      - cliquer: '.o-snippets-tabs button:has-text("Blocs")'
+      - cliquer: '.o_snippet:has-text("Colonnes")'
+      - attendre: 1.5
+      - cliquer: 'blocs >> .o_snippet_preview_wrap:has([data-snippet="s_key_benefits"])'
+      - attendre: 1.5
+  - texte: Remplacez la petite phrase du haut, puis le grand titre.
+    actions:
+      - remplacer_texte: {dans: 'site >> .s_key_benefits p.lead', texte: "Commandez l'esprit tranquille"}
+      - remplacer_texte: {dans: 'site >> .s_key_benefits h2', texte: Livraison et retours}
+  - texte: >
+      Premier point, la livraison : où, comment, et combien. Écrivez les vrais prix, en francs CFA.
+    actions:
+      - remplacer_texte: {dans: 'site >> .s_key_benefits h3 >> nth=0', texte: Livraison à Dakar}
+      - remplacer_texte: {dans: 'site >> .s_key_benefits .row p >> nth=0', texte: "À moto dans tout Dakar : 1 000 F CFA, offerte dès 20 000 F CFA d'achat."}
+  - texte: >
+      Deuxième point, les délais. Une cliente qui commande un gâteau d'anniversaire veut savoir s'il arrivera à temps.
+    actions:
+      - remplacer_texte: {dans: 'site >> .s_key_benefits h3 >> nth=1', texte: Délais}
+      - remplacer_texte: {dans: 'site >> .s_key_benefits .row p >> nth=1', texte: "Commandé avant midi, livré le jour même. Gâteau personnalisé : 48 heures à l'avance."}
+  - texte: >
+      Troisième point, ce que vous faites si quelque chose ne va pas. C'est ce qui rassure le plus.
+    actions:
+      - remplacer_texte: {dans: 'site >> .s_key_benefits h3 >> nth=2', texte: Un souci ?}
+      - remplacer_texte: {dans: 'site >> .s_key_benefits .row p >> nth=2', texte: "Appelez-nous le jour même au 33 800 00 00 : nous remplaçons le gâteau ou nous vous remboursons."}
+  - texte: Sauvegardez, puis publiez la page avec l'interrupteur, en haut.
+    actions:
+      - cliquer: '.o-snippets-top-actions button:has-text("Sauvegarder")'
+      - attendre: 3
+      - cliquer: '.o_website_publish_container'
+      - attendre: 1.5
+  - texte: >
+      Regardez le menu du site : À propos et Livraison et retours y sont apparus tout seuls,
+      parce que l'option Ajouter au menu était activée.
+    actions:
+      - surligner: 'site >> header .navbar-nav >> nth=0'
+        duree: 3.5
+
+  # ------------------------------------------------------------------ partie 3 : contact et pied de page (≈ 2 min 30)
+  - partie: "3. Contact et pied de page"
+    texte: >
+      La page Contact existe déjà, mais elle contient encore des textes d'exemple. Ouvrez-la depuis le menu.
+    actions:
+      - cliquer: 'site >> header a[href="/contactus"] >> visible=true'
+      - attendre: 2
+  - texte: >
+      À droite, Ma société et une adresse américaine imaginaire : exactement ce qu'il ne faut pas laisser.
+      Cliquez sur Modifier.
+    actions:
+      - surligner: 'site >> #wrap h5:has-text("Ma société")'
+        duree: 2
+      - cliquer: 'button:has-text("Modifier")'
+      - attendre: 2
+  - texte: Remplacez par le nom de votre boutique, puis par votre vraie adresse.
+    actions:
+      - remplacer_texte: {dans: 'site >> #wrap h5:has-text("Ma société")', texte: Les Délices de Maïmouna}
+      - remplacer_texte: {dans: 'site >> #wrap span:has-text("Fake Buena Vista")', texte: "Rue 22, Médina, Dakar"}
+  - texte: >
+      Changez aussi la phrase d'accueil, pour dire quand vous répondez.
+    actions:
+      - remplacer_texte: {dans: 'site >> #wrap p.lead', texte: "Une question sur une commande ou un gâteau sur mesure ? Écrivez-nous : nous répondons dans la journée."}
+  - texte: >
+      Descendez maintenant jusqu'au pied de page, en bas. Il apparaît sur toutes les pages du site :
+      un texte d'exemple ici se voit partout.
+    actions:
+      - defiler: 'site >> footer'
+      - surligner: 'site >> footer p:has-text("passionnés")'
+        duree: 2.5
+  - texte: Remplacez-le par une phrase sur votre pâtisserie.
+    actions:
+      - remplacer_texte: {dans: 'site >> footer p:has-text("passionnés")', texte: "Pâtisserie artisanale de la Médina, à Dakar : gâteaux faits maison, livrés à moto. Paiement par Wave, Orange Money ou à la livraison."}
+  - texte: Et tout en bas, remplacez Nom de l'entreprise par le nom de la boutique.
+    actions:
+      - remplacer_texte: {dans: 'site >> footer .o_footer_copyright_name', texte: "© Les Délices de Maïmouna"}
+  - texte: Sauvegardez. Le site ne contient plus de texte d'exemple visible.
+    actions:
+      - cliquer: '.o-snippets-top-actions button:has-text("Sauvegarder")'
+      - attendre: 3
+      - defiler: 'site >> footer'
+      - attendre: 1
+
+  # ------------------------------------------------------------------ pièges (≈ 1 min)
+  - chapitre: Pièges fréquents
+    texte: >
+      Trois pièges fréquents. Premier piège : oublier de publier. Une page Non publiée n'apparaît ni dans le menu,
+      ni sur le site de vos clients : vérifiez l'interrupteur en haut de chaque nouvelle page.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : promettre ce qu'on ne peut pas tenir. Si vous écrivez
+      livré le jour même, chaque retard fera perdre une cliente. Écrivez des délais que vous respectez à coup sûr.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : oublier les textes d'exemple cachés, comme Ma société sur la page Contact,
+      ou les liens Services et Juridique du pied de page. Visitez chaque page de votre site avant de le partager.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice (≈ 1 min)
+  - chapitre: À retenir
+    texte: >
+      Retenons l'essentiel. Un : Nouveau, puis Page, crée une page et l'ajoute au menu ; pensez à la publier.
+      Deux : la page À propos raconte votre histoire, avec une vraie photo.
+      Trois : la page Livraison et retours donne les zones, les délais, les prix, et ce que vous faites en cas de problème.
+      Quatre : remplacez tous les textes d'exemple, page Contact et pied de page compris.
+    apres: 1.2
+    actions:
+      - illustration: images/eb-03-recap.png
+        zoom: 1.02
+  - chapitre: Exercice
+    texte: >
+      À vous de jouer : créez votre page À propos et votre page Livraison et retours, puis corrigez votre page Contact
+      et votre pied de page. Dans la prochaine capsule, nous mettrons vos produits en ligne :
+      photos, prix et descriptions.
+    actions:
+      - attendre: 1
