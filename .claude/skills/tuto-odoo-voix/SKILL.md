@@ -65,6 +65,10 @@ ffmpeg -i sortie/<nom>/son.m4a -ac 1 -b:a 64k son.mp3
 curl -sS -H "xi-api-key: $ELEVENLABS_API_KEY" -F model_id=scribe_v1 -F language_code=fra -F file=@son.mp3 \
   https://api.elevenlabs.io/v1/speech-to-text
 ```
+**Outil automatique (à lancer avant le tournage final)** : `outils/voix-propre.sh <scénario.yaml>` génère la voix,
+retranscrit chaque phrase, et refait (3 essais au plus) celles qui ont un « euh » ou un mot répété qui n'est pas
+dans le texte. Il affiche à la fin les phrases encore à écouter. En moyenne 2 à 4 phrases sur 35 sont refaites.
+
 Chercher : « euh », mots répétés, sigles mal dits, noms propres déformés. Pour refaire une seule phrase :
 déplacer son fichier `sortie/<nom>/voix/NN-elevenlabs-*.mp3` (NN = numéro de l'étape, en partant de 1)
 dans `sortie/<nom>/voix-ecartees/`, relancer `--seulement-voix`, retranscrire ce fichier, puis retourner la vidéo.

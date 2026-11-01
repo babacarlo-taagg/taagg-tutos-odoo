@@ -228,9 +228,14 @@ etapes:
   - texte: Remplacez-le par une phrase sur votre pâtisserie.
     actions:
       - remplacer_texte: {dans: 'site >> footer p:has-text("passionnés")', texte: "Pâtisserie artisanale de la Médina, à Dakar : gâteaux faits maison, livrés à moto. Paiement par Wave, Orange Money ou à la livraison."}
-  - texte: Et tout en bas, remplacez Nom de l'entreprise par le nom de la boutique.
+  # NE PAS modifier la ligne Copyright dans l'éditeur : elle affiche le NOM DE LA SOCIÉTÉ (champ relié) ;
+  # la modifier renomme la société dans toute la base (comptabilité comprise). Vécu le 01/11/2026.
+  - texte: >
+      Tout en bas, la ligne Copyright affiche le nom de votre société. Ne la modifiez pas ici :
+      ce nom vient des paramètres de votre société dans Odoo, et il apparaît aussi sur vos factures.
     actions:
-      - remplacer_texte: {dans: 'site >> footer .o_footer_copyright_name', texte: "© Les Délices de Maïmouna"}
+      - survoler: 'site >> footer .o_footer_copyright_name'
+      - attendre: 2
   - texte: Sauvegardez. Le site ne contient plus de texte d'exemple visible.
     actions:
       - cliquer: '.o-snippets-top-actions button:has-text("Sauvegarder")'

@@ -112,6 +112,12 @@ Pièges vécus (EB-03) : une page créée par « Nouveau › Page » est **Non p
 `.o_website_publish_container` en haut) ; la liste de suggestions d'adresse peut s'ouvrir vers le haut :
 la fermer en cliquant sur le mot « ou » (`.o-we-linkpopover :text-is("ou")`), jamais sur un champ.
 
+**Danger (vécu en EB-03)** : certains textes du site sont des **champs reliés** à une fiche Odoo. La ligne
+« Copyright © … » du pied de page affiche le nom de la société : la modifier dans l'éditeur **renomme la société
+dans toute la base** (factures, comptabilité). Ne jamais éditer à l'écran un texte qui reprend une donnée
+(nom de la société, adresse de la société, prix, nom d'un produit) : le changer dans sa fiche, ou ne pas y toucher.
+Après chaque prise, vérifier par l'API que ces fiches n'ont pas bougé.
+
 ## Montrer une image (schéma ou ambiance)
 
 Quand l'écran Odoo ne suffit pas (parcours client, circuit de l'argent, comparaison) :
