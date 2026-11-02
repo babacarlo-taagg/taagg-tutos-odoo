@@ -82,7 +82,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | EB-22 | Réapprovisionner sans rupture | fournisseurs, règles de réassort automatique, bons d'achat | Achats, Inventaire | ☐ |
 | EB-23 | Prête pour le lancement | nom de domaine, check-list avant d'ouvrir, test sur téléphone | Paramètres du site | ☐ |
 
-**23 capsules ≈ 4 h de formation.** EB-01 : 6 min 46, EB-02 : 5 min 43, EB-03 : 6 min 48 (voix de Babacar, vitesse 1,0) — à publier.
+**23 capsules ≈ 4 h de formation.** EB-01 : 6 min 46, EB-02 : 5 min 43, EB-03 : 6 min 48, EB-04 : 4 min 58 (voix de Babacar, vitesse 1,0) — à publier.
 
 ## Hors Odoo (pas de capsule filmée dans Odoo)
 

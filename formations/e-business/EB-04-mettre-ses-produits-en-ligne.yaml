@@ -132,8 +132,45 @@ etapes:
       - surligner: '.o_website_publish_container'
         duree: 3
 
-  # ------------------------------------------------------------------ partie 3 : retirer un produit de la vente (≈ 1 min 30)
-  - partie: "3. Retirer un produit de la vente"
+  # ------------------------------------------------------------------ partie 3 : la fiche complète dans Odoo (≈ 1 min 30)
+  - partie: "3. La fiche complète dans Odoo"
+    texte: >
+      Tout ce que vous avez saisi se retrouve aussi dans la fiche complète du produit.
+      Dans le menu eCommerce, ouvrez Produits.
+    actions:
+      - ouvrir_menu: eCommerce
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Produits") >> nth=0'
+      - attendre: 1
+  - texte: Cherchez la tarte, puis ouvrez sa fiche.
+    actions:
+      - rechercher: Tarte au citron
+      - cliquer: '.o_kanban_record:has-text("Tarte au citron"), .o_data_row:has-text("Tarte au citron")'
+      - attendre: 1
+  - texte: >
+      Vous retrouvez la photo, le prix de vente hors taxes, la taxe, et le prix toutes taxes comprises juste à côté.
+    actions:
+      - surligner_champ: list_price
+        duree: 2
+      - surligner: '.o_field_widget[name="tax_string"]'
+        duree: 2.5
+  - texte: >
+      Remplissez aussi le coût : ce que vous coûte une tarte en ingrédients, ici six mille cinq cents francs.
+      Votre cliente ne le voit jamais, mais Odoo s'en servira pour calculer votre marge.
+    actions:
+      - champ: standard_price
+        taper: "6500"
+      - touche: Tab
+      - attendre: 1
+  - texte: >
+      En haut, le bouton Aller au Site Web ouvre la page du produit sur votre boutique. Enregistrez la fiche.
+    actions:
+      - surligner: '.oe_stat_button:has-text("Site Web")'
+        duree: 2.5
+      - enregistrer: oui
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 4 : retirer un produit de la vente (≈ 1 min 30)
+  - partie: "4. Retirer un produit de la vente"
     texte: >
       Il n'y a plus de pommes au marché cette semaine ? Retirez le chausson aux pommes de la vente, sans le supprimer.
       Ouvrez sa fiche sur le site.
@@ -176,7 +213,8 @@ etapes:
   # ------------------------------------------------------------------ récapitulatif et exercice (≈ 1 min)
   - chapitre: À retenir
     texte: >
-      Retenons l'essentiel. Un : Nouveau, puis Produit, réunit le nom, la photo, le prix, la taxe et la catégorie.
+      Retenons l'essentiel. Un : Nouveau, puis Produit, réunit le nom, la photo, le prix, la taxe et la catégorie ;
+      la fiche complète, dans eCommerce, Produits, ajoute le coût.
       Deux : le prix de vente est hors taxes ; vérifiez le prix toutes taxes comprises affiché à côté.
       Trois : une description courte, avec les parts, les ingrédients et le délai.
       Quatre : Publié ou Non publié, pour retirer un produit sans le supprimer.
