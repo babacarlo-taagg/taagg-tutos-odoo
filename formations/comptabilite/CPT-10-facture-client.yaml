@@ -108,7 +108,6 @@ etapes:
       - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_field_x2many_list_row_add a:has-text("Ajouter une note")'
       - champ: product_id
         taper: Livraison le samedi 7 novembre, au Plateau.
-      - touche: Tab
   - texte: >
       L'onglet Autres informations complète la facture. La référence client reprend le numéro de commande du traiteur :
       il la retrouvera facilement dans ses papiers.
