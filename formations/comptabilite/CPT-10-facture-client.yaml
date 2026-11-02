@@ -1,8 +1,8 @@
 # CPT-10 · Créer et valider une facture client
 # État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-10`) :
-#   pas de client « Traiteur Saveurs du Plateau », aucune facture client brouillon ;
+#   le client « Traiteur Saveurs du Plateau » existe (créé par l'API, sans facture), aucune facture client brouillon ;
 #   la seule facture validée est INV/2026/00001 (la prochaine sera donc INV/2026/00002).
-# Ce que la capsule crée : le client et sa facture validée INV/2026/00002 (2 fraisiers + 50 macarons,
+# Ce que la capsule crée : la facture validée INV/2026/00002 (2 fraisiers + 50 macarons,
 #   50 000 F HT, 9 000 F TVA, 59 000 F TTC). etat-depart.py la remet en brouillon puis la supprime.
 titre: Créer et valider une facture client
 sous_titre: Formation Comptabilité Odoo · CPT-10
@@ -51,8 +51,8 @@ etapes:
         duree: 2.5
       - bouton: Nouveau
   - texte: >
-      Commencez toujours par le client. Le traiteur est nouveau : tapez son nom, Traiteur Saveurs du Plateau,
-      puis cliquez sur Créer. La fiche est créée en un clic, on la complétera plus tard.
+      Commencez toujours par le client. Tapez les premières lettres, Traiteur, et choisissez Traiteur Saveurs du Plateau.
+      Sa fiche existe déjà, avec son adresse à Dakar : elle s'imprimera sur la facture.
     actions:
       - choisir: {champ: partner_id, valeur: Traiteur Saveurs du Plateau}
   - texte: >

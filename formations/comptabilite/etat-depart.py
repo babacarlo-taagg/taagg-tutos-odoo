@@ -156,6 +156,9 @@ def cpt_10():
     brouillons = odoo('account.move', 'search', [['move_type', '=', 'out_invoice'], ['state', '=', 'draft']])
     if brouillons:
         odoo('account.move', 'unlink', brouillons)
+    # le client de la démonstration est recréé propre (Odoo ne crée pas de client en un clic depuis une facture)
+    odoo('res.partner', 'create', {'name': 'Traiteur Saveurs du Plateau', 'is_company': True, 'street': 'Avenue Léopold Sédar Senghor',
+                                   'city': 'Dakar', 'country_id': 204}, context={'allowed_company_ids': [SOCIETE]})
     return retires, len(brouillons)
 
 
