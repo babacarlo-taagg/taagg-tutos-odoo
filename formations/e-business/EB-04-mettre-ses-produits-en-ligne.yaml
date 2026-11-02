@@ -1,0 +1,192 @@
+# EB-04 · Mettre ses produits en ligne
+# État de départ : python3 formations/e-business/etat-depart.py EB-04
+#   la boutique de la fin d'EB-03 (17 produits avec photos, 3 catégories, prix TTC affichés), pas de
+#   « Tarte au citron meringuée », « Chausson aux pommes » publié.
+# Pendant la capsule : la Tarte au citron meringuée est créée (12 712 F HT = 15 000 F TTC, Pâtisseries, photo,
+#   description) ; le Chausson aux pommes est dépublié puis republié. Relancer etat-depart.py avant chaque prise.
+# Photo du produit : images/produits/tarte-au-citron-meringuee.jpg (IA, voir images/README.md).
+titre: Mettre ses produits en ligne
+sous_titre: Formation E-Business Odoo · EB-04
+depart: /odoo
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG School: l'école Tag
+  TAAGG: Tag
+  EB-04: capsule quatre
+  eCommerce: e-commerce
+  E-Business: i-business
+  F CFA: francs CFA
+  FCFA: francs CFA
+  " F ": " francs "
+  TTC: té-té-cé
+  HT: hache-té
+  TVA: té-vé-a
+fin:
+  message: "Prochaine capsule : organiser son catalogue"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche (≈ 45 s)
+  - chapitre: Introduction
+    texte: >
+      Bienvenue dans la quatrième capsule de la formation E-Business.
+      Votre site est prêt. Il est temps d'y mettre vos produits, et de les présenter de façon à donner envie.
+    actions:
+      - attendre: 1
+  - texte: >
+      Une bonne fiche produit, c'est quatre choses : une vraie photo, un nom clair, le bon prix,
+      et une courte description qui répond aux questions de votre cliente.
+    actions:
+      - illustration: images/eb-04-fiche-produit.png
+        zoom: 1.02
+  - texte: >
+      Dans cette capsule, nous allons ajouter un nouveau gâteau à la boutique des Délices de Maïmouna :
+      une tarte au citron meringuée. Puis nous verrons comment retirer un produit de la vente, sans le supprimer.
+    actions:
+      - attendre: 0.5
+
+  # ------------------------------------------------------------------ partie 1 : créer le produit (≈ 3 min)
+  - partie: "1. Créer le produit"
+    texte: >
+      Ouvrez l'application Site Web. Cliquez sur Nouveau, en haut à droite, puis sur Produit.
+    actions:
+      - cliquer: '.o_app:has-text("Site Web")'
+      - attendre: 1
+      - cliquer: 'button:has-text("Nouveau")'
+      - attendre: 1
+      - cliquer: 'a:has-text("Vendez en ligne"), button:has-text("Vendez en ligne")'
+      - attendre: 1.5
+  - texte: >
+      Une petite fenêtre s'ouvre : tout l'essentiel du produit tient ici. Commencez par le nom.
+      Soyez précis : Tarte au citron meringuée, plutôt que Tarte numéro trois.
+    actions:
+      - taper_dans: {dans: '.modal [name="name"] input', texte: Tarte au citron meringuée}
+  - texte: >
+      Ajoutez la photo : cliquez sur l'image à droite, et choisissez la photo du gâteau sur votre ordinateur.
+    actions:
+      - survoler: '.modal [name="image_1920"]'
+      - attendre: 1
+      - deposer_fichier: {dans: '.modal input.o_input_file', fichier: images/produits/tarte-au-citron-meringuee.jpg}
+      - attendre: 1
+  - texte: >
+      Attention au prix. Odoo demande le prix de vente hors taxes : la boutique ajoutera la TVA de dix-huit pour cent.
+    actions:
+      - surligner: '.modal [name="list_price"]'
+        duree: 2.5
+  - texte: >
+      Pour vendre la tarte quinze mille francs CFA toutes taxes comprises, il faut saisir douze mille sept cent douze francs.
+    actions:
+      - illustration: images/eb-04-prix-ht-ttc.png
+        zoom: 1.02
+  - texte: >
+      Tapez douze mille sept cent douze. Odoo vous montre juste à côté le prix toutes taxes comprises :
+      quinze mille francs CFA. C'est le bon prix.
+    actions:
+      - taper_dans: {dans: '.modal [name="list_price"] input', texte: "12712"}
+      - touche: Tab          # le prix TTC ne s'affiche qu'en quittant le champ
+      - attendre: 1
+      - surligner: '.modal :text("toutes taxes comprises")'
+        duree: 3
+  - texte: >
+      La taxe de vente, dix-huit pour cent, est déjà remplie. Choisissez maintenant la catégorie de la boutique :
+      tapez Pâtis, puis choisissez Pâtisseries.
+    actions:
+      - surligner: '.modal [name="taxes_id"]'
+        duree: 1.5
+      - taper_dans: {dans: '.modal [name="public_categ_ids"] input', texte: Pâtis}
+      - attendre: 1
+      - cliquer: '.o-autocomplete--dropdown-item >> nth=0'
+  - texte: Cliquez sur Enregistrer.
+    actions:
+      - cliquer: '.modal button:has-text("Enregistrer")'
+      - attendre: 4
+
+  # ------------------------------------------------------------------ partie 2 : la fiche sur le site (≈ 2 min)
+  - partie: "2. La fiche sur le site"
+    texte: >
+      Odoo ouvre directement la page du produit sur votre site, avec l'éditeur. La photo, le nom et le prix sont en place.
+    actions:
+      - surligner: 'site >> #product_details'
+        duree: 3
+  - texte: >
+      Sous le nom, il reste une place pour la description. Cliquez dessus et écrivez ce que votre cliente veut savoir :
+      ce que c'est, combien de parts, et quand commander.
+    actions:
+      - remplacer_texte: {dans: 'site >> [data-oe-field="description_ecommerce"]', texte: "Pâte sablée, crème de citron frais et meringue dorée. 6 à 8 parts. Commandez la veille avant 18 h."}
+  - texte: Cliquez sur Sauvegarder.
+    actions:
+      - cliquer: '.o-snippets-top-actions button:has-text("Sauvegarder")'
+      - attendre: 3
+  - texte: >
+      Voilà la fiche telle que la verra votre cliente : la photo, le nom, la description,
+      et le prix toutes taxes comprises, quinze mille francs CFA.
+    actions:
+      - surligner: 'site >> #product_details'
+        duree: 4
+  - texte: >
+      En haut, l'interrupteur indique Publié : le produit est déjà en vente dans la boutique,
+      dans la catégorie Pâtisseries.
+    actions:
+      - surligner: '.o_website_publish_container'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 3 : retirer un produit de la vente (≈ 1 min 30)
+  - partie: "3. Retirer un produit de la vente"
+    texte: >
+      Il n'y a plus de pommes au marché cette semaine ? Retirez le chausson aux pommes de la vente, sans le supprimer.
+      Ouvrez sa fiche sur le site.
+    actions:
+      - aller: '/odoo/action-website.website_preview?path=%2Fshop%2Fchausson-aux-pommes-18'
+      - attendre: 2
+  - texte: >
+      Cliquez sur l'interrupteur Publié. Il passe à Non publié : vos clients ne voient plus ce produit.
+      Vous seul le voyez encore, avec sa fiche intacte.
+    actions:
+      - surligner: '.o_website_publish_container'
+        duree: 1.5
+      - cliquer: '.o_website_publish_container'
+      - attendre: 2
+  - texte: >
+      Quand les pommes reviennent, un seul clic remet le chausson en vente, avec sa photo, son prix et sa description.
+    actions:
+      - cliquer: '.o_website_publish_container'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ pièges (≈ 1 min)
+  - chapitre: Pièges fréquents
+    texte: >
+      Trois pièges fréquents. Premier piège : taper le prix toutes taxes comprises dans le prix de vente.
+      La tarte s'afficherait alors à dix-sept mille sept cents francs au lieu de quinze mille.
+      Regardez toujours le prix affiché à côté.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : une photo prise à la va-vite, sombre ou floue, sur un fond chargé.
+      Photographiez vos produits à la lumière du jour, sur un fond simple : c'est la photo qui fait vendre.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : supprimer un produit qu'on ne vend plus pour un temps. Dépubliez-le plutôt :
+      vous le remettrez en vente d'un clic, sans tout ressaisir.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice (≈ 1 min)
+  - chapitre: À retenir
+    texte: >
+      Retenons l'essentiel. Un : Nouveau, puis Produit, réunit le nom, la photo, le prix, la taxe et la catégorie.
+      Deux : le prix de vente est hors taxes ; vérifiez le prix toutes taxes comprises affiché à côté.
+      Trois : une description courte, avec les parts, les ingrédients et le délai.
+      Quatre : Publié ou Non publié, pour retirer un produit sans le supprimer.
+    apres: 1.2
+    actions:
+      - illustration: images/eb-04-recap.png
+        zoom: 1.02
+  - chapitre: Exercice
+    texte: >
+      À vous de jouer : ajoutez trois de vos produits à votre boutique, avec une vraie photo, le bon prix et une description.
+      Dans la prochaine capsule, nous organiserons le catalogue : catégories, tailles et options.
+    actions:
+      - attendre: 1

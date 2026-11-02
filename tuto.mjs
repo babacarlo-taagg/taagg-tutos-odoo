@@ -119,6 +119,8 @@ function chargerScenario(fichier) {
     for (const a of e.actions) {
       if ('illustration' in a && !fs.existsSync(path.resolve(path.dirname(fichier), a.illustration)))
         arreter(`Étape ${i + 1} : image introuvable « ${a.illustration} » (chemin relatif au scénario).`);
+      if ('deposer_fichier' in a && !fs.existsSync(path.resolve(path.dirname(fichier), a.deposer_fichier.fichier)))
+        arreter(`Étape ${i + 1} : fichier introuvable « ${a.deposer_fichier.fichier} » (chemin relatif au scénario).`);
     }
   });
   sc.ecran = sc.ecran || [1600, 900];
@@ -441,6 +443,13 @@ class Realisateur {
       // vérifier que le texte est bien entré (sinon la vidéo montrerait un faux résultat sans erreur)
       const debut = String(texte).slice(0, 20);
       if (!(await this.texteDe(dans, debut))) throw new Error(`le texte « ${debut}… » n'a pas été écrit dans ${dans}`);
+    } else if ('deposer_fichier' in a) {
+      // la fenêtre « choisir un fichier » de l'ordinateur ne se filme pas : on dépose le fichier directement
+      // dans le champ (penser à survoler la zone de l'image juste avant, pour que le geste se voie)
+      const { dans, fichier } = a.deposer_fichier;
+      await this.loc(dans).setInputFiles(path.resolve(this.dossierScenario, fichier));
+      await pause(800);
+      await attendreOdoo(p, 8000);
     } else if ('taper_dans' in a) {
       // tape dans n'importe quel champ visé par un sélecteur (recherche d'une fenêtre, etc.)
       const { dans, texte } = a.taper_dans;

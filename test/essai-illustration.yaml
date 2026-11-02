@@ -21,3 +21,4 @@ etapes:
       - surligner: 'site >> #wrap h1'
         duree: 1
       - taper_dans: {dans: '.panneau .recherche', texte: produit}
+      - deposer_fichier: {dans: '.panneau input.fichier', fichier: images/essai-illustration.png}

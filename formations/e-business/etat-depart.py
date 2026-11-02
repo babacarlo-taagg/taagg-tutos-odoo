@@ -333,7 +333,28 @@ def eb_03():
     pages_de_confiance_a_refaire()
 
 
-CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03}
+NOUVEAUX_PRODUITS_EB04 = ['Tarte au citron meringuée', 'Tarte test EB04']   # créés pendant les prises d'EB-04
+
+
+def produits_eb04_a_refaire():
+    """Archive les produits créés par les prises d'EB-04 et republie le chausson (dépublié pendant la capsule)."""
+    print("Produits : remis comme avant EB-04")
+    nouveaux = odoo('product.template', 'search', [('name', 'in', NOUVEAUX_PRODUITS_EB04)])
+    ecrire('product.template', nouveaux, {'active': False, 'is_published': False},
+           f'{len(nouveaux)} produit(s) des prises précédentes archivé(s)')
+    chausson = odoo('product.template', 'search', [('name', '=', 'Chausson aux pommes')])
+    ecrire('product.template', chausson, {'is_published': True}, 'Chausson aux pommes republié')
+
+
+def eb_04():
+    """EB-04 · Mettre ses produits en ligne : la boutique de la fin d'EB-03 (pages À propos, Livraison, Contact
+    et pied de page corrigés restent tels quels), sans la Tarte au citron meringuée que la capsule crée."""
+    eb_01()
+    site_fin_eb02()
+    produits_eb04_a_refaire()
+
+
+CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04}
 
 if __name__ == '__main__':
     code = next((a.upper() for a in sys.argv[1:] if not a.startswith('--')), None)
