@@ -148,7 +148,7 @@ etapes:
       Le bandeau Partiel le rappelle : la facture est en partie soldée, par l'avoir. Relier une facture à ce qui la solde,
       un avoir ou un paiement, c'est ce qu'on appelle le lettrage.
     actions:
-      - surligner: '.o_widget_web_ribbon'
+      - surligner: '.o_form_view .ribbon'
         duree: 4
   - texte: >
       Dans l'historique, à droite, Odoo note aussi que la facture a été extournée, avec un lien vers l'avoir.
