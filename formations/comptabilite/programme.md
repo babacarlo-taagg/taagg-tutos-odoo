@@ -28,7 +28,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 
 | Code | Capsule | Ce qu'on apprend | Écrans | État |
 |---|---|---|---|---|
-| CPT-10 | Créer et valider une facture client | lignes, taxes, échéance, validation, envoi, l'écriture générée | Clients › Factures clients | ☐ |
+| CPT-10 | Créer et valider une facture client | lignes, taxes, échéance, validation, envoi, l'écriture générée | Clients › Factures clients | 🎙 5:34 |
 | CPT-11 | Avoirs et annulation | rectifier une erreur : avoir total ou partiel, remettre en brouillon | Clients › Avoirs | ☐ |
 | CPT-12 | Encaisser un paiement client | paiement total, partiel, plusieurs factures, escompte | Clients › Paiements | ☐ |
 | CPT-13 | Relancer les clients **[E]** | niveaux de relance, lettre et e-mail automatiques, échéancier clients | Niveaux de relance, Échéancier clients | ☐ |
@@ -113,6 +113,11 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
   croissant (701100). Remis à zéro par etat-depart.py. **Parcours 1 terminé** (CPT-01 à CPT-09).
 - Base de tournage : le 1er novembre 2026, la société a été renommée « © Les Délices de Maïmouna » (hors tournage).
   Les scénarios CPT-01, 02 et 07 surlignent l'ancien nom : à adapter avant de les retourner.
+  (2 novembre : le nom d'origine « correction les délices de maimouna » est revenu.)
+- **CPT-10** (2 novembre 2026) : version finale, 5 min 34 s, 34 étapes, ≈ 4 800 caractères de voix.
+  Client « Traiteur Saveurs du Plateau » préparé par l'API (Odoo 19 n'a pas de création en un clic depuis la facture),
+  facture INV/2026/00002 (59 000 F) validée à l'écran puis remise en brouillon et supprimée par etat-depart.py.
+  Une phrase (étape 22) régénérée : la voix clonée avait dit « sont qui sont ».
 
 ## Ordre de tournage proposé
 
