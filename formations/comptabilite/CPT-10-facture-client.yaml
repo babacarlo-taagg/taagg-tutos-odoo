@@ -120,12 +120,13 @@ etapes:
       - surligner_champ: name
         duree: 3.5
   - texte: >
-      La date du jour s'est posée, et l'échéance a été calculée : trente jours plus tard.
+      La date du jour s'est posée. Et la condition trente jours fixe l'échéance : trente jours plus tard.
+      C'est cette date qui dira, plus tard, si le client est en retard.
     actions:
       - surligner_champ: invoice_date
         duree: 2
-      - surligner_champ: invoice_date_due
-        duree: 2.5
+      - surligner_champ: invoice_payment_term_id
+        duree: 3
 
   # ------------------------------------------------------------------ partie 4 : l'écriture
   - partie: "4. Ce que la validation a enregistré"
@@ -198,7 +199,7 @@ etapes:
       - attendre: 0.5
   - texte: >
       En brouillon, on relit et on corrige. À la confirmation, la facture reçoit son numéro,
-      sa date, son échéance, et son écriture comptable.
+      sa date, et son écriture comptable ; la condition de paiement fixe son échéance.
     actions:
       - attendre: 0.5
   - texte: >
