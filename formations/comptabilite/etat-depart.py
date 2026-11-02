@@ -137,8 +137,30 @@ def cpt_09():
     return len(patisseries), len(intrants), len(brouillons)
 
 
+def cpt_10():
+    # le client « Traiteur Saveurs du Plateau » et sa facture validée (INV/2026/00002) sont créés à l'écran
+    # on retire aussi les factures brouillon laissées par les capsules précédentes (et le client de CPT-06)
+    retires = 0
+    for nom in ['Traiteur Saveurs du Plateau', 'Pâtisserie de Banjul']:
+        clients = odoo('res.partner', 'search', [['name', '=', nom]], context={'active_test': False})
+        if not clients:
+            continue
+        pieces = odoo('account.move', 'search', [['partner_id', 'in', clients]])
+        validees = odoo('account.move', 'search', [['id', 'in', pieces], ['state', '!=', 'draft']])
+        if validees:  # dernière facture de la séquence : on peut la remettre en brouillon puis la supprimer
+            odoo('account.move', 'button_draft', validees)
+        if pieces:
+            odoo('account.move', 'unlink', pieces)
+        odoo('res.partner', 'unlink', clients)
+        retires += len(pieces)
+    brouillons = odoo('account.move', 'search', [['move_type', '=', 'out_invoice'], ['state', '=', 'draft']])
+    if brouillons:
+        odoo('account.move', 'unlink', brouillons)
+    return retires, len(brouillons)
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''

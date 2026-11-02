@@ -1,0 +1,209 @@
+# CPT-10 · Créer et valider une facture client
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-10`) :
+#   pas de client « Traiteur Saveurs du Plateau », aucune facture client brouillon ;
+#   la seule facture validée est INV/2026/00001 (la prochaine sera donc INV/2026/00002).
+# Ce que la capsule crée : le client et sa facture validée INV/2026/00002 (2 fraisiers + 50 macarons,
+#   50 000 F HT, 9 000 F TVA, 59 000 F TTC). etat-depart.py la remet en brouillon puis la supprime.
+titre: Créer et valider une facture client
+sous_titre: Formation Comptabilité Odoo · CPT-10
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : avoirs et annulation"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans le deuxième parcours de la formation : les ventes et les clients.
+      Pour commencer, le geste le plus important de la comptabilité : la facture client.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez créer une facture, la relire, la valider,
+      et comprendre ce qu'Odoo enregistre dans les comptes au moment de la validation.
+    actions:
+      - attendre: 1
+  - texte: >
+      Le premier parcours a tout préparé : la société, les taxes, les journaux, les conditions de paiement,
+      les comptes des produits. Une facture va maintenant mettre tout cela en mouvement.
+    actions:
+      - surligner: '.o_kanban_record:has-text("Ventes")'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 1 : créer la facture
+  - partie: "1. Créer la facture"
+    texte: >
+      Un traiteur du Plateau commande des pâtisseries pour une réception. Ouvrez le menu Clients, puis Factures clients.
+    actions:
+      - ouvrir_menu: Clients
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Factures clients")'
+  - texte: >
+      La liste montre les factures déjà émises : pour l'instant, celle de la Boutique Les Almadies. Cliquez sur Nouveau.
+    actions:
+      - surligner: '.o_list_renderer'
+        duree: 2.5
+      - bouton: Nouveau
+  - texte: >
+      Commencez toujours par le client. Le traiteur est nouveau : tapez son nom, Traiteur Saveurs du Plateau,
+      puis cliquez sur Créer. La fiche est créée en un clic, on la complétera plus tard.
+    actions:
+      - choisir: {champ: partner_id, valeur: Traiteur Saveurs du Plateau}
+  - texte: >
+      La date de facture est vide : Odoo mettra la date du jour au moment de la validation.
+      Pour l'échéance, choisissons une condition de paiement : trente jours.
+    actions:
+      - surligner_champ: invoice_date
+        duree: 2.5
+      - choisir: {champ: invoice_payment_term_id, valeur: 30 jours}
+
+  # ------------------------------------------------------------------ partie 2 : les lignes
+  - partie: "2. Les lignes de la facture"
+    texte: >
+      Ajoutons les produits. Cliquez sur Ajouter une ligne, et choisissez le fraisier.
+    actions:
+      - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_field_x2many_list_row_add a'
+      - choisir: {champ: product_id, valeur: Fraisier}
+  - texte: >
+      Deux fraisiers, à quinze mille francs l'unité, hors taxes.
+    actions:
+      - champ: quantity
+        taper: "2"
+      - champ: price_unit
+        taper: "15000"
+      - touche: Tab
+  - texte: Deuxième ligne, cinquante macarons, à quatre cents francs.
+    actions:
+      - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_field_x2many_list_row_add a'
+      - choisir: {champ: product_id, valeur: Macaron}
+      - champ: quantity
+        taper: "50"
+      - champ: price_unit
+        taper: "400"
+      - touche: Tab
+  - texte: >
+      Regardez ce qu'Odoo a rempli tout seul : la taxe, dix-huit pour cent, venue de la fiche produit,
+      et le compte de vente, venu de la catégorie, comme dans la capsule précédente.
+    actions:
+      - surligner: ':nth-match(.o_field_widget[name="invoice_line_ids"] .o_data_row, 1) td[name="tax_ids"]'
+        duree: 2.5
+      - surligner: ':nth-match(.o_field_widget[name="invoice_line_ids"] .o_data_row, 1) td[name="account_id"]'
+        duree: 2.5
+  - texte: >
+      En bas, les totaux : cinquante mille francs hors taxes, neuf mille francs de TVA,
+      soit cinquante-neuf mille francs à payer.
+    actions:
+      - surligner_champ: tax_totals
+        duree: 4.5
+
+  # ------------------------------------------------------------------ partie 3 : valider
+  - partie: "3. Relire et valider"
+    texte: >
+      Pour l'instant, la facture est en brouillon : elle n'a pas de numéro et n'existe pas encore en comptabilité.
+      On peut tout modifier. C'est le moment de relire : le client, les quantités, les prix, les taxes.
+    actions:
+      - surligner: '.o_statusbar_status'
+        duree: 3
+  - texte: Tout est juste. Cliquez sur Confirmer.
+    actions:
+      - cliquer: '.o_statusbar_buttons button[name="action_post"]'
+  - texte: >
+      La facture est comptabilisée. Elle reçoit son numéro, I-N-V, deux mille vingt-six, deux :
+      la suite de la facture des Almadies, sans trou.
+    actions:
+      - surligner_champ: name
+        duree: 3.5
+  - texte: >
+      La date du jour s'est posée, et l'échéance a été calculée : trente jours plus tard.
+    actions:
+      - surligner_champ: invoice_date
+        duree: 2
+      - surligner_champ: invoice_date_due
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 4 : l'écriture
+  - partie: "4. Ce que la validation a enregistré"
+    texte: Ouvrez l'onglet Écritures comptables.
+    actions:
+      - onglet: Écritures comptables
+  - texte: >
+      Le client doit cinquante-neuf mille francs : le compte Clients, quatre cent onze mille cent, est débité.
+    actions:
+      - surligner: '.o_notebook .tab-pane.active .o_data_row:has-text("411100")'
+        duree: 3.5
+  - texte: >
+      En face, les ventes sont créditées de cinquante mille francs, chaque produit dans son compte,
+      et la TVA facturée de neuf mille francs, que la boutique devra reverser à l'État.
+    actions:
+      - surligner: '.o_notebook .tab-pane.active .o_list_renderer'
+        duree: 5
+  - texte: >
+      Débits et crédits sont égaux. C'est cette écriture qui alimente la balance, la déclaration de TVA,
+      et le suivi de ce que le client doit.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 5 : après la validation
+  - partie: "5. Après la validation"
+    texte: >
+      En haut, de nouveaux boutons sont apparus. Envoyer, pour l'adresser au client par e-mail.
+      Imprimer, pour la version papier. Payer, pour enregistrer le règlement.
+      Et Avoir, pour la corriger. Chacun aura sa capsule.
+    actions:
+      - surligner: '.o_statusbar_buttons'
+        duree: 5
+  - texte: >
+      Revenons à la liste des factures. La nouvelle facture y figure, avec son statut : non payée.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Factures clients")'
+      - surligner: '.o_data_row:has-text("Traiteur Saveurs du Plateau")'
+        duree: 3.5
+  - texte: >
+      Et sur le tableau de bord, la carte Ventes compte désormais deux factures non payées.
+    actions:
+      - cliquer: '.o_menu_sections a:has-text("Tableau de bord"), .o_menu_sections .dropdown-toggle:has-text("Tableau de bord")'
+      - surligner: '.o_kanban_record:has-text("Ventes")'
+        duree: 4
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : valider trop vite. Une facture comptabilisée ne se modifie plus
+      librement. Relisez tout pendant qu'elle est en brouillon.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : vouloir supprimer une facture validée. Son numéro est déjà attribué.
+      Pour l'annuler ou la corriger, on fait un avoir : c'est le sujet de la prochaine capsule.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : saisir les lignes avant le client. Les taxes et les comptes dépendent du client,
+      par exemple de sa position fiscale. Choisissez toujours le client en premier.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Une facture se crée dans Clients, Factures clients : d'abord le client,
+      puis les lignes, avec leur quantité et leur prix. Odoo complète les taxes et les comptes.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      En brouillon, on relit et on corrige. À la confirmation, la facture reçoit son numéro,
+      sa date, son échéance, et son écriture comptable.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : facturez à votre client trois gâteaux d'anniversaire, avec une échéance à quinze jours,
+      validez la facture, et retrouvez son écriture comptable.
+      Dans la prochaine capsule, nous verrons comment corriger une facture avec un avoir. À tout de suite !
+    actions:
+      - attendre: 1
