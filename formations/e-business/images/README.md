@@ -17,6 +17,9 @@ Règles : compétence `tuto-odoo-illustrations`. Babacar valide chaque image ava
 | `eb-04-fiche-produit.png` | EB-04 | les 4 éléments d'une fiche produit qui donne envie | ☐ |
 | `eb-04-prix-ht-ttc.png` | EB-04 | 12 712 F HT + TVA 18 % = 15 000 F TTC | ☐ |
 | `eb-04-recap.png` | EB-04 | les 4 points à retenir | ☐ |
+| `eb-05-catalogue.png` | EB-05 | les 4 outils : catégories, variantes, filtres, ordre | ☐ |
+| `eb-05-variantes.png` | EB-05 | 6, 8, 12 parts : 24 000 / 30 000 / 40 000 F, suppléments HT | ☐ |
+| `eb-05-recap.png` | EB-05 | les 4 points à retenir | ☐ |
 | `logo-delices-maimouna.png` | toutes | logo fictif de la boutique d'exemple (posé sur le site par `etat-depart.py`) | ☐ |
 
 ## Images IA (sans texte)

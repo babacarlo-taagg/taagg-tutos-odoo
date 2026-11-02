@@ -1,0 +1,281 @@
+# EB-05 · Organiser son catalogue
+# État de départ : python3 formations/e-business/etat-depart.py EB-05
+#   la boutique de la fin d'EB-04 (Tarte au citron meringuée publiée, dans Pâtisseries), 3 catégories
+#   (Gâteaux, Pâtisseries, Viennoiseries), pas d'attribut « Nombre de parts », gâteau d'anniversaire en 15e position.
+# Pendant la capsule : catégorie Tartes créée, la tarte y est ajoutée ; attribut Nombre de parts (6, 8, 12 parts,
+#   suppléments 5 085 et 13 559 F HT = 6 000 et 16 000 F TTC) ; 3 variantes du Gâteau d'anniversaire ;
+#   le gâteau poussé en tête de la boutique ; ruban « Nouveau ! » sur la tarte. Relancer etat-depart.py avant chaque prise.
+titre: Organiser son catalogue
+sous_titre: Formation E-Business Odoo · EB-05
+depart: /odoo
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG School: l'école Tag
+  TAAGG: Tag
+  EB-05: capsule cinq
+  eCommerce: e-commerce
+  E-Business: i-business
+  F CFA: francs CFA
+  FCFA: francs CFA
+  " F ": " francs "
+  TTC: té-té-cé
+  HT: hache-té
+fin:
+  message: "Prochaine capsule : le tunnel d'achat"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche (≈ 45 s)
+  - chapitre: Introduction
+    texte: >
+      Bienvenue dans la cinquième capsule de la formation E-Business.
+      Vos produits sont en ligne. Maintenant, rangeons la boutique, pour que votre cliente trouve vite ce qu'elle cherche.
+    actions:
+      - attendre: 1
+  - texte: >
+      Quatre outils vont nous aider : des catégories, comme les rayons d'un magasin ; des variantes, pour vendre
+      un même gâteau en plusieurs tailles ; des filtres ; et l'ordre d'affichage, pour mettre vos produits phares en premier.
+    actions:
+      - illustration: images/eb-05-catalogue.png
+        zoom: 1.02
+
+  # ------------------------------------------------------------------ partie 1 : les catégories (≈ 2 min)
+  - partie: "1. Les catégories de la boutique"
+    texte: >
+      Ouvrez l'application Site Web. Dans le menu eCommerce, choisissez Catégories d'eCommerce.
+    actions:
+      - cliquer: '.o_app:has-text("Site Web")'
+      - attendre: 1
+      - ouvrir_menu: eCommerce
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Catégories d''eCommerce")'
+      - attendre: 1
+  - texte: >
+      Voici les trois rayons de la boutique : Gâteaux, Pâtisseries et Viennoiseries.
+      Les tartes se perdent au milieu des pâtisseries : créons-leur un rayon. Cliquez sur Nouveau.
+    actions:
+      - surligner: '.o_list_renderer tbody'
+        duree: 2.5
+      - cliquer: '.o_control_panel button:has-text("Nouveau")'
+      - attendre: 1
+  - texte: Tapez le nom de la catégorie, Tartes, puis enregistrez.
+    actions:
+      - champ: name
+        taper: Tartes
+      - enregistrer: oui
+      - attendre: 1
+  - texte: >
+      Revenez à la liste. Les catégories s'affichent dans la boutique dans cet ordre ;
+      pour le changer, faites glisser la poignée à gauche du nom.
+    actions:
+      - cliquer: '.o_breadcrumb a:has-text("Catégories")'
+      - attendre: 1.5
+      - survoler: '.o_data_row:has-text("Tartes") .o_row_handle'
+      - attendre: 1.5
+  - texte: >
+      Il reste à ranger la tarte au citron dans ce nouveau rayon. Ouvrez eCommerce, Produits, et cherchez la tarte.
+    actions:
+      - ouvrir_menu: eCommerce
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Produits") >> nth=0'
+      - attendre: 1
+      - rechercher: Tarte au citron
+      - cliquer: '.o_kanban_record:has-text("Tarte au citron"), .o_data_row:has-text("Tarte au citron")'
+      - attendre: 1
+  - texte: >
+      Dans l'onglet Ventes, la tarte est dans la catégorie Pâtisseries. Ajoutez Tartes, sans retirer Pâtisseries :
+      un produit peut être rangé dans plusieurs rayons. Enregistrez.
+    actions:
+      - onglet: Ventes
+      - surligner_champ: public_categ_ids
+        duree: 2
+      - choisir: {champ: public_categ_ids, valeur: Tartes}
+      - attendre: 1
+      - enregistrer: oui
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 2 : les variantes (≈ 3 min)
+  - partie: "2. Un gâteau en plusieurs tailles"
+    texte: >
+      Sur WhatsApp, vos clientes demandent toujours : il fait combien de parts ? Le gâteau d'anniversaire existe
+      en six, huit ou douze parts. Inutile de créer trois produits : une seule fiche suffit, avec des variantes.
+    actions:
+      - illustration: images/eb-05-variantes.png
+        zoom: 1.02
+  - texte: >
+      D'abord, on décrit les tailles possibles. Dans le menu eCommerce, ouvrez Attributs, puis cliquez sur Nouveau.
+    actions:
+      - ouvrir_menu: eCommerce
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Attributs")'
+      - attendre: 1
+      - cliquer: '.o_control_panel button:has-text("Nouveau")'
+      - attendre: 1
+  - texte: >
+      Nommez l'attribut : Nombre de parts. Pour l'affichage, choisissez Boutons carrés :
+      la cliente verra un bouton par taille.
+    actions:
+      - champ: name
+        taper: Nombre de parts
+      - cliquer: '[name="display_type"] label:has-text("Boutons carrés")'
+      - attendre: 1
+  - texte: >
+      Laissez Filtre eCommerce sur Visible : nous verrons pourquoi dans un instant.
+    actions:
+      - surligner_champ: visibility
+        duree: 2.5
+  - texte: "Ajoutez maintenant les trois valeurs. Première ligne : six parts, sans supplément."
+    actions:
+      - cliquer: '[name="value_ids"] a:has-text("Ajouter une ligne")'
+      - taper_dans: {dans: '[name="value_ids"] .o_selected_row [name="name"] input', texte: 6 parts}
+  - texte: >
+      Deuxième ligne : huit parts. Le supplément se saisit hors taxes, comme le prix :
+      pour six mille francs de plus toutes taxes comprises, tapez cinq mille quatre-vingt-cinq.
+    actions:
+      - cliquer: '[name="value_ids"] a:has-text("Ajouter une ligne")'
+      - taper_dans: {dans: '[name="value_ids"] .o_selected_row [name="name"] input', texte: 8 parts}
+      - taper_dans: {dans: '[name="value_ids"] .o_selected_row [name="default_extra_price"] input', texte: "5085"}
+  - texte: >
+      Troisième ligne : douze parts, avec seize mille francs de plus toutes taxes comprises,
+      soit treize mille cinq cent cinquante-neuf hors taxes. Enregistrez.
+    actions:
+      - cliquer: '[name="value_ids"] a:has-text("Ajouter une ligne")'
+      - taper_dans: {dans: '[name="value_ids"] .o_selected_row [name="name"] input', texte: 12 parts}
+      - taper_dans: {dans: '[name="value_ids"] .o_selected_row [name="default_extra_price"] input', texte: "13559"}
+      - enregistrer: oui
+      - attendre: 1
+  - texte: >
+      Ensuite, on relie ces tailles au gâteau. Ouvrez eCommerce, Produits, et la fiche du gâteau d'anniversaire.
+    actions:
+      - ouvrir_menu: eCommerce
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Produits") >> nth=0'
+      - attendre: 1
+      - rechercher: Gâteau d'anniversaire
+      - cliquer: '.o_kanban_record:has-text("Gâteau d''anniversaire"), .o_data_row:has-text("Gâteau d''anniversaire")'
+      - attendre: 1
+  - texte: >
+      Dans l'onglet Attributs et Variantes, cliquez sur Ajouter une ligne, et choisissez Nombre de parts.
+    actions:
+      - onglet: Attributs & Variantes
+      - cliquer: '[name="attribute_line_ids"] a:has-text("Ajouter une ligne")'
+      - taper_dans: {dans: '[name="attribute_line_ids"] .o_selected_row [name="attribute_id"] input', texte: Nombre}
+      - attendre: 1
+      - cliquer: '.o-autocomplete--dropdown-item:has-text("Nombre de parts")'
+      - attendre: 0.5
+  - texte: "Dans Valeurs, choisissez les trois tailles : six, huit et douze parts."
+    actions:
+      - cliquer: '[name="attribute_line_ids"] .o_selected_row [name="value_ids"] input'
+      - cliquer: '.o-autocomplete--dropdown-item >> text="6 parts"'
+      - cliquer: '[name="attribute_line_ids"] .o_selected_row [name="value_ids"] input'
+      - cliquer: '.o-autocomplete--dropdown-item >> text="8 parts"'
+      - cliquer: '[name="attribute_line_ids"] .o_selected_row [name="value_ids"] input'
+      - cliquer: '.o-autocomplete--dropdown-item >> text="12 parts"'
+      - attendre: 0.5
+  - texte: >
+      Enregistrez. En haut, Odoo compte maintenant trois variantes : une par taille, sur la même fiche.
+    actions:
+      - enregistrer: oui
+      - attendre: 1.5
+      - surligner: '.oe_stat_button:has-text("Variantes")'
+        duree: 3
+  - texte: >
+      Allons voir le résultat sur le site. Cliquez sur Aller au Site Web.
+    actions:
+      - cliquer: '.oe_stat_button:has-text("Site Web")'
+      - attendre: 4
+  - texte: >
+      Sous le prix, trois boutons : six, huit et douze parts, avec le supplément toutes taxes comprises.
+      Votre cliente clique sur douze parts : le prix passe à quarante mille francs.
+    actions:
+      - surligner: 'site >> .js_product'
+        duree: 2.5
+      - cliquer: 'site >> label:has-text("12 parts")'
+      - attendre: 1.5
+      - surligner: 'site >> .product_price'
+        duree: 2
+
+  # ------------------------------------------------------------------ partie 3 : les filtres (≈ 1 min)
+  - partie: "3. Les filtres"
+    texte: >
+      Ouvrez maintenant la boutique. À gauche, un filtre Nombre de parts est apparu tout seul :
+      c'est l'option Visible de l'attribut. En haut, la nouvelle catégorie Tartes a pris sa place.
+    actions:
+      - cliquer: 'site >> header a:has-text("Boutique")'
+      - attendre: 3
+      - surligner: 'site >> #products_grid_before'
+        duree: 2.5
+      - surligner: 'site >> a:has-text("Tartes")'
+        duree: 2
+  - texte: >
+      La cliente qui veut nourrir douze personnes clique sur douze parts :
+      la boutique ne lui montre plus que les gâteaux qui existent dans cette taille.
+    actions:
+      - cliquer: 'site >> #products_grid_before label:has-text("12 parts")'
+      - attendre: 3
+  - texte: Cliquez à nouveau sur douze parts pour retirer le filtre.
+    actions:
+      - cliquer: 'site >> #products_grid_before label:has-text("12 parts")'
+      - attendre: 3
+
+  # ------------------------------------------------------------------ partie 4 : l'ordre d'affichage (≈ 1 min 30)
+  - partie: "4. L'ordre d'affichage"
+    texte: >
+      Dernier réglage : l'ordre. Votre produit phare, le gâteau d'anniversaire, est perdu en bas de la boutique.
+      Cliquez sur Modifier, en haut à droite.
+    actions:
+      - cliquer: '.o_edit_website_container a, .o_edit_website_container button, .o_menu_systray button:has-text("Modifier")'
+      - attendre: 4
+  - texte: >
+      Cliquez sur le gâteau d'anniversaire. À droite, sous Produit, les flèches déplacent le produit dans la boutique.
+      La double flèche le pousse tout en haut.
+    actions:
+      - cliquer: 'site >> .oe_product:has-text("Gâteau d''anniversaire") .oe_product_image'
+      - attendre: 1.5
+      - surligner: '[data-action-id="changeSequence"][data-action-value="top"]'
+        duree: 2
+      - cliquer: '[data-action-id="changeSequence"][data-action-value="top"]'
+      - attendre: 3
+  - texte: >
+      Le gâteau est maintenant le premier produit que voit votre cliente.
+    actions:
+      - defiler: 'site >> .oe_product:has-text("Gâteau d''anniversaire")'
+      - attendre: 1.5
+  - texte: Cliquez sur Sauvegarder.
+    actions:
+      - cliquer: '.o-snippets-top-actions button:has-text("Sauvegarder")'
+      - attendre: 3
+
+  # ------------------------------------------------------------------ pièges (≈ 1 min)
+  - chapitre: Pièges fréquents
+    texte: >
+      Trois pièges fréquents. Premier piège : créer un produit par taille. Vous auriez trois photos,
+      trois fiches et trois prix à tenir à jour. Une fiche avec des variantes, c'est plus simple.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : saisir le supplément toutes taxes comprises. Comme le prix, il est hors taxes :
+      vérifiez le supplément affiché sur le site.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : trop de catégories. Trois à six rayons suffisent pour une petite boutique ;
+      au-delà, votre cliente se perd.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice (≈ 1 min)
+  - chapitre: À retenir
+    texte: >
+      Retenons l'essentiel. Un : les catégories d'eCommerce sont les rayons de la boutique ; un produit peut être dans plusieurs.
+      Deux : les attributs décrivent les tailles, avec un supplément hors taxes pour chacune.
+      Trois : un attribut visible devient un filtre dans la boutique.
+      Quatre : en modifiant la boutique, cliquez sur un produit pour le pousser en haut.
+    apres: 1.2
+    actions:
+      - illustration: images/eb-05-recap.png
+        zoom: 1.02
+  - chapitre: Exercice
+    texte: >
+      À vous de jouer : créez les catégories de votre boutique, et ajoutez des tailles à l'un de vos produits.
+      Dans la prochaine capsule, nous suivrons votre cliente dans le tunnel d'achat, du panier jusqu'au paiement.
+    actions:
+      - attendre: 1
