@@ -6,7 +6,8 @@
 
 Lit ODOO_URL, ODOO_BASE, ODOO_LOGIN_API et ODOO_CLE_API dans le .env du dépôt.
 Chaque fonction peut être relancée autant de fois qu'on veut : elle remet le même état.
-On ne supprime rien : on dépublie, on annule ou on archive.
+On ne supprime rien : on dépublie, on annule ou on archive (seule exception : les fiches que les prises
+d'une capsule créent elles-mêmes, ex. la catégorie et l'attribut d'EB-05).
 """
 import base64
 import json
@@ -354,7 +355,76 @@ def eb_04():
     produits_eb04_a_refaire()
 
 
-CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04}
+# Ordre d'affichage de la boutique au début d'EB-05 (« En vedette ») : la capsule remonte le gâteau d'anniversaire
+ORDRE_BOUTIQUE = [
+    'Pain aux raisins', 'Millefeuille', 'Opéra', 'Paris-Brest', 'Tartelette aux fruits', 'Éclair au café',
+    'Éclair au chocolat', 'Chausson aux pommes', 'Croissant', 'Croissant aux amandes',
+    'Pain au chocolat (Chocolatine)', 'Religieuse', 'Forêt Noire', 'Fraisier', "Gâteau d'anniversaire", 'Macaron',
+    'Moelleux au chocolat', 'Tarte au citron meringuée',
+]
+TARTE = {  # la tarte telle qu'elle est à la fin d'EB-04
+    'name': 'Tarte au citron meringuée', 'list_price': 12712, 'standard_price': 6500, 'taxes_id': [(6, 0, [5])],
+    'is_published': True, 'website_ribbon_id': False,
+    'description_ecommerce': '<p>Pâte sablée, crème de citron frais et meringue dorée. 6 à 8 parts. '
+                             'Commandez la veille avant 18 h.</p>',
+}
+FORMATEUR = 27  # contact « Formateur TAAGG » (seul auteur qu'on laisse dans l'historique des fiches filmées)
+
+
+def catalogue_eb05_a_refaire():
+    """Défait ce que les prises d'EB-05 créent : catégorie Tartes, attribut Nombre de parts (et les variantes
+    du gâteau), ruban, ordre de la boutique. Ce sont des fiches créées par la capsule : on les supprime."""
+    print('Catalogue : remis comme à la fin d’EB-04')
+    if not VOIR:
+        # la plus récente (celle de la prise finale d'EB-04) ; les tartes des prises d'essai restent archivées
+        tarte = odoo('product.template', 'search', [('name', '=', TARTE['name'])], order='id desc',
+                     context=dict(CTX, active_test=False))
+        if tarte[1:]:
+            odoo('product.template', 'write', tarte[1:], {'active': False, 'is_published': False})
+        valeurs = dict(TARTE, active=True, public_categ_ids=[(6, 0, odoo('product.public.category', 'search', [('name', '=', 'Pâtisseries')]))])
+        photo = image('produits/tarte-au-citron-meringuee.jpg')
+        if photo:
+            valeurs['image_1920'] = photo
+        if tarte:
+            odoo('product.template', 'write', tarte[:1], valeurs)
+        else:
+            odoo('product.template', 'create', valeurs, context=dict(CTX, tracking_disable=True))
+    print('  · Tarte au citron meringuée : publiée, Pâtisseries, sans ruban')
+    attributs = odoo('product.attribute', 'search', [('name', '=', 'Nombre de parts')], context=dict(CTX, active_test=False))
+    lignes = odoo('product.template.attribute.line', 'search', [('attribute_id', 'in', attributs)]) if attributs else []
+    print(f'  · {len(lignes)} ligne(s) de variantes et {len(attributs)} attribut « Nombre de parts » supprimés')
+    if not VOIR and lignes:
+        odoo('product.template.attribute.line', 'unlink', lignes)
+    if not VOIR and attributs:
+        odoo('product.attribute', 'unlink', attributs)
+    tartes = odoo('product.public.category', 'search', [('name', '=', 'Tartes')])
+    print(f'  · {len(tartes)} catégorie « Tartes » supprimée')
+    if not VOIR and tartes:
+        odoo('product.public.category', 'unlink', tartes)
+    par_nom = {p['name']: p['id'] for p in odoo('product.template', 'search_read', [('name', 'in', ORDRE_BOUTIQUE)], fields=['name'])}
+    print('  · ordre de la boutique remis (le gâteau d’anniversaire en 15e position)')
+    for rang, nom in enumerate(ORDRE_BOUTIQUE):
+        if nom in par_nom and not VOIR:
+            odoo('product.template', 'write', [par_nom[nom]], {'website_sequence': 10000 + 10 * rang})
+    # Les fiches ouvertes à l'écran ne gardent dans leur historique que les messages du Formateur TAAGG
+    # (les autres sont signés du compte de Babacar, une vraie personne).
+    filmees = [par_nom[n] for n in ("Gâteau d'anniversaire", TARTE['name']) if n in par_nom]
+    messages = odoo('mail.message', 'search', [('model', '=', 'product.template'), ('res_id', 'in', filmees),
+                                               ('author_id', '!=', FORMATEUR)])
+    print(f'  · {len(messages)} message(s) d’historique retirés des fiches filmées')
+    if not VOIR and messages:
+        odoo('mail.message', 'unlink', messages)
+
+
+def eb_05():
+    """EB-05 · Organiser son catalogue : la boutique de la fin d'EB-04 (avec la Tarte au citron meringuée),
+    sans la catégorie Tartes, sans l'attribut Nombre de parts, dans l'ordre ORDRE_BOUTIQUE."""
+    eb_01()
+    site_fin_eb02()
+    catalogue_eb05_a_refaire()
+
+
+CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05}
 
 if __name__ == '__main__':
     code = next((a.upper() for a in sys.argv[1:] if not a.startswith('--')), None)
