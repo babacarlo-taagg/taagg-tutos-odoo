@@ -157,9 +157,16 @@ etapes:
       - surligner: '.o-mail-Chatter, .o_mail_thread'
         duree: 3.5
   - texte: >
-      Dans la liste des factures clients, l'avoir apparaît aussi, en négatif, avec son propre numéro.
+      Dans la liste des factures clients, la facture du traiteur affiche maintenant le statut Partiellement réglé.
     actions:
       - cliquer: '.breadcrumb-item a:has-text("Factures clients")'
+      - surligner: '.o_data_row:has-text("Traiteur Saveurs du Plateau")'
+        duree: 3.5
+  - texte: >
+      Et les avoirs ont leur propre liste : ouvrez Clients, puis Avoirs. Voici le nôtre, avec son numéro et son montant.
+    actions:
+      - ouvrir_menu: Clients
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Avoirs")'
       - surligner: '.o_data_row:has-text("RINV")'
         duree: 3.5
 
