@@ -2,7 +2,8 @@
 # État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-11`) :
 #   la facture INV/2026/00002 du Traiteur Saveurs du Plateau est validée et non payée (59 000 F :
 #   2 fraisiers à 15 000 F + 50 macarons à 400 F + une note de livraison), aucun avoir client.
-# Ce que la capsule crée : l'avoir RINV/2026/00001 (10 macarons, 4 720 F), lettré avec la facture.
+# Ce que la capsule crée : l'avoir RINV/2026/00001 (10 macarons, 4 720 F), lettré automatiquement avec la facture
+#   (Odoo 19 : « Extourné », montant dû 54 280 F, bandeau Partiel).
 #   etat-depart.py le remet en brouillon et le supprime avant chaque tournage.
 titre: Avoirs et annulation
 sous_titre: Formation Comptabilité Odoo · CPT-11
@@ -129,24 +130,38 @@ etapes:
       - surligner: '.o_notebook .tab-pane.active .o_list_renderer'
         duree: 6
 
-  # ------------------------------------------------------------------ partie 4 : relier l'avoir
-  - partie: "4. Relier l'avoir à la facture"
+  # ------------------------------------------------------------------ partie 4 : l'avoir et la facture
+  - partie: "4. L'avoir et sa facture"
     texte: >
-      Reste à relier l'avoir à sa facture. Revenons à la facture du traiteur.
+      Revenons à la facture du traiteur, grâce au fil d'Ariane.
     actions:
       - cliquer: '.breadcrumb-item a:has-text("INV/2026/00002")'
   - texte: >
-      En bas, Odoo signale un crédit en attente pour ce client : notre avoir. Cliquez sur Ajouter.
+      Odoo a relié tout seul l'avoir à sa facture. En bas, une ligne Extourné, quatre mille sept cent vingt francs,
+      et le montant dû est tombé à cinquante-quatre mille deux cent quatre-vingts francs.
     actions:
-      - surligner: '.o_field_widget[name="invoice_outstanding_credits_debits_widget"]'
+      - surligner_champ: tax_totals
         duree: 3
-      - cliquer: '.o_field_widget[name="invoice_outstanding_credits_debits_widget"] a:has-text("Ajouter"), .o_field_widget[name="invoice_outstanding_credits_debits_widget"] button:has-text("Ajouter")'
-  - texte: >
-      Le montant dû tombe à cinquante-quatre mille deux cent quatre-vingts francs. La facture est maintenant
-      partiellement réglée par l'avoir : c'est ce qu'on appelle le lettrage, relier une facture à ce qui la solde.
-    actions:
       - surligner_champ: amount_residual
-        duree: 5
+        duree: 3
+  - texte: >
+      Le bandeau Partiel le rappelle : la facture est en partie soldée, par l'avoir. Relier une facture à ce qui la solde,
+      un avoir ou un paiement, c'est ce qu'on appelle le lettrage.
+    actions:
+      - surligner: '.ribbon, .o_widget_web_ribbon'
+        duree: 4
+  - texte: >
+      Dans l'historique, à droite, Odoo note aussi que la facture a été extournée, avec un lien vers l'avoir.
+      On retrouve ainsi toujours le chemin entre les deux documents.
+    actions:
+      - surligner: '.o-mail-Chatter, .o_mail_thread'
+        duree: 3.5
+  - texte: >
+      Dans la liste des factures clients, l'avoir apparaît aussi, en négatif, avec son propre numéro.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Factures clients")'
+      - surligner: '.o_data_row:has-text("RINV")'
+        duree: 3.5
 
   # ------------------------------------------------------------------ pièges fréquents
   - partie: "Les pièges à éviter"
@@ -160,8 +175,8 @@ etapes:
     actions:
       - attendre: 1
   - texte: >
-      Troisième piège : laisser l'avoir seul, sans le relier à sa facture. Le client semble devoir
-      plus qu'il ne doit vraiment. Cliquez toujours sur Ajouter.
+      Troisième piège : créer un avoir de zéro, depuis le menu Avoirs, au lieu de partir de la facture.
+      Il ne sera pas relié : le client semblera devoir plus qu'il ne doit vraiment. Partez toujours du bouton Avoir de la facture.
     actions:
       - attendre: 1
 
@@ -173,13 +188,13 @@ etapes:
     actions:
       - attendre: 0.5
   - texte: >
-      L'avoir reprend la facture : on garde ce qui est rendu, on confirme, et on le relie à la facture
-      pour que le montant dû soit juste.
+      L'avoir reprend la facture : on garde ce qui est rendu, on confirme, et Odoo le relie à la facture :
+      le montant dû est aussitôt juste.
     actions:
       - attendre: 0.5
   - texte: >
       Votre exercice : sur une de vos factures, faites un avoir pour un seul article, confirmez-le,
-      et reliez-le à sa facture.
+      et vérifiez le nouveau montant dû de la facture.
       Dans la prochaine capsule, nous encaisserons le paiement du traiteur. À tout de suite !
     actions:
       - attendre: 1
