@@ -101,6 +101,27 @@ etapes:
     actions:
       - surligner_champ: tax_totals
         duree: 4.5
+  - texte: >
+      On peut aussi ajouter une note, qui s'imprimera sur la facture sans changer les montants.
+      Cliquez sur Ajouter une note, et indiquez la livraison : samedi sept novembre, au Plateau.
+    actions:
+      - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_field_x2many_list_row_add a:has-text("Ajouter une note")'
+      - champ: name
+        taper: Livraison le samedi 7 novembre, au Plateau.
+      - touche: Tab
+  - texte: >
+      L'onglet Autres informations complète la facture. La référence client reprend le numéro de commande du traiteur :
+      il la retrouvera facilement dans ses papiers.
+    actions:
+      - onglet: Autres informations
+      - champ: ref
+        taper: Réception du 7 novembre
+  - texte: >
+      Juste en dessous, la banque destinataire : le compte bancaire de la boutique, où le client pourra virer l'argent.
+    actions:
+      - surligner_champ: partner_bank_id
+        duree: 3.5
+      - onglet: Lignes de facture
 
   # ------------------------------------------------------------------ partie 3 : valider
   - partie: "3. Relire et valider"
@@ -165,6 +186,21 @@ etapes:
       - cliquer: '.breadcrumb-item a:has-text("Factures clients")'
       - surligner: '.o_data_row:has-text("Traiteur Saveurs du Plateau")'
         duree: 3.5
+  - texte: >
+      La fiche du client garde aussi la trace. Ouvrez Clients, puis Clients, et le Traiteur Saveurs du Plateau.
+    actions:
+      - ouvrir_menu: Clients
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Clients")'
+      - rechercher: Traiteur
+      - cliquer: '.o_kanban_record:has-text("Traiteur Saveurs du Plateau"), .o_data_row:has-text("Traiteur Saveurs du Plateau")'
+  - texte: >
+      Le bouton Facturé affiche cinquante mille francs hors taxes, et le bouton Dû, cinquante-neuf mille francs :
+      ce que le client doit encore. Un clic, et vous retrouvez toutes ses factures.
+    actions:
+      - surligner: '.oe_stat_button:has-text("Facturé")'
+        duree: 2.5
+      - surligner: '.oe_stat_button:has-text("Dû")'
+        duree: 2.5
   - texte: >
       Et sur le tableau de bord, la carte Ventes compte désormais deux factures non payées.
     actions:
