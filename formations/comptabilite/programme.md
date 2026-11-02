@@ -29,7 +29,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | Code | Capsule | Ce qu'on apprend | Écrans | État |
 |---|---|---|---|---|
 | CPT-10 | Créer et valider une facture client | lignes, taxes, échéance, validation, envoi, l'écriture générée | Clients › Factures clients | 🎙 5:34 |
-| CPT-11 | Avoirs et annulation | rectifier une erreur : avoir total ou partiel, remettre en brouillon | Clients › Avoirs | ☐ |
+| CPT-11 | Avoirs et annulation | rectifier une erreur : avoir total ou partiel, remettre en brouillon | Clients › Avoirs | 🎙 4:48 |
 | CPT-12 | Encaisser un paiement client | paiement total, partiel, plusieurs factures, escompte | Clients › Paiements | ☐ |
 | CPT-13 | Relancer les clients **[E]** | niveaux de relance, lettre et e-mail automatiques, échéancier clients | Niveaux de relance, Échéancier clients | ☐ |
 
@@ -118,6 +118,11 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
   Client « Traiteur Saveurs du Plateau » préparé par l'API (Odoo 19 n'a pas de création en un clic depuis la facture),
   facture INV/2026/00002 (59 000 F) validée à l'écran puis remise en brouillon et supprimée par etat-depart.py.
   Une phrase (étape 22) régénérée : la voix clonée avait dit « sont qui sont ».
+- **CPT-11** (2 novembre 2026) : version finale, 4 min 48 s, 30 étapes, ≈ 4 150 caractères de voix.
+  Avoir partiel RINV/2026/00001 (10 macarons, 4 720 F) sur INV/2026/00002 ; Odoo 19 le lettre tout seul
+  (« Extourné », montant dû 54 280 F, bandeau Partiel). etat-depart.py supprime l'avoir et refait la facture à neuf
+  (historique propre, même numéro). Nouveau réglage `sous_titres: haut` pour ne pas cacher les totaux.
+  Une phrase (étape 25) régénérée : la voix clonée avait commencé par « euh ».
 
 ## Ordre de tournage proposé
 
