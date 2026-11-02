@@ -618,9 +618,12 @@ function monter(sc, pistes, prise, dossier, options) {
   ffmpeg([...entrees, '-filter_complex', filtres.join(';'), '-map', '[son]', '-ar', '44100', '-c:a', 'aac', '-b:a', '192k', son]);
 
   // c. sous-titres (sur la partie écran) et assemblage écran + son
-  const sous = sc.etapes.flatMap((e, i) => decouperSousTitres(e.texte, prise.etapes[i].debut, pistes[i].duree));
+  // « sous_titres: haut » sur une étape : sous-titres incrustés en haut de l'écran (quand ils cachent
+  // ce qu'on montre en bas, ex. les totaux d'une facture) ; le .srt livré n'est pas touché
+  const sous = sc.etapes.flatMap((e, i) => decouperSousTitres(e.texte, prise.etapes[i].debut, pistes[i].duree)
+    .map((s) => ({ ...s, haut: e.sous_titres === 'haut' })));
   const srtEcran = path.join(dossier, 'ecran.srt');
-  fs.writeFileSync(srtEcran, sous.map((s, i) => `${i + 1}\n${horodatage(s.debut)} --> ${horodatage(s.fin)}\n${s.texte}\n`).join('\n'));
+  fs.writeFileSync(srtEcran, sous.map((s, i) => `${i + 1}\n${horodatage(s.debut)} --> ${horodatage(s.fin)}\n${s.haut ? '{\\an8}' : ''}${s.texte}\n`).join('\n'));
   const corps = path.join(dossier, 'corps.mp4');
   const vf = [];
   // bandeau « Partie N — … » en haut à droite pendant 5 s, au début des étapes qui ont « partie »

@@ -164,7 +164,7 @@ def cpt_10():
 
 def facture_traiteur():
     # la facture INV/2026/00002 du Traiteur (CPT-10), validée ; recréée par l'API si elle manque
-    ctx = {'allowed_company_ids': [SOCIETE]}
+    ctx = {'allowed_company_ids': [SOCIETE], 'lang': 'fr_FR'}
     traiteur = odoo('res.partner', 'search', [['name', '=', 'Traiteur Saveurs du Plateau']], context=ctx)
     if not traiteur:
         traiteur = [odoo('res.partner', 'create', {'name': 'Traiteur Saveurs du Plateau', 'is_company': True,
@@ -186,16 +186,24 @@ def facture_traiteur():
 
 
 def cpt_11():
-    # l'avoir RINV/… du Traiteur est créé à l'écran et lettré avec INV/2026/00002 : on le défait
-    facture_traiteur()
+    # l'avoir RINV/… du Traiteur est créé à l'écran et lettré avec INV/2026/00002 : on le défait,
+    # puis on refait la facture à neuf, pour que son historique (à droite) ne garde pas les tournages précédents
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
     traiteur = odoo('res.partner', 'search', [['name', '=', 'Traiteur Saveurs du Plateau']])
     avoirs = odoo('account.move', 'search', [['partner_id', 'in', traiteur], ['move_type', '=', 'out_refund']])
     valides = odoo('account.move', 'search', [['id', 'in', avoirs], ['state', '!=', 'draft']])
     if valides:  # remettre en brouillon défait aussi le lettrage
-        odoo('account.move', 'button_draft', valides)
+        odoo('account.move', 'button_draft', valides, context=fr)
     if avoirs:
-        odoo('account.move', 'unlink', avoirs)
-    return len(avoirs)
+        odoo('account.move', 'unlink', avoirs, context=fr)
+    factures = odoo('account.move', 'search', [['partner_id', 'in', traiteur], ['move_type', '=', 'out_invoice']])
+    if factures:  # dernière facture de la séquence : Odoo redonnera le même numéro, INV/2026/00002
+        brouillons = odoo('account.move', 'search', [['id', 'in', factures], ['state', '!=', 'draft']])
+        if brouillons:
+            odoo('account.move', 'button_draft', brouillons, context=fr)
+        odoo('account.move', 'unlink', factures, context=fr)
+    facture = facture_traiteur()
+    return odoo('account.move', 'read', [facture], ['name'])[0]['name']
 
 
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,

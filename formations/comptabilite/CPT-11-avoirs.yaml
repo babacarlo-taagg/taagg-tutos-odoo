@@ -105,6 +105,7 @@ etapes:
       - touche: Tab
   - texte: >
       Le total de l'avoir : quatre mille francs hors taxes, sept cent vingt francs de TVA, soit quatre mille sept cent vingt francs.
+    sous_titres: haut
     actions:
       - surligner_champ: tax_totals
         duree: 4
@@ -139,6 +140,7 @@ etapes:
   - texte: >
       Odoo a relié tout seul l'avoir à sa facture. En bas, une ligne Extourné, quatre mille sept cent vingt francs,
       et le montant dû est tombé à cinquante-quatre mille deux cent quatre-vingts francs.
+    sous_titres: haut
     actions:
       - surligner_champ: tax_totals
         duree: 3

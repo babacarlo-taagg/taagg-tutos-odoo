@@ -76,6 +76,11 @@ etapes:
 
 Le curseur glisse comme une main, chaque clic fait une onde verte : pas besoin d'en rajouter.
 
+Sur l'étape (à côté de `texte:`), `sous_titres: haut` place les sous-titres incrustés **en haut** de l'écran
+pendant cette étape : à utiliser quand ils cachent ce qu'on montre en bas (totaux et montant dû d'une facture,
+pied d'une fenêtre). Le `.srt` livré n'est pas modifié. Repère du bandeau « Payé / Partiel » d'une facture :
+`.o_form_view .ribbon` (son conteneur `.o_widget_web_ribbon` a une hauteur nulle et ne se surligne pas).
+
 ## Trouver les bons noms (Odoo 19 et 20, mêmes repères)
 
 - `node tuto.mjs explorer <chemin>` liste les **champs techniques** (`name — Nom (o_field_char)`),
