@@ -162,8 +162,44 @@ def cpt_10():
     return retires, len(brouillons)
 
 
+def facture_traiteur():
+    # la facture INV/2026/00002 du Traiteur (CPT-10), validée ; recréée par l'API si elle manque
+    ctx = {'allowed_company_ids': [SOCIETE]}
+    traiteur = odoo('res.partner', 'search', [['name', '=', 'Traiteur Saveurs du Plateau']], context=ctx)
+    if not traiteur:
+        traiteur = [odoo('res.partner', 'create', {'name': 'Traiteur Saveurs du Plateau', 'is_company': True,
+                                                   'street': 'Avenue Léopold Sédar Senghor', 'city': 'Dakar', 'country_id': 204}, context=ctx)]
+    factures = odoo('account.move', 'search', [['partner_id', '=', traiteur[0]], ['move_type', '=', 'out_invoice'], ['state', '=', 'posted']])
+    if factures:
+        return factures[0]
+    trente = odoo('account.payment.term', 'search', [['name', '=', '30 jours']], context={'lang': 'fr_FR'})
+    fraisier = odoo('product.product', 'search', [['name', '=', 'Fraisier']])
+    macaron = odoo('product.product', 'search', [['name', '=', 'Macaron']])
+    facture = odoo('account.move', 'create', {
+        'move_type': 'out_invoice', 'partner_id': traiteur[0], 'invoice_payment_term_id': trente[0], 'ref': 'Réception du 7 novembre',
+        'invoice_line_ids': [[0, 0, {'product_id': fraisier[0], 'quantity': 2, 'price_unit': 15000}],
+                             [0, 0, {'product_id': macaron[0], 'quantity': 50, 'price_unit': 400}],
+                             [0, 0, {'display_type': 'line_note', 'name': 'Livraison le samedi 7 novembre, au Plateau.'}]],
+    }, context=ctx)
+    odoo('account.move', 'action_post', [facture], context=ctx)
+    return facture
+
+
+def cpt_11():
+    # l'avoir RINV/… du Traiteur est créé à l'écran et lettré avec INV/2026/00002 : on le défait
+    facture_traiteur()
+    traiteur = odoo('res.partner', 'search', [['name', '=', 'Traiteur Saveurs du Plateau']])
+    avoirs = odoo('account.move', 'search', [['partner_id', 'in', traiteur], ['move_type', '=', 'out_refund']])
+    valides = odoo('account.move', 'search', [['id', 'in', avoirs], ['state', '!=', 'draft']])
+    if valides:  # remettre en brouillon défait aussi le lettrage
+        odoo('account.move', 'button_draft', valides)
+    if avoirs:
+        odoo('account.move', 'unlink', avoirs)
+    return len(avoirs)
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''

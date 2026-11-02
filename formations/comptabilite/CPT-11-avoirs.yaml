@@ -1,0 +1,185 @@
+# CPT-11 · Avoirs et annulation
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-11`) :
+#   la facture INV/2026/00002 du Traiteur Saveurs du Plateau est validée et non payée (59 000 F :
+#   2 fraisiers à 15 000 F + 50 macarons à 400 F + une note de livraison), aucun avoir client.
+# Ce que la capsule crée : l'avoir RINV/2026/00001 (10 macarons, 4 720 F), lettré avec la facture.
+#   etat-depart.py le remet en brouillon et le supprime avant chaque tournage.
+titre: Avoirs et annulation
+sous_titre: Formation Comptabilité Odoo · CPT-11
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : encaisser un paiement client"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette onzième capsule. Une facture validée contient une erreur,
+      ou le client rend une partie de la marchandise. Comment corriger ?
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez faire un avoir, total ou partiel, le relier à sa facture,
+      et choisir entre un avoir et une remise en brouillon.
+    actions:
+      - attendre: 1
+  - texte: >
+      Dans la capsule précédente, nous avons facturé cinquante-neuf mille francs au Traiteur Saveurs du Plateau.
+      À la livraison, dix macarons sont arrivés abîmés. Le traiteur ne veut pas les payer.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : pourquoi un avoir
+  - partie: "1. Pourquoi un avoir"
+    texte: >
+      Ouvrez Clients, Factures clients, puis la facture du traiteur.
+    actions:
+      - ouvrir_menu: Clients
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Factures clients")'
+      - cliquer: '.o_data_row:has-text("Traiteur Saveurs du Plateau") td[name="name"], .o_data_row:has-text("Traiteur Saveurs du Plateau") td.o_data_cell'
+  - texte: >
+      Elle est comptabilisée : elle a un numéro, et elle figure dans les comptes. On ne la supprime pas,
+      et on ne change pas ses montants en douce : le client l'a reçue, et elle compte pour la TVA.
+    actions:
+      - surligner: '.o_statusbar_status'
+        duree: 2.5
+      - surligner_champ: name
+        duree: 2.5
+  - texte: >
+      Le bouton Remettre en brouillon existe, mais il ne sert qu'à corriger une facture que le client n'a pas encore reçue.
+      Une fois la facture envoyée, la règle est simple : on corrige par un avoir.
+    actions:
+      - surligner: '.o_statusbar_buttons button[name="button_draft"]'
+        duree: 3.5
+  - texte: >
+      Un avoir, c'est une facture à l'envers : elle diminue ce que le client doit, et elle annule la vente
+      et la TVA correspondantes. Cliquez sur Avoir.
+    actions:
+      - cliquer: '.o_statusbar_buttons button[name="action_reverse"]'
+
+  # ------------------------------------------------------------------ partie 2 : créer l'avoir
+  - partie: "2. Créer un avoir partiel"
+    texte: >
+      Indiquez d'abord le motif, il s'imprimera sur l'avoir : dix macarons abîmés à la livraison.
+    actions:
+      - champ: reason
+        taper: 10 macarons abîmés à la livraison
+  - texte: >
+      Le journal est celui des ventes, et la date celle du jour. Deux boutons : Extourner crée l'avoir.
+      Extourner et créer une facture fait l'avoir, puis prépare une nouvelle facture à corriger : utile quand tout est à refaire.
+    actions:
+      - surligner_champ: journal_id
+        duree: 1.5
+      - surligner: '.modal-footer'
+        duree: 3.5
+  - texte: Ici, on corrige une partie seulement. Cliquez sur Extourner.
+    actions:
+      - cliquer: '.modal-footer button[name="refund_moves"]'
+  - texte: >
+      Odoo prépare un avoir en brouillon, qui reprend toute la facture. Il ne reste qu'à garder ce qui est rendu.
+    actions:
+      - surligner: '.o_statusbar_status'
+        duree: 2
+      - surligner_champ: invoice_line_ids
+        duree: 2.5
+  - texte: >
+      Les fraisiers ne sont pas concernés : supprimez la ligne avec la petite corbeille. Supprimez aussi la note de livraison.
+    actions:
+      - cliquer: ':nth-match(.o_field_widget[name="invoice_line_ids"] .o_data_row, 1) .o_list_record_remove button'
+      - attendre: 0.8
+      - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_data_row.o_is_line_note .o_list_record_remove button'
+  - texte: >
+      Pour les macarons, remplacez la quantité, cinquante, par dix.
+    actions:
+      - cliquer: ':nth-match(.o_field_widget[name="invoice_line_ids"] .o_data_row, 1) td[name="quantity"]'
+      - champ: quantity
+        taper: "10"
+      - touche: Tab
+  - texte: >
+      Le total de l'avoir : quatre mille francs hors taxes, sept cent vingt francs de TVA, soit quatre mille sept cent vingt francs.
+    actions:
+      - surligner_champ: tax_totals
+        duree: 4
+  - texte: Tout est juste. Cliquez sur Confirmer.
+    actions:
+      - cliquer: '.o_statusbar_buttons button[name="action_post"]'
+  - texte: >
+      L'avoir reçoit son propre numéro : R-I-N-V, deux mille vingt-six, un. Les avoirs ont leur numérotation,
+      comme nous l'avons réglé dans le journal des ventes.
+    actions:
+      - surligner_champ: name
+        duree: 4
+
+  # ------------------------------------------------------------------ partie 3 : l'écriture de l'avoir
+  - partie: "3. Ce que l'avoir enregistre"
+    texte: Ouvrez l'onglet Écritures comptables.
+    actions:
+      - onglet: Écritures comptables
+  - texte: >
+      C'est l'écriture de la facture, à l'envers. Le compte Clients est crédité de quatre mille sept cent vingt francs :
+      le traiteur doit moins. Les ventes et la TVA sont débitées : la boutique a moins vendu, et doit moins de TVA à l'État.
+    actions:
+      - surligner: '.o_notebook .tab-pane.active .o_list_renderer'
+        duree: 6
+
+  # ------------------------------------------------------------------ partie 4 : relier l'avoir
+  - partie: "4. Relier l'avoir à la facture"
+    texte: >
+      Reste à relier l'avoir à sa facture. Revenons à la facture du traiteur.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("INV/2026/00002")'
+  - texte: >
+      En bas, Odoo signale un crédit en attente pour ce client : notre avoir. Cliquez sur Ajouter.
+    actions:
+      - surligner: '.o_field_widget[name="invoice_outstanding_credits_debits_widget"]'
+        duree: 3
+      - cliquer: '.o_field_widget[name="invoice_outstanding_credits_debits_widget"] a:has-text("Ajouter"), .o_field_widget[name="invoice_outstanding_credits_debits_widget"] button:has-text("Ajouter")'
+  - texte: >
+      Le montant dû tombe à cinquante-quatre mille deux cent quatre-vingts francs. La facture est maintenant
+      partiellement réglée par l'avoir : c'est ce qu'on appelle le lettrage, relier une facture à ce qui la solde.
+    actions:
+      - surligner_champ: amount_residual
+        duree: 5
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : remettre en brouillon une facture déjà envoyée, et la modifier.
+      Le client a un document, vous en avez un autre. Faites un avoir.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : oublier le motif. Dans six mois, personne ne saura pourquoi cet avoir existe.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : laisser l'avoir seul, sans le relier à sa facture. Le client semble devoir
+      plus qu'il ne doit vraiment. Cliquez toujours sur Ajouter.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Une facture validée ne se supprime pas : on la corrige par un avoir,
+      depuis le bouton Avoir, avec un motif.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      L'avoir reprend la facture : on garde ce qui est rendu, on confirme, et on le relie à la facture
+      pour que le montant dû soit juste.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : sur une de vos factures, faites un avoir pour un seul article, confirmez-le,
+      et reliez-le à sa facture.
+      Dans la prochaine capsule, nous encaisserons le paiement du traiteur. À tout de suite !
+    actions:
+      - attendre: 1
