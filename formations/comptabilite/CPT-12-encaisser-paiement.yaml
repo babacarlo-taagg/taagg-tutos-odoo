@@ -48,7 +48,7 @@ etapes:
     actions:
       - ouvrir_menu: Configuration
       - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Journaux")'
-      - cliquer: '.o_data_row:has-text("CAI") td[name="name"]'
+      - cliquer: '.o_data_row:has-text("Caisse boutique") td[name="name"]'
   - texte: >
       Dans l'onglet Paiements entrants, la colonne Comptes de paiements entrants en suspens indique : aucune écriture de paiement.
       Dans ce cas, Odoo note le paiement, mais n'écrit rien dans les comptes avant le relevé.
@@ -68,7 +68,7 @@ etapes:
       et choisissez le compte d'attente : Paiements entrants en suspens.
     actions:
       - cliquer: '.breadcrumb-item a:has-text("Journaux")'
-      - cliquer: '.o_data_row:has-text("WAV") td[name="name"]'
+      - cliquer: '.o_data_row:has-text("Wave") td[name="name"]'
       - onglet: Paiements entrants
       - cliquer: '.o_notebook .tab-pane.active .o_data_row td[name="payment_account_id"]'
       - choisir: {champ: payment_account_id, valeur: Paiements entrants en suspens}
