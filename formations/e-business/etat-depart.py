@@ -416,6 +416,33 @@ def catalogue_eb05_a_refaire():
         odoo('mail.message', 'unlink', messages)
 
 
+# Texte sous le bouton « Ajouter au panier » de chaque fiche produit (modèle d'Odoo : « Garantie satisfait ou
+# remboursé de 30 jours, Livraison : 2-3 jours ouvrables », faux pour une pâtisserie). Copie propre au site.
+TEXTE_FICHE_PRODUIT = """<t name="Terms and Conditions" t-name="website_sale.product_terms_and_conditions">
+        <small class="text-muted mb-0">
+            <a href="/terms" class="o_translate_inline text-muted"><u>Conditions générales</u></a><br/>
+            Gâteaux sur commande : commandez la veille avant 18 h<br/>
+            Livraison à moto dans Dakar ou retrait en boutique
+        </small>
+    </t>"""
+
+
+def texte_fiche_produit():
+    """Remplace le texte d'exemple sous « Ajouter au panier » (à partir d'EB-06)."""
+    print('Fiches produit : texte sous le bouton « Ajouter au panier »')
+    ctx = dict(CTX, website_id=SITE)
+    cle = 'website_sale.product_terms_and_conditions'
+    vue = odoo('ir.ui.view', 'search', [('key', '=', cle), ('website_id', '=', SITE)], context=ctx)
+    if not vue and not VOIR:
+        # ⚠ écrire sur le modèle ne crée PAS de copie pour ce modèle-là (essayé le 04/11/2026 : le modèle commun
+        #   avait changé) : on copie nous-mêmes le modèle pour le site, sans jamais écrire sur l'original
+        modele = odoo('ir.ui.view', 'search', [('key', '=', cle), ('website_id', '=', False)], context=ctx)
+        copie = odoo('ir.ui.view', 'copy', modele[0], {'website_id': SITE, 'key': cle}, context=ctx)
+        vue = copie if isinstance(copie, list) else [copie]  # Odoo 19 renvoie une liste
+    ecrire('ir.ui.view', vue, {'arch_db': TEXTE_FICHE_PRODUIT},
+           'copie du site : commande la veille avant 18 h, livraison à moto dans Dakar ou retrait en boutique')
+
+
 def eb_05():
     """EB-05 · Organiser son catalogue : la boutique de la fin d'EB-04 (avec la Tarte au citron meringuée),
     sans la catégorie Tartes, sans l'attribut Nombre de parts, dans l'ordre ORDRE_BOUTIQUE."""
