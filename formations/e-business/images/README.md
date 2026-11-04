@@ -20,6 +20,8 @@ Règles : compétence `tuto-odoo-illustrations`. Babacar valide chaque image ava
 | `eb-05-catalogue.png` | EB-05 | les 4 outils : catégories, variantes, filtres, ordre | ☐ |
 | `eb-05-variantes.png` | EB-05 | 6, 8, 12 parts : 24 000 / 30 000 / 40 000 F, suppléments HT | ☐ |
 | `eb-05-recap.png` | EB-05 | les 4 points à retenir | ☐ |
+| `eb-06-tunnel.png` | EB-06 | les 5 étapes du tunnel d'achat | ☐ |
+| `eb-06-recap.png` | EB-06 | les 4 points à retenir | ☐ |
 | `logo-delices-maimouna.png` | toutes | logo fictif de la boutique d'exemple (posé sur le site par `etat-depart.py`) | ☐ |
 
 ## Images IA (sans texte)
