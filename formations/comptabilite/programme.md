@@ -30,7 +30,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 |---|---|---|---|---|
 | CPT-10 | Créer et valider une facture client | lignes, taxes, échéance, validation, envoi, l'écriture générée | Clients › Factures clients | 🎙 5:34 |
 | CPT-11 | Avoirs et annulation | rectifier une erreur : avoir total ou partiel, remettre en brouillon | Clients › Avoirs | 🎙 4:48 |
-| CPT-12 | Encaisser un paiement client | paiement total, partiel, plusieurs factures, escompte | Clients › Paiements | ☐ |
+| CPT-12 | Encaisser un paiement client | paiement total, partiel, plusieurs factures, escompte | Clients › Paiements | 🎙 5:09 |
 | CPT-13 | Relancer les clients **[E]** | niveaux de relance, lettre et e-mail automatiques, échéancier clients | Niveaux de relance, Échéancier clients | ☐ |
 
 ## Parcours 3 — Achats et fournisseurs
@@ -123,6 +123,12 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
   (« Extourné », montant dû 54 280 F, bandeau Partiel). etat-depart.py supprime l'avoir et refait la facture à neuf
   (historique propre, même numéro). Nouveau réglage `sous_titres: haut` pour ne pas cacher les totaux.
   Une phrase (étape 25) régénérée : la voix clonée avait commencé par « euh ».
+- **CPT-12** (4 novembre 2026) : version finale, 5 min 09 s, 34 étapes, ≈ 4 450 caractères de voix.
+  Odoo 19 : sans « Compte de paiements entrants en suspens » sur le mode de paiement, un paiement n'écrit rien
+  et la facture garde son montant dû → réglé à l'écran (Caisse → 571001, Wave → 521003 en suspens).
+  Paiement total Wave (Traiteur 54 280), partiel caisse (Almadies 50 000, « Laisser ouvert »), groupé Wave
+  (Almadies 91 600), escompte « 2/7 Net 30 » (INV/2026/00004, 118 000 → 115 640). INV/2026/00003 et 00004
+  créées par etat-depart.py, qui défait paiements et réglages et nettoie l'historique des factures.
 
 ## Ordre de tournage proposé
 
