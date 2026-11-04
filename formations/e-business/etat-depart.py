@@ -395,8 +395,11 @@ def catalogue_eb05_a_refaire():
     print(f'  · {len(lignes)} ligne(s) de variantes et {len(attributs)} attribut « Nombre de parts » supprimés')
     if not VOIR and lignes:
         odoo('product.template.attribute.line', 'unlink', lignes)
-    if not VOIR and attributs:
-        odoo('product.attribute', 'unlink', attributs)
+    for attribut in ([] if VOIR else attributs):
+        try:
+            odoo('product.attribute', 'unlink', [attribut])
+        except SystemExit:  # déjà dans une commande (panier d'essai) : Odoo refuse, on l'archive sous un autre nom
+            odoo('product.attribute', 'write', [attribut], {'active': False, 'name': f'Nombre de parts (essai {attribut})'})
     tartes = odoo('product.public.category', 'search', [('name', '=', 'Tartes')])
     print(f'  · {len(tartes)} catégorie « Tartes » supprimée')
     if not VOIR and tartes:
@@ -451,7 +454,85 @@ def eb_05():
     catalogue_eb05_a_refaire()
 
 
-CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05}
+def catalogue_fin_eb05():
+    """Ce que la capsule EB-05 a construit à l'écran, refait par l'API : catégorie Tartes (avec la tarte),
+    attribut Nombre de parts (6, 8, 12 parts) sur le gâteau d'anniversaire, gâteau en tête de la boutique."""
+    print('Catalogue : comme à la fin d’EB-05')
+    if VOIR:
+        return
+    cat = odoo('product.public.category', 'create', {'name': 'Tartes', 'sequence': 4})
+    tarte = odoo('product.template', 'search', [('name', '=', TARTE['name'])])
+    odoo('product.template', 'write', tarte, {'public_categ_ids': [(4, cat)]})
+    attribut = odoo('product.attribute', 'create', {
+        'name': 'Nombre de parts', 'display_type': 'pills', 'create_variant': 'always', 'visibility': 'visible',
+        'value_ids': [(0, 0, {'name': n, 'default_extra_price': e}) for n, e in (('6 parts', 0), ('8 parts', 5085), ('12 parts', 13559))]})
+    valeurs = odoo('product.attribute.value', 'search', [('attribute_id', '=', attribut)])
+    gateau = odoo('product.template', 'search', [('name', '=', "Gâteau d'anniversaire")])
+    odoo('product.template', 'write', gateau, {'website_sequence': 9995, 'attribute_line_ids': [
+        (0, 0, {'attribute_id': attribut, 'value_ids': [(6, 0, valeurs)]})]}, context=dict(CTX, tracking_disable=True))
+    print('  · Tartes, Nombre de parts (3 variantes du gâteau), gâteau en tête de la boutique')
+
+
+# Cliente fictive qui commande à l'écran (EB-06…) : compte client (portail) dont le mot de passe est dans .env.
+# Elle est connectée pour que la boutique voie qu'elle est au Sénégal (sinon, l'ordinateur de tournage étant
+# situé à l'étranger, la boutique affiche les prix hors taxes).
+CLIENTE = {'name': 'Fatou Ba', 'email': 'fatou.ba@exemple.sn', 'phone': '', 'street': '', 'street2': '',
+           'city': '', 'zip': '', 'company_name': False}
+
+
+def cliente_fictive():
+    """Fatou Ba : compte client sans adresse (elle la tape à l'écran) et sans commande des prises précédentes."""
+    print('Cliente fictive : Fatou Ba')
+    login, mdp = ENV.get('ODOO_CLIENTE_LOGIN'), ENV.get('ODOO_CLIENTE_MOT_DE_PASSE')
+    if not (login and mdp):
+        raise SystemExit('✗ ODOO_CLIENTE_LOGIN et ODOO_CLIENTE_MOT_DE_PASSE manquent dans .env')
+    senegal = odoo('res.country', 'search', [('code', '=', 'SN')])[0]
+    actx = dict(CTX, active_test=False, tracking_disable=True)
+    partenaires = odoo('res.partner', 'search', [('email', '=', CLIENTE['email'])], context=actx)
+    commandes = odoo('sale.order', 'search', [('partner_id', 'child_of', partenaires), ('state', '!=', 'cancel')]) if partenaires else []
+    print(f'  · {len(commandes)} commande(s) des prises précédentes annulée(s)')
+    if not VOIR and commandes:
+        odoo('sale.order', 'action_cancel', commandes, context=dict(actx, disable_cancel_warning=True))
+    utilisateur = odoo('res.users', 'search', [('login', '=', login)], context=actx)
+    print('  · compte client ' + ('remis à zéro' if utilisateur else 'créé') + ' (adresse vide, Sénégal)')
+    if VOIR:
+        return
+    portail = odoo('ir.model.data', 'search_read', [('module', '=', 'base'), ('name', '=', 'group_portal')], fields=['res_id'])[0]['res_id']
+    if not utilisateur:
+        utilisateur = [odoo('res.users', 'create', {'name': CLIENTE['name'], 'login': login, 'password': mdp,
+                                                   'group_ids': [(6, 0, [portail])]}, context=actx)]
+    else:
+        odoo('res.users', 'write', utilisateur, {'active': True, 'password': mdp}, context=actx)
+    partenaire = odoo('res.users', 'read', utilisateur, fields=['partner_id'], context=actx)[0]['partner_id'][0]
+    odoo('res.partner', 'write', [partenaire], dict(CLIENTE, country_id=senegal, active=True), context=actx)
+    # adresses de livraison ajoutées pendant les prises : archivées ; autres fiches « Fatou Ba » des essais aussi
+    autres = odoo('res.partner', 'search', ['|', ('parent_id', '=', partenaire), '&', ('email', '=', CLIENTE['email']),
+                                            ('id', '!=', partenaire)], context=actx)
+    if autres:
+        odoo('res.partner', 'write', autres, {'active': False}, context=actx)
+
+
+def paiement_eb06():
+    """Pour EB-06 : la carte Démo (sujet d'EB-08) est cachée ; restent « Paiement comptant à la livraison »
+    et « Payer sur Place »."""
+    demo = odoo('payment.provider', 'search', [('code', '=', 'demo'), ('state', '!=', 'disabled')])
+    ecrire('payment.provider', demo, {'is_published': False}, 'carte Démo cachée (remise en ligne pour EB-08)')
+    # « Paiement comptant à la livraison » n'apparaît que si le mode de livraison l'autorise (réglé en EB-10)
+    livraison = odoo('delivery.carrier', 'search', [('name', '=', 'Livraison standard')])
+    ecrire('delivery.carrier', livraison, {'allow_cash_on_delivery': True}, 'Livraison standard : paiement à la livraison autorisé')
+
+
+def eb_06():
+    """EB-06 · Le tunnel d'achat : la boutique de la fin d'EB-05, texte des fiches produit corrigé,
+    Fatou Ba (cliente fictive) sans adresse ni commande, carte Démo cachée."""
+    eb_05()
+    catalogue_fin_eb05()
+    texte_fiche_produit()
+    cliente_fictive()
+    paiement_eb06()
+
+
+CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06}
 
 if __name__ == '__main__':
     code = next((a.upper() for a in sys.argv[1:] if not a.startswith('--')), None)

@@ -21,4 +21,5 @@ etapes:
       - surligner: 'site >> #wrap h1'
         duree: 1
       - taper_dans: {dans: '.panneau .recherche', texte: produit}
+      - taper_dans: {dans: '.panneau .recherche', texte: '${TUTO_ESSAI_SECRET}'}   # valeur lue dans l'environnement (.env)
       - deposer_fichier: {dans: '.panneau input.fichier', fichier: images/essai-illustration.png}

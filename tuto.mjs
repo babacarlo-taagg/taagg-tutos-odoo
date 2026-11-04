@@ -368,9 +368,14 @@ class Realisateur {
   }
 
   async taper(loc, texte, entree) {
+    // « ${ODOO_CLIENTE_MOT_DE_PASSE} » : valeur lue dans .env (un mot de passe ne va jamais dans le scénario)
+    const valeur = String(texte).replace(/\$\{(\w+)\}/g, (_, nom) => {
+      if (process.env[nom] === undefined) arreter(`${nom} manque dans .env`);
+      return process.env[nom];
+    });
     await this.cliquer(loc);
     await loc.fill('');
-    await loc.pressSequentially(String(texte), { delay: 55 });
+    await loc.pressSequentially(valeur, { delay: 55 });
     if (entree) await this.page.keyboard.press('Enter');
     await pause(300);
   }

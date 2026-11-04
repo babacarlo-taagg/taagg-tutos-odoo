@@ -15,7 +15,7 @@ const serveur = http.createServer((req, res) => {
   res.writeHead(200, { 'content-type': f.endsWith('.css') ? 'text/css' : 'text/html; charset=utf-8' }).end(fs.readFileSync(f));
 });
 serveur.listen(0, async () => {
-  const env = { ...process.env, ODOO_URL: `http://127.0.0.1:${serveur.address().port}`, ODOO_LOGIN: '' };
+  const env = { ...process.env, ODOO_URL: `http://127.0.0.1:${serveur.address().port}`, ODOO_LOGIN: '', TUTO_ESSAI_SECRET: 'motdepasse-essai' };
   const tourner = (scenario, ...options) => new Promise((ok) => {
     import('node:child_process').then(({ spawn }) => {
       const p = spawn(process.execPath, [path.join(ICI, '..', 'tuto.mjs'), scenario, '--voix', 'muet', ...options], { env, stdio: 'inherit' });
