@@ -122,7 +122,7 @@ etapes:
       - choisir: {champ: journal_id, valeur: Caisse boutique}
       - champ: amount
         taper: "50000"
-      - touche: Tab
+      - cliquer: '.modal .modal-title'
   - texte: >
       Odoo voit l'écart : soixante-huit mille francs restent dus. Laisser ouvert garde ce reste à payer.
       Marquer comme entièrement payé l'effacerait : c'est pour un vrai geste commercial, pas pour un paiement en deux fois.
