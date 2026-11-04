@@ -23,7 +23,7 @@ def appel(service, methode, *args):
     rep = json.load(urllib.request.urlopen(req, timeout=60))
     if 'error' in rep:
         sys.exit('Odoo a refusé : ' + rep['error']['data'].get('message', str(rep['error'])))
-    return rep['result']
+    return rep.get('result')
 
 
 UID = appel('common', 'authenticate', ENV['ODOO_BASE'], ENV['ODOO_LOGIN_API'], ENV['ODOO_CLE_API'], {})
@@ -169,7 +169,8 @@ def facture_traiteur():
     if not traiteur:
         traiteur = [odoo('res.partner', 'create', {'name': 'Traiteur Saveurs du Plateau', 'is_company': True,
                                                    'street': 'Avenue Léopold Sédar Senghor', 'city': 'Dakar', 'country_id': 204}, context=ctx)]
-    factures = odoo('account.move', 'search', [['partner_id', '=', traiteur[0]], ['move_type', '=', 'out_invoice'], ['state', '=', 'posted']])
+    factures = odoo('account.move', 'search', [['partner_id', '=', traiteur[0]], ['move_type', '=', 'out_invoice'], ['state', '=', 'posted'],
+                                               ['ref', '=', 'Réception du 7 novembre']])
     if factures:
         return factures[0]
     trente = odoo('account.payment.term', 'search', [['name', '=', '30 jours']], context={'lang': 'fr_FR'})
@@ -206,8 +207,77 @@ def cpt_11():
     return odoo('account.move', 'read', [facture], ['name'])[0]['name']
 
 
+TRAITEUR_NOTE_AVOIR = '10 macarons abîmés à la livraison'
+
+
+def avoir_traiteur(facture):
+    # l'avoir RINV/2026/00001 de CPT-11 (10 macarons, 4 720 F), lettré avec la facture ; recréé s'il manque
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    avoirs = odoo('account.move', 'search', [['reversed_entry_id', '=', facture], ['move_type', '=', 'out_refund'], ['state', '=', 'posted']])
+    if avoirs:
+        return avoirs[0]
+    partenaire = odoo('account.move', 'read', [facture], ['partner_id'])[0]['partner_id'][0]
+    macaron = odoo('product.product', 'search', [['name', '=', 'Macaron']])
+    avoir = odoo('account.move', 'create', {
+        'move_type': 'out_refund', 'partner_id': partenaire, 'reversed_entry_id': facture, 'ref': TRAITEUR_NOTE_AVOIR,
+        'invoice_line_ids': [[0, 0, {'product_id': macaron[0], 'quantity': 10, 'price_unit': 400}]],
+    }, context=fr)
+    odoo('account.move', 'action_post', [avoir], context=fr)
+    ligne = odoo('account.move.line', 'search', [['move_id', '=', avoir], ['account_id.account_type', '=', 'asset_receivable']])
+    odoo('account.move', 'js_assign_outstanding_line', [facture], ligne[0], context=fr)
+    return avoir
+
+
+def facture_simple(partenaire, lignes, terme=None):
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    valeurs = {'move_type': 'out_invoice', 'partner_id': partenaire,
+               'invoice_line_ids': [[0, 0, {'product_id': odoo('product.product', 'search', [['name', '=', nom]])[0],
+                                            'quantity': q, 'price_unit': pu}] for nom, q, pu in lignes]}
+    if terme:
+        valeurs['invoice_payment_term_id'] = odoo('account.payment.term', 'search', [['name', '=', terme]], context=fr)[0]
+    facture = odoo('account.move', 'create', valeurs, context=fr)
+    odoo('account.move', 'action_post', [facture], context=fr)
+    return odoo('account.move', 'read', [facture], ['name'])[0]['name']
+
+
+def cpt_12():
+    # paiements encaissés à l'écran (Traiteur et Boutique Les Almadies) : on les supprime ;
+    # INV/2026/00003 (Almadies, 40 croissants) et INV/2026/00004 (Traiteur, 4 gâteaux, escompte 2/7 Net 30) sont refaites à neuf
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    traiteur = odoo('res.partner', 'search', [['name', '=', 'Traiteur Saveurs du Plateau']])[0]
+    paiements = odoo('account.payment', 'search', [['partner_id', 'in', [traiteur, BOUTIQUE_ALMADIES]]])
+    if paiements:  # remettre en brouillon défait aussi le lettrage
+        valides = odoo('account.payment', 'search', [['id', 'in', paiements], ['state', '!=', 'draft']])
+        if valides:
+            odoo('account.payment', 'action_draft', valides, context=fr)
+        odoo('account.payment', 'unlink', paiements, context=fr)
+    # Compte de paiement des modes « Paiement manuel » de Wave et de la caisse : réglé à l'écran dans la capsule
+    lignes = odoo('account.payment.method.line', 'search', [['journal_id.code', 'in', ['WAV', 'CAI']], ['payment_type', '=', 'inbound']], context=fr)
+    odoo('account.payment.method.line', 'write', lignes, {'payment_account_id': False}, context=fr)
+    facture = facture_traiteur()
+    avoir = avoir_traiteur(facture)
+    en_trop = odoo('account.move', 'search', [['partner_id', '=', traiteur], ['move_type', '=', 'out_refund'], ['id', '!=', avoir]])
+    for f in en_trop:
+        if odoo('account.move', 'read', [f], ['state'])[0]['state'] != 'draft':
+            odoo('account.move', 'button_draft', [f], context=fr)
+        odoo('account.move', 'unlink', [f], context=fr)
+    anciennes = odoo('account.move', 'search', [['move_type', '=', 'out_invoice'], ['name', 'in', ['INV/2026/00003', 'INV/2026/00004']]], order='name desc')
+    for f in anciennes:  # la plus récente d'abord : Odoo redonne ensuite les mêmes numéros
+        if odoo('account.move', 'read', [f], ['state'])[0]['state'] != 'draft':
+            odoo('account.move', 'button_draft', [f], context=fr)
+        odoo('account.move', 'unlink', [f], context=fr)
+    brouillons = odoo('account.move', 'search', [['partner_id', 'in', [traiteur, BOUTIQUE_ALMADIES]], ['state', '=', 'draft'], ['move_type', '=', 'out_invoice']])
+    if brouillons:
+        odoo('account.move', 'unlink', brouillons, context=fr)
+    # même banque destinataire sur les deux factures des Almadies, sinon Odoo ne propose pas de regrouper le paiement
+    rib = odoo('res.partner.bank', 'search', [['acc_number', '=', 'SN012 01001 012345678901 23']])
+    odoo('account.move', 'write', [1], {'partner_bank_id': rib[0]}, context=fr)
+    return (facture_simple(BOUTIQUE_ALMADIES, [('Croissant', 40, 500)], terme='Paiement immédiat'),
+            facture_simple(traiteur, [("Gâteau d'anniversaire", 4, 25000)], terme='2/7 Net 30'))
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''

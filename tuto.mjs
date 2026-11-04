@@ -277,7 +277,9 @@ class Realisateur {
   }
 
   champ(nom) {
-    return this.page.locator(`.o_field_widget[name="${nom}"]`).first();
+    // une fenêtre ouverte (ex. Payer) passe avant la fiche derrière elle, qui peut avoir un champ du même nom
+    const c = `.o_field_widget[name="${nom}"]`;
+    return this.page.locator(`body:has(.modal ${c}) .modal ${c}, body:not(:has(.modal ${c})) ${c}`).first();
   }
 
   async glisser(x, y) {

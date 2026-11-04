@@ -1,0 +1,253 @@
+# CPT-12 · Encaisser un paiement client
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-12`) :
+#   aucun paiement client ; les modes « Paiement manuel » entrants des journaux Wave et Caisse boutique
+#   n'ont pas de compte (« Aucune écriture de paiement ») ;
+#   INV/2026/00002 Traiteur (59 000 F, avoir 4 720 F lettré → dû 54 280 F) ;
+#   INV/2026/00001 Boutique Les Almadies (118 000 F, échue depuis août) et INV/2026/00003 Almadies (40 croissants, 23 600 F, paiement immédiat),
+#   même banque destinataire sur les deux (sinon Odoo ne propose pas de regrouper) ;
+#   INV/2026/00004 Traiteur (4 gâteaux d'anniversaire, 118 000 F, condition « 2/7 Net 30 », datée du jour).
+# Ce que la capsule crée : les comptes de paiement de Wave (521003 en suspens) et de la caisse (571001),
+#   4 paiements (Wave 54 280 ; caisse 50 000 ; Wave groupé 91 600 ; Wave 115 640 avec escompte 2 360).
+#   etat-depart.py défait tout.
+titre: Encaisser un paiement client
+sous_titre: Formation Comptabilité Odoo · CPT-12
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : relancer les clients"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette douzième capsule. Une facture envoyée, c'est bien.
+      Une facture payée, c'est mieux. Aujourd'hui, on encaisse.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez enregistrer un paiement total ou partiel,
+      régler plusieurs factures d'un coup, et faire profiter un client d'un escompte.
+    actions:
+      - attendre: 1
+  - texte: >
+      Trois clients nous attendent : le traiteur, qui solde sa facture par Wave, la Boutique Les Almadies,
+      qui paie en deux fois, et une nouvelle commande du traiteur, payée en avance.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : le réglage des journaux
+  - partie: "1. Avant le premier encaissement"
+    texte: >
+      Un réglage d'abord, à faire une seule fois. Ouvrez Configuration, Journaux, et le journal Caisse boutique.
+    actions:
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Journaux")'
+      - cliquer: '.o_data_row:has-text("CAI") td[name="name"]'
+  - texte: >
+      Dans l'onglet Paiements entrants, la colonne Comptes de paiements entrants en suspens indique : aucune écriture de paiement.
+      Dans ce cas, Odoo note le paiement, mais n'écrit rien dans les comptes avant le relevé.
+    actions:
+      - onglet: Paiements entrants
+      - surligner: '.o_notebook .tab-pane.active .o_list_renderer'
+        duree: 5
+  - texte: >
+      Pour la caisse, l'argent est déjà dans le tiroir. Choisissez le compte de la caisse lui-même,
+      cinq cent soixante et onze mille un : le paiement sera compté tout de suite.
+    actions:
+      - cliquer: '.o_notebook .tab-pane.active .o_data_row td[name="payment_account_id"]'
+      - choisir: {champ: payment_account_id, valeur: "571001"}
+      - enregistrer: oui
+  - texte: >
+      Pour Wave, l'argent est annoncé, et le relevé Wave le confirmera. Ouvrez le journal Wave,
+      et choisissez le compte d'attente : Paiements entrants en suspens.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Journaux")'
+      - cliquer: '.o_data_row:has-text("WAV") td[name="name"]'
+      - onglet: Paiements entrants
+      - cliquer: '.o_notebook .tab-pane.active .o_data_row td[name="payment_account_id"]'
+      - choisir: {champ: payment_account_id, valeur: Paiements entrants en suspens}
+      - enregistrer: oui
+
+  # ------------------------------------------------------------------ partie 2 : paiement total
+  - partie: "2. Un paiement total"
+    texte: >
+      Le traiteur doit encore cinquante-quatre mille deux cent quatre-vingts francs. Il les envoie par Wave.
+      Ouvrez Clients, Factures clients, puis sa facture.
+    actions:
+      - ouvrir_menu: Clients
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Factures clients")'
+      - cliquer: '.o_data_row:has-text("59 000") td.o_data_cell'
+  - texte: Cliquez sur Payer.
+    actions:
+      - cliquer: '.o_statusbar_buttons button[name="action_register_payment"]'
+  - texte: >
+      Odoo propose le montant dû, la date du jour, et en mémo le numéro de la facture :
+      le client le reconnaîtra. Il ne reste qu'à choisir le journal : Wave.
+    actions:
+      - surligner_champ: amount
+        duree: 2
+      - surligner_champ: communication
+        duree: 2
+      - choisir: {champ: journal_id, valeur: Wave}
+  - texte: Cliquez sur Créer un paiement.
+    actions:
+      - cliquer: '.modal-footer button[name="action_create_payments"]'
+  - texte: >
+      Le montant dû tombe à zéro. Le bandeau indique : en cours de paiement. Le paiement est enregistré,
+      et attend la confirmation du relevé Wave : il deviendra Payé au rapprochement bancaire.
+    sous_titres: haut
+    actions:
+      - surligner_champ: amount_residual
+        duree: 3
+      - surligner: '.o_form_view .ribbon'
+        duree: 4
+
+  # ------------------------------------------------------------------ partie 3 : paiement partiel
+  - partie: "3. Un paiement partiel"
+    texte: >
+      La Boutique Les Almadies doit cent dix-huit mille francs depuis août. Elle paie cinquante mille francs
+      en espèces, à la boutique. Ouvrez sa facture, et cliquez sur Payer.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Factures clients")'
+      - cliquer: '.o_data_row:has-text("Boutique Les Almadies"):has-text("118 000") td.o_data_cell'
+      - cliquer: '.o_statusbar_buttons button[name="action_register_payment"]'
+  - texte: Journal, Caisse boutique. Montant, cinquante mille.
+    actions:
+      - choisir: {champ: journal_id, valeur: Caisse boutique}
+      - champ: amount
+        taper: "50000"
+      - touche: Tab
+  - texte: >
+      Odoo voit l'écart : soixante-huit mille francs restent dus. Laisser ouvert garde ce reste à payer.
+      Marquer comme entièrement payé l'effacerait : c'est pour un vrai geste commercial, pas pour un paiement en deux fois.
+    actions:
+      - surligner_champ: payment_difference
+        duree: 2.5
+      - surligner_champ: payment_difference_handling
+        duree: 5
+  - texte: Gardez Laisser ouvert, et créez le paiement.
+    actions:
+      - cliquer: '.modal-footer button[name="action_create_payments"]'
+  - texte: >
+      Bandeau Partiel, et un montant dû de soixante-huit mille francs. Comme c'est la caisse, le paiement est compté tout de suite.
+    sous_titres: haut
+    actions:
+      - surligner: '.o_form_view .ribbon'
+        duree: 2.5
+      - surligner_champ: amount_residual
+        duree: 3.5
+
+  # ------------------------------------------------------------------ partie 4 : plusieurs factures
+  - partie: "4. Plusieurs factures d'un coup"
+    texte: >
+      Le lendemain, la boutique solde tout par Wave : le reste d'août, et sa nouvelle facture de vingt-trois mille six cents francs.
+      Dans la liste, cochez ses deux factures.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Factures clients")'
+      - cliquer: '.o_data_row:has-text("Boutique Les Almadies"):has-text("118 000") .o_list_record_selector input'
+      - cliquer: '.o_data_row:has-text("Boutique Les Almadies"):has-text("23 600") .o_list_record_selector input'
+  - texte: Cliquez sur Payer, en haut de la liste.
+    actions:
+      - cliquer: 'button[name="action_force_register_payment"]'
+  - texte: >
+      Odoo additionne les deux restes : quatre-vingt-onze mille six cents francs. Choisissez Wave, et cochez Regrouper les paiements :
+      un seul virement, donc un seul paiement, qui règle les deux factures.
+    actions:
+      - choisir: {champ: journal_id, valeur: Wave}
+      - surligner_champ: amount
+        duree: 2
+      - cocher: group_payment
+  - texte: Créez le paiement.
+    actions:
+      - cliquer: '.modal-footer button[name="action_create_payments"]'
+  - texte: >
+      Un seul paiement, quatre-vingt-onze mille six cents francs, relié aux deux factures de la boutique.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 5 : l'escompte
+  - partie: "5. L'escompte pour paiement rapide"
+    texte: >
+      Dernière situation. Le traiteur a commandé quatre gâteaux d'anniversaire, cent dix-huit mille francs,
+      avec la condition deux, sept, net trente : deux pour cent de remise s'il paie dans les sept jours.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Factures clients")'
+      - cliquer: '.o_data_row:has-text("Traiteur Saveurs du Plateau"):has-text("118 000") td.o_data_cell'
+      - surligner_champ: invoice_payment_term_id
+        duree: 3
+  - texte: Il paie aujourd'hui, par Wave. Cliquez sur Payer.
+    actions:
+      - cliquer: '.o_statusbar_buttons button[name="action_register_payment"]'
+  - texte: >
+      Odoo applique l'escompte tout seul : deux mille trois cent soixante francs.
+      Le traiteur ne verse que cent quinze mille six cent quarante francs.
+    actions:
+      - choisir: {champ: journal_id, valeur: Wave}
+      - surligner: '.modal .alert'
+        duree: 2.5
+      - surligner_champ: amount
+        duree: 2.5
+  - texte: Créez le paiement.
+    actions:
+      - cliquer: '.modal-footer button[name="action_create_payments"]'
+  - texte: >
+      La facture est soldée : montant dû, zéro. La remise de deux mille trois cent soixante francs est enregistrée à part,
+      comme un escompte accordé.
+    sous_titres: haut
+    actions:
+      - surligner_champ: amount_residual
+        duree: 4
+
+  # ------------------------------------------------------------------ où retrouver les paiements
+  - partie: "6. Retrouver les paiements"
+    texte: >
+      Tous les encaissements se retrouvent dans Clients, Paiements, avec leur journal et leur état :
+      Payé pour la caisse, En cours de traitement pour Wave, en attendant le relevé.
+    actions:
+      - ouvrir_menu: Clients
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Paiements")'
+      - surligner: '.o_list_renderer'
+        duree: 5
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : encaisser dans le mauvais journal.
+      Un paiement Wave saisi en caisse fausse les deux soldes.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : marquer comme entièrement payée une facture payée à moitié.
+      Le reste dû disparaît, et vous ne le réclamerez jamais.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : créer un paiement de zéro, depuis le menu Paiements. Il n'est pas relié à la facture,
+      qui reste due. Partez toujours du bouton Payer de la facture.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Un encaissement part du bouton Payer de la facture : on choisit le journal,
+      on vérifie le montant, et on crée le paiement.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Paiement partiel : on laisse ouvert le reste. Plusieurs factures : on les coche, et on regroupe.
+      L'escompte, Odoo le calcule tout seul.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : enregistrez un paiement partiel sur une de vos factures, soldez-la ensuite,
+      et retrouvez les deux paiements dans Clients, Paiements.
+      Dans la prochaine capsule, nous verrons comment relancer les clients en retard. À tout de suite !
+    actions:
+      - attendre: 1
