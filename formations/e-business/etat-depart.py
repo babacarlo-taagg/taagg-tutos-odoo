@@ -520,6 +520,8 @@ def paiement_eb06():
     # « Paiement comptant à la livraison » n'apparaît que si le mode de livraison l'autorise (réglé en EB-10)
     livraison = odoo('delivery.carrier', 'search', [('name', '=', 'Livraison standard')])
     ecrire('delivery.carrier', livraison, {'allow_cash_on_delivery': True}, 'Livraison standard : paiement à la livraison autorisé')
+    ecrire('website', [SITE], {'add_to_cart_action': 'stay', 'account_on_checkout': 'optional'},
+           'réglages de la boutique : rester sur la page produit, compte client facultatif (la capsule change le 1er)')
 
 
 def eb_06():

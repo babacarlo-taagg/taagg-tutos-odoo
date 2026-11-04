@@ -1,0 +1,210 @@
+# EB-06 · Le tunnel d'achat
+# État de départ : python3 formations/e-business/etat-depart.py EB-06
+#   la boutique de la fin d'EB-05 (Tartes, gâteau d'anniversaire en 6/8/12 parts, en tête de la boutique) ;
+#   Fatou Ba, cliente fictive, a un compte (mot de passe dans .env) sans adresse ni commande ;
+#   carte Démo cachée (EB-08) ; Livraison standard avec paiement à la livraison ; « Ajouter au panier » reste sur la page.
+# Pendant la capsule : « Ajouter au panier » passe à « Aller au panier » ; Fatou commande un gâteau d'anniversaire
+#   8 parts (30 000 F TTC), adresse 12 rue Carnot à Dakar, livraison standard, paiement comptant à la livraison.
+# Pourquoi Fatou est connectée : l'ordinateur de tournage est situé à l'étranger, et un visiteur de l'étranger
+#   voit les prix hors taxes (position fiscale « International »). Connectée, Fatou est au Sénégal : prix TTC.
+# Relancer etat-depart.py avant chaque prise.
+titre: Le tunnel d'achat
+sous_titre: Formation E-Business Odoo · EB-06
+depart: /odoo
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG School: l'école Tag
+  TAAGG: Tag
+  EB-06: capsule six
+  eCommerce: e-commerce
+  E-Business: i-business
+  F CFA: francs CFA
+  FCFA: francs CFA
+  " F ": " francs "
+  TTC: té-té-cé
+fin:
+  message: "Prochaine capsule : stock et disponibilité en ligne"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche (≈ 45 s)
+  - chapitre: Introduction
+    texte: >
+      Bienvenue dans la sixième capsule de la formation E-Business.
+      Votre boutique est rangée. Suivons maintenant une cliente, du panier jusqu'à la confirmation de sa commande.
+    actions:
+      - attendre: 1
+  - texte: >
+      C'est ce qu'on appelle le tunnel d'achat : le panier, l'adresse, la livraison, le paiement, et la confirmation.
+      Chaque étape de trop fait partir des clientes : il faut qu'il reste court et simple.
+    actions:
+      - illustration: images/eb-06-tunnel.png
+        zoom: 1.02
+
+  # ------------------------------------------------------------------ partie 1 : les réglages (≈ 2 min)
+  - partie: "1. Les réglages de la boutique"
+    texte: >
+      Commençons par les réglages. Ouvrez l'application Site Web, puis Configuration, Paramètres.
+    actions:
+      - cliquer: '.o_app:has-text("Site Web")'
+      - attendre: 1
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Paramètres")'
+      - attendre: 2
+      - defiler: '#website_tax_inclusion_setting'
+      - attendre: 1
+  - texte: >
+      Dans la partie eCommerce, vérifiez d'abord que les prix s'affichent toutes taxes comprises :
+      c'est le prix que votre cliente paiera vraiment.
+    actions:
+      - surligner: '#website_tax_inclusion_setting'
+        duree: 3
+  - texte: >
+      Se connecter lors du paiement : laissez Facultatif. Votre cliente peut commander sans créer de compte ;
+      si elle en a un, elle se connecte et retrouve ses adresses. Obligatoire ferait partir celles qui sont pressées.
+    actions:
+      - surligner: '#checkout_registration_setting'
+        duree: 4
+  - texte: >
+      Ajouter au panier : choisissez Aller au panier. Vos clientes achètent souvent un seul gâteau :
+      elles arrivent directement au panier, avec une étape de moins.
+    actions:
+      - surligner: '#cart_redirect_setting'
+        duree: 1.5
+      - cliquer: '#cart_redirect_setting label:has-text("Aller au panier")'
+      - attendre: 1
+  - texte: Cliquez sur Enregistrer, en haut à gauche.
+    actions:
+      - cliquer: '.o_control_panel button:has-text("Enregistrer")'
+      - attendre: 3
+
+  # ------------------------------------------------------------------ partie 2 : la commande de Fatou (≈ 4 min)
+  - partie: "2. La commande de Fatou"
+    texte: >
+      Mettons-nous maintenant à la place de Fatou, une cliente de Dakar qui a déjà un compte sur la boutique.
+      Elle ouvre le site et se connecte.
+    actions:
+      # directement sur la page de connexion : la boutique vue sans être connecté (depuis l'étranger) serait hors taxes
+      - aller: '/web/session/logout?redirect=/web/login'
+      - attendre: 2
+  - texte: Elle tape son adresse e-mail et son mot de passe.
+    actions:
+      - taper_dans: {dans: 'input[name="login"]', texte: '${ODOO_CLIENTE_LOGIN}'}
+      - taper_dans: {dans: 'input[name="password"]', texte: '${ODOO_CLIENTE_MOT_DE_PASSE}'}
+      - cliquer: '.oe_login_form button[type="submit"]'
+      - attendre: 2.5
+  - texte: >
+      Elle va dans la boutique. Le gâteau d'anniversaire est le premier produit : elle clique dessus.
+    actions:
+      - cliquer: 'header a:has-text("Boutique")'
+      - attendre: 2.5
+      - cliquer: '.oe_product:has-text("Gâteau d''anniversaire") img'
+      - attendre: 2.5
+  - texte: >
+      Elle choisit huit parts : le prix passe à trente mille francs. Puis elle clique sur Ajouter au panier.
+    actions:
+      - cliquer: 'label:has-text("8 parts")'
+      - attendre: 1.5
+      - cliquer: '#add_to_cart'
+      - attendre: 3
+  - texte: >
+      Grâce au réglage que nous venons de faire, elle arrive directement au panier.
+      Elle voit son gâteau, la taille choisie, et le total : trente mille francs toutes taxes comprises.
+    actions:
+      - surligner: '#cart_products'
+        duree: 2.5
+      - surligner: '.o_total_card'
+        duree: 2.5
+  - texte: Elle clique sur Payer.
+    actions:
+      - cliquer: '.o_total_card a:has-text("Payer") >> visible=true'
+      - attendre: 3
+  - texte: >
+      Deuxième étape, l'adresse. Son nom et son e-mail sont déjà remplis, grâce à son compte.
+      Elle ajoute son téléphone : le livreur pourra l'appeler.
+    actions:
+      - surligner: '#div_name'
+        duree: 1.5
+      - taper_dans: {dans: '#o_phone', texte: '+221 77 000 00 03'}
+  - texte: >
+      Puis sa rue, sa ville, et le code postal, ici dix mille deux cents pour Dakar. Elle clique sur Confirmer.
+    actions:
+      - taper_dans: {dans: '#o_street', texte: 12 rue Carnot}
+      - taper_dans: {dans: '#o_city', texte: Dakar}
+      - taper_dans: {dans: '#o_zip', texte: '10200'}
+      - attendre: 0.5
+      - cliquer: '.o_total_card :is(a,button):has-text("Confirmer") >> visible=true'
+      - attendre: 3.5
+  - texte: >
+      Troisième étape, la livraison. Fatou choisit entre la livraison et le retrait en magasin.
+      Les deux sont gratuites pour l'instant : nous fixerons les prix de livraison dans la capsule dix.
+    actions:
+      - surligner: '#o_delivery_methods'
+        duree: 3
+  - texte: >
+      Elle garde la livraison standard, vérifie son adresse, et clique sur Confirmer.
+    actions:
+      - surligner: '#delivery_address_list'
+        duree: 2
+      - cliquer: '.o_total_card :is(a,button):has-text("Confirmer") >> visible=true'
+      - attendre: 3.5
+  - texte: >
+      Quatrième étape, le paiement. Ici, un seul moyen pour l'instant : le paiement comptant à la livraison.
+      Les cartes, Wave et Orange Money viendront dans la capsule huit.
+    actions:
+      - surligner: '#payment_method'
+        duree: 3
+  - texte: Elle clique sur Confirmer.
+    actions:
+      - cliquer: '.o_total_card button:has-text("Confirmer") >> visible=true'
+      - attendre: 5
+  - texte: >
+      Dernière étape : la confirmation. Merci pour votre commande ! Fatou voit le numéro de sa commande,
+      son adresse, et le total. Elle reçoit aussi un e-mail de confirmation.
+    actions:
+      - surligner: 'main h4, main h3, main .h4 >> nth=0'
+        duree: 2.5
+      - defiler: 300
+      - attendre: 2
+  - texte: >
+      De votre côté, la commande arrive dans le menu eCommerce, Commandes, comme nous l'avons vu dans la première capsule.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ pièges (≈ 1 min)
+  - chapitre: Pièges fréquents
+    texte: >
+      Trois pièges fréquents. Premier piège : aucun moyen de paiement à la dernière étape.
+      Le paiement à la livraison n'apparaît que si le mode de livraison l'autorise : vérifiez-le.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : obliger la cliente à créer un compte avant de payer. Beaucoup abandonnent :
+      laissez la connexion facultative.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : ouvrir la boutique sans l'avoir testée. Passez vous-même une commande,
+      sur votre téléphone, du panier jusqu'à la confirmation.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice (≈ 1 min)
+  - chapitre: À retenir
+    texte: >
+      Retenons l'essentiel. Un : le tunnel, c'est le panier, l'adresse, la livraison, le paiement et la confirmation.
+      Deux : dans Paramètres, eCommerce, laissez le compte facultatif, et choisissez Aller au panier.
+      Trois : le paiement à la livraison doit être autorisé par le mode de livraison.
+      Quatre : passez vous-même une commande test avant d'ouvrir votre boutique.
+    apres: 1.2
+    actions:
+      - illustration: images/eb-06-recap.png
+        zoom: 1.02
+  - chapitre: Exercice
+    texte: >
+      À vous de jouer : passez une commande test sur votre boutique, depuis votre téléphone, et notez chaque étape
+      qui vous semble trop longue. Dans la prochaine capsule, nous afficherons le stock de vos produits en ligne.
+    actions:
+      - attendre: 1
