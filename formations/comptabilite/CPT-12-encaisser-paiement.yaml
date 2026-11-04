@@ -50,7 +50,7 @@ etapes:
       - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Journaux")'
       - cliquer: '.o_data_row:has-text("Caisse boutique") td[name="name"]'
   - texte: >
-      Dans l'onglet Paiements entrants, la colonne Comptes de paiements entrants en suspens indique : aucune écriture de paiement.
+      Dans l'onglet Paiements entrants, la colonne Comptes de paiements entrants en suspens est vide.
       Dans ce cas, Odoo note le paiement, mais n'écrit rien dans les comptes avant le relevé.
     actions:
       - onglet: Paiements entrants
@@ -169,7 +169,10 @@ etapes:
   - texte: >
       Un seul paiement, quatre-vingt-onze mille six cents francs, relié aux deux factures de la boutique.
     actions:
-      - attendre: 1
+      - surligner_champ: amount
+        duree: 2
+      - surligner: '.oe_stat_button:has-text("Facture")'
+        duree: 3
 
   # ------------------------------------------------------------------ partie 5 : l'escompte
   - partie: "5. L'escompte pour paiement rapide"

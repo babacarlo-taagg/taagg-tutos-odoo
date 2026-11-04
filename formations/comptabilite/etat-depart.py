@@ -269,6 +269,12 @@ def cpt_12():
     brouillons = odoo('account.move', 'search', [['partner_id', 'in', [traiteur, BOUTIQUE_ALMADIES]], ['state', '=', 'draft'], ['move_type', '=', 'out_invoice']])
     if brouillons:
         odoo('account.move', 'unlink', brouillons, context=fr)
+    # historique (à droite) des factures du tournage : on retire les traces laissées par les tournages de CPT-12
+    # (paiements, retours en arrière), en gardant celles de CPT-10 et CPT-11
+    factures = odoo('account.move', 'search', [['partner_id', 'in', [traiteur, BOUTIQUE_ALMADIES]], ['move_type', 'in', ['out_invoice', 'out_refund']]])
+    traces = odoo('mail.message', 'search', [['model', '=', 'account.move'], ['res_id', 'in', factures], ['date', '>=', '2026-11-03 00:00:00']])
+    if traces:
+        odoo('mail.message', 'unlink', traces)
     # même banque destinataire sur les deux factures des Almadies, sinon Odoo ne propose pas de regrouper le paiement
     rib = odoo('res.partner.bank', 'search', [['acc_number', '=', 'SN012 01001 012345678901 23']])
     odoo('account.move', 'write', [1], {'partner_bank_id': rib[0]}, context=fr)
