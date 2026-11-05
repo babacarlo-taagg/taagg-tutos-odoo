@@ -158,7 +158,7 @@ etapes:
       La boutique est dans la colonne un à trente jours. Le traiteur, dans la colonne trente et un à soixante.
       Plus l'argent glisse vers la droite, plus il est difficile à récupérer : c'est là qu'il faut agir en premier.
     actions:
-      - surligner_texte: "31-60"
+      - surligner: 'th:has-text("31-60")'
         duree: 4
 
   # ------------------------------------------------------------------ pièges fréquents
