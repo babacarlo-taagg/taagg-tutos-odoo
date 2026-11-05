@@ -2,7 +2,8 @@
 # État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-14`) :
 #   aucune facture des Grands Moulins de Dakar, aucune facture fournisseur en brouillon ;
 #   la seule facture fournisseur est BILL/2026/09/0001 (Épicerie Nouvelle J C Bittar, beurre, non payée).
-#   La farine T55 coûte 18 000 F le sac (prix de revient), TVA d'achat 18 %, catégorie « Intrants » → 602100.
+#   Farine T55 : TVA d'achat 18 %, catégorie « Intrants » → 602100 ; Odoo propose 900 000 F le sac (prix de la fiche
+#   compté au kilo × 50 kg), d'où la saisie du prix de la facture, 18 000 F, à l'écran.
 # Ce que la capsule crée : BILL/2026/11/0001, Grands Moulins de Dakar, réf. GMD-2026-1187, datée du 3 novembre,
 #   10 sacs de farine, 180 000 F HT + 32 400 F de TVA = 212 400 F, condition 30 jours. etat-depart.py la supprime.
 titre: Saisir une facture fournisseur
@@ -87,13 +88,16 @@ etapes:
       - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_field_x2many_list_row_add a'
       - choisir: {champ: product_id, valeur: Farine de blé}
   - texte: >
-      Dix sacs. Le prix, dix-huit mille francs le sac, vient de la fiche du produit : vérifiez qu'il correspond à la facture.
+      Dix sacs. Odoo propose un prix, tiré de la fiche du produit, mais c'est toujours la facture qui fait foi :
+      saisissez son prix, dix-huit mille francs le sac.
     actions:
       - champ: quantity
         taper: "10"
-      - touche: Tab
       - surligner: ':nth-match(.o_field_widget[name="invoice_line_ids"] .o_data_row, 1) td[name="price_unit"]'
-        duree: 2.5
+        duree: 2
+      - champ: price_unit
+        taper: "18000"
+      - touche: Tab
   - texte: >
       Odoo a rempli la taxe d'achat, dix-huit pour cent, et le compte d'achat de matières premières, six cent deux mille cent,
       venu de la catégorie du produit.
