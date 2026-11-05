@@ -114,7 +114,7 @@ etapes:
       Enfin, un message pour les jours où tout est vendu : Fournée épuisée, revenez demain dès sept heures.
       Enregistrez.
     actions:
-      - taper_dans: {dans: '[name="out_of_stock_message"] input, [name="out_of_stock_message"] textarea', texte: "Fournée épuisée : revenez demain dès 7 h"}
+      - remplacer_texte: {dans: '[name="out_of_stock_message"] [contenteditable]', texte: "Fournée épuisée : revenez demain dès 7 h"}
       - enregistrer: oui
       - attendre: 1
 
@@ -170,7 +170,7 @@ etapes:
       - attendre: 0.5
   - texte: Ajoutez le même message, puis enregistrez.
     actions:
-      - taper_dans: {dans: '[name="out_of_stock_message"] input, [name="out_of_stock_message"] textarea', texte: "Fournée épuisée : revenez demain dès 7 h"}
+      - remplacer_texte: {dans: '[name="out_of_stock_message"] [contenteditable]', texte: "Fournée épuisée : revenez demain dès 7 h"}
       - enregistrer: oui
       - attendre: 1
   - texte: >
