@@ -125,7 +125,7 @@ etapes:
       - cliquer: '.o_control_panel button:text-is("Envoyer")'
   - texte: >
       Odoo prépare l'e-mail : le destinataire, le sujet, un message poli, et le relevé en pièce jointe.
-      Relisez, adaptez si besoin, puis cliquez sur Imprimer et envoyer.
+      Relisez, adaptez si besoin, puis cliquez sur le bouton Imprimer, et envoyer.
     actions:
       - surligner_champ: mail_partner_ids
         duree: 1.5
