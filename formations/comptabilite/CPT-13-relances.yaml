@@ -1,0 +1,193 @@
+# CPT-13 · Relancer les clients [E]
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-13`) :
+#   deux factures en retard créées par l'API, dates calculées le jour du tournage :
+#   INV/2026/00005 Boutique Les Almadies (60 croissants, 35 400 F, échue depuis 20 jours, réf. « Réassort de la vitrine »)
+#   INV/2026/00006 Traiteur Saveurs du Plateau (4 Opéra + 100 macarons, 127 440 F, échue depuis 35 jours, réf. « Commande du séminaire »).
+#   Adresses e-mail fictives en .example (aucun vrai destinataire). Niveaux de relance : 15 jours et 30 jours seulement.
+# Ce que la capsule crée : le niveau « 60 jours — Dernier rappel » (e-mail + activité « Appeler le client »),
+#   l'envoi d'une relance au traiteur (message dans son historique). etat-depart.py défait tout.
+titre: Relancer les clients
+sous_titre: Formation Comptabilité Odoo · CPT-13
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : saisir une facture fournisseur"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette treizième capsule. Une facture en retard, c'est de l'argent qui dort
+      chez le client. Aujourd'hui, on apprend à relancer, avec méthode et sans oublier personne.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez régler vos niveaux de relance, trouver les clients en retard,
+      leur envoyer une relance, et lire l'échéancier clients. Ces outils font partie de la version Enterprise d'Odoo.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deux clients sont en retard : la Boutique Les Almadies, de vingt jours, et le Traiteur Saveurs du Plateau, de trente-cinq jours.
+    actions:
+      - surligner: '.o_kanban_record:has-text("Ventes")'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 1 : niveaux de relance
+  - partie: "1. Les niveaux de relance"
+    texte: >
+      Tout commence par une règle : quand relancer, et comment. Ouvrez Configuration, puis Niveaux de relance.
+    actions:
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Niveaux de relance")'
+  - texte: >
+      Deux niveaux sont prêts. Quinze jours après l'échéance, un premier e-mail. Trente jours après, un deuxième rappel.
+    actions:
+      - surligner: '.o_list_renderer'
+        duree: 4
+  - texte: >
+      Ajoutons un troisième niveau, plus ferme. Cliquez sur Nouveau. Description : soixante jours, dernier rappel.
+    actions:
+      - bouton: Nouveau
+      - champ: name
+        taper: 60 jours — Dernier rappel
+  - texte: Il se déclenche soixante jours après la date d'échéance.
+    actions:
+      - champ: delay
+        taper: "60"
+  - texte: >
+      L'action : un e-mail, avec les factures jointes. Choisissez le modèle Deuxième rappel de relance.
+    actions:
+      - surligner_champ: send_email
+        duree: 1.5
+      - choisir: {champ: mail_template_id, valeur: Deuxième rappel}
+      - surligner_champ: join_invoices
+        duree: 2
+  - texte: >
+      À ce stade, un e-mail ne suffit plus : il faut appeler. Dans l'onglet Activité, cochez Planifier une activité,
+      et résumez : appeler le client.
+    actions:
+      - onglet: Activité
+      - cocher: create_activity
+      - champ: activity_summary
+        taper: Appeler le client
+  - texte: >
+      Enregistrez. La case Automatique, laissée vide, vous garde la main : Odoo propose la relance, et c'est vous qui l'envoyez.
+    actions:
+      - enregistrer: oui
+      - onglet: Notifications
+      - surligner_champ: auto_execute
+        duree: 3.5
+
+  # ------------------------------------------------------------------ partie 2 : qui relancer
+  - partie: "2. Qui faut-il relancer ?"
+    texte: >
+      Ouvrez Clients, puis Clients, et choisissez le filtre : Nécessite un suivi.
+    actions:
+      - ouvrir_menu: Clients
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Clients")'
+      - cliquer: '.o_searchview_dropdown_toggler'
+      - cliquer_texte: Nécessite un suivi
+      - touche: Escape
+  - texte: >
+      Il ne reste que les deux clients en retard. Personne n'est oublié, et personne n'est relancé par erreur.
+    actions:
+      - surligner: '.o_kanban_renderer, .o_list_renderer'
+        duree: 4
+
+  # ------------------------------------------------------------------ partie 3 : relancer
+  - partie: "3. Relancer un client"
+    texte: >
+      Ouvrez le traiteur. Le bouton Dû affiche ce qu'il doit : cent vingt-sept mille quatre cent quarante francs. Cliquez dessus.
+    actions:
+      - cliquer: '.o_kanban_record:has-text("Traiteur Saveurs du Plateau"), .o_data_row:has-text("Traiteur Saveurs du Plateau")'
+      - surligner: 'button[name="open_follow_up_report"]'
+        duree: 2.5
+      - cliquer: 'button[name="open_follow_up_report"]'
+  - texte: >
+      Voici le rapport de relance : la facture du séminaire, son échéance passée, en rouge, et le solde dû.
+    actions:
+      - surligner: 'tr:has-text("INV/2026/00006")'
+        duree: 4
+  - texte: >
+      La case Pas de relance sert aux factures en litige : cochée, la facture sort des relances, le temps de régler le désaccord.
+    actions:
+      - surligner: 'th:has-text("Pas de relance")'
+        duree: 3.5
+  - texte: Cliquez sur Envoyer.
+    actions:
+      - cliquer: '.o_control_panel button:text-is("Envoyer")'
+  - texte: >
+      Odoo prépare l'e-mail : le destinataire, le sujet, un message poli, et le relevé en pièce jointe.
+      Relisez, adaptez si besoin, puis cliquez sur Imprimer et envoyer.
+    actions:
+      - surligner_champ: mail_partner_ids
+        duree: 1.5
+      - surligner_champ: mail_body
+        duree: 2.5
+      - surligner_champ: mail_attachments_widget
+        duree: 2
+      - cliquer: '.modal-footer button[name="action_send_and_print"]'
+  - texte: >
+      Revenez sur la fiche du traiteur : l'historique garde la trace de la relance envoyée. En cas de désaccord, la preuve est là.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Traiteur Saveurs du Plateau")'
+      - surligner: '.o-mail-Chatter, .o_mail_thread'
+        duree: 4
+
+  # ------------------------------------------------------------------ partie 4 : l'échéancier
+  - partie: "4. L'échéancier clients"
+    texte: >
+      Pour une vue d'ensemble, ouvrez Analyse, puis Échéancier clients.
+    actions:
+      - ouvrir_menu: Analyse
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Échéancier clients")'
+  - texte: >
+      Chaque client sur une ligne, et ce qu'il doit, rangé par retard : de un à trente jours, de trente et un à soixante, et au-delà.
+    actions:
+      - surligner: '.o_content table, .account_report table'
+        duree: 4.5
+  - texte: >
+      La boutique est dans la colonne un à trente jours. Le traiteur, dans la colonne trente et un à soixante.
+      Plus l'argent glisse vers la droite, plus il est difficile à récupérer : c'est là qu'il faut agir en premier.
+    actions:
+      - surligner_texte: "31-60"
+        duree: 4
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : relancer sans vérifier les paiements reçus. Encaissez d'abord,
+      relancez ensuite : rien de pire qu'une relance pour une facture déjà payée.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : relancer une facture en litige. Cochez Pas de relance, et réglez d'abord le désaccord.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : un client sans adresse e-mail. La relance ne part pas. Vérifiez la fiche de chaque client.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Les niveaux de relance fixent quand et comment relancer : e-mail, factures jointes, activité.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Le filtre Nécessite un suivi trouve les clients en retard ; le bouton Dû ouvre leur rapport, et Envoyer expédie la relance.
+      L'échéancier montre qui doit quoi, et depuis combien de temps.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : ouvrez votre échéancier clients, repérez le client le plus en retard, et envoyez-lui sa relance.
+      Dans la prochaine capsule, nous passerons de l'autre côté : les factures des fournisseurs. À tout de suite !
+    actions:
+      - attendre: 1

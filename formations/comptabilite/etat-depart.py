@@ -3,6 +3,7 @@
 Usage : python3 formations/comptabilite/etat-depart.py CPT-02
 Lit ODOO_URL, ODOO_BASE, ODOO_LOGIN_API et ODOO_CLE_API dans l'environnement, sinon dans le .env du projet.
 """
+import datetime
 import json
 import os
 import pathlib
@@ -282,8 +283,53 @@ def cpt_12():
             facture_simple(traiteur, [("Gâteau d'anniversaire", 4, 25000)], terme='2/7 Net 30'))
 
 
+def facture_en_retard(partenaire, lignes, jours_de_retard, ref):
+    # facture validée dont l'échéance est passée de « jours_de_retard » jours (dates calculées le jour du tournage)
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    aujourdhui = datetime.date.today()
+    echeance = aujourdhui - datetime.timedelta(days=jours_de_retard)
+    facture = odoo('account.move', 'create', {
+        'move_type': 'out_invoice', 'partner_id': partenaire, 'ref': ref,
+        'invoice_date': str(echeance - datetime.timedelta(days=15)), 'invoice_date_due': str(echeance),
+        'invoice_payment_term_id': False,
+        'invoice_line_ids': [[0, 0, {'product_id': odoo('product.product', 'search', [['name', '=', nom]])[0],
+                                     'quantity': q, 'price_unit': pu}] for nom, q, pu in lignes]}, context=fr)
+    odoo('account.move', 'write', [facture], {'invoice_date_due': str(echeance)}, context=fr)
+    odoo('account.move', 'action_post', [facture], context=fr)
+    return odoo('account.move', 'read', [facture], ['name', 'invoice_date_due'])[0]
+
+
+def cpt_13():
+    # deux factures en retard (Almadies : 20 jours ; Traiteur : 35 jours), adresses e-mail fictives (.example),
+    # aucune relance faite, pas de niveau « 60 jours » ; les relances envoyées à l'écran laissent des messages,
+    # retirés ici
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    traiteur = odoo('res.partner', 'search', [['name', '=', 'Traiteur Saveurs du Plateau']])[0]
+    odoo('res.partner', 'write', [traiteur], {'email': 'compta@saveurs-du-plateau.example'}, context=fr)
+    odoo('res.partner', 'write', [BOUTIQUE_ALMADIES], {'email': 'gerance@boutique-almadies.example'}, context=fr)
+    niveaux = odoo('account_followup.followup.line', 'search', [['delay', '>', 30]], context=fr)
+    if niveaux:
+        odoo('account_followup.followup.line', 'unlink', niveaux, context=fr)
+    anciennes = odoo('account.move', 'search', [['move_type', '=', 'out_invoice'], ['ref', 'in', ['Commande du séminaire', 'Réassort de la vitrine']]], order='name desc')
+    for f in anciennes:
+        paiements = odoo('account.payment', 'search', [['reconciled_invoice_ids', 'in', [f]]])
+        if paiements:
+            odoo('account.payment', 'action_draft', paiements, context=fr)
+            odoo('account.payment', 'unlink', paiements, context=fr)
+        if odoo('account.move', 'read', [f], ['state'])[0]['state'] != 'draft':
+            odoo('account.move', 'button_draft', [f], context=fr)
+        odoo('account.move', 'unlink', [f], context=fr)
+    for p in (traiteur, BOUTIQUE_ALMADIES):
+        traces = odoo('mail.message', 'search', [['model', '=', 'res.partner'], ['res_id', '=', p], ['date', '>=', '2026-11-05 00:00:00']])
+        if traces:
+            odoo('mail.message', 'unlink', traces)
+        odoo('res.partner', 'write', [p], {'followup_next_action_date': False}, context=fr)
+    return (facture_en_retard(BOUTIQUE_ALMADIES, [('Croissant', 60, 500)], 20, 'Réassort de la vitrine'),
+            facture_en_retard(traiteur, [('Opéra', 4, 17000), ('Macaron', 100, 400)], 35, 'Commande du séminaire'))
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''
