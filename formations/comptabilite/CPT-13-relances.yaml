@@ -70,10 +70,11 @@ etapes:
         duree: 2
   - texte: >
       À ce stade, un e-mail ne suffit plus : il faut appeler. Dans l'onglet Activité, cochez Planifier une activité,
-      et résumez : appeler le client.
+      choisissez le type Appeler, et résumez : appeler le client.
     actions:
       - onglet: Activité
       - cocher: create_activity
+      - choisir: {champ: activity_type_id, valeur: Appeler}
       - champ: activity_summary
         taper: Appeler le client
   - texte: >
