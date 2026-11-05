@@ -41,10 +41,10 @@ etapes:
   # ------------------------------------------------------------------ partie 1 : l'en-tête
   - partie: "1. Créer la facture"
     texte: >
-      Ouvrez le menu Fournisseurs, puis Factures.
+      Ouvrez le menu Fournisseurs, puis Factures fournisseurs.
     actions:
       - ouvrir_menu: Fournisseurs
-      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Factures")'
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Factures fournisseurs")'
   - texte: >
       La liste montre les factures déjà reçues : pour l'instant, celle de l'épicerie, pour du beurre. Cliquez sur Nouveau.
     actions:
@@ -173,7 +173,7 @@ etapes:
   # ------------------------------------------------------------------ récapitulatif et exercice
   - chapitre: Récapitulatif
     texte: >
-      Récapitulons. Une facture fournisseur se saisit dans Fournisseurs, Factures : le fournisseur, sa référence,
+      Récapitulons. Une facture fournisseur se saisit dans Fournisseurs, Factures fournisseurs : le fournisseur, sa référence,
       la date du document, puis les lignes.
     actions:
       - attendre: 0.5
