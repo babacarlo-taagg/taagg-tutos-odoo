@@ -60,7 +60,10 @@ etapes:
   - texte: >
       L'avoir reprend toute la facture. Il ne concerne qu'un sac : remplacez la quantité, dix, par un.
     actions:
+      - attendre: 1
       - cliquer: ':nth-match(.o_field_widget[name="invoice_line_ids"] .o_data_row, 1) td[name="quantity"]'
+      - attendre: 0.5
+      - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_data_row td[name="quantity"]'
       - champ: quantity
         taper: "1"
       - touche: Tab
