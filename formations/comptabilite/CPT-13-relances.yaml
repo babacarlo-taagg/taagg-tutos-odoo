@@ -135,9 +135,9 @@ etapes:
         duree: 2
       - cliquer: '.modal-footer button[name="action_send_and_print"]'
   - texte: >
-      Revenez sur la fiche du traiteur : l'historique garde la trace de la relance envoyée. En cas de désaccord, la preuve est là.
+      Le bouton Partenaire rouvre la fiche du traiteur : l'historique garde la trace de la relance envoyée. En cas de désaccord, la preuve est là.
     actions:
-      - cliquer: '.breadcrumb-item a:has-text("Traiteur Saveurs du Plateau")'
+      - cliquer: '.o_content :is(button, a, span):text-is("Partenaire")'
       - surligner: '.o-mail-Chatter, .o_mail_thread'
         duree: 4
 
