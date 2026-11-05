@@ -152,6 +152,7 @@ etapes:
         duree: 2.5
   - texte: >
       Vous pouvez aussi désigner un responsable : la personne qui suit ce client, et qui passera l'appel au dernier niveau.
+    sous_titres: haut
     actions:
       - surligner_champ: followup_responsible_id
         duree: 3
