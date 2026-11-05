@@ -135,9 +135,10 @@ etapes:
         duree: 2
       - cliquer: '.modal-footer button[name="action_send_and_print"]'
   - texte: >
-      Le bouton Partenaire rouvre la fiche du traiteur : l'historique garde la trace de la relance envoyée. En cas de désaccord, la preuve est là.
+      Sur la fiche du traiteur, l'historique garde la trace de la relance envoyée. En cas de désaccord, la preuve est là.
     actions:
-      - cliquer: '.o_content :is(button, a, span):text-is("Partenaire")'
+      # après « Imprimer et envoyer », la page du rapport ne répond plus aux clics (téléchargement du PDF) : on rouvre la fiche
+      - aller: /odoo/action-account.res_partner_action_customer/48
       - surligner: '.o-mail-Chatter, .o_mail_thread'
         duree: 4
 
