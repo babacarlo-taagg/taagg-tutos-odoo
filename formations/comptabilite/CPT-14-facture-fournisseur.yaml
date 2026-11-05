@@ -107,8 +107,8 @@ etapes:
       - surligner: ':nth-match(.o_field_widget[name="invoice_line_ids"] .o_data_row, 1) td[name="account_id"]'
         duree: 3
   - texte: >
-      Le contrôle le plus important : le total. Cent quatre-vingt mille francs hors taxes, trente-deux mille quatre cents de TVA,
-      deux cent douze mille quatre cents francs. Exactement le montant de la facture papier.
+      Le contrôle le plus important : le total. Hors taxes, cent quatre-vingt mille francs. La TVA, trente-deux mille quatre cents.
+      Au total, deux cent douze mille quatre cents francs. Exactement le montant de la facture papier.
     sous_titres: haut
     actions:
       - surligner_champ: tax_totals
