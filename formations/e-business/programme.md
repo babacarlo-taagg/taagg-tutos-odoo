@@ -44,7 +44,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | EB-04 | Mettre ses produits en ligne | fiche produit pour la boutique : photo, prix TTC, description, publier / dépublier | Produits | 🎙 |
 | EB-05 | Organiser son catalogue | catégories de la boutique, variantes (gâteau 6, 8 ou 12 parts), filtres, ordre d'affichage | Catégories, Attributs | 🎙 |
 | EB-06 | Le tunnel d'achat | les étapes du client : panier, adresse, livraison, paiement, confirmation ; les réglages de la boutique (compte client, téléphone obligatoire…) | Paramètres eCommerce, Boutique | 🎙 |
-| EB-07 | Stock et disponibilité en ligne | afficher le stock ou « en rupture », vendre sur commande, faire l'inventaire | Inventaire, Produits | ☐ |
+| EB-07 | Stock et disponibilité en ligne | afficher le stock ou « en rupture », vendre sur commande, faire l'inventaire | Inventaire, Produits | ✎ |
 
 ## Parcours 2 — Encaisser et livrer (Module 3)
 

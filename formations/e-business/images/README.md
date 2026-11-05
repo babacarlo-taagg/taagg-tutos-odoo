@@ -22,6 +22,8 @@ Règles : compétence `tuto-odoo-illustrations`. Babacar valide chaque image ava
 | `eb-05-recap.png` | EB-05 | les 4 points à retenir | ☐ |
 | `eb-06-tunnel.png` | EB-06 | les 5 étapes du tunnel d'achat | ☐ |
 | `eb-06-recap.png` | EB-06 | les 4 points à retenir | ☐ |
+| `eb-07-deux-produits.png` | EB-07 | produits du jour (stock suivi) ou sur commande | ☐ |
+| `eb-07-recap.png` | EB-07 | les 4 points à retenir | ☐ |
 | `logo-delices-maimouna.png` | toutes | logo fictif de la boutique d'exemple (posé sur le site par `etat-depart.py`) | ☐ |
 
 ## Images IA (sans texte)
