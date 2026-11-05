@@ -31,7 +31,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | CPT-10 | Créer et valider une facture client | lignes, taxes, échéance, validation, envoi, l'écriture générée | Clients › Factures clients | 🎙 5:34 |
 | CPT-11 | Avoirs et annulation | rectifier une erreur : avoir total ou partiel, remettre en brouillon | Clients › Avoirs | 🎙 4:48 |
 | CPT-12 | Encaisser un paiement client | paiement total, partiel, plusieurs factures, escompte | Clients › Paiements | 🎙 5:09 |
-| CPT-13 | Relancer les clients **[E]** | niveaux de relance, lettre et e-mail automatiques, échéancier clients | Niveaux de relance, Échéancier clients | ☐ |
+| CPT-13 | Relancer les clients **[E]** | niveaux de relance, lettre et e-mail automatiques, échéancier clients | Niveaux de relance, Échéancier clients | 🎙 4:32 |
 
 ## Parcours 3 — Achats et fournisseurs
 
@@ -129,6 +129,12 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
   Paiement total Wave (Traiteur 54 280), partiel caisse (Almadies 50 000, « Laisser ouvert »), groupé Wave
   (Almadies 91 600), escompte « 2/7 Net 30 » (INV/2026/00004, 118 000 → 115 640). INV/2026/00003 et 00004
   créées par etat-depart.py, qui défait paiements et réglages et nettoie l'historique des factures.
+- **CPT-13** (5 novembre 2026) : version finale, 4 min 32 s, 31 étapes, ≈ 3 800 caractères de voix.
+  Odoo 19 : pas de menu Relances ; on passe par le filtre « Nécessite un suivi », le bouton « Dû » (rapport de relance)
+  et l'onglet Comptabilité (cadre Suivi des factures). Crée le niveau « 60 jours — Dernier rappel » (activité Appeler).
+  INV/2026/00005 (Almadies, 20 j de retard) et 00006 (Traiteur, 35 j) créées par etat-depart.py, adresses .example.
+  Après « Imprimer et envoyer », la page du rapport ne répond plus aux clics : la fiche est rouverte par son adresse.
+  Deux phrases régénérées (« euh » ; « Imprimer et » prononcé « imprimeur » → virgule).
 
 ## Ordre de tournage proposé
 
