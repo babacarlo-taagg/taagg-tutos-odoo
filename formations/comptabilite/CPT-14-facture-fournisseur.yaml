@@ -75,6 +75,13 @@ etapes:
   # ------------------------------------------------------------------ partie 2 : les lignes
   - partie: "2. Les lignes et les taxes"
     texte: >
+      Sur les factures fournisseurs, la colonne Produit est cachée. Affichez-la avec le petit bouton de réglage
+      des colonnes, à droite : cochez Produit.
+    actions:
+      - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_optional_columns_dropdown_toggle'
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Produit")'
+      - touche: Escape
+  - texte: >
       Ajoutez une ligne, et choisissez la farine de blé T cinquante-cinq.
     actions:
       - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_field_x2many_list_row_add a'
