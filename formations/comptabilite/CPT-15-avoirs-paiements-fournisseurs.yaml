@@ -1,0 +1,213 @@
+# CPT-15 · Avoirs et paiements fournisseurs
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-15`) :
+#   BILL/2026/11/0001 Grands Moulins de Dakar (CPT-14 : 10 sacs de farine, 212 400 F, échéance 3 décembre), sans avoir ni paiement ;
+#   Épicerie Nouvelle J C Bittar : BILL/2026/09/0001 (beurre, 23 600 F, échue le 9 septembre)
+#   et BILL/2026/10/0001 (200 œufs, 11 800 F, réf. EPI-1015, échue le 15 octobre, créée par l'API) ;
+#   aucun paiement fournisseur ; le mode « Manual Payment » sortant du journal Banque n'a pas de compte.
+# Ce que la capsule crée : l'avoir fournisseur des Grands Moulins (1 sac déchiré, 21 240 F), le compte 521004 sur les
+#   paiements sortants de la banque, un paiement de 191 160 F aux Grands Moulins et un paiement groupé de 35 400 F à l'épicerie.
+#   etat-depart.py défait tout.
+titre: Avoirs et paiements fournisseurs
+sous_titre: Formation Comptabilité Odoo · CPT-15
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : les notes de frais des employés"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette quinzième capsule. Une facture fournisseur saisie, il reste deux gestes :
+      la corriger quand la livraison n'est pas conforme, et la payer.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez enregistrer un avoir fournisseur, choisir qui payer en premier,
+      payer une facture, et en régler plusieurs d'un seul virement.
+    actions:
+      - attendre: 1
+  - texte: >
+      À l'ouverture des sacs de farine, la boutique en a trouvé un déchiré. Les Grands Moulins acceptent de ne pas le facturer.
+    actions:
+      - surligner: '.o_kanban_record:has-text("Achats")'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 1 : l'avoir fournisseur
+  - partie: "1. L'avoir fournisseur"
+    texte: >
+      Ouvrez Fournisseurs, Factures fournisseurs, puis la facture des Grands Moulins.
+    actions:
+      - ouvrir_menu: Fournisseurs
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Factures fournisseurs")'
+      - cliquer: '.o_data_row:has-text("Grands Moulins de Dakar") td.o_data_cell'
+  - texte: >
+      Comme pour un client, une facture validée ne se modifie pas : on la corrige par un avoir. Cliquez sur Avoir.
+    actions:
+      - cliquer: '.o_statusbar_buttons button[name="action_reverse"]'
+  - texte: >
+      Le motif d'abord : un sac déchiré à la livraison. Puis Extourner.
+    actions:
+      - champ: reason
+        taper: 1 sac déchiré à la livraison
+      - cliquer: '.modal-footer button[name="refund_moves"]'
+  - texte: >
+      L'avoir reprend toute la facture. Il ne concerne qu'un sac : remplacez la quantité, dix, par un.
+    actions:
+      - cliquer: ':nth-match(.o_field_widget[name="invoice_line_ids"] .o_data_row, 1) td[name="quantity"]'
+      - champ: quantity
+        taper: "1"
+      - touche: Tab
+  - texte: >
+      Dix-huit mille francs hors taxes, et trois mille deux cent quarante de TVA : vingt et un mille deux cent quarante francs.
+      Cliquez sur Confirmer.
+    sous_titres: haut
+    actions:
+      - surligner_champ: tax_totals
+        duree: 3.5
+      - cliquer: '.o_statusbar_buttons button[name="action_post"]'
+  - texte: >
+      L'avoir a son propre numéro. Odoo l'a relié tout seul à la facture des Grands Moulins.
+    actions:
+      - surligner_champ: name
+        duree: 3
+  - texte: >
+      Revenez à la facture : le montant dû est tombé à cent quatre-vingt-onze mille cent soixante francs.
+      C'est ce que la boutique paiera.
+    sous_titres: haut
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("BILL/2026/11/0001")'
+      - surligner_champ: amount_residual
+        duree: 4
+
+  # ------------------------------------------------------------------ partie 2 : le réglage de la banque
+  - partie: "2. Avant de payer"
+    texte: >
+      Un réglage, une seule fois, comme pour les encaissements. Ouvrez Configuration, Journaux, et le journal Banque.
+    actions:
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Journaux")'
+      - cliquer: '.o_data_row td[name="name"]:text-is("Banque")'
+  - texte: >
+      Dans l'onglet Paiements sortants, choisissez le compte d'attente : Paiements sortants en suspens.
+      Ainsi, chaque paiement diminue tout de suite la dette envers le fournisseur, et le relevé de la banque confirmera le virement.
+    actions:
+      - onglet: Paiements sortants
+      - cliquer: '.o_notebook .tab-pane.active .o_data_row td[name="payment_account_id"]'
+      - choisir: {champ: payment_account_id, valeur: Paiements sortants en suspens}
+      - enregistrer: oui
+
+  # ------------------------------------------------------------------ partie 3 : l'échéancier fournisseurs
+  - partie: "3. Qui payer en premier ?"
+    texte: >
+      Avant de payer, une vue d'ensemble : ouvrez Analyse, puis Échéancier fournisseurs.
+    actions:
+      - ouvrir_menu: Analyse
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Échéancier fournisseurs")'
+  - texte: >
+      Chaque fournisseur, et ce que la boutique lui doit, rangé par retard. L'épicerie attend depuis des semaines :
+      deux factures, échues. Les Grands Moulins, eux, ne sont pas encore à échéance.
+    actions:
+      - surligner: '.o_content table, .account_report table'
+        duree: 6
+  - texte: >
+      Payer d'abord les retards, c'est garder la confiance de ses fournisseurs. Mais rien n'interdit de payer en avance.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 4 : payer une facture
+  - partie: "4. Payer une facture"
+    texte: >
+      Les Grands Moulins demandent un virement dès cette semaine. Ouvrez Fournisseurs, Factures fournisseurs, puis leur facture,
+      et cliquez sur Payer.
+    actions:
+      - ouvrir_menu: Fournisseurs
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Factures fournisseurs")'
+      - cliquer: '.o_data_row:has-text("Grands Moulins de Dakar") td.o_data_cell'
+      - cliquer: '.o_statusbar_buttons button[name="action_register_payment"]'
+  - texte: >
+      Odoo propose le journal Banque et le montant dû, avoir déduit : cent quatre-vingt-onze mille cent soixante francs.
+      Le mémo reprend la référence du fournisseur : il reconnaîtra son paiement. Cliquez sur Créer un paiement.
+    actions:
+      - surligner_champ: journal_id
+        duree: 1.5
+      - surligner_champ: amount
+        duree: 2.5
+      - surligner_champ: communication
+        duree: 2
+      - cliquer: '.modal-footer button[name="action_create_payments"]'
+  - texte: >
+      Le montant dû tombe à zéro. La facture est en cours de paiement, jusqu'à ce que le relevé bancaire confirme le virement.
+    sous_titres: haut
+    actions:
+      - surligner_champ: amount_residual
+        duree: 2.5
+      - surligner: '.o_form_view .ribbon'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 5 : paiement groupé
+  - partie: "5. Payer plusieurs factures d'un coup"
+    texte: >
+      Reste l'épicerie : deux factures, vingt-trois mille six cents et onze mille huit cents francs. Dans la liste, cochez-les.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Factures fournisseurs")'
+      - cliquer: '.o_data_row:has-text("EPICERIE"):has-text("23 600") .o_list_record_selector input'
+      - cliquer: '.o_data_row:has-text("EPICERIE"):has-text("11 800") .o_list_record_selector input'
+  - texte: >
+      Cliquez sur Payer. Cochez Regrouper les paiements : un seul virement de trente-cinq mille quatre cents francs règle les deux factures.
+    actions:
+      - cliquer: 'button[name="action_force_register_payment"]'
+      - surligner_champ: amount
+        duree: 2
+      - cocher: group_payment
+  - texte: Créez le paiement.
+    actions:
+      - cliquer: '.modal-footer button[name="action_create_payments"]'
+  - texte: >
+      Un seul paiement, relié aux deux factures. Tous les paiements fournisseurs se retrouvent dans Fournisseurs, Paiements.
+    actions:
+      - surligner: '.oe_stat_button:has-text("Facture")'
+        duree: 2.5
+      - ouvrir_menu: Fournisseurs
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Paiements")'
+      - surligner: '.o_list_renderer'
+        duree: 3.5
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : payer la facture entière en oubliant l'avoir. Faites toujours l'avoir avant le paiement :
+      Odoo déduira lui-même ce qui est dû.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : payer deux fois la même facture. Partez toujours du bouton Payer de la facture : une fois payée, il disparaît.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : oublier les échéances. Un coup d'œil chaque semaine à l'échéancier fournisseurs évite les retards, et les pénalités.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Une livraison non conforme se corrige par un avoir, depuis le bouton Avoir de la facture : Odoo le relie à la facture.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      L'échéancier fournisseurs dit qui payer en premier. On paie depuis le bouton Payer ; plusieurs factures d'un même fournisseur,
+      on les coche, et on regroupe.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : ouvrez votre échéancier fournisseurs, et payez la facture la plus en retard.
+      Dans la prochaine capsule, nous verrons les notes de frais des employés. À tout de suite !
+    actions:
+      - attendre: 1

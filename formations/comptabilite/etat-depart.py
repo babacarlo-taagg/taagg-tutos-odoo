@@ -342,8 +342,57 @@ def cpt_14():
     return len(factures)
 
 
+def facture_moulins():
+    # BILL/2026/11/0001 de CPT-14 (Grands Moulins de Dakar, 10 sacs de farine à 18 000 F, réf. GMD-2026-1187) ; recréée si elle manque
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    moulins = odoo('res.partner', 'search', [['name', '=', 'Grands Moulins de Dakar']])[0]
+    factures = odoo('account.move', 'search', [['partner_id', '=', moulins], ['move_type', '=', 'in_invoice'], ['ref', '=', 'GMD-2026-1187'], ['state', '=', 'posted']])
+    if factures:
+        return factures[0]
+    farine = odoo('product.product', 'search', [['name', '=like', 'Farine de blé T55%'], ['name', 'not ilike', 'copie']])
+    facture = odoo('account.move', 'create', {
+        'move_type': 'in_invoice', 'partner_id': moulins, 'ref': 'GMD-2026-1187', 'invoice_date': '2026-11-03',
+        'invoice_payment_term_id': odoo('account.payment.term', 'search', [['name', '=', '30 jours']], context=fr)[0],
+        'invoice_line_ids': [[0, 0, {'product_id': farine[0], 'quantity': 10, 'price_unit': 18000}]]}, context=fr)
+    odoo('account.move', 'action_post', [facture], context=fr)
+    return facture
+
+
+def cpt_15():
+    # avoir fournisseur et paiements fournisseurs faits à l'écran : on les défait ; deuxième facture de l'épicerie
+    # (BILL/2026/10/0001, 200 œufs, 11 800 F, réf. EPI-1015) refaite à neuf ; mode de paiement sortant de la banque sans compte
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    paiements = odoo('account.payment', 'search', [['partner_type', '=', 'supplier']])
+    if paiements:
+        valides = odoo('account.payment', 'search', [['id', 'in', paiements], ['state', '!=', 'draft']])
+        if valides:
+            odoo('account.payment', 'action_draft', valides, context=fr)
+        odoo('account.payment', 'unlink', paiements, context=fr)
+    lignes = odoo('account.payment.method.line', 'search', [['journal_id.code', '=', 'BNK1'], ['payment_type', '=', 'outbound']], context=fr)
+    odoo('account.payment.method.line', 'write', lignes, {'payment_account_id': False}, context=fr)
+    a_supprimer = odoo('account.move', 'search', ['|', ['move_type', '=', 'in_refund'], '&', ['move_type', '=', 'in_invoice'], ['ref', '=', 'EPI-1015']], order='id desc')
+    for f in a_supprimer:
+        if odoo('account.move', 'read', [f], ['state'])[0]['state'] != 'draft':
+            odoo('account.move', 'button_draft', [f], context=fr)
+        odoo('account.move', 'unlink', [f], context=fr)
+    moulins = facture_moulins()
+    epicerie = odoo('res.partner', 'search', [['name', '=', 'EPICERIE NOUVELLE J C BITTAR']])[0]
+    oeuf = odoo('product.product', 'search', [['name', '=', 'Oeuf']])
+    seconde = odoo('account.move', 'create', {
+        'move_type': 'in_invoice', 'partner_id': epicerie, 'ref': 'EPI-1015', 'invoice_date': '2026-10-15',
+        'invoice_date_due': '2026-10-15', 'invoice_payment_term_id': False,
+        'invoice_line_ids': [[0, 0, {'product_id': oeuf[0], 'quantity': 200, 'price_unit': 50}]]}, context=fr)
+    odoo('account.move', 'action_post', [seconde], context=fr)
+    factures = odoo('account.move', 'search', [['move_type', '=', 'in_invoice']])
+    traces = odoo('mail.message', 'search', [['model', '=', 'account.move'], ['res_id', 'in', factures], ['date', '>=', '2026-11-05 12:00:00'],
+                                              ['res_id', '!=', seconde]])
+    if traces:
+        odoo('mail.message', 'unlink', traces)
+    return odoo('account.move', 'read', [moulins, seconde], ['name', 'amount_residual'])
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''
