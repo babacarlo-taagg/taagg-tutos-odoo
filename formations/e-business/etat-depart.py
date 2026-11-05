@@ -534,7 +534,45 @@ def eb_06():
     paiement_eb06()
 
 
-CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06}
+# EB-07 : produits dont la capsule règle le stock (les autres gardent « vendre en rupture », sans stock affiché)
+STOCK_EB07 = ['Croissant', 'Chausson aux pommes']
+
+
+def stock_eb07_a_refaire():
+    """Stock à zéro pour les produits suivis, ventes en rupture autorisées, rien d'affiché, sans message ;
+    historique des fiches filmées nettoyé (messages signés du compte de Babacar)."""
+    print('Stock : remis comme avant EB-07')
+    ecrire('website', [SITE], {'add_to_cart_action': 'go_to_cart'}, 'Ajouter au panier → aller au panier (réglé en EB-06)')
+    publies = odoo('product.template', 'search', [('sale_ok', '=', True), ('is_published', '=', True)])
+    ecrire('product.template', publies, {'allow_out_of_stock_order': True, 'show_availability': False,
+                                         'available_threshold': 5, 'out_of_stock_message': False},
+           f'{len(publies)} produits : vente en rupture autorisée, quantité non affichée')
+    gateaux = odoo('product.template', 'search', [('name', 'in', list(CATALOGUE['Gâteaux']) + [TARTE['name']])])
+    ecrire('product.template', gateaux, {'is_storable': False}, 'gâteaux et tarte (sur commande) : stock non suivi')
+    viennoiseries = odoo('product.template', 'search', [('name', 'in', list(CATALOGUE['Viennoiseries']))])
+    ecrire('product.template', viennoiseries, {'is_storable': True}, 'viennoiseries (fournée du matin) : stock suivi')
+    filmes = odoo('product.template', 'search', [('name', 'in', STOCK_EB07)])
+    variantes = odoo('product.product', 'search', [('product_tmpl_id', 'in', filmes)])
+    quants = odoo('stock.quant', 'search', [('product_id', 'in', variantes), ('location_id.usage', '=', 'internal')])
+    print(f'  · stock des {len(STOCK_EB07)} produits filmés remis à 0 ({len(quants)} ligne(s) de stock)')
+    if not VOIR and quants:
+        odoo('stock.quant', 'write', quants, {'inventory_quantity': 0})
+        odoo('stock.quant', 'action_apply_inventory', quants)
+    messages = odoo('mail.message', 'search', [('model', '=', 'product.template'), ('res_id', 'in', filmes),
+                                               ('author_id', '!=', FORMATEUR)])
+    print(f'  · {len(messages)} message(s) d’historique retirés des fiches filmées')
+    if not VOIR and messages:
+        odoo('mail.message', 'unlink', messages)
+
+
+def eb_07():
+    """EB-07 · Stock et disponibilité en ligne : la boutique de la fin d'EB-06, stock des croissants
+    et du chausson à zéro, aucun produit en rupture affiché."""
+    eb_06()
+    stock_eb07_a_refaire()
+
+
+CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07}
 
 if __name__ == '__main__':
     code = next((a.upper() for a in sys.argv[1:] if not a.startswith('--')), None)
