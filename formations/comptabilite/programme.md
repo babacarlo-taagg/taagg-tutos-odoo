@@ -37,7 +37,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 
 | Code | Capsule | Ce qu'on apprend | Écrans | État |
 |---|---|---|---|---|
-| CPT-14 | Saisir une facture fournisseur | saisie manuelle, numérisation d'une facture PDF, contrôle des taxes | Fournisseurs › Factures fournisseurs | ☐ |
+| CPT-14 | Saisir une facture fournisseur | saisie manuelle, numérisation d'une facture PDF, contrôle des taxes | Fournisseurs › Factures fournisseurs | 🎙 4:36 |
 | CPT-15 | Notes de crédit et payer les fournisseurs | avoir fournisseur, paiement unique et groupé, échéancier fournisseurs | Fournisseurs › Paiements | ☐ |
 | CPT-16 | Notes de frais des employés | de la dépense à son remboursement et à l'écriture | Dépenses de l'employé | ☐ |
 
@@ -135,6 +135,11 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
   INV/2026/00005 (Almadies, 20 j de retard) et 00006 (Traiteur, 35 j) créées par etat-depart.py, adresses .example.
   Après « Imprimer et envoyer », la page du rapport ne répond plus aux clics : la fiche est rouverte par son adresse.
   Deux phrases régénérées (« euh » ; « Imprimer et » prononcé « imprimeur » → virgule).
+- **CPT-14** (5 novembre 2026) : version finale, 4 min 36 s, 30 étapes, ≈ 4 100 caractères de voix. Parcours 3 commencé.
+  BILL/2026/11/0001 Grands Moulins de Dakar, réf. GMD-2026-1187, 10 sacs de farine T55 à 18 000 F → 212 400 F, compte 602100.
+  Odoo 19 : colonne Produit cachée sur les lignes de facture fournisseur (affichée à l'écran) ; Odoo propose 900 000 F le sac
+  (prix de la fiche au kilo × 50 kg) → on saisit le prix de la facture. Numérisation (bouton Charger) montrée sans être lancée.
+  Trois phrases régénérées (« cent quatre-vingt mille » mal dit, un « euh », un mot parasite en tête de phrase).
 
 ## Ordre de tournage proposé
 
