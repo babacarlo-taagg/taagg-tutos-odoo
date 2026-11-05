@@ -388,6 +388,11 @@ def cpt_15():
                                               ['res_id', '!=', seconde]])
     if traces:
         odoo('mail.message', 'unlink', traces)
+    # l'historique du journal Banque garde les va-et-vient des tournages de CPT-08 : on le vide (il est filmé ici)
+    banque = odoo('account.journal', 'search', [['code', '=', 'BNK1'], ['company_id', '=', SOCIETE]])
+    traces = odoo('mail.message', 'search', [['model', '=', 'account.journal'], ['res_id', 'in', banque], ['date', '>=', '2026-10-25 00:00:00']])
+    if traces:
+        odoo('mail.message', 'unlink', traces)
     return odoo('account.move', 'read', [moulins, seconde], ['name', 'amount_residual'])
 
 
