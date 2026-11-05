@@ -1,0 +1,219 @@
+# EB-07 · Stock et disponibilité en ligne
+# État de départ : python3 formations/e-business/etat-depart.py EB-07
+#   la boutique de la fin d'EB-06 ; gâteaux et tarte : stock non suivi (sur commande) ; viennoiseries : stock suivi,
+#   à zéro, vente en rupture autorisée, quantité non affichée ; livraisons des commandes de démo annulées.
+# Pendant la capsule : 40 croissants en stock, puis inventaire à 6 ; croissant et chausson : vente en rupture
+#   interdite, message « Fournée épuisée… » ; croissant : quantité affichée sous 10. Relancer etat-depart.py avant chaque prise.
+titre: Stock et disponibilité en ligne
+sous_titre: Formation E-Business Odoo · EB-07
+depart: /odoo
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG School: l'école Tag
+  TAAGG: Tag
+  EB-07: capsule sept
+  eCommerce: e-commerce
+  E-Business: i-business
+  F CFA: francs CFA
+  FCFA: francs CFA
+  " F ": " francs "
+fin:
+  message: "Prochaine capsule : les moyens de paiement"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche (≈ 45 s)
+  - chapitre: Introduction
+    texte: >
+      Bienvenue dans la septième capsule de la formation E-Business.
+      Rien de pire pour une cliente que de payer des croissants qui n'existent plus. Voyons comment Odoo affiche le stock en ligne.
+    actions:
+      - attendre: 1
+  - texte: >
+      Aux Délices de Maïmouna, il y a deux sortes de produits. Les viennoiseries, faites chaque matin en quantité limitée :
+      on suit leur stock. Et les gâteaux, faits sur commande : pas de stock à suivre, ils sont toujours disponibles.
+    actions:
+      - illustration: images/eb-07-deux-produits.png
+        zoom: 1.02
+
+  # ------------------------------------------------------------------ partie 1 : sur commande (≈ 45 s)
+  - partie: "1. Les gâteaux sur commande"
+    texte: >
+      Ouvrez l'application Site Web, puis eCommerce, Produits, et la fiche du gâteau d'anniversaire.
+    actions:
+      - cliquer: '.o_app:has-text("Site Web")'
+      - attendre: 1
+      - ouvrir_menu: eCommerce
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Produits") >> nth=0'
+      - attendre: 1
+      - rechercher: Gâteau d'anniversaire
+      - cliquer: '.o_kanban_record:has-text("Gâteau d''anniversaire"), .o_data_row:has-text("Gâteau d''anniversaire")'
+      - attendre: 1.5
+  - texte: >
+      La case Suivre l'inventaire n'est pas cochée : Odoo ne compte pas les gâteaux, et la boutique les vend toujours.
+      C'est ce qu'il faut pour un produit fait sur commande.
+    actions:
+      - surligner_champ: is_storable
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 2 : la fournée du matin (≈ 1 min 30)
+  - partie: "2. La fournée du matin"
+    texte: >
+      Ouvrez maintenant la fiche du croissant. Ici, Suivre l'inventaire est coché, et la quantité disponible est à zéro.
+    actions:
+      - cliquer: '.o_breadcrumb a:has-text("Produits")'
+      - attendre: 1
+      - rechercher: Croissant
+      - cliquer: '.o_kanban_record:has-text("Croissant"):not(:has-text("amandes")), .o_data_row:has-text("Croissant"):not(:has-text("amandes"))'
+      - attendre: 1.5
+      - surligner_champ: is_storable
+        duree: 1.5
+      - surligner_champ: qty_available
+        duree: 1.5
+  - texte: >
+      Ce matin, Maïmouna a sorti quarante croissants du four. Cliquez sur la quantité disponible,
+      puis sur Mettre la quantité à jour.
+    actions:
+      - cliquer: '.o_field_widget[name="qty_available"]'
+      - attendre: 2
+      - cliquer: 'button:has-text("Mettre la quantité à jour")'
+      - attendre: 2
+  - texte: Cliquez sur Nouveau, tapez quarante dans la quantité, et enregistrez.
+    actions:
+      - cliquer: '.o_control_panel button:has-text("Nouveau")'
+      - attendre: 1
+      - taper_dans: {dans: '.o_selected_row [name="inventory_quantity_auto_apply"] input', texte: "40"}
+      - cliquer: '.o_control_panel button:has-text("Enregistrer")'
+      - attendre: 1.5
+  - texte: "Revenez à la fiche du croissant : quarante unités en stock."
+    actions:
+      - cliquer: '.o_breadcrumb a:has-text("Croissant")'
+      - attendre: 2
+      - surligner_champ: qty_available
+        duree: 2
+
+  # ------------------------------------------------------------------ partie 3 : ce que voit la cliente (≈ 1 min 30)
+  - partie: "3. Ce que voit la cliente"
+    texte: >
+      Dans l'onglet Ventes, trois réglages décident de ce que voit la cliente. D'abord, décochez Vendre en cas de rupture de stock :
+      quand il n'y a plus de croissants, on ne peut plus en commander.
+    actions:
+      - onglet: Ventes
+      - cliquer: '[name="allow_out_of_stock_order"] input'
+      - attendre: 1
+  - texte: >
+      Ensuite, cochez Afficher la quantité disponible, si inférieure à dix : quand il en reste peu,
+      la cliente le voit, et elle se dépêche.
+    actions:
+      - cliquer: '[name="show_availability"] input'
+      - attendre: 0.5
+      - taper_dans: {dans: '[name="available_threshold"] input', texte: "10"}
+  - texte: >
+      Enfin, un message pour les jours où tout est vendu : Fournée épuisée, revenez demain dès sept heures.
+      Enregistrez.
+    actions:
+      - taper_dans: {dans: '[name="out_of_stock_message"] input, [name="out_of_stock_message"] textarea', texte: "Fournée épuisée : revenez demain dès 7 h"}
+      - enregistrer: oui
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 4 : l'inventaire (≈ 1 min 30)
+  - partie: "4. Compter ce qui reste : l'inventaire"
+    texte: >
+      À midi, Maïmouna compte : il ne reste que six croissants. Odoo doit le savoir.
+      Ouvrez l'application Inventaire, puis Opérations, Inventaire physique.
+    actions:
+      - menu: Inventaire > Opérations > Inventaire physique
+      - attendre: 1.5
+  - texte: >
+      Vous voyez tout ce qui est en stock, ingrédients compris. Cherchez le croissant.
+    actions:
+      - rechercher: Croissant
+      - attendre: 1
+  - texte: >
+      Dans la colonne Compté, tapez six : Odoo calcule la différence, moins trente-quatre.
+    actions:
+      - cliquer: '.o_data_row:has-text("Croissant") [name="inventory_quantity"]'
+      - taper_dans: {dans: '.o_data_row:has-text("Croissant") [name="inventory_quantity"] input', texte: "6"}
+      - cliquer: '.o_control_panel button:has-text("Enregistrer")'
+      - attendre: 1.5
+      - surligner: '.o_data_row:has-text("Croissant")'
+        duree: 2
+  - texte: "Cliquez sur Appliquer : le stock passe à six."
+    actions:
+      - cliquer: '.o_data_row:has-text("Croissant") button:has-text("Appliquer")'
+      - attendre: 2.5
+  - texte: >
+      Sur le site, la fiche du croissant affiche maintenant : uniquement six disponibles.
+      Votre cliente sait qu'il faut se dépêcher.
+    actions:
+      - aller: '/odoo/action-website.website_preview?path=%2Fshop%2Fcroissant-15'
+      - attendre: 4
+      - surligner: 'site >> #product_details'
+        duree: 4
+
+  # ------------------------------------------------------------------ partie 5 : en rupture (≈ 1 min)
+  - partie: "5. Un produit en rupture"
+    texte: >
+      Et quand il n'y a plus rien ? Les chaussons aux pommes sont tous vendus : leur stock est à zéro.
+      Ouvrez leur fiche, et dans l'onglet Ventes, décochez Vendre en cas de rupture de stock.
+    actions:
+      - ouvrir_menu: eCommerce
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Produits") >> nth=0'
+      - attendre: 1.5
+      - rechercher: Chausson
+      - cliquer: '.o_kanban_record:has-text("Chausson"), .o_data_row:has-text("Chausson")'
+      - attendre: 1.5
+      - onglet: Ventes
+      - cliquer: '[name="allow_out_of_stock_order"] input'
+      - attendre: 0.5
+  - texte: Ajoutez le même message, puis enregistrez.
+    actions:
+      - taper_dans: {dans: '[name="out_of_stock_message"] input, [name="out_of_stock_message"] textarea', texte: "Fournée épuisée : revenez demain dès 7 h"}
+      - enregistrer: oui
+      - attendre: 1
+  - texte: >
+      Sur le site, le chausson est marqué en rupture de stock, avec votre message.
+      Le bouton Ajouter au panier a disparu : personne ne paiera un chausson qui n'existe plus.
+    actions:
+      - aller: '/odoo/action-website.website_preview?path=%2Fshop%2Fchausson-aux-pommes-18'
+      - attendre: 4
+      - surligner: 'site >> #product_details'
+        duree: 4
+
+  # ------------------------------------------------------------------ pièges (≈ 1 min)
+  - chapitre: Pièges fréquents
+    texte: >
+      Trois pièges fréquents. Premier piège : suivre le stock d'un gâteau fait sur commande.
+      Le stock reste à zéro, et la boutique finit par l'afficher en rupture.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : oublier de mettre le stock à jour le matin. Hier soir, tout était vendu :
+      sans la nouvelle fournée, la boutique dit rupture toute la journée.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : ne jamais compter. Les ventes en boutique et sur WhatsApp ne passent pas toutes par Odoo :
+      faites l'inventaire, au moins une fois par jour pour les viennoiseries.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice (≈ 1 min)
+  - chapitre: À retenir
+    texte: >
+      Retenons l'essentiel. Un : suivez l'inventaire des produits du jour, pas des gâteaux sur commande.
+      Deux : la quantité disponible se met à jour en un clic, avec la fournée du matin.
+      Trois : dans l'onglet Ventes, interdisez la vente en rupture, affichez le stock quand il en reste peu, et écrivez un message d'attente.
+      Quatre : l'inventaire physique corrige le stock avec ce que vous avez compté.
+    apres: 1.2
+    actions:
+      - illustration: images/eb-07-recap.png
+        zoom: 1.02
+  - chapitre: Exercice
+    texte: >
+      À vous de jouer : choisissez vos produits du jour, mettez leur stock à jour, et faites un inventaire en fin de journée.
+      Dans la prochaine capsule, nous ouvrirons les moyens de paiement : carte, Wave et Orange Money.
+    actions:
+      - attendre: 1

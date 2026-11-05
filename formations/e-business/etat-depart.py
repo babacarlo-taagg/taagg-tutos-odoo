@@ -41,7 +41,7 @@ def rpc(service, methode, *args):
     r = json.load(urllib.request.urlopen(req, timeout=300))
     if 'error' in r:
         raise SystemExit(f"✗ Odoo : {r['error']['data'].get('message', r['error'])}")
-    return r['result']
+    return r.get('result')  # certaines méthodes (ex. action_apply_inventory) ne renvoient rien
 
 
 UID = rpc('common', 'login', BASE, ENV['ODOO_LOGIN_API'], CLE)
@@ -551,6 +551,12 @@ def stock_eb07_a_refaire():
     ecrire('product.template', gateaux, {'is_storable': False}, 'gâteaux et tarte (sur commande) : stock non suivi')
     viennoiseries = odoo('product.template', 'search', [('name', 'in', list(CATALOGUE['Viennoiseries']))])
     ecrire('product.template', viennoiseries, {'is_storable': True}, 'viennoiseries (fournée du matin) : stock suivi')
+    # les livraisons des commandes de démo (10 croissants chacune) réserveraient la fournée filmée
+    livraisons = odoo('stock.picking', 'search', [('sale_id.client_order_ref', 'like', 'EB-DEMO'),
+                                                  ('state', 'not in', ['done', 'cancel'])])
+    print(f'  · {len(livraisons)} livraison(s) des commandes de démo annulée(s) (sinon elles réservent les croissants)')
+    if not VOIR and livraisons:
+        odoo('stock.picking', 'action_cancel', livraisons)
     filmes = odoo('product.template', 'search', [('name', 'in', STOCK_EB07)])
     variantes = odoo('product.product', 'search', [('product_tmpl_id', 'in', filmes)])
     quants = odoo('stock.quant', 'search', [('product_id', 'in', variantes), ('location_id.usage', '=', 'internal')])
