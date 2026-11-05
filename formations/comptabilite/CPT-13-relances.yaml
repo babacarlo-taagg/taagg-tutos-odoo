@@ -141,6 +141,20 @@ etapes:
       - aller: /odoo/action-account.res_partner_action_customer/48
       - surligner: '.o-mail-Chatter, .o_mail_thread'
         duree: 4
+  - texte: >
+      Dans l'onglet Comptabilité, le cadre Suivi des factures résume tout : les trois niveaux de relance,
+      dont celui que nous venons de créer, et le statut du client : nécessite une action, tant que la facture n'est pas payée.
+    actions:
+      - onglet: Comptabilité
+      - surligner_champ: followup_line_id
+        duree: 3.5
+      - surligner_champ: followup_status
+        duree: 2.5
+  - texte: >
+      Vous pouvez aussi désigner un responsable : la personne qui suit ce client, et qui passera l'appel au dernier niveau.
+    actions:
+      - surligner_champ: followup_responsible_id
+        duree: 3
 
   # ------------------------------------------------------------------ partie 4 : l'échéancier
   - partie: "4. L'échéancier clients"
