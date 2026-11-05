@@ -328,8 +328,22 @@ def cpt_13():
             facture_en_retard(traiteur, [('Opéra', 4, 17000), ('Macaron', 100, 400)], 35, 'Commande du séminaire'))
 
 
+def cpt_14():
+    # la facture des Grands Moulins de Dakar (10 sacs de farine, réf. GMD-2026-1187) est saisie à l'écran : on la supprime,
+    # ainsi que toute facture fournisseur en brouillon
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    moulins = odoo('res.partner', 'search', [['name', '=', 'Grands Moulins de Dakar']])
+    factures = odoo('account.move', 'search', ['|', '&', ['partner_id', 'in', moulins], ['move_type', '=', 'in_invoice'],
+                                               '&', ['move_type', '=', 'in_invoice'], ['state', '=', 'draft']], order='id desc')
+    for f in factures:
+        if odoo('account.move', 'read', [f], ['state'])[0]['state'] != 'draft':
+            odoo('account.move', 'button_draft', [f], context=fr)
+        odoo('account.move', 'unlink', [f], context=fr)
+    return len(factures)
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''

@@ -1,0 +1,190 @@
+# CPT-14 · Saisir une facture fournisseur
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-14`) :
+#   aucune facture des Grands Moulins de Dakar, aucune facture fournisseur en brouillon ;
+#   la seule facture fournisseur est BILL/2026/09/0001 (Épicerie Nouvelle J C Bittar, beurre, non payée).
+#   La farine T55 coûte 18 000 F le sac (prix de revient), TVA d'achat 18 %, catégorie « Intrants » → 602100.
+# Ce que la capsule crée : BILL/2026/11/0001, Grands Moulins de Dakar, réf. GMD-2026-1187, datée du 3 novembre,
+#   10 sacs de farine, 180 000 F HT + 32 400 F de TVA = 212 400 F, condition 30 jours. etat-depart.py la supprime.
+titre: Saisir une facture fournisseur
+sous_titre: Formation Comptabilité Odoo · CPT-14
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : avoirs et paiements fournisseurs"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans le troisième parcours de la formation : les achats et les fournisseurs.
+      On commence par le geste de base : saisir la facture d'un fournisseur.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez enregistrer une facture fournisseur, contrôler ses taxes et son total,
+      la valider, et lire l'écriture qu'elle produit.
+    actions:
+      - attendre: 1
+  - texte: >
+      La boutique vient de recevoir sa livraison de farine, et la facture des Grands Moulins de Dakar :
+      dix sacs, deux cent douze mille quatre cents francs.
+    actions:
+      - surligner: '.o_kanban_record:has-text("Achats")'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 1 : l'en-tête
+  - partie: "1. Créer la facture"
+    texte: >
+      Ouvrez le menu Fournisseurs, puis Factures.
+    actions:
+      - ouvrir_menu: Fournisseurs
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Factures")'
+  - texte: >
+      La liste montre les factures déjà reçues : pour l'instant, celle de l'épicerie, pour du beurre. Cliquez sur Nouveau.
+    actions:
+      - surligner: '.o_list_renderer'
+        duree: 2.5
+      - bouton: Nouveau
+  - texte: >
+      D'abord le fournisseur : tapez Grands Moulins, et choisissez Grands Moulins de Dakar.
+    actions:
+      - choisir: {champ: partner_id, valeur: Grands Moulins de Dakar}
+  - texte: >
+      Puis la référence de la facture : le numéro imprimé par le fournisseur, G-M-D, deux mille vingt-six, mille cent quatre-vingt-sept.
+      C'est elle qui permet de retrouver le papier, et d'éviter de saisir deux fois la même facture.
+    actions:
+      - champ: ref
+        taper: GMD-2026-1187
+  - texte: >
+      La date de facture est celle du document, le trois novembre, et non le jour de la saisie.
+    actions:
+      - champ: invoice_date
+        taper: "03/11/2026"
+        entree: true
+  - texte: >
+      Le fournisseur accorde trente jours pour payer : choisissez la condition de paiement trente jours.
+    actions:
+      - choisir: {champ: invoice_payment_term_id, valeur: 30 jours}
+
+  # ------------------------------------------------------------------ partie 2 : les lignes
+  - partie: "2. Les lignes et les taxes"
+    texte: >
+      Ajoutez une ligne, et choisissez la farine de blé T cinquante-cinq.
+    actions:
+      - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_field_x2many_list_row_add a'
+      - choisir: {champ: product_id, valeur: Farine de blé}
+  - texte: >
+      Dix sacs. Le prix, dix-huit mille francs le sac, vient de la fiche du produit : vérifiez qu'il correspond à la facture.
+    actions:
+      - champ: quantity
+        taper: "10"
+      - touche: Tab
+      - surligner: ':nth-match(.o_field_widget[name="invoice_line_ids"] .o_data_row, 1) td[name="price_unit"]'
+        duree: 2.5
+  - texte: >
+      Odoo a rempli la taxe d'achat, dix-huit pour cent, et le compte d'achat de matières premières, six cent deux mille cent,
+      venu de la catégorie du produit.
+    actions:
+      - surligner: ':nth-match(.o_field_widget[name="invoice_line_ids"] .o_data_row, 1) td[name="tax_ids"]'
+        duree: 2.5
+      - surligner: ':nth-match(.o_field_widget[name="invoice_line_ids"] .o_data_row, 1) td[name="account_id"]'
+        duree: 3
+  - texte: >
+      Le contrôle le plus important : le total. Cent quatre-vingt mille francs hors taxes, trente-deux mille quatre cents de TVA,
+      deux cent douze mille quatre cents francs. Exactement le montant de la facture papier.
+    sous_titres: haut
+    actions:
+      - surligner_champ: tax_totals
+        duree: 5
+  - texte: >
+      S'il y a un écart, ne confirmez pas : c'est souvent un prix, une quantité, ou une taxe différente. Corrigez d'abord la ligne.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 3 : valider
+  - partie: "3. Valider la facture"
+    texte: Tout correspond. Cliquez sur Confirmer.
+    actions:
+      - cliquer: '.o_statusbar_buttons button[name="action_post"]'
+  - texte: >
+      La facture est comptabilisée, avec son numéro : B-I-L-L, deux mille vingt-six, onze, un. Les factures fournisseurs
+      sont numérotées par mois.
+    actions:
+      - surligner_champ: name
+        duree: 3.5
+  - texte: >
+      La condition trente jours fixe l'échéance au trois décembre : c'est la date à laquelle il faudra payer.
+    actions:
+      - surligner_champ: invoice_payment_term_id
+        duree: 3
+  - texte: Ouvrez l'onglet Écritures comptables.
+    actions:
+      - onglet: Écritures comptables
+  - texte: >
+      C'est l'écriture d'une vente, à l'envers. Les achats sont débités de cent quatre-vingt mille francs, et la TVA récupérable,
+      de trente-deux mille quatre cents. En face, le compte Fournisseurs, quatre cent un mille cent, est crédité :
+      la boutique doit deux cent douze mille quatre cents francs.
+    actions:
+      - surligner: '.o_notebook .tab-pane.active .o_list_renderer'
+        duree: 7
+  - texte: >
+      Cette TVA payée au fournisseur n'est pas perdue : elle viendra en déduction de la TVA collectée sur les ventes.
+    actions:
+      - surligner: '.o_notebook .tab-pane.active .o_data_row:has-text("445200")'
+        duree: 3.5
+
+  # ------------------------------------------------------------------ partie 4 : numériser
+  - partie: "4. Numériser une facture"
+    texte: >
+      Revenons à la liste des factures fournisseurs. La nouvelle facture y figure, à payer.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Factures")'
+      - surligner: '.o_data_row:has-text("Grands Moulins de Dakar")'
+        duree: 3
+  - texte: >
+      Pour aller plus vite, le bouton Charger accepte le PDF, ou la photo, d'une facture : Odoo lit le fournisseur, la date
+      et les montants, et prépare un brouillon. Ce service consomme des crédits, et il faut toujours relire avant de confirmer.
+    actions:
+      - surligner: '.o_control_panel button:has-text("Charger")'
+        duree: 5
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : oublier la référence du fournisseur. Sans elle, une même facture peut être
+      saisie deux fois, et payée deux fois.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : mettre la date du jour au lieu de la date de la facture. La TVA récupérable tombe alors dans la mauvaise période.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : confirmer sans comparer le total au papier. Un écart de taxe passe inaperçu, et se retrouve dans la déclaration.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Une facture fournisseur se saisit dans Fournisseurs, Factures : le fournisseur, sa référence,
+      la date du document, puis les lignes.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Odoo remplit la taxe et le compte. On compare le total au papier, on confirme, et l'écriture enregistre l'achat,
+      la TVA récupérable et la dette envers le fournisseur.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : saisissez la dernière facture d'un de vos fournisseurs, avec sa référence et sa vraie date,
+      et vérifiez que le total correspond au centime près.
+      Dans la prochaine capsule, nous verrons les avoirs et le paiement des fournisseurs. À tout de suite !
+    actions:
+      - attendre: 1
