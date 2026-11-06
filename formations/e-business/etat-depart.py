@@ -760,7 +760,8 @@ def service_client_eb12_a_refaire():
     formateur = rpc_formateur()
     canal = formateur('im_livechat.channel', 'search', [])
     formateur('im_livechat.channel', 'write', canal[:1], {'name': 'YourWebsite.com', 'button_text': 'Besoin d’aide ? Chattez avec nous.',
-                                                          'default_message': 'Bonjour, comment puis-je vous aider ?', 'user_ids': [(5, 0, 0)]})
+                                                          'default_message': 'Bonjour, comment puis-je vous aider ?'})
+    formateur('im_livechat.channel', 'write', canal[:1], {'user_ids': [(6, 0, [])]})  # aucun agent (à part : sinon ignoré)
     conversations = formateur('discuss.channel', 'search', [('livechat_channel_id', 'in', canal)])
     if conversations:
         formateur('discuss.channel', 'unlink', conversations)

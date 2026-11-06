@@ -87,7 +87,7 @@ etapes:
       Enregistrez, puis cliquez sur Rejoindre le canal : vous devenez agent, et les messages des clientes arrivent
       dans votre application Discussion.
     actions:
-      - enregistrer: oui
+      - touche: Alt+s        # la fiche du canal s'enregistre parfois toute seule : pas de bouton Enregistrer à viser
       - attendre: 1
       - cliquer: 'button:has-text("Rejoindre"):visible'
       - attendre: 1.5
