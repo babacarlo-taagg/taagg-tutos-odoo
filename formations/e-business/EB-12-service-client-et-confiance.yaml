@@ -1,0 +1,202 @@
+# EB-12 · Service client et confiance
+# État de départ : python3 formations/e-business/etat-depart.py EB-12
+#   la boutique de la fin d'EB-11 ; Fatou Ba a une commande livrée et payée (gâteau 8 parts, 30 000 F) ;
+#   Live Chat : canal d'origine « YourWebsite.com », sans agent ; avis clients désactivés sur les fiches produit.
+#   Le compte Formateur TAAGG a le droit Live Chat / Administrateur (accord de Babacar, 06/11/2026).
+# Pendant la capsule : canal renommé « Les Délices de Maïmouna » avec un message d'accueil, le Formateur le rejoint ;
+#   option « Avis » activée sur la fiche produit ; Fatou consulte sa commande dans Mon compte et laisse un avis 5 étoiles.
+# Limite : le navigateur de tournage ne peut pas se signaler « en ligne » (pas de connexion en direct) ; la bulle du chat
+#   n'apparaît donc pas sur le site filmé : la capsule montre les réglages, pas une conversation.
+# Relancer etat-depart.py avant chaque prise.
+titre: Service client et confiance
+sous_titre: Formation E-Business Odoo · EB-12
+depart: /odoo
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG School: l'école Tag
+  TAAGG: Tag
+  EB-12: capsule douze
+  eCommerce: e-commerce
+  E-Business: i-business
+  Live Chat: laïve tchatte
+  F CFA: francs CFA
+  " F ": " francs "
+fin:
+  message: "Prochaine capsule : être trouvé sur Google"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche (≈ 45 s)
+  - chapitre: Introduction
+    texte: >
+      Bienvenue dans la douzième capsule de la formation E-Business. Une cliente qui a confiance revient,
+      et elle en parle autour d'elle. Voyons comment Odoo vous aide à prendre soin d'elle.
+    actions:
+      - attendre: 1
+  - texte: >
+      Quatre outils : l'e-mail de confirmation, qui rassure tout de suite ; l'espace Mon compte, où elle retrouve
+      ses commandes ; le chat, pour répondre à ses questions ; et les avis des autres clientes.
+    actions:
+      - illustration: images/eb-12-confiance.png
+        zoom: 1.02
+
+  # ------------------------------------------------------------------ partie 1 : l'e-mail (≈ 45 s)
+  - partie: "1. L'e-mail de confirmation"
+    texte: >
+      Ouvrez Site Web, puis Configuration, Paramètres. Dans la partie eCommerce, Confirmation de la commande :
+      Odoo envoie cet e-mail tout seul à chaque commande, avec le détail et le total.
+    actions:
+      - cliquer: '.o_app:has-text("Site Web")'
+      - attendre: 1
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Paramètres")'
+      - attendre: 2.5
+      - defiler: '.o_setting_box:has-text("Confirmation de la commande")'
+      - attendre: 1
+      - surligner: '.o_setting_box:has-text("Confirmation de la commande")'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 2 : le chat (≈ 1 min 30)
+  - partie: "2. Le chat en direct"
+    texte: >
+      Ouvrez l'application Live Chat. Un canal existe déjà, avec un nom d'exemple. Ouvrez ses réglages :
+      les trois points, puis Configurer le canal.
+    actions:
+      - menu: Live Chat
+      - attendre: 1.5
+      - survoler: '.o_kanban_record >> nth=0'
+      - attendre: 0.5
+      - cliquer: '.o_kanban_record .o_dropdown_kanban button'
+      - attendre: 0.5
+      - cliquer: '.dropdown-item:has-text("Configurer le canal")'
+      - attendre: 2
+  - texte: Donnez-lui le nom de votre boutique.
+    actions:
+      - champ: name
+        taper: Les Délices de Maïmouna
+  - texte: >
+      Dans l'onglet Options, écrivez le message d'accueil : ce que la cliente lit en ouvrant le chat.
+      Dites-lui quand vous répondez.
+    actions:
+      - onglet: Options
+      - champ: default_message
+        taper: "Bonjour ! Une question sur nos gâteaux ? Nous répondons de 8 h à 19 h."
+  - texte: >
+      Enregistrez, puis cliquez sur Rejoindre le canal : vous devenez agent, et les messages des clientes arrivent
+      dans votre application Discussion.
+    actions:
+      - enregistrer: oui
+      - attendre: 1
+      - cliquer: 'button:has-text("Rejoindre"):visible'
+      - attendre: 1.5
+  - texte: >
+      La bulle du chat n'apparaît sur votre site que lorsqu'un agent est connecté. Gardez Odoo ouvert sur votre ordinateur,
+      ou l'application Odoo sur votre téléphone, aux heures annoncées.
+    actions:
+      - surligner: '.o_form_view [name="user_ids"], .o_notebook'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 3 : activer les avis (≈ 45 s)
+  - partie: "3. Les avis clients"
+    texte: >
+      Les avis se règlent sur la fiche produit. Ouvrez la fiche du gâteau d'anniversaire sur le site, et cliquez sur Modifier.
+    actions:
+      - aller: '/odoo/action-website.website_preview?path=%2Fshop%2Fgateau-d-anniversaire-37'
+      - attendre: 4
+      - cliquer: '.o_edit_website_container a, .o_edit_website_container button'
+      - attendre: 4
+  - texte: >
+      Dans l'onglet Style, activez Avis, puis cliquez sur Sauvegarder. Toutes vos fiches produit ont maintenant
+      une partie Avis client.
+    actions:
+      - cliquer: '.o-snippets-tabs button:has-text("Style")'
+      - attendre: 1
+      - surligner: '.hb-row[data-label="Avis"]'
+        duree: 1.5
+      - cliquer: '.hb-row[data-label="Avis"] input'
+      - attendre: 1.5
+      - cliquer: '.o-snippets-top-actions button:has-text("Sauvegarder")'
+      - attendre: 3
+
+  # ------------------------------------------------------------------ partie 4 : côté cliente (≈ 1 min 30)
+  - partie: "4. Ce que voit la cliente"
+    texte: >
+      Passons du côté de Fatou. Elle se connecte : elle arrive dans Mon compte.
+    actions:
+      - aller: '/web/session/logout?redirect=/web/login'
+      - attendre: 2
+      - taper_dans: {dans: 'input[name="login"]', texte: '${ODOO_CLIENTE_LOGIN}'}
+      - taper_dans: {dans: 'input[name="password"]', texte: '${ODOO_CLIENTE_MOT_DE_PASSE}'}
+      - cliquer: '.oe_login_form button[type="submit"]'
+      - attendre: 2.5
+  - texte: >
+      Dans Vos commandes, elle retrouve son gâteau : livré, trente mille francs. Elle l'ouvre.
+    actions:
+      - cliquer: 'main a:has-text("Vos commandes")'
+      - attendre: 2
+      - surligner: 'main table tbody tr >> nth=0'
+        duree: 2
+      - cliquer: 'main table tbody tr a >> nth=0'
+      - attendre: 3
+  - texte: >
+      Tout y est : le détail, la facture payée qu'elle peut télécharger, et la livraison. Plus besoin de vous appeler
+      pour demander où en est sa commande.
+    actions:
+      - defiler: 400
+      - attendre: 3
+  - texte: >
+      Le gâteau était délicieux : Fatou laisse un avis. Elle ouvre la fiche du gâteau, et descend jusqu'aux avis.
+    actions:
+      - aller: /shop/gateau-d-anniversaire-37
+      - attendre: 3
+      - defiler: '#o_product_page_reviews'
+      - attendre: 1.5
+  - texte: Elle donne cinq étoiles, et écrit quelques mots.
+    actions:
+      - cliquer: '.o-mail-Composer-stars .fa >> nth=4'
+      - attendre: 0.5
+      - taper_dans: {dans: 'textarea.o-mail-Composer-input', texte: "Délicieux et livré à l'heure pour l'anniversaire de ma fille. Merci !"}
+  - texte: >
+      Elle clique sur Envoyer. Son avis est en ligne : la prochaine cliente verra les étoiles avant d'acheter.
+    actions:
+      - cliquer: '.o-mail-Composer button:has-text("Envoyer")'
+      - attendre: 3
+      - surligner: '#o_product_page_reviews'
+        duree: 3
+
+  # ------------------------------------------------------------------ pièges (≈ 1 min)
+  - chapitre: Pièges fréquents
+    texte: >
+      Trois pièges fréquents. Premier piège : afficher un chat où personne ne répond. Annoncez vos horaires,
+      et répondez vite : une question sans réponse, c'est une vente perdue.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : supprimer les avis négatifs. Répondez-y plutôt, poliment : c'est votre sérieux que les clientes regardent.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : oublier de demander un avis. Après chaque livraison, un petit message suffit :
+      votre gâteau vous a plu ? Laissez-nous un avis.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice (≈ 1 min)
+  - chapitre: À retenir
+    texte: >
+      Retenons l'essentiel. Un : l'e-mail de confirmation part tout seul, réglé dans Paramètres, eCommerce.
+      Deux : dans Mon compte, la cliente retrouve ses commandes et ses factures.
+      Trois : pour le chat, écrivez un message d'accueil, et rejoignez le canal pour répondre.
+      Quatre : les avis s'activent dans l'éditeur de la fiche produit.
+    apres: 1.2
+    actions:
+      - illustration: images/eb-12-recap.png
+        zoom: 1.02
+  - chapitre: Exercice
+    texte: >
+      À vous de jouer : écrivez le message d'accueil de votre chat, activez les avis, et demandez à une première cliente
+      de laisser le sien. Dans la prochaine capsule, nous ferons connaître votre boutique sur Google.
+    actions:
+      - attendre: 1
