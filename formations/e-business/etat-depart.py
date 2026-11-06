@@ -698,7 +698,31 @@ def eb_10():
     livraisons_eb10_a_refaire()
 
 
-CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08, 'EB-09': eb_09, 'EB-10': eb_10}
+def livraisons_fin_eb10():
+    """Ce que la capsule EB-10 a réglé à l'écran : Dakar ville 1 271 F HT (1 500 F TTC), gratuite dès 30 000 F ;
+    banlieue 2 119 F HT (2 500 F TTC) avec son produit ; Retrait en boutique (Médina)."""
+    print('Livraison : comme à la fin d’EB-10')
+    if VOIR:
+        return
+    ctx = dict(CTX, active_test=False)
+    standard = odoo('delivery.carrier', 'search', [('delivery_type', '=', 'fixed'), ('product_id.default_code', '=', 'Delivery_007')], context=ctx)[:1]
+    odoo('delivery.carrier', 'write', standard, {'name': 'À moto – Dakar ville (Plateau, Médina, Fann, Mermoz)', 'fixed_price': 1271,
+                                                 'free_over': True, 'amount': 30000})
+    produit = odoo('product.product', 'create', {'name': 'Livraison banlieue', 'type': 'service', 'sale_ok': False,
+                                                 'taxes_id': [(6, 0, [5])], 'list_price': 2119})
+    odoo('delivery.carrier', 'create', {'name': 'À moto – banlieue (Pikine, Guédiawaye, Rufisque)', 'delivery_type': 'fixed',
+                                        'product_id': produit, 'fixed_price': 2119, 'allow_cash_on_delivery': True, 'is_published': True})
+    retrait = odoo('delivery.carrier', 'search', [('delivery_type', '=', 'in_store')], context=ctx)[:1]
+    odoo('delivery.carrier', 'write', retrait, {'name': 'Retrait en boutique (Médina)'})
+
+
+def eb_11():
+    """EB-11 · Une commande de bout en bout : la boutique de la fin d'EB-10 (paiements et livraisons réglés)."""
+    eb_10()
+    livraisons_fin_eb10()
+
+
+CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08, 'EB-09': eb_09, 'EB-10': eb_10, 'EB-11': eb_11}
 
 if __name__ == '__main__':
     code = next((a.upper() for a in sys.argv[1:] if not a.startswith('--')), None)
