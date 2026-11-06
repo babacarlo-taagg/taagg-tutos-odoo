@@ -81,12 +81,13 @@ etapes:
       - onglet: Messages
       - remplacer_texte: {dans: '[name="pending_msg"] [contenteditable]', texte: "Envoyez le montant de votre commande par Wave ou Orange Money au 77 000 00 00 (Les Délices de Maïmouna), en indiquant votre numéro de commande. Nous confirmons dès réception."}
   - texte: >
-      Enregistrez, puis cliquez sur Non publié, en haut, pour le rendre visible sur le site.
+      Enregistrez. En haut, le bouton indique Publié : quand vous activez un moyen de paiement,
+      Odoo le propose aussitôt dans la boutique.
     actions:
       - enregistrer: oui
       - attendre: 1
-      - cliquer: '.o_control_panel button:has-text("Non publié"), button:has-text("Non publié")'
-      - attendre: 1.5
+      - surligner: '.o_form_view button:has-text("Publié")'
+        duree: 2.5
   - texte: >
       Dernier détail : le nom que voit la cliente au moment de payer. Ouvrez Configuration, Modes de paiement,
       et cherchez Virement.
@@ -184,8 +185,8 @@ etapes:
   # ------------------------------------------------------------------ pièges (≈ 1 min)
   - chapitre: Pièges fréquents
     texte: >
-      Trois pièges fréquents. Premier piège : activer un moyen de paiement sans le publier.
-      Il est prêt, mais la cliente ne le voit pas : vérifiez le bouton Publié.
+      Trois pièges fréquents. Premier piège : un numéro Wave mal écrit dans les instructions.
+      L'argent partirait chez quelqu'un d'autre : relisez-le, et faites un premier essai de cent francs.
     actions:
       - attendre: 1
   - texte: >
