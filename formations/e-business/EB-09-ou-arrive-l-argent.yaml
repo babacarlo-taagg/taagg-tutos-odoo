@@ -106,7 +106,7 @@ etapes:
     actions:
       - surligner: '.o_form_view [name="amount_residual"], .o_form_view .oe_subtotal_footer'
         duree: 2
-      - cliquer: 'button:text-is("Payer") >> visible=true'
+      - cliquer: 'button[name="action_register_payment"]:visible'
       - attendre: 2
   - texte: >
       Dans Journal, choisissez Wave : c'est là que l'argent est arrivé. Le montant est déjà rempli.
