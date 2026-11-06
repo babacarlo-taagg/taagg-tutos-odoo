@@ -1,0 +1,208 @@
+# EB-10 · Organiser la livraison
+# État de départ : python3 formations/e-business/etat-depart.py EB-10
+#   la boutique de la fin d'EB-08/EB-09 (Wave ou Orange Money, carte Démo) ; modes de livraison : « Livraison standard »
+#   gratuite (paiement à la livraison autorisé) et « Retrait en magasin » (boutique de la Médina seulement).
+# Pendant la capsule : Livraison standard → « À moto – Dakar ville » 1 271 F HT (1 500 F TTC), gratuite dès 30 000 F ;
+#   nouveau mode « À moto – banlieue » 2 119 F HT (2 500 F TTC), avec son produit « Livraison banlieue », publié ;
+#   Retrait en magasin → « Retrait en boutique (Médina) ». Fatou choisit la banlieue pour un gâteau 6 parts : 26 500 F.
+#   Relancer etat-depart.py avant chaque prise.
+titre: Organiser la livraison
+sous_titre: Formation E-Business Odoo · EB-10
+depart: /odoo
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG School: l'école Tag
+  TAAGG: Tag
+  EB-10: capsule dix
+  eCommerce: e-commerce
+  E-Business: i-business
+  F CFA: francs CFA
+  FCFA: francs CFA
+  " F ": " francs "
+  TTC: té-té-cé
+fin:
+  message: "Prochaine capsule : une commande de bout en bout"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche (≈ 45 s)
+  - chapitre: Introduction
+    texte: >
+      Bienvenue dans la dixième capsule de la formation E-Business.
+      Pour l'instant, la livraison est gratuite partout. Donnons-lui un vrai prix, selon le quartier de votre cliente.
+    actions:
+      - attendre: 1
+  - texte: >
+      Aux Délices de Maïmouna, trois façons de recevoir son gâteau : à moto dans Dakar, mille cinq cents francs,
+      gratuite dès trente mille francs d'achat ; à moto en banlieue, deux mille cinq cents francs ; ou le retrait en boutique, gratuit.
+    actions:
+      - illustration: images/eb-10-zones.png
+        zoom: 1.02
+
+  # ------------------------------------------------------------------ partie 1 : les modes de livraison (≈ 30 s)
+  - partie: "1. Les modes de livraison"
+    texte: >
+      Ouvrez l'application Site Web, puis Configuration, Modes de livraison.
+      Deux modes existent : la livraison standard, gratuite, et le retrait en magasin.
+    actions:
+      - cliquer: '.o_app:has-text("Site Web")'
+      - attendre: 1
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Modes de livraison")'
+      - attendre: 2
+      - surligner: '.o_list_renderer tbody'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 2 : Dakar ville (≈ 1 min 30)
+  - partie: "2. La livraison dans Dakar"
+    texte: Ouvrez la livraison standard, et renommez-la, avec les quartiers concernés.
+    actions:
+      - cliquer: '.o_data_row:has-text("Livraison standard") td[name="name"]'
+      - attendre: 2
+      - champ: name
+        taper: À moto – Dakar ville (Plateau, Médina, Fann, Mermoz)
+  - texte: >
+      Le prix fixe se saisit hors taxes, comme pour les produits. Pour mille cinq cents francs toutes taxes comprises,
+      tapez mille deux cent soixante et onze.
+    actions:
+      - champ: fixed_price
+        taper: "1271"
+      - touche: Tab
+      - attendre: 0.5
+  - texte: >
+      Cochez Gratuit si le montant de la commande est supérieur à, et tapez trente mille :
+      une belle commande mérite la livraison offerte.
+    actions:
+      - cocher: free_over
+      - attendre: 0.5
+      - champ: amount
+        taper: "30000"
+      - touche: Tab
+  - texte: >
+      La case Paiement comptant à la livraison est cochée : le livreur peut encaisser. Enregistrez.
+    actions:
+      - surligner_champ: allow_cash_on_delivery
+        duree: 2
+      - enregistrer: oui
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 3 : la banlieue (≈ 1 min 30)
+  - partie: "3. La livraison en banlieue"
+    texte: >
+      Pour la banlieue, créez un deuxième mode. Cliquez sur Nouveau, et donnez-lui un nom clair.
+    actions:
+      - cliquer: '.o_control_panel button:has-text("Nouveau")'
+      - attendre: 1.5
+      - champ: name
+        taper: À moto – banlieue (Pikine, Guédiawaye, Rufisque)
+  - texte: >
+      Chaque mode a besoin de son propre produit de livraison : c'est lui qui porte le prix. Tapez Livraison banlieue,
+      puis cliquez sur Créer.
+    actions:
+      - taper_dans: {dans: '[name="product_id"] input', texte: Livraison banlieue}
+      - attendre: 1
+      - cliquer: '.o-autocomplete--dropdown-item:has-text("Créer")'
+      - attendre: 1
+  - texte: >
+      Le prix : deux mille cent dix-neuf francs hors taxes, soit deux mille cinq cents toutes taxes comprises.
+      Cochez aussi le paiement à la livraison.
+    actions:
+      - champ: fixed_price
+        taper: "2119"
+      - touche: Tab
+      - cocher: allow_cash_on_delivery
+      - attendre: 0.5
+  - texte: >
+      Enregistrez, puis cliquez sur Non publié, en haut, pour le proposer dans la boutique.
+    actions:
+      - enregistrer: oui
+      - attendre: 1
+      - cliquer: '.o_form_view button:has-text("Non publié"):visible'
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ partie 4 : le retrait en boutique (≈ 45 s)
+  - partie: "4. Le retrait en boutique"
+    texte: >
+      Revenez à la liste, et ouvrez le retrait en magasin. Il propose une seule adresse : la boutique de la Médina.
+      Renommez-le Retrait en boutique, et enregistrez.
+    actions:
+      - cliquer: '.o_breadcrumb a:has-text("Modes de livraison")'
+      - attendre: 1.5
+      - cliquer: '.o_data_row:has-text("Retrait") td[name="name"]'
+      - attendre: 2
+      - surligner_champ: warehouse_ids
+        duree: 2
+      - champ: name
+        taper: Retrait en boutique (Médina)
+      - enregistrer: oui
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 5 : ce que voit la cliente (≈ 1 min)
+  - partie: "5. Ce que voit la cliente"
+    texte: >
+      Voyons le résultat avec Fatou. Elle se connecte, ajoute un gâteau d'anniversaire de six parts, et clique sur Payer.
+    actions:
+      - aller: '/web/session/logout?redirect=/web/login'
+      - attendre: 2
+      - taper_dans: {dans: 'input[name="login"]', texte: '${ODOO_CLIENTE_LOGIN}'}
+      - taper_dans: {dans: 'input[name="password"]', texte: '${ODOO_CLIENTE_MOT_DE_PASSE}'}
+      - cliquer: '.oe_login_form button[type="submit"]'
+      - attendre: 2.5
+      - aller: /shop/gateau-d-anniversaire-37
+      - attendre: 2.5
+      - cliquer: '#add_to_cart'
+      - attendre: 3
+      - cliquer: '.o_total_card a:has-text("Payer") >> visible=true'
+      - attendre: 3.5
+  - texte: >
+      Les trois modes s'affichent, chacun avec son prix toutes taxes comprises.
+      Fatou habite Pikine : elle choisit la banlieue. Le total passe à vingt-six mille cinq cents francs.
+    actions:
+      - surligner: '#o_delivery_methods'
+        duree: 2.5
+      - cliquer: '#o_delivery_methods li:has-text("banlieue")'
+      - attendre: 2
+      - surligner: '.o_total_card >> visible=true'
+        duree: 2.5
+  - texte: >
+      Si elle avait pris un gâteau de huit parts, à trente mille francs, la livraison dans Dakar aurait été offerte.
+    actions:
+      - surligner: '#o_delivery_methods li:has-text("Dakar ville")'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ pièges (≈ 1 min)
+  - chapitre: Pièges fréquents
+    texte: >
+      Trois pièges fréquents. Premier piège : dupliquer un mode de livraison et changer son prix.
+      La copie garde le même produit de livraison, et le prix change pour les deux. Créez un nouveau mode, avec son propre produit.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : saisir le prix toutes taxes comprises. La cliente paierait dix-huit pour cent de plus que prévu.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : des noms vagues, comme Livraison un et Livraison deux. Écrivez les quartiers dans le nom :
+      votre cliente choisit sans hésiter.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice (≈ 1 min)
+  - chapitre: À retenir
+    texte: >
+      Retenons l'essentiel. Un : les modes de livraison sont dans Site Web, Configuration, Modes de livraison : un mode par zone.
+      Deux : le prix fixe est hors taxes, et la livraison peut être gratuite dès un montant d'achat.
+      Trois : chaque nouveau mode a son propre produit de livraison.
+      Quatre : cochez le paiement à la livraison si le livreur encaisse.
+    apres: 1.2
+    actions:
+      - illustration: images/eb-10-recap.png
+        zoom: 1.02
+  - chapitre: Exercice
+    texte: >
+      À vous de jouer : créez les zones de livraison de votre boutique, avec leurs prix, et testez-les avec une commande.
+      Dans la prochaine capsule, nous suivrons une commande de bout en bout, du paiement jusqu'à la livraison.
+    actions:
+      - attendre: 1

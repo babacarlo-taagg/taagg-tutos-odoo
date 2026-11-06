@@ -680,9 +680,14 @@ def livraisons_eb10_a_refaire():
            'Livraison standard : gratuite, paiement à la livraison autorisé')
     copies = odoo('delivery.carrier', 'search', [('delivery_type', '=', 'fixed'), ('id', 'not in', standard[:1])])
     ecrire('delivery.carrier', copies, {'active': False, 'is_published': False}, f'{len(copies)} mode(s) créé(s) pendant les prises archivé(s)')
+    # le prix d'un mode de livraison est celui de son « produit de livraison » : ceux créés pendant les prises sont archivés
+    produits = odoo('product.product', 'search', [('name', 'in', ['Livraison banlieue']), ('type', '=', 'service')])
+    ecrire('product.product', produits, {'active': False}, f'{len(produits)} produit(s) de livraison des prises archivé(s)')
     retrait = odoo('delivery.carrier', 'search', [('delivery_type', '=', 'in_store')], context=ctx)
-    ecrire('delivery.carrier', retrait[:1], {'name': 'Retrait en magasin', 'is_published': True, 'active': True},
-           'Retrait en magasin : publié')
+    entrepot = odoo('stock.warehouse', 'search', [('code', '=', 'WH'), ('company_id', '=', 1)])
+    ecrire('delivery.carrier', retrait[:1], {'name': 'Retrait en magasin', 'is_published': True, 'active': True,
+                                             'warehouse_ids': [(6, 0, entrepot)]},
+           'Retrait en magasin : publié, à la boutique seulement (pas à l’Entrepôt du Potager)')
 
 
 def eb_10():
