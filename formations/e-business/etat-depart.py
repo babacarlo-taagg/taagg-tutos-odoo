@@ -716,10 +716,18 @@ def livraisons_fin_eb10():
     odoo('delivery.carrier', 'write', retrait, {'name': 'Retrait en boutique (Médina)'})
 
 
+def sans_sms_de_livraison():
+    """La validation d'une livraison propose d'envoyer un SMS à la cliente (module stock_sms : crédits payants).
+    On coupe ce SMS dans la base de tournage : aucun SMS ne part jamais pendant une prise."""
+    ecrire('res.company', [1], {'stock_sms_confirmation_template_id': False, 'has_received_warning_stock_sms': True},
+           'Inventaire : pas de SMS à la validation des livraisons (crédits SMS payants)')
+
+
 def eb_11():
     """EB-11 · Une commande de bout en bout : la boutique de la fin d'EB-10 (paiements et livraisons réglés)."""
     eb_10()
     livraisons_fin_eb10()
+    sans_sms_de_livraison()
 
 
 CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08, 'EB-09': eb_09, 'EB-10': eb_10, 'EB-11': eb_11}

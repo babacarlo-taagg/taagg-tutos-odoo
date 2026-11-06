@@ -1,0 +1,197 @@
+# EB-11 · Une commande de bout en bout (livrable du module 3)
+# État de départ : python3 formations/e-business/etat-depart.py EB-11
+#   la boutique de la fin d'EB-10 (livraisons Dakar ville / banlieue / retrait, paiements Wave, Démo, à la livraison) ;
+#   Fatou Ba a son adresse et un panier vide ; aucun SMS n'est envoyé à la validation des livraisons.
+# Pendant la capsule : Fatou commande un gâteau d'anniversaire 8 parts (30 000 F TTC, livraison Dakar offerte),
+#   paie avec la carte Démo (données test) ; la commande est confirmée et payée ; le bon de livraison est validé ;
+#   la facture est créée et confirmée (« En cours de paiement », reliée au paiement de la carte).
+#   Relancer etat-depart.py avant chaque prise : il annule commande, facture et paiement des prises précédentes.
+titre: Une commande de bout en bout
+sous_titre: Formation E-Business Odoo · EB-11
+depart: /odoo
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG School: l'école Tag
+  TAAGG: Tag
+  EB-11: capsule onze
+  eCommerce: e-commerce
+  E-Business: i-business
+  F CFA: francs CFA
+  FCFA: francs CFA
+  " F ": " francs "
+fin:
+  message: "Prochaine capsule : service client et confiance"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche (≈ 45 s)
+  - chapitre: Introduction
+    texte: >
+      Bienvenue dans la onzième capsule de la formation E-Business. Aujourd'hui, on met tout bout à bout :
+      une cliente commande et paie, puis vous livrez et vous facturez.
+    actions:
+      - attendre: 1
+  - texte: >
+      Quatre étapes : la cliente paie en ligne ; la commande est confirmée toute seule ; vous validez la livraison ;
+      et vous faites la facture. C'est le livrable du module trois : faites-le aussi sur votre boutique.
+    actions:
+      - illustration: images/eb-11-bout-en-bout.png
+        zoom: 1.02
+
+  # ------------------------------------------------------------------ partie 1 : Fatou commande et paie (≈ 1 min 30)
+  - partie: "1. Fatou commande et paie"
+    texte: >
+      Fatou se connecte à la boutique. Elle veut un gâteau d'anniversaire de huit parts.
+    actions:
+      - aller: '/web/session/logout?redirect=/web/login'
+      - attendre: 2
+      - taper_dans: {dans: 'input[name="login"]', texte: '${ODOO_CLIENTE_LOGIN}'}
+      - taper_dans: {dans: 'input[name="password"]', texte: '${ODOO_CLIENTE_MOT_DE_PASSE}'}
+      - cliquer: '.oe_login_form button[type="submit"]'
+      - attendre: 2.5
+      - aller: /shop/gateau-d-anniversaire-37
+      - attendre: 2.5
+  - texte: Elle choisit huit parts, trente mille francs, et l'ajoute au panier.
+    actions:
+      - cliquer: 'label:has-text("8 parts")'
+      - attendre: 1
+      - cliquer: '#add_to_cart'
+      - attendre: 3
+  - texte: >
+      Elle clique sur Payer. Comme sa commande atteint trente mille francs, la livraison à moto dans Dakar est offerte.
+      Elle la choisit, et confirme.
+    actions:
+      - cliquer: '.o_total_card a:has-text("Payer") >> visible=true'
+      - attendre: 3.5
+      - cliquer: '#o_delivery_methods li:has-text("Dakar ville")'
+      - attendre: 1.5
+      - surligner: '#o_delivery_methods li:has-text("Dakar ville")'
+        duree: 2
+      - cliquer: '.o_total_card :is(a,button):has-text("Confirmer") >> visible=true'
+      - attendre: 3.5
+  - texte: >
+      Elle paie par carte. Ici, c'est la carte Démo : on tape un faux numéro, et aucun argent ne circule.
+    actions:
+      - cliquer: 'main label:has-text("Démo")'
+      - attendre: 1
+      - taper_dans: {dans: '#customer_input', texte: "4111 1111 1111 1111"}
+  - texte: Elle clique sur Payer maintenant.
+    actions:
+      - cliquer: '.o_total_card button:has-text("Payer") >> visible=true'
+      - attendre: 6
+  - texte: >
+      Merci pour votre commande : le paiement a été traité. Fatou a fini. Maintenant, c'est à vous.
+    actions:
+      - surligner: 'main .alert >> nth=0'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 2 : la commande dans Odoo (≈ 1 min)
+  - partie: "2. La commande dans Odoo"
+    texte: >
+      Reconnectez-vous à Odoo, ouvrez Site Web, puis eCommerce, Commandes.
+    actions:
+      - aller: '/web/session/logout?redirect=/web/login'
+      - attendre: 2
+      - taper_dans: {dans: 'input[name="login"]', texte: '${ODOO_LOGIN}'}
+      - taper_dans: {dans: 'input[name="password"]', texte: '${ODOO_MOT_DE_PASSE}'}
+      - cliquer: '.oe_login_form button[type="submit"]'
+      - attendre: 3
+      - cliquer: '.o_app:has-text("Site Web")'
+      - attendre: 1
+      - ouvrir_menu: eCommerce
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Commandes") >> nth=0'
+      - attendre: 2
+  - texte: >
+      La commande de Fatou est en haut de la liste : trente mille francs. Ouvrez-la.
+    actions:
+      - surligner: '.o_data_row:has-text("Fatou") >> nth=0'
+        duree: 2
+      - cliquer: '.o_data_row:has-text("Fatou") td[name="name"] >> nth=0'
+      - attendre: 2
+  - texte: >
+      Elle est déjà au statut Commande client : payée par carte, Odoo l'a confirmée tout seul.
+      Pas besoin de vérifier sur votre téléphone, comme pour Wave.
+    actions:
+      - surligner: '.o_form_view .o_statusbar_status'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 3 : la livraison (≈ 1 min)
+  - partie: "3. La livraison"
+    texte: >
+      En haut, le bouton Livraison ouvre le bon de livraison : ce que le livreur doit apporter, et où.
+    actions:
+      - cliquer: 'button:has-text("Livraison"):visible'
+      - attendre: 2.5
+  - texte: >
+      Le gâteau est prêt, le livreur part. Cliquez sur Valider : la livraison passe à Terminé.
+    actions:
+      - surligner: '.o_form_view [name="move_ids"], .o_form_view .o_notebook'
+        duree: 2
+      - cliquer: 'button[name="button_validate"]:visible'
+      - attendre: 2.5
+      - surligner: '.o_form_view .o_statusbar_status'
+        duree: 2
+
+  # ------------------------------------------------------------------ partie 4 : la facture (≈ 1 min)
+  - partie: "4. La facture"
+    texte: >
+      Revenez à la commande, et cliquez sur Créer une facture, puis Créer brouillon.
+    actions:
+      - cliquer: '.o_breadcrumb a:has-text("S0")'
+      - attendre: 2
+      - cliquer: 'button:has-text("Créer une facture"):visible'
+      - attendre: 1.5
+      - cliquer: '.modal-footer button:has-text("Créer brouillon")'
+      - attendre: 2.5
+  - texte: Confirmez la facture.
+    actions:
+      - cliquer: 'button[name="action_post"]:visible'
+      - attendre: 3
+  - texte: >
+      La facture est déjà en cours de paiement : Odoo y a rattaché tout seul le paiement de la carte.
+      Commande, livraison, facture, paiement : tout est relié.
+    actions:
+      - surligner: '[class*="ribbon"]:visible >> nth=0'
+        duree: 2
+      - surligner: 'button:has-text("Paiements"):visible'
+        duree: 1.5
+      - surligner: 'button:has-text("Commandes clients"):visible'
+        duree: 1.5
+
+  # ------------------------------------------------------------------ pièges (≈ 1 min)
+  - chapitre: Pièges fréquents
+    texte: >
+      Trois pièges fréquents. Premier piège : valider la livraison avant que le livreur parte.
+      Validez quand le gâteau quitte vraiment la boutique.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : oublier la facture. Payée ne veut pas dire facturée : sans facture, votre comptabilité est incomplète.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : tester avec la carte Démo, puis oublier de la retirer avant l'ouverture.
+      Dépubliez-la quand votre vrai moyen de paiement par carte est prêt.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice (≈ 1 min)
+  - chapitre: À retenir
+    texte: >
+      Retenons l'essentiel. Un : payée en ligne, la commande est confirmée toute seule.
+      Deux : le bouton Livraison ouvre le bon de livraison ; validez-le quand le livreur part.
+      Trois : Créer une facture, puis Confirmer : le paiement de la cliente s'y rattache.
+      Quatre : tout est relié, de la commande au paiement.
+    apres: 1.2
+    actions:
+      - illustration: images/eb-11-recap.png
+        zoom: 1.02
+  - chapitre: Exercice
+    texte: >
+      À vous de jouer : c'est le livrable du module trois. Passez une commande test sur votre boutique, payez-la,
+      livrez-la et facturez-la, puis envoyez à votre formateur une capture de la facture.
+      Dans la prochaine capsule, nous soignerons le service client.
+    actions:
+      - attendre: 1
