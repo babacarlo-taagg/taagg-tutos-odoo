@@ -159,7 +159,7 @@ etapes:
       - attendre: 3.5
   - texte: >
       Les trois modes s'affichent, chacun avec son prix toutes taxes comprises.
-      Fatou habite Pikine : elle choisit la banlieue. Le total passe à vingt-six mille cinq cents francs.
+      Odoo ne vérifie pas le quartier : c'est la cliente qui choisit. Pour l'exemple, Fatou prend la banlieue : le total passe à vingt-six mille cinq cents francs.
     actions:
       - surligner: '#o_delivery_methods'
         duree: 2.5

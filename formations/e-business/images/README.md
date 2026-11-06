@@ -29,6 +29,8 @@ Règles : compétence `tuto-odoo-illustrations`. Babacar valide chaque image ava
 | `eb-09-chemin.png` | EB-09 | le chemin de l'argent d'une commande Wave, en 5 étapes | ☐ |
 | `eb-09-telephone.png` | EB-09 | notification Wave fictive (24 000 F de Fatou Ba) | ☐ |
 | `eb-09-recap.png` | EB-09 | les 4 points à retenir | ☐ |
+| `eb-10-zones.png` | EB-10 | Dakar ville 1 500 F, banlieue 2 500 F, retrait gratuit | ☐ |
+| `eb-10-recap.png` | EB-10 | les 4 points à retenir | ☐ |
 | `logo-delices-maimouna.png` | toutes | logo fictif de la boutique d'exemple (posé sur le site par `etat-depart.py`) | ☐ |
 
 ## Images IA (sans texte)
