@@ -39,7 +39,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 |---|---|---|---|---|
 | CPT-14 | Saisir une facture fournisseur | saisie manuelle, numérisation d'une facture PDF, contrôle des taxes | Fournisseurs › Factures fournisseurs | 🎙 4:36 |
 | CPT-15 | Notes de crédit et payer les fournisseurs | avoir fournisseur, paiement unique et groupé, échéancier fournisseurs | Fournisseurs › Paiements | 🎙 4:16 |
-| CPT-16 | Notes de frais des employés | de la dépense à son remboursement et à l'écriture | Dépenses de l'employé | ☐ |
+| CPT-16 | Notes de frais des employés | de la dépense à son remboursement et à l'écriture | Dépenses de l'employé | 🎙 3:28 |
 
 ## Parcours 4 — Trésorerie
 
@@ -146,6 +146,10 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
   (BILL/2026/09/0001 + BILL/2026/10/0001 « EPI-1015 », créée par etat-depart.py). Cinq phrases régénérées.
   À noter : la carte Achats du tableau de bord affiche « Séquences irrégulières » (factures recréées par l'API à des dates
   antérieures) ; sans conséquence pour les capsules, à ne pas commenter.
+- **CPT-16** (6 novembre 2026) : version finale, 3 min 28 s, 22 étapes, ≈ 2 900 caractères de voix. **Parcours 3 terminé.**
+  Odoo 19 : plus de rapport de dépenses ; Soumettre → Approuvé (validation automatique) → « Enregistrer les pièces
+  comptables » (fenêtre journal Achats) → ticket BILL/2026/11/0002 au nom d'Amy BA → Payer (Banque). Compte corrigé à l'écran :
+  638300 Réceptions au lieu de 601100. Prononciation « Amy Ba » ajoutée ; deux phrases régénérées.
 
 ## Ordre de tournage proposé
 
