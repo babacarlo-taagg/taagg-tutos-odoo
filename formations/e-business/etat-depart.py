@@ -491,6 +491,20 @@ def cliente_fictive():
     partenaires = odoo('res.partner', 'search', [('email', '=', CLIENTE['email'])], context=actx)
     commandes = odoo('sale.order', 'search', [('partner_id', 'child_of', partenaires), ('state', '!=', 'cancel')]) if partenaires else []
     print(f'  · {len(commandes)} commande(s) des prises précédentes annulée(s)')
+    # factures et paiements des prises d'EB-09 : annulés d'abord (sinon Odoo refuse d'annuler la commande)
+    factures = odoo('account.move', 'search', [('partner_id', 'child_of', partenaires), ('move_type', '=', 'out_invoice'),
+                                               ('state', '!=', 'cancel')]) if partenaires else []
+    paiements = odoo('account.payment', 'search', [('partner_id', 'child_of', partenaires), ('state', 'not in', ['draft', 'canceled', 'cancel'])]) if partenaires else []
+    if factures or paiements:
+        print(f'  · {len(factures)} facture(s) et {len(paiements)} paiement(s) des prises précédentes annulés')
+    if not VOIR:
+        for pmt in paiements:
+            odoo('account.payment', 'action_draft', [pmt])
+            odoo('account.payment', 'action_cancel', [pmt])
+        for fac in factures:
+            if odoo('account.move', 'read', [fac], fields=['state'])[0]['state'] == 'posted':
+                odoo('account.move', 'button_draft', [fac])
+            odoo('account.move', 'button_cancel', [fac])
     if not VOIR and commandes:
         odoo('sale.order', 'action_cancel', commandes, context=dict(actx, disable_cancel_warning=True))
     utilisateur = odoo('res.users', 'search', [('login', '=', login)], context=actx)
@@ -610,7 +624,52 @@ def eb_08():
     paiements_eb08_a_refaire()
 
 
-CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08}
+def commande_wave_de_fatou():
+    """La commande que Fatou a passée à la fin d'EB-08 : gâteau d'anniversaire 6 parts (24 000 F TTC),
+    payée « Wave ou Orange Money » : devis envoyé, transaction en attente, pas encore de facture."""
+    print('Commande de Fatou : payée par Wave, en attente de vérification')
+    if VOIR:
+        return
+    ctx = dict(CTX, tracking_disable=True)
+    partenaire = odoo('res.users', 'search_read', [('login', '=', ENV['ODOO_CLIENTE_LOGIN'])], fields=['partner_id'])[0]['partner_id'][0]
+    gateau = odoo('product.product', 'search', [('product_tmpl_id.name', '=', "Gâteau d'anniversaire"),
+                                                ('product_template_attribute_value_ids.name', '=', '6 parts')])
+    commande = odoo('sale.order', 'create', {'partner_id': partenaire, 'website_id': SITE, 'user_id': odoo('website', 'read', [SITE], fields=['salesperson_id'])[0]['salesperson_id'][0],
+                                             'order_line': [(0, 0, {'product_id': gateau[0], 'product_uom_qty': 1})]}, context=ctx)
+    odoo('sale.order', 'write', [commande], {'state': 'sent'}, context=ctx)
+    total = odoo('sale.order', 'read', [commande], fields=['amount_total', 'name', 'currency_id'])[0]
+    wave = odoo('payment.provider', 'search', [('custom_mode', '=', 'wire_transfer'), ('company_id', '=', 1)])[0]
+    methode = odoo('payment.method', 'search', [('code', '=', 'wire_transfer')], context=dict(CTX, active_test=False))[0]
+    tx = odoo('payment.transaction', 'create', {'provider_id': wave, 'payment_method_id': methode, 'amount': total['amount_total'],
+                                                'currency_id': total['currency_id'][0], 'partner_id': partenaire,
+                                                'reference': total['name'], 'sale_order_ids': [(6, 0, [commande])]})
+    odoo('payment.transaction', 'write', [tx], {'state': 'pending'})
+    print(f"  · {total['name']} : {total['amount_total']:,.0f} F, transaction Wave en attente".replace(',', ' '))
+
+
+def paiements_fin_eb08():
+    """Ce que la capsule EB-08 a réglé à l'écran : Wave ou Orange Money activé, publié, avec ses instructions ;
+    carte Démo publiée (mode test)."""
+    print('Paiements : comme à la fin d’EB-08')
+    if VOIR:
+        return
+    ctx = dict(CTX, active_test=False)
+    virement = odoo('payment.provider', 'search', [('custom_mode', '=', 'wire_transfer'), ('company_id', '=', 1)], context=ctx)
+    odoo('payment.provider', 'write', virement, {'name': 'Wave ou Orange Money', 'state': 'enabled', 'is_published': True,
+        'pending_msg': '<p>Envoyez le montant de votre commande par Wave ou Orange Money au 77 000 00 00 (Les Délices de '
+                       'Maïmouna), en indiquant votre numéro de commande. Nous confirmons dès réception.</p>'})
+    odoo('payment.method', 'write', odoo('payment.method', 'search', [('code', '=', 'wire_transfer')], context=ctx), {'name': 'Wave ou Orange Money'})
+    odoo('payment.provider', 'write', odoo('payment.provider', 'search', [('code', '=', 'demo'), ('company_id', '=', 1)], context=ctx), {'is_published': True})
+
+
+def eb_09():
+    """EB-09 · Où arrive l'argent : la boutique de la fin d'EB-08, avec la commande Wave de Fatou en attente."""
+    eb_08()
+    paiements_fin_eb08()
+    commande_wave_de_fatou()
+
+
+CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08, 'EB-09': eb_09}
 
 if __name__ == '__main__':
     code = next((a.upper() for a in sys.argv[1:] if not a.startswith('--')), None)
