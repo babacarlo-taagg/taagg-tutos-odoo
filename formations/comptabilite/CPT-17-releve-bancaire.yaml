@@ -64,7 +64,7 @@ etapes:
     actions:
       - surligner: 'table'
         duree: 4
-      - surligner_texte: Format de date
+      - surligner: 'text=Format de date >> xpath=following::input[1]'
         duree: 2.5
   - texte: "Cliquez sur Tester. Aucune erreur : cliquez sur Importer."
     actions:
