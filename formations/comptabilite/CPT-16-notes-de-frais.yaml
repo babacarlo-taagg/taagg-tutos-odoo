@@ -80,7 +80,7 @@ etapes:
     actions:
       - cliquer: '.o_statusbar_buttons button[name="action_submit"]'
   - texte: >
-      La dépense passe directement à Approuvé : aucun responsable n'est désigné, la validation est automatique.
+      La dépense passe directement à Approuvé : sans responsable désigné, Odoo l'approuve tout seul, et note qui l'a fait.
       Dans une équipe, c'est le responsable de l'employé qui approuve, ou refuse.
     actions:
       - surligner: '.o_statusbar_status'
