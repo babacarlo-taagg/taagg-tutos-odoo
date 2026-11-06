@@ -1,0 +1,170 @@
+# EB-09 · Où arrive l'argent
+# État de départ : python3 formations/e-business/etat-depart.py EB-09
+#   la boutique de la fin d'EB-08 (Wave ou Orange Money publié, carte Démo publiée) ; la commande de Fatou Ba
+#   (gâteau d'anniversaire 6 parts, 24 000 F TTC) payée « Wave ou Orange Money » : devis envoyé, transaction en attente.
+# Pendant la capsule : la commande est confirmée, facturée (facture confirmée) et le paiement est enregistré dans
+#   le journal Wave (facture « En cours de paiement »). Relancer etat-depart.py avant chaque prise : il annule la
+#   facture et le paiement des prises précédentes.
+titre: Où arrive l'argent
+sous_titre: Formation E-Business Odoo · EB-09
+depart: /odoo
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG School: l'école Tag
+  TAAGG: Tag
+  EB-09: capsule neuf
+  eCommerce: e-commerce
+  E-Business: i-business
+  F CFA: francs CFA
+  FCFA: francs CFA
+  " F ": " francs "
+fin:
+  message: "Prochaine capsule : organiser la livraison"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche (≈ 45 s)
+  - chapitre: Introduction
+    texte: >
+      Bienvenue dans la neuvième capsule de la formation E-Business.
+      Fatou a commandé un gâteau et dit l'avoir payé par Wave. Comment savoir si l'argent est bien arrivé, et le noter dans Odoo ?
+    actions:
+      - attendre: 1
+  - texte: >
+      Voici le chemin de l'argent : la commande attend ; vous vérifiez le paiement sur votre téléphone ;
+      vous confirmez la commande ; vous faites la facture ; et vous enregistrez le paiement.
+    actions:
+      - illustration: images/eb-09-chemin.png
+        zoom: 1.02
+
+  # ------------------------------------------------------------------ partie 1 : la commande qui attend (≈ 1 min)
+  - partie: "1. La commande qui attend"
+    texte: >
+      Ouvrez l'application Site Web, puis eCommerce, Commandes non payées.
+    actions:
+      - cliquer: '.o_app:has-text("Site Web")'
+      - attendre: 1
+      - ouvrir_menu: eCommerce
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Commandes non payées")'
+      - attendre: 2
+  - texte: >
+      La commande de Fatou est là : vingt-quatre mille francs, au statut Envoyé.
+      Odoo attend la preuve du paiement. Ouvrez-la.
+    actions:
+      - surligner: '.o_data_row:has-text("Fatou")'
+        duree: 2.5
+      - cliquer: '.o_data_row:has-text("Fatou") td[name="name"]'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ partie 2 : vérifier (≈ 45 s)
+  - partie: "2. Vérifier le paiement"
+    texte: >
+      Avant tout, prenez le téléphone de la boutique. Dans Wave ou Orange Money, cherchez le transfert :
+      vingt-quatre mille francs, de Fatou Ba, avec le numéro de la commande en message.
+    actions:
+      - illustration: images/eb-09-telephone.png
+        zoom: 1.02
+  - texte: >
+      Le montant et le numéro correspondent ? Alors seulement, vous pouvez confirmer.
+    actions:
+      - surligner: '.o_field_widget[name="amount_total"], .oe_subtotal_footer'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 3 : confirmer et facturer (≈ 1 min 30)
+  - partie: "3. Confirmer et facturer"
+    texte: >
+      Cliquez sur Confirmer. Le devis devient une commande client : la préparation du gâteau peut commencer.
+    actions:
+      - cliquer: 'button[name="action_confirm"] >> visible=true'
+      - attendre: 2
+  - texte: >
+      Faites maintenant la facture, le document officiel de la vente. Cliquez sur Créer une facture.
+    actions:
+      - cliquer: 'button:has-text("Créer une facture") >> visible=true'
+      - attendre: 1.5
+  - texte: >
+      Gardez Facture normale, et cliquez sur Créer brouillon.
+    actions:
+      - surligner: '.modal [name="advance_payment_method"]'
+        duree: 1.5
+      - cliquer: '.modal-footer button:has-text("Créer brouillon")'
+      - attendre: 2.5
+  - texte: >
+      Voici la facture, avec le même gâteau, la TVA, et le total : vingt-quatre mille francs. Cliquez sur Confirmer.
+    actions:
+      - surligner: '.o_form_view .oe_subtotal_footer, .o_form_view [name="tax_totals"]'
+        duree: 2
+      - cliquer: 'button[name="action_post"] >> visible=true'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ partie 4 : enregistrer le paiement (≈ 1 min 30)
+  - partie: "4. Enregistrer le paiement"
+    texte: >
+      La facture a un numéro, et il reste vingt-quatre mille francs à payer. Cliquez sur Payer.
+    actions:
+      - surligner: '.o_form_view [name="amount_residual"], .o_form_view .oe_subtotal_footer'
+        duree: 2
+      - cliquer: 'button:text-is("Payer") >> visible=true'
+      - attendre: 2
+  - texte: >
+      Dans Journal, choisissez Wave : c'est là que l'argent est arrivé. Le montant est déjà rempli.
+    actions:
+      - cliquer: '.modal [name="journal_id"] input'
+      - attendre: 1
+      - cliquer: '.o-autocomplete--dropdown-item:has-text("Wave")'
+      - attendre: 1
+      - surligner: '.modal [name="amount"]'
+        duree: 1.5
+  - texte: Cliquez sur Créer un paiement.
+    actions:
+      - cliquer: '.modal-footer button:has-text("Créer un paiement")'
+      - attendre: 3
+  - texte: >
+      La facture affiche En cours de paiement : l'argent est noté dans le journal Wave.
+      Elle passera à Payé quand votre comptable rapprochera ce paiement de votre relevé Wave.
+    actions:
+      - surligner: '.o_form_view .ribbon, .o_form_view .o_widget_web_ribbon'
+        duree: 3
+  - texte: >
+      En haut, les boutons vous mènent au paiement, et à la commande de Fatou : tout est relié.
+    actions:
+      - surligner: '.oe_button_box'
+        duree: 3
+
+  # ------------------------------------------------------------------ pièges (≈ 1 min)
+  - chapitre: Pièges fréquents
+    texte: >
+      Trois pièges fréquents. Premier piège : confirmer sur une simple capture d'écran envoyée par la cliente.
+      Les fausses captures existent : vérifiez toujours sur votre propre téléphone.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : enregistrer le paiement dans le mauvais journal, par exemple Banque au lieu de Wave.
+      Vos comptes ne correspondraient plus à votre relevé Wave.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : laisser des commandes non payées s'accumuler. Regardez cette liste chaque jour,
+      et relancez les clientes qui n'ont pas encore payé.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice (≈ 1 min)
+  - chapitre: À retenir
+    texte: >
+      Retenons l'essentiel. Un : les commandes Wave qui attendent sont dans eCommerce, Commandes non payées.
+      Deux : vérifiez l'argent sur votre téléphone, avec le numéro de commande.
+      Trois : confirmez la commande, créez la facture, et confirmez-la.
+      Quatre : enregistrez le paiement dans le journal Wave.
+    apres: 1.2
+    actions:
+      - illustration: images/eb-09-recap.png
+        zoom: 1.02
+  - chapitre: Exercice
+    texte: >
+      À vous de jouer : passez une commande test payée par Wave, puis suivez le chemin de l'argent jusqu'à la facture.
+      Dans la prochaine capsule, nous organiserons la livraison : zones, prix, et retrait en boutique.
+    actions:
+      - attendre: 1
