@@ -72,7 +72,7 @@ etapes:
     actions:
       - champ: name
         taper: Wave ou Orange Money
-      - cliquer: '[name="state"] label:has-text("Activé")'
+      - cliquer: '[name="state"] label:text-is("Activé")'
       - attendre: 1
   - texte: >
       Dans l'onglet Messages, écrivez ce que la cliente doit faire après sa commande :
