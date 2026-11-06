@@ -22,4 +22,5 @@ etapes:
         duree: 1
       - taper_dans: {dans: '.panneau .recherche', texte: produit}
       - taper_dans: {dans: '.panneau .recherche', texte: '${TUTO_ESSAI_SECRET}'}   # valeur lue dans l'environnement (.env)
+      - selectionner: {dans: '.panneau select.groupe', option: Source}
       - deposer_fichier: {dans: '.panneau input.fichier', fichier: images/essai-illustration.png}

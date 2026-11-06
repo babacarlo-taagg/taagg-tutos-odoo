@@ -499,6 +499,13 @@ class Realisateur {
         const choix = p.locator('.o-autocomplete--dropdown-item, .ui-menu-item').filter({ hasText: valeur }).first();
         await this.cliquer(choix);
       }
+    } else if ('selectionner' in a) {
+      // liste déroulante classique (<select>) visée par un sélecteur : « Grouper par › Groupe personnalisé »…
+      const { dans, option } = a.selectionner;
+      const liste = this.loc(dans).first();
+      await this.cliquer(liste);
+      await liste.selectOption({ label: option });
+      await pause(300);
     } else if ('cocher' in a) {
       await this.cliquer(this.champ(a.cocher).locator('input[type="checkbox"], label').first());
     } else if ('rechercher' in a) {

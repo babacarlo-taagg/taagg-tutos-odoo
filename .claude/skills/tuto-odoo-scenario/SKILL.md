@@ -64,6 +64,7 @@ etapes:
 | `cliquer: '<sélecteur>'` | clique un sélecteur Playwright (`.o_form_button_save`, `text=Archiver`, `button:has-text("Confirmer")`) |
 | `champ: name` + `taper: Awa Diop` | tape lettre par lettre dans le champ technique `name` (`entree: true` pour valider) |
 | `choisir: {champ: country_id, valeur: Sénégal}` | liste déroulante ou champ relié : tape puis choisit dans la liste |
+| `selectionner: {dans: '.o_add_custom_group_menu', option: Source}` | liste déroulante classique (`<select>`) visée par un sélecteur, choisie par son libellé (ex. « Groupe personnalisé » dans Filtres) |
 | `cocher: is_company` | coche une case |
 | `onglet: Notes internes` | ouvre un onglet de la fiche |
 | `rechercher: Awa` | tape dans la barre de recherche + Entrée |
