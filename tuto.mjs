@@ -420,6 +420,13 @@ class Realisateur {
       if (typeof a.defiler === 'number') await p.mouse.wheel(0, a.defiler);
       else await p.locator(a.defiler).first().scrollIntoViewIfNeeded();
       await pause(500);
+    } else if ('televerser' in a) {
+      // bouton qui ouvre le sélecteur de fichiers (Charger…) : on lui donne un fichier du dépôt
+      const { cliquer: bouton, fichier } = a.televerser;
+      const [selecteur] = await Promise.all([p.waitForEvent('filechooser'), this.cliquer(p.locator(bouton).first())]);
+      await selecteur.setFiles(path.resolve(ICI, fichier));
+      await attendreOdoo(p);
+      await pause(1000);
     } else if ('attendre' in a) {
       await pause(a.attendre * 1000);
     } else {

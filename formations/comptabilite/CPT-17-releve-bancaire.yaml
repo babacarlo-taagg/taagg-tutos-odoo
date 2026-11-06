@@ -1,0 +1,152 @@
+# CPT-17 · Importer un relevé bancaire
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-17`) :
+#   aucune ligne de relevé sur le journal Banque ; les paiements de CPT-15 et CPT-16 (Grands Moulins 191 160 F,
+#   Épicerie 35 400 F, Amy BA 23 600 F) sont « en cours » (521004 Paiements sortants en suspens).
+# Fichier importé : formations/comptabilite/fichiers/releve-banque-novembre.csv (UTF-8 avec BOM, colonnes
+#   Date, Libellé, Partenaire, Montant ; dates JJ/MM/AAAA). Odoo associe seul les colonnes, et rapproche seul les trois
+#   virements avec les paiements à l'import. Le versement d'espèces (300 000 F) reste à traiter (CPT-18 / CPT-20).
+# Ce que la capsule crée : le relevé importé (4 lignes) et une ligne saisie à la main (frais de tenue de compte, −2 500 F).
+#   etat-depart.py défait les rapprochements et supprime relevé et lignes.
+titre: Importer un relevé bancaire
+sous_titre: Formation Comptabilité Odoo · CPT-17
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+  CSV: C S V
+  CAMT: Camte
+  OFX: O F X
+fin:
+  message: "Prochaine capsule : le rapprochement bancaire"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans le quatrième parcours : la trésorerie. Ce que dit Odoo et ce que dit la banque
+      doivent concorder. Tout commence par le relevé bancaire.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez importer un relevé dans Odoo, lire le résultat, et saisir une ligne à la main.
+    actions:
+      - surligner: '.o_kanban_record:has-text("Banque")'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 1 : récupérer le relevé
+  - partie: "1. Récupérer le relevé"
+    texte: >
+      Dans votre banque en ligne, exportez le relevé du mois. Odoo accepte les formats courants : C S V, Excel, O F X, Camte.
+      Sur le tableau de bord, cliquez sur Transactions, dans la carte Banque.
+    actions:
+      - cliquer: '.o_kanban_record:has-text("Banque") button:has-text("Transactions")'
+  - texte: >
+      L'écran de réconciliation bancaire est vide : aucune ligne de relevé pour l'instant. Il rappelle les formats acceptés.
+    actions:
+      - surligner_texte: Rien à faire ici
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 2 : importer
+  - partie: "2. Importer le fichier"
+    texte: >
+      Cliquez sur Charger, et choisissez le fichier exporté de la banque : le relevé de novembre, au format C S V.
+    actions:
+      - televerser:
+          cliquer: '.o_control_panel button:has-text("Charger")'
+          fichier: formations/comptabilite/fichiers/releve-banque-novembre.csv
+  - texte: >
+      Odoo lit le fichier et reconnaît tout seul les colonnes : la date, le libellé, le partenaire, le montant.
+      Vérifiez le format de date : jour, mois, année.
+    actions:
+      - surligner: 'table'
+        duree: 4
+      - surligner_texte: Format de date
+        duree: 2.5
+  - texte: Cliquez sur Tester. Aucune erreur : cliquez sur Importer.
+    actions:
+      - cliquer: '.o_control_panel button:has-text("Tester")'
+      - attendre: 1.5
+      - cliquer: '.o_control_panel button:has-text("Importer")'
+      - attendre: 3
+
+  # ------------------------------------------------------------------ partie 3 : le résultat
+  - partie: "3. Lire le résultat"
+    texte: >
+      Revenez à la réconciliation bancaire. Les lignes du relevé sont là, et en haut, le solde : il doit être celui de votre relevé papier.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Réconciliation")'
+      - attendre: 2
+      - surligner_texte: Solde actuel
+        duree: 3
+  - texte: >
+      Bonne surprise : Odoo a déjà relié trois virements aux paiements enregistrés dans les capsules précédentes,
+      les Grands Moulins, l'épicerie, et Amy. Une coche verte, et le numéro du paiement.
+    actions:
+      - surligner_texte: PBNK1/2026/00002
+        duree: 2.5
+      - surligner_texte: PBNK1/2026/00003
+        duree: 2
+  - texte: >
+      Le versement d'espèces de la caisse attend encore : Odoo ne sait pas à quoi le relier. Ce sera le sujet de la prochaine capsule.
+    actions:
+      - surligner_texte: VERSEMENT ESPECES CAISSE BOUTIQUE
+        duree: 3.5
+
+  # ------------------------------------------------------------------ partie 4 : saisir une ligne
+  - partie: "4. Saisir une ligne à la main"
+    texte: >
+      Sur le relevé papier figurent aussi des frais de tenue de compte, absents du fichier. Cliquez sur Nouveau pour les saisir.
+    actions:
+      - cliquer: '.o_control_panel button:has-text("Nouveau")'
+  - texte: >
+      Le libellé, comme sur le relevé : frais de tenue de compte. Et le montant, en négatif, puisque l'argent sort :
+      moins deux mille cinq cents francs.
+    actions:
+      - champ: payment_ref
+        taper: FRAIS TENUE DE COMPTE NOVEMBRE
+      - champ: amount
+        taper: "-2500"
+  - texte: Cliquez sur Ajouter et fermer.
+    actions:
+      - cliquer: 'button:has-text("Ajouter & Fermer")'
+      - attendre: 1.5
+  - texte: >
+      La ligne rejoint le relevé, et le solde se met à jour. Elle reste à traiter, comme le versement d'espèces.
+    actions:
+      - surligner_texte: FRAIS TENUE DE COMPTE NOVEMBRE
+        duree: 3
+      - surligner_texte: Solde actuel
+        duree: 2
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : importer deux fois le même relevé. Les lignes se retrouvent en double.
+      Notez la dernière date importée.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : un format de date inversé. Le cinq novembre devient le onze mai. Vérifiez toujours avant d'importer.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : ne pas comparer le solde. Si le solde d'Odoo n'est pas celui de la banque, une ligne manque, ou est en trop.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. On exporte le relevé de la banque, on le charge dans Transactions, on vérifie les colonnes et la date,
+      puis on importe. Odoo relie déjà ce qu'il reconnaît, et une ligne manquante se saisit avec Nouveau.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : importez le relevé de votre banque pour le mois dernier, et vérifiez que le solde correspond.
+      Dans la prochaine capsule, nous rapprocherons les lignes qui restent. À tout de suite !
+    actions:
+      - attendre: 1

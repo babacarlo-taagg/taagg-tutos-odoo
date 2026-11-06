@@ -71,6 +71,7 @@ etapes:
 | `surligner: '<sélecteur>'` / `surligner_champ: email` + `duree: 2` | cadre vert + fond assombri autour de l'élément |
 | `survoler: '<sélecteur>'` | déplace le curseur dessus (pour pointer sans cliquer) |
 | `touche: Escape` | appuie sur une touche |
+| `televerser: {cliquer: '<bouton>', fichier: formations/…/x.csv}` | clique un bouton qui ouvre le choix de fichier (Charger…) et lui donne un fichier du dépôt (chemin depuis la racine) |
 | `defiler: 400` ou `defiler: '<sélecteur>'` | fait défiler la page |
 | `attendre: 1.5` | pause (secondes) |
 

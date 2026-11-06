@@ -417,8 +417,26 @@ def cpt_16():
     return len(depenses)
 
 
+def cpt_17():
+    # le relevé de la banque est importé (et une ligne saisie à la main) à l'écran : on supprime les lignes de relevé
+    # du journal Banque, en défaisant leurs rapprochements (les paiements repassent « en cours »), puis les relevés
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    banque = odoo('account.journal', 'search', [['code', '=', 'BNK1'], ['company_id', '=', SOCIETE]])
+    lignes = odoo('account.bank.statement.line', 'search', [['journal_id', 'in', banque]], context=fr)
+    for l in lignes:
+        if odoo('account.bank.statement.line', 'read', [l], ['is_reconciled'], context=fr)[0]['is_reconciled']:
+            odoo('account.bank.statement.line', 'action_undo_reconciliation', [l], context=fr)
+    releves = odoo('account.bank.statement', 'search', [['journal_id', 'in', banque]], context=fr)
+    if releves:  # Odoo refuse de supprimer une ligne d'un relevé validé : le relevé d'abord
+        odoo('account.bank.statement', 'unlink', releves, context=fr)
+    lignes = odoo('account.bank.statement.line', 'search', [['journal_id', 'in', banque]], context=fr)
+    if lignes:
+        odoo('account.bank.statement.line', 'unlink', lignes, context=fr)
+    return len(lignes), len(releves)
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''
