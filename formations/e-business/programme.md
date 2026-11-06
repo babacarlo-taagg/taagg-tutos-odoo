@@ -53,7 +53,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | EB-08 | Les moyens de paiement | carte (Démo), Wave et Orange Money avec instructions, virement ; Flutterwave : ce qu'il faut pour l'activer | Moyens de paiement | 🎙 |
 | EB-09 | Où arrive l'argent | transaction, commande payée, facture, paiement ; vérifier un paiement Wave reçu à la main | Transactions, Factures | 🎙 |
 | EB-10 | Organiser la livraison | forfait Dakar, zones (Plateau, banlieue, régions), livraison gratuite dès un montant, retrait en boutique, paiement à la livraison | Modes de livraison | 🎙 |
-| EB-11 | Une commande de bout en bout | commande test : le client paie → la commande → la livraison → la facture (livrable du module 3) | Boutique, Commandes, Inventaire | ☐ |
+| EB-11 | Une commande de bout en bout | commande test : le client paie → la commande → la livraison → la facture (livrable du module 3) | Boutique, Commandes, Inventaire | ✎ |
 | EB-12 | Service client et confiance | e-mails de confirmation, l'espace « Mon compte » du client, chat en direct, avis clients | Modèles d'e-mail, Chat en direct | ☐ |
 
 ## Parcours 3 — Attirer les clients (Module 4)

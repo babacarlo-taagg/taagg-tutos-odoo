@@ -31,6 +31,8 @@ Règles : compétence `tuto-odoo-illustrations`. Babacar valide chaque image ava
 | `eb-09-recap.png` | EB-09 | les 4 points à retenir | ☐ |
 | `eb-10-zones.png` | EB-10 | Dakar ville 1 500 F, banlieue 2 500 F, retrait gratuit | ☐ |
 | `eb-10-recap.png` | EB-10 | les 4 points à retenir | ☐ |
+| `eb-11-bout-en-bout.png` | EB-11 | la cliente paie, commande, livraison, facture | ☐ |
+| `eb-11-recap.png` | EB-11 | les 4 points à retenir | ☐ |
 | `logo-delices-maimouna.png` | toutes | logo fictif de la boutique d'exemple (posé sur le site par `etat-depart.py`) | ☐ |
 
 ## Images IA (sans texte)
