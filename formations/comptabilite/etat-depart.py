@@ -396,8 +396,29 @@ def cpt_15():
     return odoo('account.move', 'read', [moulins, seconde], ['name', 'amount_residual'])
 
 
+def cpt_16():
+    # la dépense d'Amy BA (déjeuner avec un client, 23 600 F) est saisie, comptabilisée et remboursée à l'écran : on défait tout
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    depenses = odoo('hr.expense', 'search', [], context=fr)
+    for d in depenses:
+        piece = odoo('hr.expense', 'read', [d], ['account_move_id'], context=fr)[0]['account_move_id']
+        if piece:
+            paiements = odoo('account.payment', 'search', [['reconciled_bill_ids', 'in', [piece[0]]]])
+            if paiements:
+                odoo('account.payment', 'action_draft', paiements, context=fr)
+                odoo('account.payment', 'unlink', paiements, context=fr)
+            if odoo('account.move', 'read', [piece[0]], ['state'])[0]['state'] != 'draft':
+                odoo('account.move', 'button_draft', [piece[0]], context=fr)
+            odoo('account.move', 'unlink', [piece[0]], context=fr)
+        if odoo('hr.expense', 'read', [d], ['state'], context=fr)[0]['state'] != 'draft':
+            odoo('hr.expense', 'action_reset', [d], context=fr)
+    if depenses:
+        odoo('hr.expense', 'unlink', depenses, context=fr)
+    return len(depenses)
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''

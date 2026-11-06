@@ -1,0 +1,169 @@
+# CPT-16 · Les notes de frais des employés
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-16`) :
+#   aucune dépense d'employé ; la prochaine facture fournisseur de novembre sera BILL/2026/11/0002.
+#   Le journal Banque a son compte de paiements sortants (521004, réglé dans CPT-15).
+# Ce que la capsule crée : la dépense d'Amy BA (« Déjeuner avec un client », catégorie Repas, 23 600 F TTC, compte 638300),
+#   son ticket comptable BILL/2026/11/0002 et le remboursement par la banque. etat-depart.py défait tout.
+# Odoo 19 : plus de « rapport de dépenses » ; la dépense est soumise, approuvée (validation automatique, pas de manager),
+#   puis « Enregistrer les pièces comptables » ouvre une fenêtre (journal Achats) avant « Comptabiliser les dépenses ».
+titre: Les notes de frais des employés
+sous_titre: Formation Comptabilité Odoo · CPT-16
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : importer un relevé bancaire"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette seizième capsule. Amy, la commerciale de la boutique, a invité un client au restaurant,
+      et elle a payé l'addition de sa poche : vingt-trois mille six cents francs. Comment la rembourser proprement ?
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez saisir une note de frais, la faire valider, l'enregistrer en comptabilité,
+      et rembourser l'employé.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : saisir
+  - partie: "1. Saisir la dépense"
+    texte: >
+      Ouvrez Fournisseurs, puis Dépenses de l'employé, et cliquez sur Nouveau.
+    actions:
+      - ouvrir_menu: Fournisseurs
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Dépenses de l")'
+      - bouton: Nouveau
+  - texte: >
+      Une description claire : déjeuner avec un client. Puis la catégorie : Repas.
+    actions:
+      - champ: name
+        taper: Déjeuner avec un client
+      - choisir: {champ: product_id, valeur: Repas}
+  - texte: >
+      Le total payé, taxes comprises : vingt-trois mille six cents francs. Odoo en déduit la TVA, trois mille six cents francs.
+    actions:
+      - champ: total_amount_currency
+        taper: "23600"
+      - touche: Tab
+      - surligner_champ: tax_amount_currency
+        duree: 2.5
+  - texte: >
+      L'employée : Amy BA. Elle a payé elle-même : Payé par, Employé, à rembourser.
+    actions:
+      - choisir: {champ: employee_id, valeur: Amy BA}
+      - surligner_champ: payment_mode
+        duree: 2.5
+  - texte: >
+      Vérifiez le compte. Odoo propose un compte d'achat de marchandises : pour un repas d'affaires, choisissez Réceptions,
+      six cent trente-huit mille trois cents.
+    actions:
+      - surligner_champ: account_id
+        duree: 2
+      - choisir: {champ: account_id, valeur: "638300"}
+  - texte: >
+      Le bouton Joindre le reçu ajoute la photo du ticket de caisse. C'est le justificatif : sans lui, pas de TVA récupérable.
+    actions:
+      - surligner: '.o_statusbar_buttons button:has-text("Joindre le reçu")'
+        duree: 3.5
+
+  # ------------------------------------------------------------------ partie 2 : soumettre
+  - partie: "2. Soumettre et valider"
+    texte: Cliquez sur Soumettre.
+    actions:
+      - cliquer: '.o_statusbar_buttons button[name="action_submit"]'
+  - texte: >
+      La dépense passe directement à Approuvé : aucun responsable n'est désigné, la validation est automatique.
+      Dans une équipe, c'est le responsable de l'employé qui approuve, ou refuse.
+    actions:
+      - surligner: '.o_statusbar_status'
+        duree: 3
+      - surligner_champ: manager_id
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 3 : comptabiliser
+  - partie: "3. Enregistrer en comptabilité"
+    texte: >
+      Cliquez sur Enregistrer les pièces comptables. La dépense ira dans le journal des achats, à la date du jour.
+      Cliquez sur Comptabiliser les dépenses.
+    actions:
+      - cliquer: '.o_statusbar_buttons button[name="action_post"]'
+      - surligner_champ: employee_journal_id
+        duree: 2.5
+      - cliquer: '.modal-footer button[name="action_post_entry"]'
+  - texte: >
+      Odoo crée une pièce d'achat, comme une facture fournisseur. Le fournisseur, c'est Amy : la boutique lui doit
+      vingt-trois mille six cents francs.
+    actions:
+      - surligner_champ: partner_id
+        duree: 3
+      - surligner_champ: amount_residual
+        duree: 2.5
+  - texte: Ouvrez l'onglet Écritures comptables.
+    actions:
+      - onglet: Écritures comptables
+  - texte: >
+      La charge de réception est débitée de vingt mille francs, la TVA récupérable de trois mille six cents,
+      et en face, la dette envers Amy est créditée.
+    actions:
+      - surligner: '.o_notebook .tab-pane.active .o_list_renderer'
+        duree: 6
+
+  # ------------------------------------------------------------------ partie 4 : rembourser
+  - partie: "4. Rembourser l'employée"
+    texte: >
+      Reste à rembourser Amy, par virement. Cliquez sur Payer : le journal Banque, vingt-trois mille six cents francs,
+      et la description de la dépense en mémo. Créez le paiement.
+    actions:
+      - cliquer: '.o_statusbar_buttons button[name="action_register_payment"]'
+      - surligner_champ: amount
+        duree: 2.5
+      - cliquer: '.modal-footer button[name="action_create_payments"]'
+  - texte: >
+      Le montant dû tombe à zéro. Amy est remboursée, et la dépense est complète : du ticket de caisse à l'écriture.
+    sous_titres: haut
+    actions:
+      - onglet: Lignes de facture
+      - surligner_champ: amount_residual
+        duree: 3.5
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : une dépense sans reçu. Sans justificatif, la TVA n'est pas récupérable,
+      et la charge peut être refusée en cas de contrôle.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : garder le compte proposé sans le lire. Un repas d'affaires n'est pas un achat de marchandises.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : choisir Employé, à rembourser, pour une dépense payée avec la carte de la société.
+      L'employé serait remboursé d'un argent qu'il n'a pas avancé. Choisissez alors Société.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Une note de frais se saisit dans Dépenses de l'employé : la catégorie, le total, l'employé, le bon compte,
+      et le reçu. On la soumet, on la fait approuver.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Comptabilisée, elle devient une dette envers l'employé, qu'on rembourse avec le bouton Payer.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : enregistrez un frais de taxi avancé par un de vos employés, avec son reçu, puis remboursez-le.
+      Dans la prochaine capsule, nous ouvrirons le parcours trésorerie : importer un relevé bancaire. À tout de suite !
+    actions:
+      - attendre: 1
