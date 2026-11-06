@@ -51,7 +51,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | Code | Capsule | Ce qu'on apprend | Écrans | État |
 |---|---|---|---|---|
 | EB-08 | Les moyens de paiement | carte (Démo), Wave et Orange Money avec instructions, virement ; Flutterwave : ce qu'il faut pour l'activer | Moyens de paiement | 🎙 |
-| EB-09 | Où arrive l'argent | transaction, commande payée, facture, paiement ; vérifier un paiement Wave reçu à la main | Transactions, Factures | ✎ |
+| EB-09 | Où arrive l'argent | transaction, commande payée, facture, paiement ; vérifier un paiement Wave reçu à la main | Transactions, Factures | 🎙 |
 | EB-10 | Organiser la livraison | forfait Dakar, zones (Plateau, banlieue, régions), livraison gratuite dès un montant, retrait en boutique, paiement à la livraison | Modes de livraison | ☐ |
 | EB-11 | Une commande de bout en bout | commande test : le client paie → la commande → la livraison → la facture (livrable du module 3) | Boutique, Commandes, Inventaire | ☐ |
 | EB-12 | Service client et confiance | e-mails de confirmation, l'espace « Mon compte » du client, chat en direct, avis clients | Modèles d'e-mail, Chat en direct | ☐ |
@@ -82,7 +82,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | EB-22 | Réapprovisionner sans rupture | fournisseurs, règles de réassort automatique, bons d'achat | Achats, Inventaire | ☐ |
 | EB-23 | Prête pour le lancement | nom de domaine, check-list avant d'ouvrir, test sur téléphone | Paramètres du site | ☐ |
 
-**23 capsules ≈ 4 h de formation.** EB-01 : 6 min 46, EB-02 : 5 min 43, EB-03 : 6 min 48, EB-04 : 4 min 58, EB-05 : 5 min 37, EB-06 : 4 min 49, EB-07 : 4 min 42, EB-08 : 4 min 42 (voix de Babacar, vitesse 1,0) — à publier.
+**23 capsules ≈ 4 h de formation.** EB-01 : 6 min 46, EB-02 : 5 min 43, EB-03 : 6 min 48, EB-04 : 4 min 58, EB-05 : 5 min 37, EB-06 : 4 min 49, EB-07 : 4 min 42, EB-08 : 4 min 42, EB-09 : 3 min 20 (voix de Babacar, vitesse 1,0) — à publier.
 
 ## Hors Odoo (pas de capsule filmée dans Odoo)
 
