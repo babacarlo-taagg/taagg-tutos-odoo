@@ -61,7 +61,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 
 | Code | Capsule | Ce qu'on apprend | Écrans | État |
 |---|---|---|---|---|
-| EB-13 | Être trouvé sur Google | titre, description et image de partage de chaque page et produit ; adresse des pages ; Google Search Console et Analytics | Optimiser le référencement, Paramètres | ✎ |
+| EB-13 | Être trouvé sur Google | titre, description et image de partage de chaque page et produit ; adresse des pages ; Google Search Console et Analytics | Optimiser le référencement, Paramètres | 🎙 |
 | EB-14 | Mesurer ses campagnes WhatsApp, Facebook, TikTok | liens de suivi : savoir quelle publication amène les ventes | Liens traceurs | ☐ |
 | EB-15 | Promotions et codes promo | code « TABASKI », réduction sur une catégorie, livraison offerte | Programmes de remise et de fidélité | ☐ |
 | EB-16 | Fidéliser ses clients | carte de fidélité, newsletter, relance des paniers abandonnés | Fidélité, Marketing par e-mail | ☐ |
@@ -83,7 +83,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | EB-22 | Réapprovisionner sans rupture | fournisseurs, règles de réassort automatique, bons d'achat | Achats, Inventaire | ☐ |
 | EB-23 | Prête pour le lancement | nom de domaine, check-list avant d'ouvrir, test sur téléphone | Paramètres du site | ☐ |
 
-**23 capsules ≈ 4 h de formation.** EB-01 : 6 min 46, EB-02 : 5 min 43, EB-03 : 6 min 48, EB-04 : 4 min 58, EB-05 : 5 min 37, EB-06 : 4 min 49, EB-07 : 4 min 42, EB-08 : 4 min 42, EB-09 : 3 min 20, EB-10 : 4 min 13, EB-11 : 4 min 13, EB-12 : 4 min 14 (voix de Babacar, vitesse 1,0) — à publier.
+**23 capsules ≈ 4 h de formation.** EB-01 : 6 min 46, EB-02 : 5 min 43, EB-03 : 6 min 48, EB-04 : 4 min 58, EB-05 : 5 min 37, EB-06 : 4 min 49, EB-07 : 4 min 42, EB-08 : 4 min 42, EB-09 : 3 min 20, EB-10 : 4 min 13, EB-11 : 4 min 13, EB-12 : 4 min 14, EB-13 : 3 min 31 (voix de Babacar, vitesse 1,0) — à publier.
 
 ## Hors Odoo (pas de capsule filmée dans Odoo)
 

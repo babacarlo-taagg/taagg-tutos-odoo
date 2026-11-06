@@ -24,7 +24,7 @@ Les leçons EB-03 à EB-23 sont en **brouillon** : les apprenants ne les voient 
 | EB-10 | 2786 | 3 | « Organiser la livraison à Dakar et en régions » | `EB-10-organiser-la-livraison/organiser-la-livraison.mp4` | 🎬 prête, à mettre |
 | EB-11 | 2787 | 3 | EB-12 | `EB-11-une-commande-de-bout-en-bout/une-commande-de-bout-en-bout.mp4` | 🎬 prête, à mettre |
 | EB-12 | 2788 | 3 | « Service client et confiance » (texte) | `EB-12-service-client-et-confiance/service-client-et-confiance.mp4` | 🎬 prête, à mettre |
-| EB-13 | 2789 | 4 | « Référencement naturel et Google » | `EB-13-etre-trouve-sur-google/etre-trouve-sur-google.mp4` | 🎙 voix en cours |
+| EB-13 | 2789 | 4 | « Référencement naturel et Google » | `EB-13-etre-trouve-sur-google/etre-trouve-sur-google.mp4` | 🎬 prête, à mettre |
 | EB-14 | 2790 | 4 | EB-15 | — | ☐ à tourner |
 | EB-15 | 2791 | 4 | EB-16 | — | ☐ à tourner |
 | EB-16 | 2792 | 4 | « Email, SMS et fidélisation » | — | ☐ à tourner |
