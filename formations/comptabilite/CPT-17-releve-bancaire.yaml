@@ -66,7 +66,7 @@ etapes:
         duree: 4
       - surligner_texte: Format de date
         duree: 2.5
-  - texte: Cliquez sur Tester. Aucune erreur : cliquez sur Importer.
+  - texte: "Cliquez sur Tester. Aucune erreur : cliquez sur Importer."
     actions:
       - cliquer: '.o_control_panel button:has-text("Tester")'
       - attendre: 1.5
