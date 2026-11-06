@@ -27,6 +27,7 @@ Illustrations (schémas, images d'ambiance) : compétence `tuto-odoo-illustratio
 | Promotions eCommerce (`website_sale_loyalty`) | codes promo, cartes de fidélité | EB-15, EB-16 |
 | Retrait en boutique (`website_sale_collect`) | « je passe chercher mon gâteau » | EB-10 |
 | Chat en direct (`website_livechat`) | service client sur le site | EB-12 |
+| ~~Confirmation SMS (`stock_sms`)~~ | **désinstallé le 06/11/2026** (accord de Babacar) : chaque livraison validée tentait un SMS payant | EB-11 |
 | Paiement Flutterwave (`payment_flutterwave`) | montrer un vrai prestataire de paiement africain (sans clé, réglages seulement) | EB-08 |
 
 Aussi à préparer par l'API (`etat-depart.py`) : **les prix de vente sont tous à 1 F** dans la base

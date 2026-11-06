@@ -717,10 +717,14 @@ def livraisons_fin_eb10():
 
 
 def sans_sms_de_livraison():
-    """La validation d'une livraison propose d'envoyer un SMS à la cliente (module stock_sms : crédits payants).
-    On coupe ce SMS dans la base de tournage : aucun SMS ne part jamais pendant une prise."""
-    ecrire('res.company', [1], {'stock_sms_confirmation_template_id': False, 'has_received_warning_stock_sms': True},
-           'Inventaire : pas de SMS à la validation des livraisons (crédits SMS payants)')
+    """La validation d'une livraison envoyait un SMS à la cliente (module stock_sms : crédits payants, et une ligne
+    « SMS » en erreur visible dans l'historique). Module désinstallé le 06/11/2026 avec l'accord de Babacar ;
+    on vérifie qu'il n'est pas revenu."""
+    etat = odoo('ir.module.module', 'search_read', [('name', '=', 'stock_sms')], fields=['state'])
+    if etat and etat[0]['state'] == 'installed':
+        raise SystemExit('✗ Le module stock_sms est réinstallé : chaque livraison validée tenterait un SMS. '
+                         'Le désinstaller (Inventaire › Paramètres › Confirmation SMS) avant de filmer.')
+    print('  · Inventaire : module SMS de livraison absent (aucun SMS à la validation des livraisons)')
 
 
 def eb_11():
@@ -730,7 +734,82 @@ def eb_11():
     sans_sms_de_livraison()
 
 
-CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08, 'EB-09': eb_09, 'EB-10': eb_10, 'EB-11': eb_11}
+def droits_live_chat():
+    """Le compte de tournage « Formateur TAAGG » reçoit le droit Live Chat / Administrateur (accord de Babacar
+    du 06/11/2026, pour EB-12). Base de démonstration seulement."""
+    utilisateur = odoo('res.users', 'search', [('login', '=', ENV['ODOO_LOGIN'])])
+    groupe = odoo('ir.model.data', 'search_read', [('module', '=', 'im_livechat'), ('name', '=', 'im_livechat_group_manager')],
+                  fields=['res_id'])[0]['res_id']
+    ecrire('res.users', utilisateur, {'group_ids': [(4, groupe)]}, 'Formateur TAAGG : droit Live Chat / Administrateur')
+
+
+def rpc_formateur():
+    """Accès avec le compte Formateur TAAGG (Live Chat : le compte API n'y a pas droit)."""
+    uid = rpc('common', 'login', BASE, ENV['ODOO_LOGIN'], ENV['ODOO_MOT_DE_PASSE'])
+    return lambda modele, methode, *args, **kw: rpc('object', 'execute_kw', BASE, uid, ENV['ODOO_MOT_DE_PASSE'],
+                                                    modele, methode, list(args), dict(kw, context=kw.get('context', CTX)))
+
+
+def service_client_eb12_a_refaire():
+    """Chat en direct : canal d'origine (« YourWebsite.com », aucun agent), conversations des prises supprimées ;
+    avis clients désactivés sur les fiches produit, avis des prises supprimés."""
+    print('Service client : remis comme avant EB-12')
+    droits_live_chat()
+    if VOIR:
+        return
+    formateur = rpc_formateur()
+    canal = formateur('im_livechat.channel', 'search', [])
+    formateur('im_livechat.channel', 'write', canal[:1], {'name': 'YourWebsite.com', 'button_text': 'Besoin d’aide ? Chattez avec nous.',
+                                                          'default_message': 'Bonjour, comment puis-je vous aider ?', 'user_ids': [(5, 0, 0)]})
+    conversations = formateur('discuss.channel', 'search', [('livechat_channel_id', 'in', canal)])
+    if conversations:
+        formateur('discuss.channel', 'unlink', conversations)
+    print(f'  · chat : canal d’origine, sans agent ; {len(conversations)} conversation(s) des prises supprimée(s)')
+    vues = odoo('ir.ui.view', 'search', [('key', '=', 'website_sale.product_comment')], context=dict(CTX, active_test=False))
+    odoo('ir.ui.view', 'write', vues, {'active': False})
+    fatou = odoo('res.partner', 'search', [('email', '=', CLIENTE['email'])], context=dict(CTX, active_test=False))
+    avis = odoo('mail.message', 'search', [('model', '=', 'product.template'), ('author_id', 'in', fatou)])
+    if avis:
+        odoo('mail.message', 'unlink', avis)
+    print(f'  · avis clients désactivés ; {len(avis)} avis des prises supprimé(s)')
+
+
+def commande_livree_de_fatou():
+    """La commande de la fin d'EB-11 : gâteau 8 parts (30 000 F), livraison Dakar offerte, confirmée, facturée, payée."""
+    print('Commande de Fatou : livrée, facturée, payée (fin d’EB-11)')
+    if VOIR:
+        return
+    ctx = dict(CTX, tracking_disable=True)
+    partenaire = odoo('res.users', 'search_read', [('login', '=', ENV['ODOO_CLIENTE_LOGIN'])], fields=['partner_id'])[0]['partner_id'][0]
+    gateau = odoo('product.product', 'search', [('product_tmpl_id.name', '=', "Gâteau d'anniversaire"),
+                                                ('product_template_attribute_value_ids.name', '=', '8 parts')])
+    vendeur = odoo('website', 'read', [SITE], fields=['salesperson_id'])[0]['salesperson_id'][0]
+    commande = odoo('sale.order', 'create', {'partner_id': partenaire, 'website_id': SITE, 'user_id': vendeur,
+                                             'order_line': [(0, 0, {'product_id': gateau[0], 'product_uom_qty': 1})]}, context=ctx)
+    odoo('sale.order', 'action_confirm', [commande], context=ctx)
+    for bon in odoo('sale.order', 'read', [commande], fields=['picking_ids'])[0]['picking_ids']:
+        odoo('stock.picking', 'button_validate', [bon], context=dict(ctx, skip_sms=True))
+    assistant = odoo('sale.advance.payment.inv', 'create', {'advance_payment_method': 'delivered'},
+                     context=dict(ctx, active_model='sale.order', active_ids=[commande], active_id=commande))
+    odoo('sale.advance.payment.inv', 'create_invoices', [assistant], context=dict(ctx, active_model='sale.order', active_ids=[commande], active_id=commande))
+    facture = odoo('sale.order', 'read', [commande], fields=['invoice_ids'])[0]['invoice_ids']
+    odoo('account.move', 'action_post', facture, context=ctx)
+    banque = odoo('account.journal', 'search', [('code', '=', 'BNK1'), ('company_id', '=', 1)])
+    reglement = odoo('account.payment.register', 'create', {'journal_id': banque[0]},
+                     context=dict(ctx, active_model='account.move', active_ids=facture))
+    odoo('account.payment.register', 'action_create_payments', [reglement], context=dict(ctx, active_model='account.move', active_ids=facture))
+    print('  · commande confirmée, livrée, facture confirmée et payée (journal Banque, comme la carte)')
+
+
+def eb_12():
+    """EB-12 · Service client et confiance : la boutique de la fin d'EB-11 (Fatou a une commande livrée et payée),
+    chat en direct d'origine sans agent, avis clients désactivés."""
+    eb_11()
+    commande_livree_de_fatou()
+    service_client_eb12_a_refaire()
+
+
+CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08, 'EB-09': eb_09, 'EB-10': eb_10, 'EB-11': eb_11, 'EB-12': eb_12}
 
 if __name__ == '__main__':
     code = next((a.upper() for a in sys.argv[1:] if not a.startswith('--')), None)
