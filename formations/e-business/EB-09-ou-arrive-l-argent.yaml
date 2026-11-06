@@ -132,8 +132,10 @@ etapes:
   - texte: >
       En haut, les boutons vous mènent au paiement, et à la commande de Fatou : tout est relié.
     actions:
-      - surligner: '.oe_button_box'
-        duree: 3
+      - surligner: 'button:has-text("Paiements"):visible'
+        duree: 1.5
+      - surligner: 'button:has-text("Commandes clients"):visible'
+        duree: 1.5
 
   # ------------------------------------------------------------------ pièges (≈ 1 min)
   - chapitre: Pièges fréquents
