@@ -578,7 +578,39 @@ def eb_07():
     stock_eb07_a_refaire()
 
 
-CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07}
+VIREMENT_MSG_ORIGINE = ('<div><h5>Veuillez utiliser les informations suivantes pour le transfert bancaire.</h5><p><br></p>'
+                        '<h6>Comptes bancaires</h6><ul></ul><p><br></p></div>')
+
+
+def paiements_eb08_a_refaire():
+    """Le « Virement bancaire » des Délices redevient tel qu'Odoo l'installe (désactivé) : la capsule le transforme
+    en « Wave ou Orange Money ». Carte Démo en mode test, non publiée ; Flutterwave désactivé, sans clés."""
+    print('Paiements : remis comme avant EB-08')
+    ctx = dict(CTX, active_test=False)
+    virement = odoo('payment.provider', 'search', [('custom_mode', '=', 'wire_transfer'), ('company_id', '=', 1)], context=ctx)
+    ecrire('payment.provider', virement, {'name': 'Virement bancaire', 'state': 'disabled', 'is_published': False,
+                                          'pending_msg': VIREMENT_MSG_ORIGINE}, 'Virement bancaire : désactivé, message d’origine')
+    methode = odoo('payment.method', 'search', [('code', '=', 'wire_transfer')], context=ctx)
+    ecrire('payment.method', methode, {'name': 'Virement bancaire'}, 'mode de paiement « Virement bancaire » (nom d’origine)')
+    demo = odoo('payment.provider', 'search', [('code', '=', 'demo'), ('company_id', '=', 1)], context=ctx)
+    ecrire('payment.provider', demo, {'state': 'test', 'is_published': False}, 'carte Démo : mode test, non publiée')
+    flutterwave = odoo('payment.provider', 'search', [('code', '=', 'flutterwave'), ('company_id', '=', 1)], context=ctx)
+    ecrire('payment.provider', flutterwave, {'state': 'disabled', 'is_published': False}, 'Flutterwave : désactivé')
+    # Fatou a déjà commandé (EB-06) : son adresse est connue, le tunnel va droit au paiement
+    utilisateur = odoo('res.users', 'search_read', [('login', '=', ENV.get('ODOO_CLIENTE_LOGIN'))], fields=['partner_id'], context=ctx)
+    if utilisateur:
+        ecrire('res.partner', [utilisateur[0]['partner_id'][0]], {'street': '12 rue Carnot', 'city': 'Dakar', 'zip': '10200',
+                                                                  'phone': '+221 77 000 00 03'}, 'Fatou Ba : adresse de la commande d’EB-06')
+
+
+def eb_08():
+    """EB-08 · Les moyens de paiement : la boutique de la fin d'EB-07 ; paiements : à la livraison et sur place
+    seulement ; Virement bancaire désactivé ; Fatou a son adresse et un panier vide."""
+    eb_07()
+    paiements_eb08_a_refaire()
+
+
+CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08}
 
 if __name__ == '__main__':
     code = next((a.upper() for a in sys.argv[1:] if not a.startswith('--')), None)

@@ -1,0 +1,219 @@
+# EB-08 · Les moyens de paiement
+# État de départ : python3 formations/e-business/etat-depart.py EB-08
+#   la boutique de la fin d'EB-07 ; paiements publiés : à la livraison, sur place ; Virement bancaire désactivé ;
+#   carte Démo en mode test, non publiée ; Flutterwave désactivé, sans clés ; Fatou Ba a son adresse.
+# Pendant la capsule : Virement bancaire → « Wave ou Orange Money » (activé, publié, instructions avec un numéro
+#   fictif 77 000 00 00) ; carte Démo publiée ; Fatou commande un gâteau d'anniversaire 6 parts (24 000 F) et choisit
+#   Wave ou Orange Money. Flutterwave est seulement montré (aucune clé). Relancer etat-depart.py avant chaque prise.
+titre: Les moyens de paiement
+sous_titre: Formation E-Business Odoo · EB-08
+depart: /odoo
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG School: l'école Tag
+  TAAGG: Tag
+  EB-08: capsule huit
+  eCommerce: e-commerce
+  E-Business: i-business
+  F CFA: francs CFA
+  FCFA: francs CFA
+  " F ": " francs "
+  Flutterwave: Flutter-wève
+  NINEA: ninéa
+fin:
+  message: "Prochaine capsule : où arrive l'argent"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche (≈ 45 s)
+  - chapitre: Introduction
+    texte: >
+      Bienvenue dans la huitième capsule de la formation E-Business.
+      Aujourd'hui, vos clientes ne peuvent payer qu'à la livraison. Ajoutons les moyens qu'elles utilisent tous les jours.
+    actions:
+      - attendre: 1
+  - texte: >
+      À Dakar, on paie surtout par Wave et Orange Money, à la livraison, parfois par carte, et par virement pour les entreprises.
+      Odoo ne propose pas Wave ni Orange Money directement : on affiche des instructions, et on vérifie le paiement à la main.
+    actions:
+      - illustration: images/eb-08-moyens.png
+        zoom: 1.02
+
+  # ------------------------------------------------------------------ partie 1 : les fournisseurs (≈ 45 s)
+  - partie: "1. Les fournisseurs de paiement"
+    texte: >
+      Ouvrez l'application Site Web, puis Configuration, Fournisseurs de paiement.
+    actions:
+      - cliquer: '.o_app:has-text("Site Web")'
+      - attendre: 1
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Fournisseurs de paiement")'
+      - attendre: 2
+  - texte: >
+      Les deux premiers sont déjà en service : le paiement à la livraison et le paiement sur place.
+      Les autres sont des prestataires du monde entier ; la plupart ne fonctionnent pas encore au Sénégal.
+    actions:
+      - surligner: '.o_kanban_record:has-text("Paiement comptant à la livraison")'
+        duree: 2
+      - surligner: '.o_kanban_record:has-text("Payer sur Place")'
+        duree: 2
+
+  # ------------------------------------------------------------------ partie 2 : Wave et Orange Money (≈ 2 min 30)
+  - partie: "2. Wave et Orange Money"
+    texte: >
+      Pour Wave et Orange Money, nous allons utiliser le Virement bancaire, et le renommer. Ouvrez-le.
+    actions:
+      - cliquer: '.o_kanban_record:has-text("Virement bancaire") .o_kanban_record_title, .o_kanban_record:has-text("Virement bancaire") img'
+      - attendre: 2
+  - texte: >
+      Changez le nom : Wave ou Orange Money. Puis passez le statut sur Activé.
+    actions:
+      - champ: name
+        taper: Wave ou Orange Money
+      - cliquer: '[name="state"] label:has-text("Activé")'
+      - attendre: 1
+  - texte: >
+      Dans l'onglet Messages, écrivez ce que la cliente doit faire après sa commande :
+      envoyer le montant sur votre numéro Wave ou Orange Money, avec son numéro de commande.
+    actions:
+      - onglet: Messages
+      - remplacer_texte: {dans: '[name="pending_msg"] [contenteditable]', texte: "Envoyez le montant de votre commande par Wave ou Orange Money au 77 000 00 00 (Les Délices de Maïmouna), en indiquant votre numéro de commande. Nous confirmons dès réception."}
+  - texte: >
+      Enregistrez, puis cliquez sur Non publié, en haut, pour le rendre visible sur le site.
+    actions:
+      - enregistrer: oui
+      - attendre: 1
+      - cliquer: '.o_control_panel button:has-text("Non publié"), button:has-text("Non publié")'
+      - attendre: 1.5
+  - texte: >
+      Dernier détail : le nom que voit la cliente au moment de payer. Ouvrez Configuration, Modes de paiement,
+      et cherchez Virement.
+    actions:
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Modes de paiement")'
+      - attendre: 1.5
+      - rechercher: Virement
+      - attendre: 1
+  - texte: Ouvrez-le, renommez-le Wave ou Orange Money, et enregistrez.
+    actions:
+      - cliquer: '.o_data_row:has-text("Virement"), .o_kanban_record:has-text("Virement")'
+      - attendre: 1.5
+      - champ: name
+        taper: Wave ou Orange Money
+      - enregistrer: oui
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 3 : la carte bancaire (≈ 1 min 30)
+  - partie: "3. La carte bancaire"
+    texte: >
+      Pour la carte bancaire, il faut un prestataire de paiement. Revenez aux fournisseurs, et ouvrez Flutterwave,
+      très utilisé en Afrique.
+    actions:
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Fournisseurs de paiement")'
+      - attendre: 2
+      - cliquer: '.o_kanban_record:has-text("Flutterwave") .o_kanban_record_title, .o_kanban_record:has-text("Flutterwave") img'
+      - attendre: 2
+  - texte: >
+      Odoo demande trois clés : la clé publique, la clé secrète, et le secret du webhook.
+      Vous les obtenez en ouvrant un compte sur le site de Flutterwave, une fois votre entreprise vérifiée, avec votre NINEA.
+    actions:
+      - surligner: '.o_notebook .tab-pane.active'
+        duree: 4
+  - texte: >
+      Nous n'avons pas de clés ici : nous ne l'activons pas. Pour vous entraîner, Odoo propose une fausse carte : Démo.
+      Revenez aux fournisseurs, et ouvrez Démo.
+    actions:
+      - cliquer: '.o_breadcrumb a:has-text("Fournisseurs")'
+      - attendre: 2
+      - cliquer: '.o_kanban_record:has-text("Démo") .o_kanban_record_title, .o_kanban_record:has-text("Démo") img'
+      - attendre: 2
+  - texte: >
+      Démo est en mode test : aucun argent ne circule. Cliquez sur Non publié pour l'afficher dans la boutique,
+      le temps de vos essais.
+    actions:
+      - surligner_champ: state
+        duree: 2
+      - cliquer: '.o_control_panel button:has-text("Non publié"), button:has-text("Non publié")'
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ partie 4 : ce que voit la cliente (≈ 1 min 30)
+  - partie: "4. Ce que voit la cliente"
+    texte: >
+      Voyons le résultat avec Fatou, notre cliente. Elle se connecte.
+    actions:
+      - aller: '/web/session/logout?redirect=/web/login'
+      - attendre: 2
+      - taper_dans: {dans: 'input[name="login"]', texte: '${ODOO_CLIENTE_LOGIN}'}
+      - taper_dans: {dans: 'input[name="password"]', texte: '${ODOO_CLIENTE_MOT_DE_PASSE}'}
+      - cliquer: '.oe_login_form button[type="submit"]'
+      - attendre: 2.5
+  - texte: >
+      Elle commande un gâteau d'anniversaire de six parts, et va au panier.
+    actions:
+      - aller: /shop/gateau-d-anniversaire-37
+      - attendre: 2.5
+      - cliquer: '#add_to_cart'
+      - attendre: 3
+  - texte: >
+      Elle clique sur Payer. Son adresse est déjà connue : elle arrive directement au choix du paiement.
+    actions:
+      - cliquer: '.o_total_card a:has-text("Payer") >> visible=true'
+      - attendre: 3
+      - cliquer: '.o_total_card :is(a,button):has-text("Confirmer") >> visible=true'
+      - attendre: 3
+  - texte: >
+      Trois choix : la carte Démo, le paiement à la livraison, et Wave ou Orange Money. Elle choisit Wave ou Orange Money,
+      et clique sur Payer maintenant.
+    actions:
+      - surligner: '#payment_method'
+        duree: 3
+      - cliquer: 'main label:has-text("Wave ou Orange Money")'
+      - attendre: 1
+      - cliquer: '.o_total_card button:is(:has-text("Confirmer"),:has-text("Payer")) >> visible=true'
+      - attendre: 5
+  - texte: >
+      La page de confirmation lui affiche vos instructions : le numéro où envoyer l'argent, et le numéro de commande à indiquer.
+      Il ne vous reste qu'à vérifier le paiement sur votre téléphone : ce sera la prochaine capsule.
+    actions:
+      - surligner: 'main .alert, main [role="alert"] >> nth=0'
+        duree: 4
+
+  # ------------------------------------------------------------------ pièges (≈ 1 min)
+  - chapitre: Pièges fréquents
+    texte: >
+      Trois pièges fréquents. Premier piège : activer un moyen de paiement sans le publier.
+      Il est prêt, mais la cliente ne le voit pas : vérifiez le bouton Publié.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : oublier le numéro de commande dans les instructions. Sans lui, impossible de savoir
+      à quelle commande correspond un transfert Wave.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : laisser la carte Démo publiée quand la boutique ouvre. Vos vraies clientes croiraient payer,
+      sans qu'aucun argent n'arrive. Dépubliez-la avant le lancement.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice (≈ 1 min)
+  - chapitre: À retenir
+    texte: >
+      Retenons l'essentiel. Un : les moyens de paiement sont dans Site Web, Configuration, Fournisseurs de paiement :
+      on les active, puis on les publie.
+      Deux : pour Wave et Orange Money, renommez le Virement bancaire, et écrivez vos instructions.
+      Trois : pour la carte, il faut un prestataire comme Flutterwave, et ses clés.
+      Quatre : testez chaque moyen avec une commande test.
+    apres: 1.2
+    actions:
+      - illustration: images/eb-08-recap.png
+        zoom: 1.02
+  - chapitre: Exercice
+    texte: >
+      À vous de jouer : ajoutez Wave ou Orange Money à votre boutique, avec votre propre numéro, et passez une commande test.
+      Dans la prochaine capsule, nous verrons où arrive l'argent, et comment confirmer un paiement Wave.
+    actions:
+      - attendre: 1
