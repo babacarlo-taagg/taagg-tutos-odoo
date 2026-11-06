@@ -810,7 +810,49 @@ def eb_12():
     service_client_eb12_a_refaire()
 
 
-CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08, 'EB-09': eb_09, 'EB-10': eb_10, 'EB-11': eb_11, 'EB-12': eb_12}
+def service_client_fin_eb12():
+    """Ce que la capsule EB-12 a réglé à l'écran : canal de chat « Les Délices de Maïmouna » avec son message d'accueil,
+    avis clients activés sur les fiches produit (copie propre au site)."""
+    print('Service client : comme à la fin d’EB-12')
+    if VOIR:
+        return
+    formateur = rpc_formateur()
+    canal = formateur('im_livechat.channel', 'search', [])
+    formateur('im_livechat.channel', 'write', canal[:1], {'name': 'Les Délices de Maïmouna',
+              'default_message': 'Bonjour ! Une question sur nos gâteaux ? Nous répondons de 8 h à 19 h.'})
+    ctx = dict(CTX, active_test=False)
+    copie = odoo('ir.ui.view', 'search', [('key', '=', 'website_sale.product_comment'), ('website_id', '=', SITE)], context=ctx)
+    if copie:
+        odoo('ir.ui.view', 'write', copie, {'active': True})
+    else:
+        modele = odoo('ir.ui.view', 'search', [('key', '=', 'website_sale.product_comment'), ('website_id', '=', False)], context=ctx)
+        odoo('ir.ui.view', 'copy', modele[0], {'website_id': SITE, 'key': 'website_sale.product_comment', 'active': True}, context=ctx)
+
+
+# EB-13 : pages dont la capsule écrit le titre et la description pour Google (remis à vide avant chaque prise)
+SEO_EB13 = ["Gâteau d'anniversaire"]
+
+
+def referencement_eb13_a_refaire():
+    """Titre, description et adresse « Google » vides pour le gâteau d'anniversaire ; Google Analytics et Search Console
+    non configurés ; pas d'image de partage par défaut."""
+    print('Référencement : remis comme avant EB-13')
+    produits = odoo('product.template', 'search', [('name', 'in', SEO_EB13)])
+    ecrire('product.template', produits, {'website_meta_title': False, 'website_meta_description': False,
+                                          'website_meta_keywords': False, 'seo_name': False, 'website_meta_og_img': False},
+           f'{len(produits)} fiche(s) produit sans titre ni description Google')
+    ecrire('website', [SITE], {'google_analytics_key': False, 'google_search_console': False},
+           'Google Analytics et Search Console non configurés')
+
+
+def eb_13():
+    """EB-13 · Être trouvé sur Google : la boutique de la fin d'EB-12 ; référencement du gâteau d'anniversaire à faire."""
+    eb_12()
+    service_client_fin_eb12()
+    referencement_eb13_a_refaire()
+
+
+CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08, 'EB-09': eb_09, 'EB-10': eb_10, 'EB-11': eb_11, 'EB-12': eb_12, 'EB-13': eb_13}
 
 if __name__ == '__main__':
     code = next((a.upper() for a in sys.argv[1:] if not a.startswith('--')), None)

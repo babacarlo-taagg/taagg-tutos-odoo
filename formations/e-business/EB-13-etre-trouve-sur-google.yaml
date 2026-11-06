@@ -1,0 +1,146 @@
+# EB-13 · Être trouvé sur Google
+# État de départ : python3 formations/e-business/etat-depart.py EB-13
+#   la boutique de la fin d'EB-12 (chat « Les Délices de Maïmouna », avis activés) ; le gâteau d'anniversaire n'a ni
+#   titre ni description Google ; Google Analytics et Search Console non configurés.
+# Pendant la capsule : titre, description et adresse (« gateau-anniversaire-dakar ») du gâteau d'anniversaire écrits
+#   dans Site › Optimisation SEO ; Paramètres › Suivi & SEO montrés sans rien activer (il faut un compte Google).
+# Relancer etat-depart.py avant chaque prise.
+titre: Être trouvé sur Google
+sous_titre: Formation E-Business Odoo · EB-13
+depart: /odoo
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG School: l'école Tag
+  TAAGG: Tag
+  EB-13: capsule treize
+  eCommerce: e-commerce
+  E-Business: i-business
+  SEO: S-E-O
+  Search Console: seurtche console
+  Analytics: analytixe
+  WhatsApp: ouatsape
+fin:
+  message: "Prochaine capsule : mesurer ses campagnes WhatsApp, Facebook, TikTok"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche (≈ 45 s)
+  - chapitre: Introduction
+    texte: >
+      Bienvenue dans la treizième capsule de la formation E-Business. Votre boutique est prête.
+      Maintenant, il faut qu'on la trouve : quand une cliente cherche gâteau d'anniversaire Dakar sur Google, c'est vous qu'elle doit voir.
+    actions:
+      - attendre: 1
+  - texte: >
+      Pour chaque page, Google montre trois choses : l'adresse, un titre, et une courte description.
+      Ces trois textes, c'est vous qui les écrivez dans Odoo. Écrivez comme votre cliente cherche : le produit, et la ville.
+    actions:
+      - illustration: images/eb-13-google.png
+        zoom: 1.02
+
+  # ------------------------------------------------------------------ partie 1 : titre et description (≈ 2 min)
+  - partie: "1. Le titre et la description"
+    texte: >
+      Ouvrez la fiche du gâteau d'anniversaire sur votre site. Dans le menu Site, en haut, choisissez Optimisation SEO.
+    actions:
+      - aller: '/odoo/action-website.website_preview?path=%2Fshop%2Fgateau-d-anniversaire-37'
+      - attendre: 4
+      - ouvrir_menu: Site
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Optimisation SEO")'
+      - attendre: 2
+  - texte: >
+      À droite, l'aperçu montre ce que Google affichera. Pour l'instant, le titre reprend le nom du produit,
+      et il n'y a pas de description.
+    actions:
+      - surligner: '.modal .card, .modal :has-text("Aperçu") + div >> nth=0'
+        duree: 3
+  - texte: >
+      Écrivez un titre qui contient le produit et la ville : Gâteau d'anniversaire à Dakar, Les Délices de Maïmouna.
+    actions:
+      - taper_dans: {dans: '.modal input.form-control >> nth=0', texte: "Gâteau d'anniversaire à Dakar – Les Délices de Maïmouna"}
+  - texte: >
+      Puis la description : deux phrases qui donnent envie de cliquer. Ce qu'est le gâteau, la livraison, et comment commander.
+    actions:
+      - taper_dans: {dans: '.modal textarea', texte: "Gâteau d'anniversaire fait maison, 6 à 12 parts, livré à moto dans Dakar. Commandez la veille avant 18 h, paiement Wave ou à la livraison."}
+      - attendre: 1
+      - surligner: '.modal .card, .modal :has-text("Aperçu") + div >> nth=0'
+        duree: 2.5
+  - texte: >
+      L'adresse de la page peut aussi contenir la ville. Remplacez-la par gâteau anniversaire Dakar, avec des tirets.
+    actions:
+      - taper_dans: {dans: '.modal input.form-control >> nth=1', texte: gateau-anniversaire-dakar}
+  - texte: >
+      Plus bas, l'image de couverture : c'est elle qui s'affiche quand vous partagez le lien sur WhatsApp ou Facebook.
+      Ici, la photo du gâteau est déjà choisie. Cliquez sur Sauvegarder.
+    actions:
+      - surligner: '.modal :has-text("Image de couverture") >> nth=-1'
+        duree: 2.5
+      - cliquer: '.modal-footer button:has-text("Sauvegarder")'
+      - attendre: 2.5
+  - texte: >
+      Faites de même pour vos pages les plus importantes : l'accueil, la boutique, et vos produits phares.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 2 : Google Search Console et Analytics (≈ 1 min 30)
+  - partie: "2. Les outils de Google"
+    texte: >
+      Deux outils gratuits de Google vont plus loin. Ouvrez Site Web, Configuration, Paramètres, jusqu'à la partie Suivi et SEO.
+    actions:
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Paramètres")'
+      - attendre: 3
+      - defiler: '.o_setting_box:has-text("Console Google Search")'
+      - attendre: 1
+  - texte: >
+      Google Search Console vous dit sur quels mots on trouve votre boutique, et signale les pages que Google ne lit pas.
+      Pour l'activer, il faut un compte Google, et un code que Google vous donne.
+    actions:
+      - surligner: '.o_setting_box:has-text("Console Google Search")'
+        duree: 3.5
+  - texte: >
+      Google Analytics compte vos visiteurs : combien, d'où ils viennent, et ce qu'ils regardent. Lui aussi demande un code de Google.
+    actions:
+      - surligner: '.o_setting_box:has-text("Google Analytics")'
+        duree: 3.5
+  - texte: >
+      Nous ne les activons pas ici, car ils demandent votre propre compte Google. Le pas-à-pas est dans le cours en ligne.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ pièges (≈ 1 min)
+  - chapitre: Pièges fréquents
+    texte: >
+      Trois pièges fréquents. Premier piège : le même titre partout. Chaque page doit avoir son titre à elle,
+      sinon Google ne sait pas laquelle montrer.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : oublier la ville. Vos clientes cherchent près de chez elles : Dakar, Thiès, Saint-Louis.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : attendre des résultats le lendemain. Google met plusieurs semaines à lire une nouvelle boutique :
+      soyez patiente, et partagez vos liens en attendant.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice (≈ 1 min)
+  - chapitre: À retenir
+    texte: >
+      Retenons l'essentiel. Un : Site, Optimisation SEO, pour écrire le titre et la description de chaque page.
+      Deux : le produit et la ville dans le titre.
+      Trois : une image de partage, pour WhatsApp et Facebook.
+      Quatre : Search Console et Analytics, dans les Paramètres, avec votre compte Google.
+    apres: 1.2
+    actions:
+      - illustration: images/eb-13-recap.png
+        zoom: 1.02
+  - chapitre: Exercice
+    texte: >
+      À vous de jouer : écrivez le titre et la description de votre page d'accueil et de vos trois meilleurs produits.
+      Dans la prochaine capsule, nous verrons quelle publication WhatsApp, Facebook ou TikTok vous amène vraiment des ventes.
+    actions:
+      - attendre: 1
