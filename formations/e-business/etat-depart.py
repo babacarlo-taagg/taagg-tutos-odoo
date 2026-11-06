@@ -669,7 +669,31 @@ def eb_09():
     commande_wave_de_fatou()
 
 
-CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08, 'EB-09': eb_09}
+def livraisons_eb10_a_refaire():
+    """Modes de livraison tels qu'au début d'EB-10 : « Livraison standard » gratuite (paiement à la livraison
+    autorisé depuis EB-06), « Retrait en magasin » ; les copies faites pendant les prises sont archivées."""
+    print('Livraison : remise comme avant EB-10')
+    ctx = dict(CTX, active_test=False)
+    standard = odoo('delivery.carrier', 'search', [('delivery_type', '=', 'fixed'), ('product_id.default_code', '=', 'Delivery_007')], context=ctx)
+    ecrire('delivery.carrier', standard[:1], {'name': 'Livraison standard', 'fixed_price': 0, 'free_over': False, 'amount': 1000,
+                                              'allow_cash_on_delivery': True, 'is_published': True, 'active': True},
+           'Livraison standard : gratuite, paiement à la livraison autorisé')
+    copies = odoo('delivery.carrier', 'search', [('delivery_type', '=', 'fixed'), ('id', 'not in', standard[:1])])
+    ecrire('delivery.carrier', copies, {'active': False, 'is_published': False}, f'{len(copies)} mode(s) créé(s) pendant les prises archivé(s)')
+    retrait = odoo('delivery.carrier', 'search', [('delivery_type', '=', 'in_store')], context=ctx)
+    ecrire('delivery.carrier', retrait[:1], {'name': 'Retrait en magasin', 'is_published': True, 'active': True},
+           'Retrait en magasin : publié')
+
+
+def eb_10():
+    """EB-10 · Organiser la livraison : la boutique de la fin d'EB-09 (sans la commande de Fatou), livraison gratuite
+    unique + retrait en magasin."""
+    eb_08()
+    paiements_fin_eb08()
+    livraisons_eb10_a_refaire()
+
+
+CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08, 'EB-09': eb_09, 'EB-10': eb_10}
 
 if __name__ == '__main__':
     code = next((a.upper() for a in sys.argv[1:] if not a.startswith('--')), None)
