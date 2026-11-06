@@ -868,7 +868,9 @@ CAMPAGNE_EB14 = 'Anniversaires novembre'
 def liens_eb14_a_refaire():
     """Supprime les liens de suivi créés par les prises d'EB-14 (campagne « Anniversaires novembre » seulement)."""
     campagne = odoo('utm.campaign', 'search', [('name', '=', CAMPAGNE_EB14)])
-    liens = odoo('link.tracker', 'search', [('campaign_id', 'in', campagne)]) if campagne else []
+    sources = odoo('utm.source', 'search', [('name', 'in', ['Statut WhatsApp', 'TikTok'])])
+    # liens de la campagne, ou vers une source de la capsule (une prise ratée peut créer un lien sans campagne)
+    liens = odoo('link.tracker', 'search', ['|', ('campaign_id', 'in', campagne), ('source_id', 'in', sources)])
     print(f'Liens de suivi : {len(liens)} lien(s) des prises d’EB-14 supprimé(s)')
     if not VOIR and liens:
         odoo('link.tracker', 'unlink', liens)
