@@ -125,8 +125,10 @@ etapes:
       La facture affiche En cours de paiement : l'argent est noté dans le journal Wave.
       Elle passera à Payé quand votre comptable rapprochera ce paiement de votre relevé Wave.
     actions:
-      - surligner: '.o_form_view .ribbon, .o_form_view .o_widget_web_ribbon'
-        duree: 3
+      - surligner: '[class*="ribbon"]:visible >> nth=0'
+        duree: 2
+      - surligner: '.o_form_view [name="tax_totals"]:visible, .o_form_view .oe_subtotal_footer:visible'
+        duree: 2
   - texte: >
       En haut, les boutons vous mènent au paiement, et à la commande de Fatou : tout est relié.
     actions:
