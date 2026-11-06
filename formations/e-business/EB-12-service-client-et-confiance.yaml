@@ -153,8 +153,10 @@ etapes:
       - attendre: 3
       - defiler: '#o_product_page_reviews'
       - attendre: 1.5
-  - texte: Elle donne cinq étoiles, et écrit quelques mots.
+  - texte: Elle ouvre les avis, donne cinq étoiles, et écrit quelques mots.
     actions:
+      - cliquer: '.o_product_page_reviews_title'
+      - attendre: 1.5
       - cliquer: '.o-mail-Composer-stars .fa >> nth=4'
       - attendre: 0.5
       - taper_dans: {dans: 'textarea.o-mail-Composer-input', texte: "Délicieux et livré à l'heure pour l'anniversaire de ma fille. Merci !"}
