@@ -38,7 +38,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | Code | Capsule | Ce qu'on apprend | Écrans | État |
 |---|---|---|---|---|
 | CPT-14 | Saisir une facture fournisseur | saisie manuelle, numérisation d'une facture PDF, contrôle des taxes | Fournisseurs › Factures fournisseurs | 🎙 4:36 |
-| CPT-15 | Notes de crédit et payer les fournisseurs | avoir fournisseur, paiement unique et groupé, échéancier fournisseurs | Fournisseurs › Paiements | ☐ |
+| CPT-15 | Notes de crédit et payer les fournisseurs | avoir fournisseur, paiement unique et groupé, échéancier fournisseurs | Fournisseurs › Paiements | 🎙 4:16 |
 | CPT-16 | Notes de frais des employés | de la dépense à son remboursement et à l'écriture | Dépenses de l'employé | ☐ |
 
 ## Parcours 4 — Trésorerie
@@ -140,6 +140,12 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
   Odoo 19 : colonne Produit cachée sur les lignes de facture fournisseur (affichée à l'écran) ; Odoo propose 900 000 F le sac
   (prix de la fiche au kilo × 50 kg) → on saisit le prix de la facture. Numérisation (bouton Charger) montrée sans être lancée.
   Trois phrases régénérées (« cent quatre-vingt mille » mal dit, un « euh », un mot parasite en tête de phrase).
+- **CPT-15** (6 novembre 2026) : version finale, 4 min 16 s, 28 étapes, ≈ 3 700 caractères de voix.
+  Avoir fournisseur RBILL/2026/11/0001 (1 sac déchiré, 21 240 F) → dû 191 160 F ; réglage Banque › Paiements sortants
+  → 521004 ; échéancier fournisseurs ; paiement Grands Moulins 191 160 F ; paiement groupé Épicerie 35 400 F
+  (BILL/2026/09/0001 + BILL/2026/10/0001 « EPI-1015 », créée par etat-depart.py). Cinq phrases régénérées.
+  À noter : la carte Achats du tableau de bord affiche « Séquences irrégulières » (factures recréées par l'API à des dates
+  antérieures) ; sans conséquence pour les capsules, à ne pas commenter.
 
 ## Ordre de tournage proposé
 
