@@ -132,7 +132,8 @@ etapes:
       - attendre: 1.5
       - cliquer: '.o_data_row:has-text("Retrait") td[name="name"]'
       - attendre: 2
-      - surligner_champ: warehouse_ids
+      - onglet: Magasins
+      - surligner: '.o_notebook .tab-pane.active'
         duree: 2
       - champ: name
         taper: Retrait en boutique (Médina)
