@@ -852,7 +852,36 @@ def eb_13():
     referencement_eb13_a_refaire()
 
 
-CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08, 'EB-09': eb_09, 'EB-10': eb_10, 'EB-11': eb_11, 'EB-12': eb_12, 'EB-13': eb_13}
+def referencement_fin_eb13():
+    """Ce que la capsule EB-13 a écrit : titre, description et adresse Google du gâteau d'anniversaire."""
+    produits = odoo('product.template', 'search', [('name', '=', "Gâteau d'anniversaire")])
+    ecrire('product.template', produits, {
+        'website_meta_title': "Gâteau d'anniversaire à Dakar – Les Délices de Maïmouna",
+        'website_meta_description': "Gâteau d'anniversaire fait maison, 6 à 12 parts, livré à moto dans Dakar. "
+                                    "Commandez la veille avant 18 h, paiement Wave ou à la livraison.",
+        'seo_name': 'gateau-anniversaire-dakar'}, 'référencement du gâteau d’anniversaire (fin d’EB-13)')
+
+
+CAMPAGNE_EB14 = 'Anniversaires novembre'
+
+
+def liens_eb14_a_refaire():
+    """Supprime les liens de suivi créés par les prises d'EB-14 (campagne « Anniversaires novembre » seulement)."""
+    campagne = odoo('utm.campaign', 'search', [('name', '=', CAMPAGNE_EB14)])
+    liens = odoo('link.tracker', 'search', [('campaign_id', 'in', campagne)]) if campagne else []
+    print(f'Liens de suivi : {len(liens)} lien(s) des prises d’EB-14 supprimé(s)')
+    if not VOIR and liens:
+        odoo('link.tracker', 'unlink', liens)
+
+
+def eb_14():
+    """EB-14 · Mesurer ses campagnes : la boutique de la fin d'EB-13, sans lien de suivi ; Fatou sans commande."""
+    eb_13()
+    referencement_fin_eb13()
+    liens_eb14_a_refaire()
+
+
+CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08, 'EB-09': eb_09, 'EB-10': eb_10, 'EB-11': eb_11, 'EB-12': eb_12, 'EB-13': eb_13, 'EB-14': eb_14}
 
 if __name__ == '__main__':
     code = next((a.upper() for a in sys.argv[1:] if not a.startswith('--')), None)

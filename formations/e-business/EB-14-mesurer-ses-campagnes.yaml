@@ -1,0 +1,227 @@
+# EB-14 · Mesurer ses campagnes WhatsApp, Facebook, TikTok
+# État de départ : python3 formations/e-business/etat-depart.py EB-14
+#   la boutique de la fin d'EB-13 (référencement du gâteau d'anniversaire écrit) ; aucun lien de suivi de la campagne
+#   « Anniversaires novembre » ; Fatou Ba sans panier.
+# Pendant la capsule : deux liens de suivi vers le gâteau d'anniversaire (campagne « Anniversaires novembre », médium
+#   Social) : source « Statut WhatsApp » (adresse /r/gateau-whatsapp) et source « TikTok » ; Fatou ouvre le lien
+#   WhatsApp, commande un gâteau 8 parts et paie avec la carte Démo : sa commande porte la source « Statut WhatsApp ».
+# Relancer etat-depart.py avant chaque prise.
+titre: Mesurer ses campagnes WhatsApp, Facebook, TikTok
+sous_titre: Formation E-Business Odoo · EB-14
+depart: /odoo
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG School: l'école Tag
+  TAAGG: Tag
+  EB-14: capsule quatorze
+  eCommerce: e-commerce
+  E-Business: i-business
+  WhatsApp: ouatsape
+  TikTok: tik-tok
+  " F ": " francs "
+fin:
+  message: "Prochaine capsule : promotions et codes promo"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche (≈ 45 s)
+  - chapitre: Introduction
+    texte: >
+      Bienvenue dans la quatorzième capsule de la formation E-Business. Vous publiez sur WhatsApp, Facebook et TikTok.
+      Mais quelle publication vous amène vraiment des ventes ? Odoo peut vous le dire.
+    actions:
+      - attendre: 1
+  - texte: >
+      L'idée est simple : un lien différent pour chaque publication. Même produit, même page ; seul le lien change.
+      Et Odoo note, sur chaque commande, le lien par lequel la cliente est arrivée.
+    actions:
+      - illustration: images/eb-14-liens.png
+        zoom: 1.02
+
+  # ------------------------------------------------------------------ partie 1 : créer un lien de suivi (≈ 2 min)
+  - partie: "1. Créer un lien de suivi"
+    texte: >
+      Ouvrez la page du gâteau d'anniversaire sur votre site. Dans le menu Site, choisissez Tracker de liens.
+    actions:
+      - aller: '/odoo/action-website.website_preview?path=%2Fshop%2Fgateau-d-anniversaire-37'
+      - attendre: 4
+      - ouvrir_menu: Site
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Tracker de liens")'
+      - attendre: 3
+  - texte: >
+      Le lien cible est déjà rempli : c'est la page du gâteau. Trois cases décrivent votre publication.
+      La campagne, c'est l'opération : Anniversaires novembre.
+    actions:
+      - surligner: '#url'
+        duree: 2
+      - cliquer: 'input[placeholder^="par ex. June"]'
+      - taper_dans: {dans: 'input[placeholder^="par ex. June"]', texte: Anniversaires novembre}
+      - attendre: 1
+      - cliquer: '.o-dropdown-item:has-text("Anniversaires novembre")'
+      - attendre: 0.5
+  - texte: >
+      Le médium, c'est le type de canal : Social, pour les réseaux sociaux. Et la source, l'endroit exact : Statut WhatsApp.
+    actions:
+      - cliquer: 'input[placeholder^="par ex. InMails"]'
+      - taper_dans: {dans: 'input[placeholder^="par ex. InMails"]', texte: Social}
+      - attendre: 1
+      - cliquer: '.o-dropdown-item:has-text("Social") >> nth=0'
+      - attendre: 0.5
+      - cliquer: 'input[placeholder^="par ex. LinkedIn"]'
+      - taper_dans: {dans: 'input[placeholder^="par ex. LinkedIn"]', texte: Statut WhatsApp}
+      - attendre: 1
+      - cliquer: '.o-dropdown-item:has-text("Statut WhatsApp")'
+      - attendre: 0.5
+  - texte: Cliquez sur Générer un lien de suivi.
+    actions:
+      - cliquer: 'button:has-text("Générer un Lien de Suivi")'
+      - attendre: 3
+  - texte: >
+      Odoo crée un lien court. Rendez-le lisible : cliquez sur le crayon, tapez gâteau-whatsapp, et cliquez sur OK.
+    actions:
+      - cliquer: '.o_website_links_edit_code:visible'
+      - attendre: 0.5
+      - taper_dans: {dans: '.o_website_links_edition input:visible', texte: gateau-whatsapp}
+      - cliquer: '.o_website_links_ok_edit:visible'
+      - attendre: 2
+  - texte: >
+      C'est ce lien que vous mettez dans votre statut WhatsApp. Le bouton Copier le met dans votre presse-papiers.
+    actions:
+      - surligner: '#o_website_links_link_tracker_form, main form >> nth=0'
+        duree: 3
+  - texte: >
+      Pour TikTok, cliquez sur Créer un autre suivi, et changez seulement la source : TikTok.
+    actions:
+      - cliquer: 'button:has-text("Créer un autre"), a:has-text("Créer un autre")'
+      - attendre: 2
+      - cliquer: 'input[placeholder^="par ex. June"]'
+      - taper_dans: {dans: 'input[placeholder^="par ex. June"]', texte: Anniversaires novembre}
+      - attendre: 1
+      - cliquer: '.o-dropdown-item:has-text("Anniversaires novembre") >> nth=0'
+      - cliquer: 'input[placeholder^="par ex. InMails"]'
+      - taper_dans: {dans: 'input[placeholder^="par ex. InMails"]', texte: Social}
+      - attendre: 1
+      - cliquer: '.o-dropdown-item:has-text("Social") >> nth=0'
+      - cliquer: 'input[placeholder^="par ex. LinkedIn"]'
+      - taper_dans: {dans: 'input[placeholder^="par ex. LinkedIn"]', texte: TikTok}
+      - attendre: 1
+      - cliquer: '.o-dropdown-item:has-text("TikTok") >> nth=0'
+      - cliquer: 'button:has-text("Générer un Lien de Suivi")'
+      - attendre: 3
+  - texte: >
+      En bas, vos liens de suivi, avec le nombre de clics de chacun. Pour l'instant, zéro.
+    actions:
+      - defiler: 500
+      - attendre: 1
+      - surligner: 'main :has-text("Vos liens trackés") + * , #o_website_links_recent_links'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 2 : Fatou clique (≈ 1 min)
+  - partie: "2. Une cliente clique sur le lien"
+    texte: >
+      Fatou voit votre statut WhatsApp et clique sur le lien. Elle arrive sur la page du gâteau.
+    actions:
+      - aller: '/web/session/logout?redirect=/web/login'
+      - attendre: 2
+      - taper_dans: {dans: 'input[name="login"]', texte: '${ODOO_CLIENTE_LOGIN}'}
+      - taper_dans: {dans: 'input[name="password"]', texte: '${ODOO_CLIENTE_MOT_DE_PASSE}'}
+      - cliquer: '.oe_login_form button[type="submit"]'
+      - attendre: 2.5
+      - aller: /r/gateau-whatsapp
+      - attendre: 3
+  - texte: >
+      Elle prend huit parts, et paie par carte, comme dans la capsule onze.
+    actions:
+      - cliquer: 'label:has-text("8 parts")'
+      - attendre: 0.5
+      - cliquer: '#add_to_cart'
+      - attendre: 3
+      - cliquer: '.o_total_card a:has-text("Payer") >> visible=true'
+      - attendre: 3
+      - cliquer: '#o_delivery_methods li:has-text("Dakar ville")'
+      - attendre: 1.5
+      - cliquer: '.o_total_card :is(a,button):has-text("Confirmer") >> visible=true'
+      - attendre: 3
+      - cliquer: 'main label:has-text("Démo")'
+      - taper_dans: {dans: '#customer_input', texte: "4111 1111 1111 1111"}
+      - cliquer: '.o_total_card button:has-text("Payer") >> visible=true'
+      - attendre: 5
+
+  # ------------------------------------------------------------------ partie 3 : mesurer (≈ 1 min 30)
+  - partie: "3. Ce que vous rapporte chaque publication"
+    texte: >
+      Revenons de votre côté. Dans le tracker de liens, le lien WhatsApp compte maintenant un clic.
+    actions:
+      - aller: '/web/session/logout?redirect=/web/login'
+      - attendre: 2
+      - taper_dans: {dans: 'input[name="login"]', texte: '${ODOO_LOGIN}'}
+      - taper_dans: {dans: 'input[name="password"]', texte: '${ODOO_MOT_DE_PASSE}'}
+      - cliquer: '.oe_login_form button[type="submit"]'
+      - attendre: 3
+      - aller: '/r?u=https%3A%2F%2Fedu-correction-les-delices-de-maimouna.odoo.com%2Fshop'
+      - attendre: 3
+      - defiler: 500
+      - attendre: 1
+      - surligner: 'main :has-text("Statut WhatsApp") >> nth=-1'
+        duree: 3
+  - texte: >
+      Mais un clic n'est pas une vente. Ouvrez Site Web, eCommerce, Commandes.
+    actions:
+      - aller: /odoo
+      - attendre: 2
+      - cliquer: '.o_app:has-text("Site Web")'
+      - attendre: 1
+      - ouvrir_menu: eCommerce
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Commandes") >> nth=0'
+      - attendre: 2
+  - texte: >
+      Ouvrez les filtres, et dans Grouper par, choisissez un groupe personnalisé : Source.
+    actions:
+      - cliquer: '.o_searchview_dropdown_toggler'
+      - attendre: 1
+      - selectionner: {dans: '.o_add_custom_group_menu', option: Source}
+      - attendre: 2
+      - touche: Escape
+  - texte: >
+      Voilà la réponse : les commandes arrivées par votre statut WhatsApp, et leur total : trente mille francs.
+      Les autres n'ont pas de source : elles sont venues sans lien de suivi.
+    actions:
+      - surligner: '.o_group_header:has-text("Statut WhatsApp")'
+        duree: 3.5
+
+  # ------------------------------------------------------------------ pièges (≈ 1 min)
+  - chapitre: Pièges fréquents
+    texte: >
+      Trois pièges fréquents. Premier piège : partager l'adresse normale de la page au lieu du lien de suivi.
+      La vente arrive, mais vous ne savez pas d'où.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : le même lien partout. Un lien par publication, sinon impossible de comparer.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : regarder seulement les clics. Une publication qui fait beaucoup de clics et aucune vente
+      vous coûte du temps : comparez les ventes.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice (≈ 1 min)
+  - chapitre: À retenir
+    texte: >
+      Retenons l'essentiel. Un : Site, Tracker de liens, un lien court par publication.
+      Deux : la campagne, c'est l'opération ; le médium, le type de canal ; la source, l'endroit exact.
+      Trois : le crayon rend le lien lisible.
+      Quatre : dans Commandes, groupez par Source pour voir ce que rapporte chaque publication.
+    apres: 1.2
+    actions:
+      - illustration: images/eb-14-recap.png
+        zoom: 1.02
+  - chapitre: Exercice
+    texte: >
+      À vous de jouer : créez un lien pour votre prochain statut WhatsApp, et un autre pour votre page Facebook.
+      Dans une semaine, comparez les ventes. Dans la prochaine capsule, nous créerons des codes promo.
+    actions:
+      - attendre: 1
