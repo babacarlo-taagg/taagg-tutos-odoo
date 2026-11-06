@@ -54,68 +54,68 @@ etapes:
       Le lien cible est déjà rempli : c'est la page du gâteau. Trois cases décrivent votre publication.
       La campagne, c'est l'opération : Anniversaires novembre.
     actions:
-      - surligner: '#url'
+      - surligner: 'site >> #url'
         duree: 2
-      - cliquer: 'input[placeholder^="par ex. June"]'
-      - taper_dans: {dans: 'input[placeholder^="par ex. June"]', texte: Anniversaires novembre}
+      - cliquer: 'site >> input[placeholder^="par ex. June"]'
+      - taper_dans: {dans: 'site >> input[placeholder^="par ex. June"]', texte: Anniversaires novembre}
       - attendre: 1
-      - cliquer: '.o-dropdown-item:has-text("Anniversaires novembre")'
+      - cliquer: 'site >> .o-dropdown-item:has-text("Anniversaires novembre")'
       - attendre: 0.5
   - texte: >
       Le médium, c'est le type de canal : Social, pour les réseaux sociaux. Et la source, l'endroit exact : Statut WhatsApp.
     actions:
-      - cliquer: 'input[placeholder^="par ex. InMails"]'
-      - taper_dans: {dans: 'input[placeholder^="par ex. InMails"]', texte: Social}
+      - cliquer: 'site >> input[placeholder^="par ex. InMails"]'
+      - taper_dans: {dans: 'site >> input[placeholder^="par ex. InMails"]', texte: Social}
       - attendre: 1
-      - cliquer: '.o-dropdown-item:has-text("Social") >> nth=0'
+      - cliquer: 'site >> .o-dropdown-item:has-text("Social") >> nth=0'
       - attendre: 0.5
-      - cliquer: 'input[placeholder^="par ex. LinkedIn"]'
-      - taper_dans: {dans: 'input[placeholder^="par ex. LinkedIn"]', texte: Statut WhatsApp}
+      - cliquer: 'site >> input[placeholder^="par ex. LinkedIn"]'
+      - taper_dans: {dans: 'site >> input[placeholder^="par ex. LinkedIn"]', texte: Statut WhatsApp}
       - attendre: 1
-      - cliquer: '.o-dropdown-item:has-text("Statut WhatsApp")'
+      - cliquer: 'site >> .o-dropdown-item:has-text("Statut WhatsApp")'
       - attendre: 0.5
   - texte: Cliquez sur Générer un lien de suivi.
     actions:
-      - cliquer: 'button:has-text("Générer un Lien de Suivi")'
+      - cliquer: 'site >> button:has-text("Générer un Lien de Suivi")'
       - attendre: 3
   - texte: >
       Odoo crée un lien court. Rendez-le lisible : cliquez sur le crayon, tapez gâteau-whatsapp, et cliquez sur OK.
     actions:
-      - cliquer: '.o_website_links_edit_code:visible'
+      - cliquer: 'site >> .o_website_links_edit_code:visible'
       - attendre: 0.5
-      - taper_dans: {dans: '.o_website_links_edition input:visible', texte: gateau-whatsapp}
-      - cliquer: '.o_website_links_ok_edit:visible'
+      - taper_dans: {dans: 'site >> .o_website_links_edition input:visible', texte: gateau-whatsapp}
+      - cliquer: 'site >> .o_website_links_ok_edit:visible'
       - attendre: 2
   - texte: >
       C'est ce lien que vous mettez dans votre statut WhatsApp. Le bouton Copier le met dans votre presse-papiers.
     actions:
-      - surligner: '#o_website_links_link_tracker_form, main form >> nth=0'
+      - surligner: 'site >> #generated_tracked_link'
         duree: 3
   - texte: >
       Pour TikTok, cliquez sur Créer un autre suivi, et changez seulement la source : TikTok.
     actions:
-      - cliquer: 'button:has-text("Créer un autre"), a:has-text("Créer un autre")'
+      - cliquer: 'site >> button:has-text("Créer un autre"), a:has-text("Créer un autre")'
       - attendre: 2
-      - cliquer: 'input[placeholder^="par ex. June"]'
-      - taper_dans: {dans: 'input[placeholder^="par ex. June"]', texte: Anniversaires novembre}
+      - cliquer: 'site >> input[placeholder^="par ex. June"]'
+      - taper_dans: {dans: 'site >> input[placeholder^="par ex. June"]', texte: Anniversaires novembre}
       - attendre: 1
-      - cliquer: '.o-dropdown-item:has-text("Anniversaires novembre") >> nth=0'
-      - cliquer: 'input[placeholder^="par ex. InMails"]'
-      - taper_dans: {dans: 'input[placeholder^="par ex. InMails"]', texte: Social}
+      - cliquer: 'site >> .o-dropdown-item:has-text("Anniversaires novembre") >> nth=0'
+      - cliquer: 'site >> input[placeholder^="par ex. InMails"]'
+      - taper_dans: {dans: 'site >> input[placeholder^="par ex. InMails"]', texte: Social}
       - attendre: 1
-      - cliquer: '.o-dropdown-item:has-text("Social") >> nth=0'
-      - cliquer: 'input[placeholder^="par ex. LinkedIn"]'
-      - taper_dans: {dans: 'input[placeholder^="par ex. LinkedIn"]', texte: TikTok}
+      - cliquer: 'site >> .o-dropdown-item:has-text("Social") >> nth=0'
+      - cliquer: 'site >> input[placeholder^="par ex. LinkedIn"]'
+      - taper_dans: {dans: 'site >> input[placeholder^="par ex. LinkedIn"]', texte: TikTok}
       - attendre: 1
-      - cliquer: '.o-dropdown-item:has-text("TikTok") >> nth=0'
-      - cliquer: 'button:has-text("Générer un Lien de Suivi")'
+      - cliquer: 'site >> .o-dropdown-item:has-text("TikTok") >> nth=0'
+      - cliquer: 'site >> button:has-text("Générer un Lien de Suivi")'
       - attendre: 3
   - texte: >
       En bas, vos liens de suivi, avec le nombre de clics de chacun. Pour l'instant, zéro.
     actions:
-      - defiler: 500
+      - defiler: 'site >> #o_website_links_recent_links'
       - attendre: 1
-      - surligner: 'main :has-text("Vos liens trackés") + * , #o_website_links_recent_links'
+      - surligner: 'site >> #o_website_links_recent_links'
         duree: 3
 
   # ------------------------------------------------------------------ partie 2 : Fatou clique (≈ 1 min)
@@ -162,9 +162,9 @@ etapes:
       - attendre: 3
       - aller: '/r?u=https%3A%2F%2Fedu-correction-les-delices-de-maimouna.odoo.com%2Fshop'
       - attendre: 3
-      - defiler: 500
+      - defiler: '#o_website_links_recent_links'
       - attendre: 1
-      - surligner: 'main :has-text("Statut WhatsApp") >> nth=-1'
+      - surligner: '#o_website_links_recent_links'
         duree: 3
   - texte: >
       Mais un clic n'est pas une vente. Ouvrez Site Web, eCommerce, Commandes.
