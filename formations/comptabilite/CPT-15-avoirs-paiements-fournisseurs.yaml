@@ -76,7 +76,7 @@ etapes:
         duree: 3.5
       - cliquer: '.o_statusbar_buttons button[name="action_post"]'
   - texte: >
-      L'avoir a son propre numéro. Odoo l'a relié tout seul à la facture des Grands Moulins.
+      Cet avoir a son propre numéro, et il est déjà relié à la facture des Grands Moulins.
     actions:
       - surligner_champ: name
         duree: 3
