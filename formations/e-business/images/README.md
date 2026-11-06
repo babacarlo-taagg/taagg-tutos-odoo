@@ -35,6 +35,8 @@ Règles : compétence `tuto-odoo-illustrations`. Babacar valide chaque image ava
 | `eb-11-recap.png` | EB-11 | les 4 points à retenir | ☐ |
 | `eb-12-confiance.png` | EB-12 | e-mail, Mon compte, chat, avis | ☐ |
 | `eb-12-recap.png` | EB-12 | les 4 points à retenir | ☐ |
+| `eb-13-google.png` | EB-13 | résultat Google fictif : adresse, titre, description | ☐ |
+| `eb-13-recap.png` | EB-13 | les 4 points à retenir | ☐ |
 | `logo-delices-maimouna.png` | toutes | logo fictif de la boutique d'exemple (posé sur le site par `etat-depart.py`) | ☐ |
 
 ## Images IA (sans texte)
