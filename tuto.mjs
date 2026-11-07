@@ -397,7 +397,9 @@ class Realisateur {
     } else if ('cocher' in a) {
       await this.cliquer(this.champ(a.cocher).locator('input[type="checkbox"], label').first());
     } else if ('rechercher' in a) {
-      await this.taper(p.locator('.o_searchview_input').first(), a.rechercher, true);
+      // la barre de recherche d'une fenêtre ouverte (choix d'un compte…) passe avant celle de la page
+      const barre = (await p.locator('.modal .o_searchview_input').count()) ? '.modal .o_searchview_input' : '.o_searchview_input';
+      await this.taper(p.locator(barre).first(), a.rechercher, true);
       await attendreOdoo(p);
     } else if ('enregistrer' in a) {
       await this.cliquer(p.locator('.o_form_button_save').first());

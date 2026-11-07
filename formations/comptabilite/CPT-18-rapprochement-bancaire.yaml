@@ -1,0 +1,144 @@
+# CPT-18 · Le rapprochement bancaire [E]
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-18`) :
+#   fin de CPT-17 : relevé de novembre importé, trois virements déjà reliés (Grands Moulins, Épicerie, Amy),
+#   frais de tenue de compte (−2 500 F) et versement d'espèces (+300 000 F) à traiter ;
+#   plus une ligne ajoutée par l'API : « VIR SAVEURS DU PLATEAU REGLEMENT SEMINAIRE », +127 440 F, partenaire Traiteur,
+#   qui règle INV/2026/00006 (CPT-13). Si le relevé de CPT-17 manque, etat-depart.py s'arrête : retourner CPT-17 d'abord.
+# Ce que la capsule fait : virement du traiteur lettré avec INV/2026/00006 (bouton Lettrer), frais → 631800,
+#   versement d'espèces → 585001 Transfert de liquidités. etat-depart.py défait ces rapprochements.
+titre: Le rapprochement bancaire
+sous_titre: Formation Comptabilité Odoo · CPT-18
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : les modèles de rapprochement"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette dix-huitième capsule. Rapprocher, c'est relier chaque ligne du relevé bancaire
+      à ce qu'elle paie : une facture, un paiement, ou une charge. Quand tout est relié, Odoo et la banque disent la même chose.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez relier un virement à une facture, enregistrer des frais bancaires,
+      traiter un versement d'espèces, et annuler un rapprochement. Cet écran fait partie de la version Enterprise d'Odoo.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : l'écran
+  - partie: "1. L'écran de rapprochement"
+    texte: >
+      Ouvrez Transactions, dans la carte Banque. En bas, les lignes déjà reliées, avec leur coche verte.
+      En haut, celles qui restent à traiter.
+    actions:
+      - cliquer: '.o_kanban_record:has-text("Banque") button:has-text("Transactions")'
+      - attendre: 2
+      - surligner_texte: PBNK1/2026/00002
+        duree: 2
+      - surligner_texte: FRAIS TENUE DE COMPTE NOVEMBRE
+        duree: 2
+  - texte: >
+      Un nouveau virement est arrivé : le traiteur règle enfin la facture du séminaire, relancée dans la capsule treize.
+    actions:
+      - surligner_texte: VIR SAVEURS DU PLATEAU REGLEMENT SEMINAIRE
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 2 : relier à une facture
+  - partie: "2. Relier un virement à une facture"
+    texte: >
+      Odoo a reconnu le client, et propose le bouton Lettrer : il a trouvé trois écritures ouvertes de ce client. Cliquez dessus.
+    actions:
+      - cliquer: 'button:has-text("Lettrer")'
+  - texte: >
+      La facture du séminaire, cent vingt-sept mille quatre cent quarante francs, et deux paiements Wave déjà enregistrés.
+      Le bon choix : la facture, du même montant que le virement. Cochez-la, puis cliquez sur Sélectionner.
+    actions:
+      - surligner: '.modal .o_data_row:has-text("INV/2026/00006")'
+        duree: 3
+      - cliquer: '.modal .o_data_row:has-text("INV/2026/00006") .o_list_record_selector input'
+      - cliquer: '.modal-footer button:has-text("Sélectionner")'
+      - attendre: 1.5
+  - texte: >
+      La ligne est reliée à la facture. Celle-ci est désormais payée, et le traiteur ne doit plus rien.
+    actions:
+      - surligner_texte: INV/2026/00006
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 3 : les frais
+  - partie: "3. Les frais bancaires"
+    texte: >
+      Les frais de tenue de compte ne paient aucune facture : ce sont des charges. Cliquez sur Compte, sur leur ligne.
+    actions:
+      - cliquer: '.o_kanban_record:has-text("FRAIS TENUE DE COMPTE") button:has-text("Compte")'
+  - texte: >
+      Cherchez le compte des frais bancaires, six cent trente et un mille huit cents, et choisissez-le.
+    actions:
+      - rechercher: "631800"
+      - cliquer: '.modal .o_data_row:has-text("631800")'
+      - attendre: 1.5
+  - texte: >
+      La charge est enregistrée, et la ligne est rapprochée.
+    actions:
+      - surligner_texte: FRAIS TENUE DE COMPTE NOVEMBRE
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 4 : le versement d'espèces
+  - partie: "4. Le versement d'espèces"
+    texte: >
+      Reste le versement d'espèces : trois cent mille francs, sortis de la caisse et déposés à la banque.
+      Ce n'est ni une vente ni une charge, c'est un transfert. Cliquez sur Compte.
+    actions:
+      - cliquer: '.o_kanban_record:has-text("VERSEMENT ESPECES") button:has-text("Compte")'
+  - texte: >
+      Choisissez le compte de transfert de liquidités, cinq cent quatre-vingt-cinq mille un. La sortie de la caisse
+      utilisera le même compte, dans la capsule sur la caisse.
+    actions:
+      - rechercher: "585001"
+      - cliquer: '.modal .o_data_row:has-text("585001")'
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ partie 5 : annuler
+  - partie: "5. Annuler une erreur"
+    texte: >
+      Toutes les lignes sont rapprochées. Une erreur ? La petite flèche ronde, à côté de chaque rapprochement, l'annule :
+      la ligne revient à traiter, et vous recommencez.
+    actions:
+      - surligner: '.o_kanban_record:has-text("GRANDS MOULINS") .fa-undo, .o_kanban_record:has-text("GRANDS MOULINS") [title*="nnuler"]'
+        duree: 4
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : relier un virement à la mauvaise facture. Comparez toujours le montant et la référence.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : enregistrer un paiement client à la main, puis le relier aussi à la facture depuis le relevé.
+      Le client paie deux fois dans Odoo. Si un paiement existe déjà, reliez la ligne au paiement.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : laisser des lignes non rapprochées. Chaque semaine, l'écran doit être vide.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Chaque ligne du relevé se relie : à une facture ou un paiement avec Lettrer, à une charge
+      ou un transfert avec Compte. La flèche ronde annule une erreur.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : rapprochez toutes les lignes de votre dernier relevé, jusqu'à ce que l'écran soit vide.
+      Dans la prochaine capsule, nous automatiserons les frais bancaires avec les modèles de rapprochement. À tout de suite !
+    actions:
+      - attendre: 1
