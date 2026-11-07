@@ -435,8 +435,31 @@ def cpt_17():
     return len(lignes), len(releves)
 
 
+def cpt_18():
+    # on part de la fin de CPT-17 (relevé importé, trois virements déjà reliés aux paiements) et on ajoute le virement du
+    # traiteur, qui règle INV/2026/00006 (relancée dans CPT-13) ; les rapprochements faits à l'écran (virement du traiteur,
+    # frais de tenue de compte, versement d'espèces) sont défaits
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    banque = odoo('account.journal', 'search', [['code', '=', 'BNK1'], ['company_id', '=', SOCIETE]])[0]
+    if not odoo('account.bank.statement.line', 'search', [['journal_id', '=', banque], ['payment_ref', 'like', 'VIR GRANDS MOULINS']]):
+        sys.exit("Le relevé de CPT-17 manque : retourner CPT-17 (l'import le recrée) avant CPT-18.")
+    traiteur = odoo('res.partner', 'search', [['name', '=', 'Traiteur Saveurs du Plateau']])[0]
+    a_defaire = odoo('account.bank.statement.line', 'search', [['journal_id', '=', banque], ['is_reconciled', '=', True],
+        ['payment_ref', 'in', ['FRAIS TENUE DE COMPTE NOVEMBRE', 'VERSEMENT ESPECES CAISSE BOUTIQUE', 'VIR SAVEURS DU PLATEAU REGLEMENT SEMINAIRE']]])
+    for l in a_defaire:
+        odoo('account.bank.statement.line', 'action_undo_reconciliation', [l], context=fr)
+    if not odoo('account.bank.statement.line', 'search', [['journal_id', '=', banque], ['payment_ref', '=', 'VIR SAVEURS DU PLATEAU REGLEMENT SEMINAIRE']]):
+        odoo('account.bank.statement.line', 'create', {'journal_id': banque, 'date': '2026-11-07', 'partner_id': traiteur,
+                                                       'payment_ref': 'VIR SAVEURS DU PLATEAU REGLEMENT SEMINAIRE', 'amount': 127440}, context=fr)
+    seminaire = odoo('account.move', 'search', [['ref', '=', 'Commande du séminaire'], ['move_type', '=', 'out_invoice']])
+    traces = odoo('mail.message', 'search', [['model', '=', 'account.move'], ['res_id', 'in', seminaire], ['date', '>=', '2026-11-07 00:00:00']])
+    if traces:
+        odoo('mail.message', 'unlink', traces)
+    return odoo('account.bank.statement.line', 'search_read', [['journal_id', '=', banque], ['is_reconciled', '=', False]], ['payment_ref', 'amount'])
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''

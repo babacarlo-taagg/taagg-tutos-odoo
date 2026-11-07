@@ -45,7 +45,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 
 | Code | Capsule | Ce qu'on apprend | Écrans | État |
 |---|---|---|---|---|
-| CPT-17 | Importer un relevé bancaire | import CSV / OFX / CAMT, saisie manuelle d'une ligne | Tableau de bord › Banque | ☐ |
+| CPT-17 | Importer un relevé bancaire | import CSV / OFX / CAMT, saisie manuelle d'une ligne | Tableau de bord › Banque | 🎙 3:14 |
 | CPT-18 | Le rapprochement bancaire **[E]** | relier chaque ligne du relevé à une facture ou un paiement | Rapprochement | ☐ |
 | CPT-19 | Modèles de rapprochement **[E]** | automatiser les frais bancaires, agios, commissions | Modèles de rapprochement | ☐ |
 | CPT-20 | La caisse | encaissements et décaissements en espèces, contrôle de caisse | Journal de caisse | ☐ |
@@ -150,6 +150,13 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
   Odoo 19 : plus de rapport de dépenses ; Soumettre → Approuvé (validation automatique) → « Enregistrer les pièces
   comptables » (fenêtre journal Achats) → ticket BILL/2026/11/0002 au nom d'Amy BA → Payer (Banque). Compte corrigé à l'écran :
   638300 Réceptions au lieu de 601100. Prononciation « Amy Ba » ajoutée ; deux phrases régénérées.
+- **CPT-17** (7 novembre 2026) : version finale, 3 min 14 s, 19 étapes, ≈ 2 600 caractères de voix. Parcours 4 commencé.
+  Import du CSV `fichiers/releve-banque-novembre.csv` (UTF-8 avec BOM, colonnes auto-reconnues) par « Charger » de la
+  réconciliation bancaire ; Odoo relie seul les 3 virements aux paiements de CPT-15/16 ; ligne manuelle « frais de tenue
+  de compte » (−2 500 F). Nouveau geste `televerser` dans tuto.mjs. Prononciation Charger/Tester/Importer → Chargé/Testé/Importé
+  (la voix disait « chargeur »). Crédit ElevenLabs presque épuisé (≈ 3 300 caractères jusqu'au 17 novembre).
+- Base de tournage partagée : le 6 novembre, une autre session y a créé des paiements « Fatou Ba » (Banque, Wave) ;
+  les états de départ n'y touchent pas.
 
 ## Ordre de tournage proposé
 
