@@ -1,0 +1,150 @@
+# STU-04 · Ranger les écrans : la fiche et la liste
+# État de départ attendu : la fin de STU-02, recréée par l'API (`python3 formations/studio/etat-depart.py STU-04 --preparer`
+#   sur une base remise à zéro) : « Type d'événement » et « Nombre de convives » sous le client dans la fiche du devis,
+#   le devis « Mariage Ndiaye » (S00083) avec Mariage et 150 convives. Aucune autre personnalisation des devis.
+# Ce que la capsule crée : un onglet « Événement » dans la fiche (les deux champs y sont déplacés) et la colonne
+#   « Type d'événement » dans la liste des devis (vues Studio des devis). Le regroupement n'est pas enregistré.
+# Le kanban n'est pas traité : dans cette version, Studio n'y propose pas les champs existants.
+titre: "Ranger les écrans : la fiche et la liste"
+sous_titre: Formation Studio Odoo · STU-04
+depart: /odoo/sales?debug=1
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : un champ calculé, le prix par convive"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour. Dans la capsule sur les champs, nous avons ajouté le type d'événement et le nombre de convives
+      sur les devis. Ils sont là, mais pas encore bien rangés.
+    actions:
+      - attendre: 1
+  - texte: >
+      Aujourd'hui, nous allons ranger les écrans : regrouper ces champs dans un onglet de la fiche, les montrer
+      dans la liste des devis, et s'en servir pour regrouper les devis. Une règle d'or : moins, c'est mieux.
+      Chaque champ affiché doit avoir une raison.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : un onglet dans la fiche
+  - partie: "1. Un onglet Événement"
+    texte: Ouvrons le devis du mariage de la famille Ndiaye, puis Studio.
+    actions:
+      - rechercher: Mariage Ndiaye
+      - cliquer: '.o_data_row td[name="name"]'
+      - cliquer: '[title="Toggle Studio"]'
+      - attendre: 2
+  - texte: >
+      Le type d'événement et le nombre de convives sont sous le client. Pour une commande de la boutique,
+      ils ne servent à rien et alourdissent l'écran. Rangeons-les dans un onglet.
+    actions:
+      - surligner: '.o_web_studio_form_view_editor .o_wrap_label[data-field-name="x_studio_type_evenement"]'
+        duree: 2.5
+  - texte: Cliquez sur le petit plus, à droite des onglets. Un nouvel onglet apparaît.
+    actions:
+      - cliquer: '.o_web_studio_form_view_editor .o_notebook_headers .fa-plus-square'
+      - attendre: 1.5
+  - texte: "Cliquez dessus et donnez-lui un libellé : Événement."
+    actions:
+      - cliquer: '.o_web_studio_form_view_editor .o_notebook_headers a:has-text("Nouvelle page")'
+      - ecrire: '.o_web_studio_sidebar input#string'
+        taper: Événement
+      - touche: Tab
+      - attendre: 1.5
+  - texte: Faites maintenant glisser le type d'événement dans l'onglet.
+    actions:
+      - deposer: '.o_web_studio_form_view_editor .o_wrap_label[data-field-name="x_studio_type_evenement"]'
+        sur: '.o_web_studio_form_view_editor .o_notebook .tab-pane.active .o_web_studio_hook'
+  - texte: Et le nombre de convives, juste en dessous.
+    actions:
+      - deposer: '.o_web_studio_form_view_editor .o_wrap_label[data-field-name="x_studio_nombre_de_convives"]'
+        sur: '.o_web_studio_form_view_editor .o_notebook .tab-pane.active .o_wrap_label[data-field-name="x_studio_type_evenement"]'
+        decalage: [0, 20]
+  - texte: >
+      Le haut de la fiche retrouve sa clarté, et tout ce qui concerne l'événement est rangé au même endroit.
+    actions:
+      - surligner: '.o_web_studio_form_view_editor .o_notebook'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 2 : une colonne dans la liste
+  - partie: "2. Une colonne dans la liste"
+    texte: >
+      Passons à la liste des devis. En haut à droite, ces icônes donnent accès à chaque façon d'afficher les devis.
+      Cliquez sur celle de la liste.
+    actions:
+      - surligner: '.o_web_studio_views_icons'
+        duree: 2
+      - cliquer: '.o_web_studio_views_icons a[title="Liste"]'
+      - attendre: 2
+  - texte: >
+      Le champ existe déjà : on ne le recrée pas. Ouvrez Champs existants, en bas à gauche.
+    actions:
+      - cliquer: '.o_web_studio_sidebar .o_web_studio_existing_fields_header'
+      - attendre: 1
+  - texte: Faites glisser Type d'événement entre la colonne du client et celle du vendeur.
+    actions:
+      - deposer: '.o_web_studio_sidebar .o_web_studio_component[data-drop*="x_studio_type_evenement"]'
+        sur: ':nth-match(th.o_web_studio_hook, 4)'
+      - attendre: 1
+  - texte: >
+      La colonne est en place. Le nombre de convives, lui, reste dans la fiche : dans une liste, il ne servirait à rien.
+      Fermez Studio.
+    actions:
+      - cliquer: '.o_studio_navbar a.btn-primary:has-text("Fermer")'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ partie 3 : regrouper
+  - partie: "3. Regrouper les devis"
+    texte: >
+      Un champ bien choisi sert aussi à analyser. Ouvrez les options de recherche, puis Groupe personnalisé,
+      et choisissez Type d'événement.
+    actions:
+      - cliquer: '.o_searchview_dropdown_toggler'
+      - selectionner: {dans: '.o-dropdown--menu select.o_add_custom_group_menu', option: "Type d'événement"}
+      - attendre: 1
+      - touche: Escape
+  - texte: >
+      Les devis sont rangés par événement : les mariages d'un côté, les commandes de la boutique de l'autre,
+      avec le total de chaque groupe. Pour retrouver ce regroupement chaque matin, enregistrez-le dans les favoris.
+    actions:
+      - surligner: '.o_group_header'
+        duree: 3
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : recréer un champ qui existe déjà. Pour la liste, on prend Champs existants,
+      sinon on obtient deux champs Type d'événement qui ne se parlent pas.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : surcharger. Une liste de douze colonnes ne se lit plus, surtout sur un téléphone.
+      Pour chaque colonne, demandez-vous qui la regarde, et pour décider quoi.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : ouvrir Studio sur le mauvais écran. La fiche et la liste se modifient séparément :
+      vérifiez l'icône active en haut à droite avant de déposer un champ.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Dans la fiche, le petit plus crée un onglet, et l'on y glisse les champs à ranger. Pour la liste,
+      on change d'écran avec les icônes, et on prend les champs existants. Et un champ bien rangé devient un critère
+      pour regrouper.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : ajoutez la colonne Nombre de convives dans la liste des devis, regardez si elle aide vraiment,
+      puis retirez-la si ce n'est pas le cas. Dans la prochaine capsule, Odoo calculera pour nous le prix par convive.
+      À tout de suite !
+    actions:
+      - attendre: 1
