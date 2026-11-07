@@ -56,7 +56,7 @@ etapes:
       - attendre: 0.5
       - cliquer: '.o-dropdown-item:has-text("Cartes de fidélité")'
       - attendre: 1.5
-  - texte: Donnez-lui un nom : Carte de fidélité des Délices.
+  - texte: "Donnez-lui un nom : Carte de fidélité des Délices."
     actions:
       - champ: name
         taper: Carte de fidélité des Délices
