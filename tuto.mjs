@@ -13,6 +13,7 @@
 //
 // Réglages (variables d'environnement ou fichier .env à côté de ce script, jamais versionné) :
 //   ODOO_URL, ODOO_BASE, ODOO_LOGIN, ODOO_MOT_DE_PASSE
+//   CHROMIUM_CHEMIN (facultatif : navigateur déjà installé, ex. /opt/pw-browsers/chromium dans le cloud)
 //   ELEVENLABS_API_KEY, ELEVENLABS_VOICE_ID, ELEVENLABS_MODELE
 //   OPENAI_API_KEY, OPENAI_VOIX
 
@@ -370,6 +371,31 @@ class Realisateur {
       await this.cliquer(p.locator('.o_menu_sections .dropdown-toggle').filter({ hasText: a.ouvrir_menu }).first());
     } else if ('onglet' in a) {
       await this.cliquer(p.locator('.o_notebook .nav-link').filter({ hasText: a.onglet }).first());
+    } else if ('ecrire' in a) {
+      // taper dans n'importe quelle case visée par un sélecteur (panneau de Studio, fenêtre de condition…)
+      await this.taper(p.locator(a.ecrire).filter({ visible: true }).first(), a.taper ?? '', a.entree);
+    } else if ('deposer' in a) {
+      // glisser-déposer à la main (Studio : un nouveau champ vers sa place dans la fiche)
+      await this.viser(p.locator(a.deposer).filter({ visible: true }).first());
+      await p.mouse.down();
+      await pause(150);
+      await this.glisser(this.x + 30, this.y + 10); // petit décalage : Odoo commence alors le glisser
+      const cible = p.locator(a.sur).filter({ visible: true }).first();
+      await cible.waitFor({ state: 'visible', timeout: 15000 });
+      const b = await cible.boundingBox();
+      const [dx, dy] = a.decalage ?? [0, 0];
+      await this.glisser(b.x + b.width / 2 + dx, b.y + b.height / 2 + dy);
+      await pause(500);
+      await p.mouse.up();
+      await pause(400);
+      await attendreOdoo(p, 8000);
+    } else if ('selectionner' in a) {
+      // liste déroulante classique (<select>) visée par un sélecteur : opérateur d'une condition…
+      const { dans, option } = a.selectionner;
+      const liste = p.locator(dans).filter({ visible: true }).first();
+      await this.cliquer(liste);
+      await liste.selectOption({ label: option });
+      await pause(300);
     } else if ('champ' in a && 'taper' in a) {
       await this.taper(this.saisie(a.champ), a.taper, a.entree);
     } else if ('choisir' in a) {
@@ -465,7 +491,7 @@ class Camera {
 }
 
 async function tourner(sc, pistes, dossier, visible) {
-  const navigateur = await chromium.launch({ headless: !visible });
+  const navigateur = await chromium.launch({ headless: !visible, executablePath: process.env.CHROMIUM_CHEMIN || undefined });
   const etat = await connexion(navigateur, sc);
   const [l, h] = sc.ecran;
   const ctx = await navigateur.newContext({ viewport: { width: l, height: h }, locale: 'fr-FR', storageState: etat });
@@ -689,7 +715,7 @@ function mmss(s) {
 
 async function explorer(chemin) {
   const sc = { ecran: [1600, 900] };
-  const navigateur = await chromium.launch();
+  const navigateur = await chromium.launch({ executablePath: process.env.CHROMIUM_CHEMIN || undefined });
   const etat = await connexion(navigateur, sc);
   const ctx = await navigateur.newContext({ viewport: { width: 1600, height: 900 }, locale: 'fr-FR', storageState: etat });
   const page = await ctx.newPage();

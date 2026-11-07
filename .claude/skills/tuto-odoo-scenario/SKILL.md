@@ -70,6 +70,9 @@ etapes:
 | `enregistrer: oui` | clique l'icône Enregistrer de la fiche |
 | `surligner: '<sélecteur>'` / `surligner_champ: email` + `duree: 2` | cadre vert + fond assombri autour de l'élément |
 | `survoler: '<sélecteur>'` | déplace le curseur dessus (pour pointer sans cliquer) |
+| `ecrire: '<sélecteur>'` + `taper: Mariage` | tape dans n'importe quelle case visée par un sélecteur (panneau de Studio, fenêtre) ; `entree: true` pour valider |
+| `deposer: '<sélecteur>'` + `sur: '<sélecteur>'` | glisser-déposer à la main (Studio : un nouveau champ vers sa place) ; `decalage: [dx, dy]` pour viser à côté du centre de la cible |
+| `selectionner: {dans: '<sélecteur>', option: est défini}` | liste déroulante classique (`<select>`) : opérateur d'une condition… |
 | `touche: Escape` | appuie sur une touche |
 | `defiler: 400` ou `defiler: '<sélecteur>'` | fait défiler la page |
 | `attendre: 1.5` | pause (secondes) |
