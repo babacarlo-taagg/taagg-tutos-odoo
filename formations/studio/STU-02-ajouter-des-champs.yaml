@@ -1,0 +1,222 @@
+# STU-02 · Ajouter des champs : le type d'événement
+# État de départ attendu (remis par `python3 formations/studio/etat-depart.py STU-02 --oui`) :
+#   aucun champ Studio sur les devis, pas de vue « Odoo Studio: sale.order.form customization » ;
+#   le devis de démonstration « Mariage Ndiaye » (Moussa Ndiaye, 150 × Fraisier à 8 000 F = 1 200 000 F HT) en brouillon.
+# Le compte qui filme est en mode développeur (?debug=1) : sans lui, Studio ne montre pas le nom technique.
+# Ce que la capsule crée : x_studio_type_evenement (Sélection, 5 valeurs), x_studio_nombre_de_convives (Entier,
+#   requis et visible seulement si un type est choisi), leur place dans la fiche du devis (vue Studio), la valeur
+#   par défaut 0 de l'entier, et sur le devis de démonstration : Mariage, 150 convives.
+# Remarque : dans l'éditeur Studio, quelques libellés du devis restent en anglais (Customer, Order Lines…) ;
+# hors de Studio, tout est en français.
+titre: "Ajouter des champs : le type d'événement"
+sous_titre: Formation Studio Odoo · STU-02
+depart: /odoo/sales?debug=1
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+  STU-02: capsule deux
+fin:
+  message: "Prochaine capsule : choisir le bon lien entre deux fiches"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette capsule consacrée à Studio. Les Délices de Maïmouna font une grande partie
+      de leur chiffre en traiteur : mariages, baptêmes, séminaires.
+    actions:
+      - attendre: 1
+  - texte: >
+      Maïmouna veut savoir, devis par devis, de quel événement il s'agit et pour combien de convives.
+      À la fin de cette capsule, vous saurez ajouter ces deux champs sur les devis, sans écrire une ligne de code.
+    actions:
+      - surligner: '.o_list_renderer'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 1 : ouvrir Studio
+  - partie: "1. Ouvrir Studio sur un devis"
+    texte: Ouvrons le devis du mariage de la famille Ndiaye.
+    actions:
+      - rechercher: Mariage Ndiaye
+      - cliquer: '.o_data_row'
+  - texte: >
+      Le petit insecte en haut de l'écran indique que le mode développeur est actif. Gardez-le : il permet
+      de choisir le nom technique de chaque champ.
+    actions:
+      - surligner: '.o_debug_manager'
+        duree: 2.5
+  - texte: >
+      Cliquez maintenant sur l'icône de Studio, en haut à droite. Studio s'ouvre sur l'écran que vous regardiez :
+      ici, la fiche du devis.
+    actions:
+      - cliquer: '[title="Toggle Studio"]'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ partie 2 : le champ Sélection
+  - partie: "2. Le type d'événement"
+    texte: >
+      À gauche, la liste des nouveaux champs. Pour le type d'événement, prenez Sélection : une liste de choix fixes.
+    actions:
+      - surligner: '.o_web_studio_sidebar .o_web_studio_component:has-text("Sélection")'
+        duree: 2
+  - texte: Faites-la glisser juste sous le client.
+    actions:
+      - deposer: '.o_web_studio_sidebar .o_web_studio_component:has-text("Sélection")'
+        sur: '.o_web_studio_hook[data-position="after"][data-xpath="/form[1]/sheet[1]/group[1]/group[1]/field[1]"]'
+  - texte: >
+      Odoo demande les valeurs possibles. Tapez-les dans l'ordre où l'utilisateur les lira :
+      Mariage, Baptême, Séminaire, Anniversaire, et Autre.
+    actions:
+      - ecrire: '.modal input.o-web-studio-interactive-list-item-input'
+        taper: Mariage
+        entree: true
+      - ecrire: '.modal input.o-web-studio-interactive-list-item-input'
+        taper: Baptême
+        entree: true
+      - ecrire: '.modal input.o-web-studio-interactive-list-item-input'
+        taper: Séminaire
+        entree: true
+      - ecrire: '.modal input.o-web-studio-interactive-list-item-input'
+        taper: Anniversaire
+        entree: true
+      - ecrire: '.modal input.o-web-studio-interactive-list-item-input'
+        taper: Autre
+        entree: true
+  - texte: Cliquez sur Confirmer. Le champ est créé, et ses propriétés s'affichent à gauche.
+    actions:
+      - cliquer: '.modal-footer button:has-text("Confirmer")'
+      - attendre: 1.5
+  - texte: >
+      Commencez par le nom technique. Studio ajoute toujours le préfixe x studio. Écrivez type événement,
+      sans accent ni espace. Faites-le tout de suite : une fois le champ utilisé, ce nom ne change plus.
+    actions:
+      - ecrire: '.o_web_studio_sidebar input#technical_name'
+        taper: type_evenement
+      - touche: Tab
+      - attendre: 1.5
+  - texte: Puis le libellé, celui que verront les utilisateurs : Type d'événement.
+    actions:
+      - ecrire: '.o_web_studio_sidebar input#string'
+        taper: "Type d'événement"
+      - touche: Tab
+      - attendre: 1
+  - texte: >
+      Et une infobulle d'aide, pour expliquer quand le remplir : laisser vide pour une commande de la boutique.
+    actions:
+      - ecrire: '.o_web_studio_sidebar input#help'
+        taper: Laisser vide pour une commande de la boutique
+      - touche: Tab
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 3 : le champ conditionnel
+  - partie: "3. Le nombre de convives"
+    texte: >
+      Deuxième champ : le nombre de convives. C'est un nombre entier. Glissez le champ Entier juste sous le type d'événement.
+    actions:
+      - deposer: '.o_web_studio_sidebar .o_web_studio_component:has-text("Entier")'
+        sur: '.o_web_studio_form_view_editor [data-field-name="x_studio_type_evenement"] ~ .o_web_studio_hook[data-position="after"]'
+  - texte: Même méthode : le nom technique d'abord, nombre de convives, puis le libellé.
+    actions:
+      - ecrire: '.o_web_studio_sidebar input#technical_name'
+        taper: nombre_de_convives
+      - touche: Tab
+      - attendre: 1.5
+      - ecrire: '.o_web_studio_sidebar input#string'
+        taper: Nombre de convives
+      - touche: Tab
+      - attendre: 1
+  - texte: >
+      Ce champ n'a de sens que pour un événement. Rendons-le d'abord obligatoire, mais seulement quand un type
+      d'événement est choisi. À côté de Requis, cliquez sur Conditionnel.
+    actions:
+      - cliquer: ':nth-match(.o_web_studio_sidebar .o_web_studio_attrs, 2)'
+  - texte: Choisissez le champ Type d'événement, puis la règle : est défini.
+    actions:
+      - cliquer: '.modal .o_model_field_selector'
+      - ecrire: '.o_model_field_selector_popover_search input'
+        taper: Type
+      - cliquer: '.o_model_field_selector_popover li[data-name="x_studio_type_evenement"] button'
+      - selectionner: {dans: '.modal .o_tree_editor_editor select', option: est défini}
+      - attendre: 1
+  - texte: Confirmez.
+    actions:
+      - cliquer: '.modal-footer button:has-text("Confirmer")'
+      - attendre: 1
+  - texte: >
+      Ensuite, cachons-le quand il ne sert à rien. À côté d'Invisible, cliquez sur Conditionnel,
+      choisissez Type d'événement, et cette fois : n'est pas défini.
+    actions:
+      - cliquer: ':nth-match(.o_web_studio_sidebar .o_web_studio_attrs, 1)'
+      - cliquer: '.modal .o_model_field_selector'
+      - ecrire: '.o_model_field_selector_popover_search input'
+        taper: Type
+      - cliquer: '.o_model_field_selector_popover li[data-name="x_studio_type_evenement"] button'
+      - selectionner: {dans: '.modal .o_tree_editor_editor select', option: n’est pas défini}
+      - attendre: 1
+  - texte: >
+      Confirmez. Le champ disparaît de Studio : c'est normal, ce devis n'a pas encore de type d'événement.
+    actions:
+      - cliquer: '.modal-footer button:has-text("Confirmer")'
+      - attendre: 2
+  - texte: Fermez Studio. Chaque geste est déjà enregistré : il n'y a pas de bouton Sauvegarder.
+    actions:
+      - cliquer: '.o_main_navbar button:has-text("Fermer"), .o_main_navbar a:has-text("Fermer")'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ partie 4 : tester
+  - partie: "4. Tester sur le devis"
+    texte: Testons. Dans le champ Type d'événement, choisissez Mariage.
+    actions:
+      - cliquer: '.o_field_widget[name="x_studio_type_evenement"] input'
+      - cliquer: '.o_select_menu_item:has-text("Mariage")'
+      - attendre: 1
+  - texte: >
+      Le nombre de convives apparaît aussitôt. Saisissez cent cinquante, puis enregistrez.
+    actions:
+      - surligner_champ: x_studio_nombre_de_convives
+        duree: 2
+      - ecrire: '.o_field_widget[name="x_studio_nombre_de_convives"] input'
+        taper: '150'
+      - enregistrer: oui
+  - texte: >
+      Le devis porte maintenant son événement. Une liste de choix fixes garantit des valeurs propres :
+      vous pourrez compter vos mariages, et non des mariage, MARIAGE ou mariage Thiès.
+    actions:
+      - surligner_champ: x_studio_type_evenement
+        duree: 3
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : un nombre entier vaut zéro par défaut. Pour Odoo, zéro est une valeur :
+      Requis n'empêche donc pas d'enregistrer zéro convive. Vérifiez-le à la relecture des devis.
+    actions:
+      - surligner_champ: x_studio_nombre_de_convives
+        duree: 2.5
+  - texte: >
+      Deuxième piège : rendre un champ obligatoire et invisible dans les mêmes conditions. L'utilisateur ne peut plus
+      enregistrer, et ne voit pas ce qu'on lui demande.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : supprimer une valeur de la liste plus tard. Les devis qui la portaient la perdent.
+      Pour changer un mot, modifiez la valeur au lieu de la supprimer.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. On ouvre Studio sur l'écran à modifier, on glisse le bon type de champ, on fixe aussitôt
+      son nom technique et son libellé, et on règle Requis et Invisible avec Conditionnel. Puis on teste sur un vrai devis.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : ajoutez sur les devis un champ Date de l'événement, visible seulement quand un type
+      d'événement est choisi. Dans la prochaine capsule, nous verrons comment relier deux fiches entre elles.
+      À tout de suite !
+    actions:
+      - attendre: 1
