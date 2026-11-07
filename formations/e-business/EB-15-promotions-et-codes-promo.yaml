@@ -63,7 +63,8 @@ etapes:
       - cliquer: '.modal-footer button:has-text("Enregistrer") >> nth=0'
       - attendre: 1.5
   - texte: >
-      À droite, la récompense : dix pour cent. Ouvrez-la, choisissez Produits spécifiques, et dans les catégories, Gâteaux et Tartes.
+      À droite, la récompense : dix pour cent. Ouvrez-la, choisissez Produits spécifiques, et dans les catégories,
+      Gâteaux et Tartes. Enregistrez.
     actions:
       - cliquer: '[name="reward_ids"] .o_kanban_record >> nth=0'
       - attendre: 1.5
@@ -72,10 +73,6 @@ etapes:
       - cliquer: '.modal [name="discount_product_ids"] .o_delete'
       - choisir: {champ: discount_product_category_id, valeur: Gâteaux et Tartes}
       - attendre: 0.5
-  - texte: >
-      Écrivez aussi la description que verra la cliente sur sa commande, puis enregistrez.
-    actions:
-      - taper_dans: {dans: '.modal [name="description"] input', texte: "Tabaski : −10 % sur les gâteaux"}
       - cliquer: '.modal-footer button:has-text("Enregistrer") >> nth=0'
       - attendre: 1.5
   - texte: >
