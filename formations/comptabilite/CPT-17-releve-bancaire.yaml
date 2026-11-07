@@ -19,6 +19,9 @@ prononciation:
   CSV: C S V
   CAMT: Camte
   OFX: O F X
+  Charger: Chargé
+  Tester: Testé
+  Importer: Importé
 fin:
   message: "Prochaine capsule : le rapprochement bancaire"
   lien: taagg-gui.com
