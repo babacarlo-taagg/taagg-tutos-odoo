@@ -38,10 +38,10 @@ etapes:
 
   # ------------------------------------------------------------------ partie 1 : ouvrir Studio
   - partie: "1. Ouvrir Studio sur un devis"
-    texte: Ouvrons le devis du mariage de la famille Ndiaye.
+    texte: "Ouvrons le devis du mariage de la famille Ndiaye."
     actions:
       - rechercher: Mariage Ndiaye
-      - cliquer: '.o_data_row'
+      - cliquer: '.o_data_row td[name="name"]'
   - texte: >
       Le petit insecte en haut de l'écran indique que le mode développeur est actif. Gardez-le : il permet
       de choisir le nom technique de chaque champ.
@@ -62,7 +62,7 @@ etapes:
     actions:
       - surligner: '.o_web_studio_sidebar .o_web_studio_component:has-text("Sélection")'
         duree: 2
-  - texte: Faites-la glisser juste sous le client.
+  - texte: "Faites-la glisser juste sous le client."
     actions:
       - deposer: '.o_web_studio_sidebar .o_web_studio_component:has-text("Sélection")'
         sur: '.o_web_studio_hook[data-position="after"][data-xpath="/form[1]/sheet[1]/group[1]/group[1]/field[1]"]'
@@ -85,24 +85,24 @@ etapes:
       - ecrire: '.modal input.o-web-studio-interactive-list-item-input'
         taper: Autre
         entree: true
-  - texte: Cliquez sur Confirmer. Le champ est créé, et ses propriétés s'affichent à gauche.
+  - texte: "Cliquez sur Confirmer. Le champ est créé, et ses propriétés s'affichent à gauche."
     actions:
       - cliquer: '.modal-footer button:has-text("Confirmer")'
       - attendre: 1.5
+  - texte: "Donnez-lui d'abord son libellé, celui que verront les utilisateurs : Type d'événement."
+    actions:
+      - ecrire: '.o_web_studio_sidebar input#string'
+        taper: "Type d'événement"
+      - touche: Tab
+      - attendre: 1
   - texte: >
-      Commencez par le nom technique. Studio ajoute toujours le préfixe x studio. Écrivez type événement,
+      Puis vérifiez le nom technique, juste en dessous. Studio ajoute toujours le préfixe x studio. Écrivez type événement,
       sans accent ni espace. Faites-le tout de suite : une fois le champ utilisé, ce nom ne change plus.
     actions:
       - ecrire: '.o_web_studio_sidebar input#technical_name'
         taper: type_evenement
       - touche: Tab
       - attendre: 1.5
-  - texte: Puis le libellé, celui que verront les utilisateurs : Type d'événement.
-    actions:
-      - ecrire: '.o_web_studio_sidebar input#string'
-        taper: "Type d'événement"
-      - touche: Tab
-      - attendre: 1
   - texte: >
       Et une infobulle d'aide, pour expliquer quand le remplir : laisser vide pour une commande de la boutique.
     actions:
@@ -116,24 +116,26 @@ etapes:
     texte: >
       Deuxième champ : le nombre de convives. C'est un nombre entier. Glissez le champ Entier juste sous le type d'événement.
     actions:
+      - cliquer: '.o_web_studio_sidebar .o_web_studio_new'
       - deposer: '.o_web_studio_sidebar .o_web_studio_component:has-text("Entier")'
-        sur: '.o_web_studio_form_view_editor [data-field-name="x_studio_type_evenement"] ~ .o_web_studio_hook[data-position="after"]'
-  - texte: Même méthode : le nom technique d'abord, nombre de convives, puis le libellé.
+        sur: '.o_web_studio_form_view_editor [data-field-name="partner_invoice_id"]'
+        decalage: [0, -12]
+  - texte: "Même méthode : le libellé d'abord, Nombre de convives, puis le nom technique."
     actions:
-      - ecrire: '.o_web_studio_sidebar input#technical_name'
-        taper: nombre_de_convives
-      - touche: Tab
-      - attendre: 1.5
       - ecrire: '.o_web_studio_sidebar input#string'
         taper: Nombre de convives
       - touche: Tab
       - attendre: 1
+      - ecrire: '.o_web_studio_sidebar input#technical_name'
+        taper: nombre_de_convives
+      - touche: Tab
+      - attendre: 1.5
   - texte: >
       Ce champ n'a de sens que pour un événement. Rendons-le d'abord obligatoire, mais seulement quand un type
       d'événement est choisi. À côté de Requis, cliquez sur Conditionnel.
     actions:
       - cliquer: ':nth-match(.o_web_studio_sidebar .o_web_studio_attrs, 2)'
-  - texte: Choisissez le champ Type d'événement, puis la règle : est défini.
+  - texte: "Choisissez le champ Type d'événement, puis la règle : est défini."
     actions:
       - cliquer: '.modal .o_model_field_selector'
       - ecrire: '.o_model_field_selector_popover_search input'
@@ -141,7 +143,7 @@ etapes:
       - cliquer: '.o_model_field_selector_popover li[data-name="x_studio_type_evenement"] button'
       - selectionner: {dans: '.modal .o_tree_editor_editor select', option: est défini}
       - attendre: 1
-  - texte: Confirmez.
+  - texte: "Confirmez."
     actions:
       - cliquer: '.modal-footer button:has-text("Confirmer")'
       - attendre: 1
@@ -161,14 +163,14 @@ etapes:
     actions:
       - cliquer: '.modal-footer button:has-text("Confirmer")'
       - attendre: 2
-  - texte: Fermez Studio. Chaque geste est déjà enregistré : il n'y a pas de bouton Sauvegarder.
+  - texte: "Fermez Studio. Chaque geste est déjà enregistré : il n'y a pas de bouton Sauvegarder."
     actions:
       - cliquer: '.o_main_navbar button:has-text("Fermer"), .o_main_navbar a:has-text("Fermer")'
       - attendre: 2
 
   # ------------------------------------------------------------------ partie 4 : tester
   - partie: "4. Tester sur le devis"
-    texte: Testons. Dans le champ Type d'événement, choisissez Mariage.
+    texte: "Testons. Dans le champ Type d'événement, choisissez Mariage."
     actions:
       - cliquer: '.o_field_widget[name="x_studio_type_evenement"] input'
       - cliquer: '.o_select_menu_item:has-text("Mariage")'
@@ -211,7 +213,7 @@ etapes:
   - chapitre: Récapitulatif
     texte: >
       Récapitulons. On ouvre Studio sur l'écran à modifier, on glisse le bon type de champ, on fixe aussitôt
-      son nom technique et son libellé, et on règle Requis et Invisible avec Conditionnel. Puis on teste sur un vrai devis.
+      son libellé et son nom technique, et on règle Requis et Invisible avec Conditionnel. Puis on teste sur un vrai devis.
     actions:
       - attendre: 0.5
   - texte: >

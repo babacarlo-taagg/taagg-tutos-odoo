@@ -20,7 +20,7 @@ Avancement : ☐ à écrire · 📝 scénario écrit · ✎ brouillon muet OK ·
 | Code | Section du cours | Capsule | Ce qu'on apprend | Écrans | Fiches liées | État |
 |---|---|---|---|---|---|---|
 | STU-01 | 1. Découvrir Studio | Ouvrir Studio et lire l'éditeur | l'icône Studio, ce que Studio fabrique (champs, vues, règles), les 5 zones de l'éditeur, Annuler / Fermer, le contexte (la vue qu'on regardait) | un devis, Studio | 1.1, 1.2, 2802, 2804 | ☐ |
-| STU-02 | 2. Champs et vues | Ajouter des champs : le type d'événement | champ Sélection « Type d'événement » (5 valeurs), champ Entier « Nombre de convives », invisible et obligatoire selon une condition, test sur un devis | Ventes › Devis | 2.1, 2805 | ☐ |
+| STU-02 | 2. Champs et vues | Ajouter des champs : le type d'événement | champ Sélection « Type d'événement » (5 valeurs), champ Entier « Nombre de convives », invisible et obligatoire selon une condition, test sur un devis | Ventes › Devis | 2.1, 2805 | ✎ 4:32 |
 | STU-03 | 2. Champs et vues | Choisir le bon lien entre deux fiches | Many2one « Livreur » et champ associé « Téléphone du client » sur le bon de livraison ; étiquettes « Allergènes » ; quand prendre des lignes (One2many) | Inventaire › Livraisons, Produits | 2806 | ☐ |
 | STU-04 | 2. Champs et vues | Ranger les écrans : formulaire, liste, kanban | un onglet « Événement » sur le devis, une colonne dans la liste, le type sur la carte kanban, un regroupement enregistré et partagé | Ventes › Devis (3 vues) | 2.2, 2807 | ☐ |
 | STU-05 | 3. Automatiser | Un champ calculé : le prix par convive | vérifier le standard d'abord (Marges), champ Monétaire, dépendances et calcul en mode développeur, stocké ou non, contrôle 1 200 000 F / 150 = 8 000 | Devis, Paramètres › Technique › Champs | 3.2, 2810 | ☐ |
@@ -53,7 +53,7 @@ Avancement : ☐ à écrire · 📝 scénario écrit · ✎ brouillon muet OK ·
 | Capsule | Créé à l'écran |
 |---|---|
 | STU-01 | rien (visite seulement) |
-| STU-02 | champs `x_studio_type_d_evenement`, `x_studio_nombre_de_convives` sur les devis + leur place dans la vue formulaire |
+| STU-02 | champs `x_studio_type_evenement`, `x_studio_nombre_de_convives` sur les devis + leur place dans la vue formulaire |
 | STU-03 | champs `x_studio_livreur`, `x_studio_telephone_du_client` (livraisons), `x_studio_allergenes` + le modèle des allergènes (produits) |
 | STU-04 | l'onglet « Événement », la colonne, la carte kanban, le filtre enregistré |
 | STU-05 | champ `x_studio_prix_par_convive` |
