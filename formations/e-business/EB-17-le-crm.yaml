@@ -1,0 +1,155 @@
+# EB-17 · Du message WhatsApp au client : le CRM
+# État de départ : python3 formations/e-business/etat-depart.py EB-17
+#   la boutique de la fin d'EB-16 ; pipeline CRM avec deux demandes fictives (Moussa Ndiaye : plateau de viennoiseries,
+#   Nouveau, 45 000 F ; Awa Diop : gâteaux de baptême, Qualifié, 54 000 F) ; les pistes d'origine de la base (au nom
+#   de Babacar) sont archivées.
+# Pendant la capsule : nouvelle opportunité « Gâteau de mariage – 150 parts » pour Khady Sarr (150 000 F), note,
+#   passage à Qualifié, activité « Appeler » pour demain ; « Nouveau devis » ouvre un devis pour Khady (suite en EB-18).
+# Relancer etat-depart.py avant chaque prise.
+titre: "Du message WhatsApp au client : le CRM"
+sous_titre: Formation E-Business Odoo · EB-17
+depart: /odoo
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG School: l'école Tag
+  TAAGG: Tag
+  EB-17: capsule dix-sept
+  eCommerce: e-commerce
+  E-Business: i-business
+  CRM: C-R-M
+  WhatsApp: ouatsape
+  " F ": " francs "
+fin:
+  message: "Prochaine capsule : devis en ligne pour les commandes sur mesure"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche (≈ 45 s)
+  - chapitre: Introduction
+    texte: >
+      Bienvenue dans la dix-septième capsule de la formation E-Business. Les grosses commandes, comme un gâteau de mariage,
+      arrivent souvent par WhatsApp. Et dans le fil des discussions, on les perd. Le CRM d'Odoo les garde pour vous.
+    actions:
+      - attendre: 1
+  - texte: >
+      Chaque demande devient une carte, qui avance de colonne en colonne : nouveau, qualifié, proposition, et gagné.
+    actions:
+      - illustration: images/eb-17-pipeline.png
+        zoom: 1.02
+
+  # ------------------------------------------------------------------ partie 1 : le pipeline (≈ 30 s)
+  - partie: "1. Le pipeline"
+    texte: >
+      Ouvrez l'application CRM. Voici votre pipeline : deux demandes sont déjà en cours, avec leur montant attendu.
+    actions:
+      - cliquer: '.o_app:has-text("CRM")'
+      - attendre: 2.5
+      - surligner: '.o_kanban_renderer'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 2 : noter une demande (≈ 1 min 30)
+  - partie: "2. Noter une demande WhatsApp"
+    texte: >
+      Khady vous écrit sur WhatsApp : elle veut un gâteau de mariage pour cent cinquante invités.
+      Cliquez sur le plus de la colonne Nouveau.
+    actions:
+      - cliquer: '.o_kanban_group:has-text("Nouveau") .o_kanban_quick_add'
+      - attendre: 1.5
+  - texte: >
+      Choisissez la cliente, Khady Sarr, donnez un nom clair à la demande, et le montant attendu : cent cinquante mille francs.
+    actions:
+      - taper_dans: {dans: '.o_kanban_quick_create [name="partner_id"] input', texte: Khady}
+      - attendre: 1
+      - cliquer: '.o-autocomplete--dropdown-item:has-text("Khady Sarr")'
+      - attendre: 0.5
+      - taper_dans: {dans: '.o_kanban_quick_create [name="name"] input', texte: "Gâteau de mariage – 150 parts"}
+      - taper_dans: {dans: '.o_kanban_quick_create [name="expected_revenue"] input', texte: "150000"}
+  - texte: Cliquez sur Modifier pour ouvrir la fiche complète.
+    actions:
+      - cliquer: '.o_kanban_quick_create button:has-text("Modifier")'
+      - attendre: 2.5
+  - texte: >
+      Son téléphone et son e-mail sont déjà là. Dans les notes, recopiez l'essentiel de son message :
+      la date, le nombre d'invités, ses goûts.
+    actions:
+      - surligner: '.o_form_view [name="phone"]'
+        duree: 1.5
+      - cliquer: '.o_notebook [name="description"] [contenteditable]'
+      - taper_dans: {dans: '.o_notebook [name="description"] [contenteditable]', texte: "Message WhatsApp : mariage le 21 décembre, 150 invités, gâteau à étages vanille-fraise."}
+
+  # ------------------------------------------------------------------ partie 3 : faire avancer (≈ 1 min 30)
+  - partie: "3. Faire avancer la demande"
+    texte: >
+      La demande est sérieuse : il y a une date et un nombre d'invités. Cliquez sur Qualifié.
+    actions:
+      - cliquer: '.o_statusbar_status button:has-text("Qualifié")'
+      - attendre: 1.5
+  - texte: >
+      Et surtout, notez la prochaine action. Cliquez sur Activité, choisissez Appeler, et écrivez : rappeler Khady pour la dégustation.
+    actions:
+      - cliquer: '.o-mail-Chatter-topbar button:has-text("Activité"), button:has-text("Activité") >> nth=0'
+      - attendre: 1.5
+      - cliquer: '.modal button:has-text("Appeler")'
+      - attendre: 0.5
+      - taper_dans: {dans: '.modal [name="summary"] input', texte: Rappeler Khady pour la dégustation}
+      - cliquer: '.modal-footer button:has-text("Enregistrer")'
+      - attendre: 1.5
+  - texte: >
+      Le jour venu, Odoo vous le rappelle. Plus aucune demande oubliée.
+    actions:
+      - surligner: '.o-mail-Chatter, .o_mail_activity, .o-mail-ActivityList >> nth=0'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 4 : vers le devis (≈ 45 s)
+  - partie: "4. Vers le devis"
+    texte: >
+      Après la dégustation, Khady est d'accord sur le principe. Cliquez sur Nouveau devis : Odoo prépare un devis à son nom,
+      relié à cette demande. Nous le remplirons dans la prochaine capsule.
+    actions:
+      - cliquer: 'button:has-text("Nouveau devis")'
+      - attendre: 3
+      - surligner: '.o_form_view [name="partner_id"]'
+        duree: 2.5
+  - texte: "Revenez au pipeline : la carte de Khady est dans la colonne Qualifié."
+    actions:
+      - cliquer: '.o_breadcrumb a:has-text("Pipeline")'
+      - attendre: 2.5
+      - surligner: '.o_kanban_group:has-text("Qualifié")'
+        duree: 3
+
+  # ------------------------------------------------------------------ pièges (≈ 1 min)
+  - chapitre: Pièges fréquents
+    texte: >
+      Trois pièges fréquents. Premier piège : noter seulement les grosses demandes. Une petite commande d'aujourd'hui
+      est souvent la grosse commande de demain : notez tout.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : une carte sans prochaine action. Sans activité, la demande dort dans sa colonne.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : ne jamais marquer perdu. Quand une cliente dit non, cliquez sur Perdu, avec la raison :
+      c'est comme ça qu'on apprend.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice (≈ 1 min)
+  - chapitre: À retenir
+    texte: >
+      Retenons l'essentiel. Un : le pipeline du CRM, une carte par demande, une colonne par étape.
+      Deux : le plus d'une colonne, pour noter une demande en dix secondes.
+      Trois : une activité, pour la prochaine action, avec une date.
+      Quatre : Nouveau devis, pour transformer la demande en proposition chiffrée.
+    apres: 1.2
+    actions:
+      - illustration: images/eb-17-recap.png
+        zoom: 1.02
+  - chapitre: Exercice
+    texte: >
+      À vous de jouer : notez dans le CRM les trois dernières demandes reçues sur WhatsApp, chacune avec une activité.
+      Dans la prochaine capsule, nous enverrons le devis du gâteau de mariage, à accepter et payer en ligne.
+    actions:
+      - attendre: 1

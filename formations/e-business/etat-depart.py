@@ -952,7 +952,55 @@ def eb_16():
     fidelite_eb16_a_refaire()
 
 
-CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08, 'EB-09': eb_09, 'EB-10': eb_10, 'EB-11': eb_11, 'EB-12': eb_12, 'EB-13': eb_13, 'EB-14': eb_14, 'EB-15': eb_15, 'EB-16': eb_16}
+def fidelite_fin_eb16():
+    """Ce que la capsule EB-16 a créé : la carte de fidélité des Délices (1 point par commande, 5 points = 10 %)."""
+    print('Fidélité : comme à la fin d’EB-16')
+    if VOIR:
+        return
+    odoo('loyalty.program', 'create', {'name': 'Carte de fidélité des Délices', 'program_type': 'loyalty', 'trigger': 'auto',
+         'rule_ids': [(0, 0, {'reward_point_mode': 'order', 'reward_point_amount': 1, 'minimum_amount': 0})],
+         'reward_ids': [(0, 0, {'reward_type': 'discount', 'discount': 10, 'discount_mode': 'percent',
+                                'discount_applicability': 'order', 'required_points': 5})]})
+
+
+# Demandes fictives du pipeline CRM (EB-17) : (nom, client, étape, montant attendu)
+PISTES_EB17 = [
+    ('Plateau de viennoiseries – réunion de bureau', 'Moussa Ndiaye', 'Nouveau', 45000),
+    ('Gâteaux de baptême – 3 fraisiers', 'Awa Diop', 'Qualifié', 54000),
+]
+
+
+def crm_eb17_a_refaire():
+    """Pipeline CRM de démonstration : les pistes d'origine de la base (au nom de Babacar, une vraie personne) sont
+    archivées (pas supprimées) ; les pistes créées par les prises sont supprimées ; deux demandes fictives recréées."""
+    ctx = dict(CTX, active_test=False)
+    formateur = odoo('res.users', 'search', [('login', '=', ENV['ODOO_LOGIN'])])[0]
+    demos = [n for n, *_ in PISTES_EB17] + ['Gâteau de mariage – 150 parts']
+    a_supprimer = odoo('crm.lead', 'search', [('name', 'in', demos)], context=ctx)
+    autres = odoo('crm.lead', 'search', [('name', 'not in', demos), ('active', '=', True)])
+    print(f'CRM : {len(autres)} piste(s) d’origine archivée(s), {len(a_supprimer)} piste(s) des prises supprimée(s), '
+          f'{len(PISTES_EB17)} demandes fictives créées')
+    if VOIR:
+        return
+    if autres:
+        odoo('crm.lead', 'write', autres, {'active': False})
+    if a_supprimer:
+        odoo('crm.lead', 'unlink', a_supprimer, context=ctx)
+    for nom, client, etape, montant in PISTES_EB17:
+        partenaire = odoo('res.partner', 'search', [('name', '=', client)])
+        stage = odoo('crm.stage', 'search', [('name', '=', etape)])
+        odoo('crm.lead', 'create', {'name': nom, 'type': 'opportunity', 'partner_id': partenaire[0], 'stage_id': stage[0],
+                                    'expected_revenue': montant, 'user_id': formateur}, context=dict(CTX, tracking_disable=True))
+
+
+def eb_17():
+    """EB-17 · Du message WhatsApp au client : le CRM. La boutique de la fin d'EB-16 ; pipeline avec 2 demandes fictives."""
+    eb_16()
+    fidelite_fin_eb16()
+    crm_eb17_a_refaire()
+
+
+CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08, 'EB-09': eb_09, 'EB-10': eb_10, 'EB-11': eb_11, 'EB-12': eb_12, 'EB-13': eb_13, 'EB-14': eb_14, 'EB-15': eb_15, 'EB-16': eb_16, 'EB-17': eb_17}
 
 if __name__ == '__main__':
     code = next((a.upper() for a in sys.argv[1:] if not a.startswith('--')), None)
