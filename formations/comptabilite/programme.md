@@ -46,7 +46,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | Code | Capsule | Ce qu'on apprend | Écrans | État |
 |---|---|---|---|---|
 | CPT-17 | Importer un relevé bancaire | import CSV / OFX / CAMT, saisie manuelle d'une ligne | Tableau de bord › Banque | 🎙 3:14 |
-| CPT-18 | Le rapprochement bancaire **[E]** | relier chaque ligne du relevé à une facture ou un paiement | Rapprochement | ☐ |
+| CPT-18 | Le rapprochement bancaire **[E]** | relier chaque ligne du relevé à une facture ou un paiement | Rapprochement | ✎ 3:16 |
 | CPT-19 | Modèles de rapprochement **[E]** | automatiser les frais bancaires, agios, commissions | Modèles de rapprochement | ☐ |
 | CPT-20 | La caisse | encaissements et décaissements en espèces, contrôle de caisse | Journal de caisse | ☐ |
 | CPT-21 | Les emprunts **[E]** | créer un emprunt, échéancier, écritures automatiques | Actif & passif › Emprunts | ☐ |
@@ -157,6 +157,10 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
   (la voix disait « chargeur »). Crédit ElevenLabs presque épuisé (≈ 3 300 caractères jusqu'au 17 novembre).
 - Base de tournage partagée : le 6 novembre, une autre session y a créé des paiements « Fatou Ba » (Banque, Wave) ;
   les états de départ n'y touchent pas.
+- **CPT-18** (7 novembre 2026) : brouillon muet validé techniquement, 3 min 16 s, 21 étapes, ≈ 2 750 caractères de voix.
+  **Voix à générer après la remise à zéro du crédit ElevenLabs (17 novembre).** Part de la fin de CPT-17 (etat-depart.py
+  s'arrête si le relevé manque) ; ajoute le virement du traiteur (127 440 F) lettré avec INV/2026/00006 ; frais → 631800 ;
+  versement d'espèces → 585001 (la sortie de caisse de CPT-20 utilisera le même compte).
 
 ## Ordre de tournage proposé
 
