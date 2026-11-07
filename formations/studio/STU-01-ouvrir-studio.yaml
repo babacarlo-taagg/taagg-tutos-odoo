@@ -1,0 +1,168 @@
+# STU-01 · Ouvrir Studio et lire l'éditeur
+# État de départ attendu (`python3 formations/studio/etat-depart.py STU-01`) : le devis de démonstration
+#   « Mariage Ndiaye » (S00083) en brouillon ; aucune personnalisation Studio sur les devis.
+# Ce que la capsule crée : rien. C'est une visite : on ouvre des écrans de Studio sans rien modifier
+#   (aucune case cochée, aucun champ déplacé). Cliquer un champ pour voir ses propriétés ne change rien.
+# Remarque : dans l'éditeur, quelques libellés du devis restent en anglais (Customer, Order Lines…).
+titre: Ouvrir Studio et lire l'éditeur
+sous_titre: Formation Studio Odoo · STU-01
+depart: /odoo/sales
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : ajouter des champs"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette formation à Studio, l'outil d'Odoo qui permet d'adapter l'application
+      sans écrire de code : ajouter des champs, réorganiser les écrans, automatiser, personnaliser les documents.
+    actions:
+      - attendre: 1
+  - texte: >
+      Dans cette première capsule, on ne modifie rien. On ouvre Studio et on apprend à lire son écran.
+      À la fin, vous saurez où chercher chaque réglage, au lieu de cliquer au hasard.
+    actions:
+      - attendre: 1
+  - texte: >
+      Une précision importante : Studio n'existe que dans Odoo Enterprise. Sur Odoo Online, il faut le plan
+      Personnalisé. En version Community, une partie du travail se fait avec le mode développeur.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : ouvrir Studio
+  - partie: "1. Ouvrir Studio"
+    texte: On part d'un écran normal. Ouvrons le devis du mariage de la famille Ndiaye.
+    actions:
+      - rechercher: Mariage Ndiaye
+      - cliquer: '.o_data_row td[name="name"]'
+  - texte: >
+      Studio s'ouvre avec cette icône, en haut à droite. Elle est présente sur tous les écrans d'Odoo.
+    actions:
+      - surligner: '[title="Toggle Studio"]'
+        duree: 2
+      - cliquer: '[title="Toggle Studio"]'
+      - attendre: 2
+  - texte: >
+      L'écran change de couleur. Studio s'est ouvert sur l'écran que vous regardiez : la fiche du devis.
+      C'est la règle d'or de Studio : on personnalise toujours l'écran sur lequel on se trouve.
+    actions:
+      - surligner: '.o_web_studio_form_view_editor'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 2 : les cinq zones
+  - partie: "2. Les cinq zones de l'éditeur"
+    texte: >
+      Première zone : le menu de Studio, en haut. Vues, Rapports, Automatisations, Contrôle d'accès :
+      chaque entrée est un chantier différent sur le même objet, ici les devis.
+    actions:
+      - surligner: '.o_web_studio_menu .o_menu_sections'
+        duree: 4
+  - texte: >
+      Deuxième zone : le canevas, au centre. C'est l'écran lui-même, avec les données du devis. On y clique
+      pour choisir un élément, on y dépose les nouveaux champs.
+    actions:
+      - surligner: '.o_web_studio_form_view_editor'
+        duree: 3
+  - texte: >
+      À gauche, trois onglets. Troisième zone, l'onglet Ajouter : les composants comme les onglets et les colonnes,
+      puis les nouveaux champs, et tout en bas les champs qui existent déjà.
+    actions:
+      - surligner: '.o_web_studio_sidebar'
+        duree: 4
+  - texte: >
+      Quatrième zone, l'onglet Vue : les réglages de l'écran entier, par exemple si l'on peut créer
+      ou supprimer un devis depuis cet écran.
+    actions:
+      - cliquer: '.o_web_studio_sidebar .o_web_studio_view'
+      - attendre: 1.5
+  - texte: >
+      Cinquième zone, l'onglet Propriétés. Il s'ouvre dès qu'on clique sur un élément du canevas. Cliquons sur le client.
+    actions:
+      - cliquer: '.o_web_studio_form_view_editor [data-field-name="partner_id"]'
+      - attendre: 1
+  - texte: >
+      On retrouve ici tout ce qui concerne ce champ : invisible, requis, lecture seule, son libellé,
+      son infobulle d'aide. Nous nous en servirons dès la prochaine capsule.
+    actions:
+      - surligner: '.o_web_studio_sidebar'
+        duree: 4
+
+  # ------------------------------------------------------------------ partie 3 : ce que Studio fabrique
+  - partie: "3. Ce que fabrique Studio"
+    texte: >
+      Studio ne modifie jamais le code d'Odoo. Chaque geste ajoute une couche par-dessus le standard.
+      L'entrée Vues, par exemple, montre toutes les façons d'afficher les devis.
+    actions:
+      - cliquer: '.o_web_studio_menu .o_menu_sections button:has-text("Vues")'
+      - attendre: 2
+  - texte: >
+      Formulaire, liste, kanban, calendrier, graphique… Studio peut modifier chacune séparément.
+    actions:
+      - surligner: '.o_web_studio_thumbnail_list'
+        duree: 2
+  - texte: >
+      L'entrée Automatisations rassemble les règles qui agissent toutes seules, par exemple prévenir la cuisine
+      quand un mariage est confirmé. Ici, il n'y en a encore aucune.
+    actions:
+      - cliquer: '.o_web_studio_menu .o_menu_sections button:has-text("Automatisations")'
+      - attendre: 2.5
+  - texte: Revenons à la fiche du devis.
+    actions:
+      - cliquer: '.o_web_studio_menu .o_menu_sections button:has-text("Vues")'
+      - attendre: 1.5
+      - cliquer: '.o_web_studio_thumbnail_form'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ partie 4 : annuler et fermer
+  - partie: "4. Annuler, refaire, fermer"
+    texte: >
+      En haut, Annuler et Refaire reviennent sur le dernier geste, tant que vous êtes dans Studio.
+    actions:
+      - surligner: '.o_web_studio_undo'
+        duree: 2
+  - texte: >
+      Il n'y a pas de bouton Sauvegarder : chaque geste est enregistré tout de suite.
+      Pour sortir, cliquez sur Fermer.
+    actions:
+      - surligner: '.o_studio_navbar a.btn-primary:has-text("Fermer")'
+        duree: 2
+      - cliquer: '.o_studio_navbar a.btn-primary:has-text("Fermer")'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : se tromper d'écran. Ouvert depuis la liste des devis, Studio modifie
+      la liste ; ouvert depuis un devis, il modifie la fiche. Si un champ n'apparaît pas, vérifiez d'abord où vous l'avez mis.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : tester en direct dans la base du client. Studio est si rapide qu'on est tenté de personnaliser
+      pendant la réunion. Travaillez dans une base de test, puis transférez.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : promettre Studio à un client qui ne l'a pas. Demandez toujours son édition et son abonnement
+      avant de proposer une personnalisation.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Studio s'ouvre par l'icône en haut à droite, sur l'écran que vous regardez. Cinq zones :
+      le menu de Studio, le canevas, et les onglets Ajouter, Vue et Propriétés. Chaque geste est enregistré aussitôt,
+      et Fermer vous ramène à l'écran normal.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : ouvrez Studio sur la fiche d'un contact, retrouvez les cinq zones, puis fermez sans rien modifier.
+      Dans la prochaine capsule, nous ajouterons nos premiers champs. À tout de suite !
+    actions:
+      - attendre: 1

@@ -91,7 +91,33 @@ def stu_02():
     return devis_demo()
 
 
-CAPSULES = {'STU-02': stu_02}
+def livraison_demo():
+    """Le bon de livraison de démonstration « Mariage Ndiaye » : 150 Fraisier pour Moussa Ndiaye, en brouillon."""
+    ids = odoo('stock.picking', 'search', [['origin', '=', REF_DEVIS], ['picking_type_code', '=', 'outgoing'], ['partner_id', '=', CLIENT_DEMO]])
+    if not ids:
+        if not OUI:
+            print(f'  à créer  bon de livraison de démonstration « {REF_DEVIS} » (Moussa Ndiaye, 150 Fraisier)')
+            return None
+        ids = [odoo('stock.picking', 'create', {'picking_type_id': 2, 'partner_id': CLIENT_DEMO, 'origin': REF_DEVIS,
+                                                'location_id': 5, 'location_dest_id': 2,
+                                                'move_ids': [[0, 0, {'product_id': FRAISIER, 'product_uom_qty': 150,
+                                                                     'location_id': 5, 'location_dest_id': 2}]]})]
+    return odoo('stock.picking', 'read', ids, fields=['name', 'state'])[0]
+
+
+def stu_01():
+    # STU-01 est une visite : rien n'est créé. On vérifie seulement le devis de démonstration.
+    return devis_demo()
+
+
+def stu_03():
+    # STU-03 crée « Livreur » (Many2One vers Utilisateur) et « Téléphone du client » (champ associé) sur les transferts.
+    defaire_champs('stock.picking', champs_studio('stock.picking', ['Livreur', 'Téléphone du client', 'Nouveau Many2One',
+                                                                    'Nouveau Champ associé', 'Téléphone', 'Nouveau Many2one']))
+    return livraison_demo()
+
+
+CAPSULES = {'STU-01': stu_01, 'STU-02': stu_02, 'STU-03': stu_03}
 
 if __name__ == '__main__':
     code = next((a for a in sys.argv[1:] if not a.startswith('--')), '')

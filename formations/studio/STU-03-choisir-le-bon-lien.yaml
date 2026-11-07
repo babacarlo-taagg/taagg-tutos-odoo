@@ -1,0 +1,197 @@
+# STU-03 · Choisir le bon lien entre deux fiches
+# État de départ attendu (`python3 formations/studio/etat-depart.py STU-03 --oui`) :
+#   aucun champ Studio sur les transferts ; le bon de livraison de démonstration « Mariage Ndiaye »
+#   (WH/OUT/…, Moussa Ndiaye, 150 Fraisier) en brouillon, créé par etat-depart.py.
+# Le compte qui filme est en mode développeur (?debug=1) pour fixer le nom technique.
+# Ce que la capsule crée : x_studio_livreur (Many2one vers Utilisateur) et x_studio_telephone_du_client
+#   (champ associé partner_id.phone) sur les transferts, et leur place dans la fiche (vue Studio).
+#   Aucun livreur n'est choisi à l'écran (Modou n'a pas encore de compte : il l'aura dans STU-08).
+#   Étiquettes et Lignes sont expliquées sans être créées : pas de modification des produits (filmés par CPT-09).
+titre: Choisir le bon lien entre deux fiches
+sous_titre: Formation Studio Odoo · STU-03
+depart: /odoo/action-stock.action_picking_tree_all?debug=1
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+  res.users: ress point iouzeurs
+  Many2One: Mény tou one
+fin:
+  message: "Prochaine capsule : ranger les écrans"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour. Dans la capsule précédente, nous avons ajouté des champs simples : une liste de choix et un nombre.
+      Aujourd'hui, nous allons relier deux fiches entre elles.
+    actions:
+      - attendre: 1
+  - texte: >
+      La plupart des champs mal conçus ne sont pas des erreurs de libellé, mais des erreurs de lien.
+      Et on ne change pas le type d'un champ rempli sans perdre ses données. À la fin de cette capsule,
+      vous saurez choisir le bon lien, et éviter de recopier une information qui existe déjà.
+    actions:
+      - surligner: '.o_list_renderer'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 1 : la question à poser
+  - partie: "1. La question à poser"
+    texte: >
+      Avant d'ouvrir Studio, posez une question : combien de X pour un Y ? Un livreur par livraison ?
+      Plusieurs allergènes par produit ? Plusieurs moments dans le déroulé d'un mariage ?
+    actions:
+      - rechercher: Mariage Ndiaye
+      - cliquer: '.o_data_row td[name="name"]'
+  - texte: >
+      Voici le bon de livraison du mariage de la famille Ndiaye. Maïmouna veut y voir le livreur,
+      et le téléphone du client pour qu'il puisse l'appeler en route.
+    actions:
+      - surligner: '.o_form_sheet'
+        duree: 3
+  - texte: "Ouvrons Studio sur ce bon de livraison."
+    actions:
+      - cliquer: '[title="Toggle Studio"]'
+      - attendre: 2
+  - texte: >
+      Dans la liste des nouveaux champs, quatre servent à relier des fiches. Many2One : un seul élément choisi
+      dans une liste, par exemple un livreur pour une livraison.
+    actions:
+      - surligner: '.o_web_studio_sidebar .o_web_studio_component:has-text("Many2One")'
+        duree: 2.5
+  - texte: >
+      Étiquettes : plusieurs éléments partagés entre les fiches, comme les allergènes, réutilisés sur tous les produits.
+    actions:
+      - surligner: '.o_web_studio_sidebar .o_web_studio_component:has-text("Étiquettes")'
+        duree: 2.5
+  - texte: >
+      Lignes : plusieurs lignes qui n'appartiennent qu'à cette fiche, comme le déroulé d'un mariage :
+      treize heures le cocktail, quinze heures le déjeuner.
+    actions:
+      - surligner: '.o_web_studio_sidebar .o_web_studio_component:has-text("Lignes")'
+        duree: 2.5
+  - texte: >
+      Et le champ associé : aucune saisie, il affiche une valeur déjà enregistrée ailleurs.
+    actions:
+      - surligner: '.o_web_studio_sidebar .o_web_studio_component:has-text("Champ associé")'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 2 : le livreur
+  - partie: "2. Le livreur : un Many2One"
+    texte: "Un seul livreur par livraison : c'est un Many2One. Glissez-le sous le type d'opération."
+    actions:
+      - deposer: '.o_web_studio_sidebar .o_web_studio_component:has-text("Many2One")'
+        sur: '.o_web_studio_form_view_editor [data-field-name="location_id"]'
+        decalage: [0, -12]
+  - texte: >
+      Odoo demande vers quelles fiches pointer. Le livreur devra se connecter à Odoo : on choisit donc les
+      utilisateurs. Leur nom technique est res.users ; tapez-le pour les trouver plus vite, et choisissez Utilisateur.
+    actions:
+      - ecrire: '.modal input.o-autocomplete--input'
+        taper: res.users
+      - cliquer: '.o-autocomplete--dropdown-item:has-text("Utilisateur") >> text="Utilisateur"'
+      - attendre: 1
+  - texte: "Confirmez."
+    actions:
+      - cliquer: '.modal-footer button:has-text("Confirmer")'
+      - attendre: 1.5
+  - texte: "Le libellé : Livreur. Puis le nom technique : livreur."
+    actions:
+      - ecrire: '.o_web_studio_sidebar input#string'
+        taper: Livreur
+      - touche: Tab
+      - attendre: 1
+      - ecrire: '.o_web_studio_sidebar input#technical_name'
+        taper: livreur
+      - touche: Tab
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ partie 3 : le téléphone, champ associé
+  - partie: "3. Le téléphone : un champ associé"
+    texte: >
+      Pour le téléphone du client, le réflexe naïf serait de créer un champ Téléphone et de le remplir.
+      Ce serait une deuxième copie, jamais à jour. Le champ associé, lui, lit le téléphone sur la fiche du client.
+    actions:
+      - cliquer: '.o_web_studio_sidebar .o_web_studio_new'
+      - deposer: '.o_web_studio_sidebar .o_web_studio_component:has-text("Champ associé")'
+        sur: '.o_web_studio_form_view_editor [data-field-name="location_id"]'
+        decalage: [0, -12]
+  - texte: >
+      Odoo demande le chemin. Cherchez Contact, le client de la livraison, et cliquez sur la flèche pour entrer dans sa fiche.
+    actions:
+      - cliquer: '.modal .o_model_field_selector'
+      - ecrire: '.o_model_field_selector_popover_search input'
+        taper: Contact
+      - cliquer: '.o_model_field_selector_popover li[data-name="partner_id"] .o_model_field_selector_popover_item_relation'
+  - texte: "Puis choisissez Téléphone, et confirmez."
+    actions:
+      - ecrire: '.o_model_field_selector_popover_search input'
+        taper: Téléphone
+      - cliquer: '.o_model_field_selector_popover li[data-name="phone"] button'
+      - attendre: 1
+      - cliquer: '.modal-footer button:has-text("Confirmer")'
+      - attendre: 1.5
+  - texte: "Libellé : Téléphone du client. Nom technique : téléphone du client."
+    actions:
+      - ecrire: '.o_web_studio_sidebar input#string'
+        taper: Téléphone du client
+      - touche: Tab
+      - attendre: 1
+      - ecrire: '.o_web_studio_sidebar input#technical_name'
+        taper: telephone_du_client
+      - touche: Tab
+      - attendre: 1.5
+  - texte: "Fermez Studio."
+    actions:
+      - cliquer: '.o_studio_navbar a.btn-primary:has-text("Fermer")'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ partie 4 : le résultat
+  - partie: "4. Le résultat"
+    texte: >
+      Le téléphone de Moussa Ndiaye s'affiche déjà, sans aucune saisie. Le jour où il change de numéro
+      sur sa fiche, le bon de livraison suit tout seul.
+    actions:
+      - surligner_champ: x_studio_telephone_du_client
+        duree: 3
+  - texte: >
+      Le livreur se choisit dans la liste des utilisateurs. Seules les personnes qui ont un compte Odoo y figurent :
+      Modou, notre livreur, recevra le sien dans la capsule sur les droits d'accès.
+    actions:
+      - cliquer: '.o_field_widget[name="x_studio_livreur"] input'
+      - attendre: 2
+      - touche: Escape
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : un texte à la place d'un Many2One. Un livreur tapé à la main,
+      Modou, modou F., ne se relie à personne : impossible de compter les livraisons par livreur.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : une liste de choix à la place d'étiquettes. Un produit qui contient du gluten et du lait
+      ne peut porter qu'une seule valeur.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : des étiquettes à la place de lignes. Les horaires du déroulé seraient partagés entre
+      tous les mariages ; en modifier un modifierait les autres.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Un seul élément : Many2One. Plusieurs éléments partagés : Étiquettes. Plusieurs lignes propres
+      à la fiche : Lignes. Une valeur qui existe déjà ailleurs : un champ associé, jamais une copie.
+      Et dessinez le lien sur papier avant d'ouvrir Studio.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : sur les devis, ajoutez un champ associé qui affiche l'adresse e-mail du client.
+      Dans la prochaine capsule, nous rangerons les écrans : formulaire, liste et kanban. À tout de suite !
+    actions:
+      - attendre: 1
