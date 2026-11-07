@@ -64,7 +64,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | EB-13 | Être trouvé sur Google | titre, description et image de partage de chaque page et produit ; adresse des pages ; Google Search Console et Analytics | Optimiser le référencement, Paramètres | 🎙 |
 | EB-14 | Mesurer ses campagnes WhatsApp, Facebook, TikTok | liens de suivi : savoir quelle publication amène les ventes | Liens traceurs | 🎙 |
 | EB-15 | Promotions et codes promo | code « TABASKI », réduction sur une catégorie, livraison offerte | Programmes de remise et de fidélité | 🎙 |
-| EB-16 | Fidéliser ses clients | carte de fidélité, newsletter, relance des paniers abandonnés | Fidélité, Marketing par e-mail | ☐ |
+| EB-16 | Fidéliser ses clients | carte de fidélité, newsletter, relance des paniers abandonnés | Fidélité, Marketing par e-mail | ✎ |
 
 ## Parcours 4 — Vendre et piloter (Module 5)
 
