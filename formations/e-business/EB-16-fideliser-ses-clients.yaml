@@ -1,0 +1,203 @@
+# EB-16 · Fidéliser ses clients
+# État de départ : python3 formations/e-business/etat-depart.py EB-16
+#   la boutique de la fin d'EB-15 (code TABASKI, livraison offerte dès 25 000 F) ; aucune carte de fidélité ;
+#   un panier abandonné : Khady Sarr (cliente fictive) a laissé un Fraisier (18 000 F) hier ; Fatou sans panier.
+# Pendant la capsule : programme « Carte de fidélité des Délices » (1 point par commande, 5 points = 10 % de remise) ;
+#   Fatou commande un gâteau 8 parts, paie avec la carte Démo, et voit 1 point dans Mon compte ;
+#   les paniers abandonnés sont montrés, l'e-mail automatique de relance n'est PAS activé (aucun e-mail ne part).
+# Relancer etat-depart.py avant chaque prise.
+titre: Fidéliser ses clients
+sous_titre: Formation E-Business Odoo · EB-16
+depart: /odoo
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG School: l'école Tag
+  TAAGG: Tag
+  EB-16: capsule seize
+  eCommerce: e-commerce
+  E-Business: i-business
+  WhatsApp: ouatsape
+  " F ": " francs "
+fin:
+  message: "Prochaine capsule : du message WhatsApp au client, le CRM"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche (≈ 45 s)
+  - chapitre: Introduction
+    texte: >
+      Bienvenue dans la seizième capsule de la formation E-Business. Une cliente qui revient coûte moins cher
+      qu'une nouvelle cliente à trouver. Voyons deux outils pour la faire revenir.
+    actions:
+      - attendre: 1
+  - texte: >
+      Le premier, la carte de fidélité : chaque commande rapporte un point, et cinq points donnent dix pour cent de remise.
+      Le second, les paniers abandonnés : les clientes qui n'ont pas fini leur commande.
+    actions:
+      - illustration: images/eb-16-fidelite.png
+        zoom: 1.02
+
+  # ------------------------------------------------------------------ partie 1 : la carte de fidélité (≈ 2 min)
+  - partie: "1. La carte de fidélité"
+    texte: >
+      Ouvrez Site Web, eCommerce, Remise et Fidélité. Vous y retrouvez vos promotions de la capsule précédente.
+      Cliquez sur Nouveau, et dans Type de programme, choisissez Cartes de fidélité.
+    actions:
+      - cliquer: '.o_app:has-text("Site Web")'
+      - attendre: 1
+      - ouvrir_menu: eCommerce
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Remise & Fidélité")'
+      - attendre: 2.5
+      - cliquer: '.o_control_panel button:has-text("Nouveau")'
+      - attendre: 2
+      - cliquer: '[name="program_type"] input'
+      - attendre: 0.5
+      - cliquer: '.o-dropdown-item:has-text("Cartes de fidélité")'
+      - attendre: 1.5
+  - texte: Donnez-lui un nom : Carte de fidélité des Délices.
+    actions:
+      - champ: name
+        taper: Carte de fidélité des Délices
+  - texte: >
+      Odoo propose un point par franc dépensé : c'est trop compliqué pour vos clientes. Ouvrez la règle,
+      choisissez un point par commande, et mettez le minimum d'achat à zéro. Enregistrez.
+    actions:
+      - cliquer: '[name="rule_ids"] .o_kanban_record >> nth=0'
+      - attendre: 1.5
+      - cliquer: '.modal [name="reward_point_mode"] label:has-text("par commande")'
+      - attendre: 0.5
+      - taper_dans: {dans: '.modal [name="minimum_amount"] input', texte: "0"}
+      - cliquer: '.modal-footer button:has-text("Enregistrer") >> nth=0'
+      - attendre: 1.5
+  - texte: >
+      Côté récompenses, gardez-en une seule. Ouvrez la livraison gratuite, et supprimez-la.
+    actions:
+      - cliquer: '[name="reward_ids"] .o_kanban_record >> nth=1'
+      - attendre: 1.5
+      - cliquer: '.modal-footer button:has-text("Supprimer")'
+      - attendre: 1.5
+  - texte: >
+      Ouvrez la remise : dix pour cent, en échange de cinq points. Enregistrez, puis enregistrez le programme.
+    actions:
+      - cliquer: '[name="reward_ids"] .o_kanban_record >> nth=0'
+      - attendre: 1.5
+      - taper_dans: {dans: '.modal [name="discount"] input', texte: "10"}
+      - taper_dans: {dans: '.modal [name="required_points"] input', texte: "5"}
+      - cliquer: '.modal-footer button:has-text("Enregistrer") >> nth=0'
+      - attendre: 1.5
+      - enregistrer: oui
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ partie 2 : la cliente gagne des points (≈ 1 min 30)
+  - partie: "2. La cliente gagne des points"
+    texte: >
+      Fatou commande à nouveau un gâteau d'anniversaire de huit parts, et paie par carte.
+    actions:
+      - aller: '/web/session/logout?redirect=/web/login'
+      - attendre: 2
+      - taper_dans: {dans: 'input[name="login"]', texte: '${ODOO_CLIENTE_LOGIN}'}
+      - taper_dans: {dans: 'input[name="password"]', texte: '${ODOO_CLIENTE_MOT_DE_PASSE}'}
+      - cliquer: '.oe_login_form button[type="submit"]'
+      - attendre: 2.5
+      - aller: /shop/gateau-d-anniversaire-37
+      - attendre: 2.5
+      - cliquer: 'label:has-text("8 parts")'
+      - attendre: 0.5
+      - cliquer: '#add_to_cart'
+      - attendre: 3
+      - cliquer: '.o_total_card a:has-text("Payer") >> visible=true'
+      - attendre: 3
+      - cliquer: '#o_delivery_methods li:has-text("Dakar ville")'
+      - attendre: 1.5
+      - cliquer: '.o_total_card :is(a,button):has-text("Confirmer") >> visible=true'
+      - attendre: 3
+      - cliquer: 'main label:has-text("Démo")'
+      - taper_dans: {dans: '#customer_input', texte: "4111 1111 1111 1111"}
+      - cliquer: '.o_total_card button:has-text("Payer") >> visible=true'
+      - attendre: 5
+  - texte: >
+      Dans Mon compte, elle voit sa carte de fidélité : un point. Encore quatre commandes, et elle aura sa remise.
+      De quoi lui donner envie de revenir chez vous plutôt qu'ailleurs.
+    actions:
+      - aller: /my
+      - attendre: 3
+      - surligner: 'main :text("Carte de fidélité des Délices")'
+        duree: 4
+
+  # ------------------------------------------------------------------ partie 3 : les paniers abandonnés (≈ 1 min 30)
+  - partie: "3. Les paniers abandonnés"
+    texte: >
+      Revenons de votre côté. Dans eCommerce, ouvrez Paniers abandonnés.
+    actions:
+      - aller: '/web/session/logout?redirect=/web/login'
+      - attendre: 2
+      - taper_dans: {dans: 'input[name="login"]', texte: '${ODOO_LOGIN}'}
+      - taper_dans: {dans: 'input[name="password"]', texte: '${ODOO_MOT_DE_PASSE}'}
+      - cliquer: '.oe_login_form button[type="submit"]'
+      - attendre: 3
+      - cliquer: '.o_app:has-text("Site Web")'
+      - attendre: 1
+      - ouvrir_menu: eCommerce
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Paniers abandonnés")'
+      - attendre: 2
+  - texte: >
+      Khady a mis un fraisier dans son panier hier, puis elle est partie. Ouvrez son panier : vous avez son téléphone.
+    actions:
+      - surligner: '.o_data_row:has-text("Khady"), .o_kanban_record:has-text("Khady")'
+        duree: 2.5
+      - cliquer: '.o_data_row:has-text("Khady") td[name="name"], .o_kanban_record:has-text("Khady")'
+      - attendre: 2.5
+  - texte: >
+      Un petit message WhatsApp, simple et personnel, suffit souvent : bonjour Khady, votre fraisier vous attend,
+      on vous le livre demain ?
+    actions:
+      - surligner: '.o_form_view [name="partner_id"]'
+        duree: 3
+  - texte: >
+      Odoo peut aussi envoyer tout seul un e-mail de relance. Le réglage est dans Configuration, Paramètres,
+      partie eCommerce : Suivi des paniers abandonnés, avec le délai d'attente.
+    actions:
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Paramètres")'
+      - attendre: 3
+      - defiler: '.o_setting_box:has-text("Suivi des paniers abandonnés")'
+      - attendre: 1
+      - surligner: '.o_setting_box:has-text("Suivi des paniers abandonnés")'
+        duree: 3.5
+
+  # ------------------------------------------------------------------ pièges (≈ 1 min)
+  - chapitre: Pièges fréquents
+    texte: >
+      Trois pièges fréquents. Premier piège : une récompense trop lointaine. Si elle demande vingt commandes,
+      personne ne l'atteint : cinq, c'est motivant.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : relancer trop souvent. Une relance par panier, pas plus : sinon, c'est du harcèlement.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : oublier d'en parler. Annoncez votre carte de fidélité sur le site et dans vos statuts WhatsApp :
+      une récompense que personne ne connaît ne fait revenir personne.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice (≈ 1 min)
+  - chapitre: À retenir
+    texte: >
+      Retenons l'essentiel. Un : dans Remise et Fidélité, une carte de fidélité donne des points à chaque commande.
+      Deux : une récompense simple, cinq points pour dix pour cent.
+      Trois : les paniers abandonnés montrent les clientes qui n'ont pas fini.
+      Quatre : relancez-les une fois, avec un message court et personnel.
+    apres: 1.2
+    actions:
+      - illustration: images/eb-16-recap.png
+        zoom: 1.02
+  - chapitre: Exercice
+    texte: >
+      À vous de jouer : créez votre carte de fidélité, et relancez vos paniers abandonnés de la semaine.
+      Dans la prochaine capsule, nous suivrons les demandes WhatsApp avec le CRM.
+    actions:
+      - attendre: 1

@@ -902,7 +902,57 @@ def eb_15():
     promotions_eb15_a_refaire()
 
 
-CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08, 'EB-09': eb_09, 'EB-10': eb_10, 'EB-11': eb_11, 'EB-12': eb_12, 'EB-13': eb_13, 'EB-14': eb_14, 'EB-15': eb_15}
+def promotions_fin_eb15():
+    """Ce que la capsule EB-15 a créé : code TABASKI (−10 % sur Gâteaux et Tartes) et livraison offerte dès 25 000 F."""
+    print('Promotions : comme à la fin d’EB-15')
+    if VOIR:
+        return
+    categ = odoo('product.category', 'search', [('name', '=', 'Gâteaux et Tartes')])
+    odoo('loyalty.program', 'create', {'name': 'Tabaski : −10 % sur les gâteaux', 'program_type': 'promo_code', 'trigger': 'with_code',
+         'rule_ids': [(0, 0, {'mode': 'with_code', 'code': 'TABASKI'})],
+         'reward_ids': [(0, 0, {'reward_type': 'discount', 'discount': 10, 'discount_mode': 'percent',
+                                'discount_applicability': 'specific', 'discount_product_category_id': categ[0]})]})
+    odoo('loyalty.program', 'create', {'name': 'Livraison offerte dès 25 000 F', 'program_type': 'promotion', 'trigger': 'auto',
+         'rule_ids': [(0, 0, {'minimum_amount': 25000})], 'reward_ids': [(0, 0, {'reward_type': 'shipping'})]})
+
+
+def fidelite_eb16_a_refaire():
+    """Supprime les cartes de fidélité créées par les prises d'EB-16 (la base n'en avait aucune) et le panier abandonné
+    de démonstration ; recrée ce panier : Khady Sarr (cliente fictive) a laissé un Fraisier dans son panier hier."""
+    ctx = dict(CTX, active_test=False)
+    programmes = odoo('loyalty.program', 'search', [('program_type', '=', 'loyalty')], context=ctx)
+    print(f'Fidélité : {len(programmes)} carte(s) de fidélité des prises d’EB-16 retirée(s)')
+    for prog in ([] if VOIR else programmes):
+        try:
+            odoo('loyalty.program', 'unlink', [prog], context=ctx)
+        except SystemExit:
+            odoo('loyalty.program', 'write', [prog], {'active': False}, context=ctx)
+    khady = odoo('res.partner', 'search', [('name', '=', 'Khady Sarr')])
+    anciens = odoo('sale.order', 'search', [('partner_id', 'in', khady), ('state', '=', 'draft'), ('website_id', '=', SITE)])
+    print(f'  · panier abandonné de Khady Sarr recréé ({len(anciens)} ancien(s) annulé(s))')
+    if VOIR:
+        return
+    if anciens:
+        odoo('sale.order', 'action_cancel', anciens)
+    fraisier = odoo('product.product', 'search', [('product_tmpl_id.name', '=', 'Fraisier')])
+    vendeur = odoo('website', 'read', [SITE], fields=['salesperson_id'])[0]['salesperson_id'][0]
+    panier = odoo('sale.order', 'create', {'partner_id': khady[0], 'website_id': SITE, 'user_id': vendeur,
+                                           'order_line': [(0, 0, {'product_id': fraisier[0], 'product_uom_qty': 1})]},
+                  context=dict(CTX, tracking_disable=True))
+    # Odoo compte un panier comme abandonné une heure après sa date : on la recule d'un jour
+    from datetime import datetime, timedelta, timezone
+    hier = datetime.now(timezone.utc) - timedelta(days=1)
+    odoo('sale.order', 'write', [panier], {'date_order': hier.strftime('%Y-%m-%d %H:%M:%S')})
+
+
+def eb_16():
+    """EB-16 · Fidéliser ses clients : la boutique de la fin d'EB-15, sans carte de fidélité ; un panier abandonné (Khady)."""
+    eb_15()
+    promotions_fin_eb15()
+    fidelite_eb16_a_refaire()
+
+
+CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08, 'EB-09': eb_09, 'EB-10': eb_10, 'EB-11': eb_11, 'EB-12': eb_12, 'EB-13': eb_13, 'EB-14': eb_14, 'EB-15': eb_15, 'EB-16': eb_16}
 
 if __name__ == '__main__':
     code = next((a.upper() for a in sys.argv[1:] if not a.startswith('--')), None)
