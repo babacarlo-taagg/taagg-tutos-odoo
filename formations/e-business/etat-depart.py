@@ -883,7 +883,26 @@ def eb_14():
     liens_eb14_a_refaire()
 
 
-CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08, 'EB-09': eb_09, 'EB-10': eb_10, 'EB-11': eb_11, 'EB-12': eb_12, 'EB-13': eb_13, 'EB-14': eb_14}
+def promotions_eb15_a_refaire():
+    """Supprime les promotions et codes promo créés par les prises d'EB-15 (la base n'en avait aucun ; les cartes-cadeaux
+    d'origine restent). Si une commande les utilise, Odoo refuse : on les archive."""
+    ctx = dict(CTX, active_test=False)
+    programmes = odoo('loyalty.program', 'search', [('program_type', 'in', ['promo_code', 'promotion'])], context=ctx)
+    print(f'Promotions : {len(programmes)} programme(s) des prises d’EB-15 retiré(s)')
+    for prog in ([] if VOIR else programmes):
+        try:
+            odoo('loyalty.program', 'unlink', [prog], context=ctx)
+        except SystemExit:
+            odoo('loyalty.program', 'write', [prog], {'active': False}, context=ctx)
+
+
+def eb_15():
+    """EB-15 · Promotions et codes promo : la boutique de la fin d'EB-14, sans promotion ; Fatou sans panier."""
+    eb_14()
+    promotions_eb15_a_refaire()
+
+
+CAPSULES = {'EB-01': eb_01, 'EB-02': eb_02, 'EB-03': eb_03, 'EB-04': eb_04, 'EB-05': eb_05, 'EB-06': eb_06, 'EB-07': eb_07, 'EB-08': eb_08, 'EB-09': eb_09, 'EB-10': eb_10, 'EB-11': eb_11, 'EB-12': eb_12, 'EB-13': eb_13, 'EB-14': eb_14, 'EB-15': eb_15}
 
 if __name__ == '__main__':
     code = next((a.upper() for a in sys.argv[1:] if not a.startswith('--')), None)

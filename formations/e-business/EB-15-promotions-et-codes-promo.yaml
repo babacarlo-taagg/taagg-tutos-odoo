@@ -1,0 +1,195 @@
+# EB-15 · Promotions et codes promo
+# État de départ : python3 formations/e-business/etat-depart.py EB-15
+#   la boutique de la fin d'EB-14 ; aucun code promo ni promotion (seules les cartes-cadeaux d'origine) ; Fatou sans panier.
+# Pendant la capsule : code promo « TABASKI » (−10 % sur la catégorie Gâteaux et Tartes) ; promotion automatique
+#   « Livraison offerte dès 25 000 F » ; Fatou ajoute un gâteau 8 parts (30 000 F), tape TABASKI (−3 000 F) et choisit
+#   la livraison en banlieue, offerte. Relancer etat-depart.py avant chaque prise (supprime les programmes créés).
+titre: Promotions et codes promo
+sous_titre: Formation E-Business Odoo · EB-15
+depart: /odoo
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG School: l'école Tag
+  TAAGG: Tag
+  EB-15: capsule quinze
+  eCommerce: e-commerce
+  E-Business: i-business
+  TABASKI: Tabaski
+  WhatsApp: ouatsape
+  " F ": " francs "
+fin:
+  message: "Prochaine capsule : fidéliser ses clients"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche (≈ 45 s)
+  - chapitre: Introduction
+    texte: >
+      Bienvenue dans la quinzième capsule de la formation E-Business. La Tabaski approche : c'est le moment d'une promotion.
+      Voyons comment la créer dans Odoo, sans calculer les prix à la main.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deux façons de faire. Le code promo : la cliente tape un mot au panier, par exemple TABASKI.
+      Et la promotion automatique : sans code, Odoo l'applique tout seul, par exemple la livraison offerte dès vingt-cinq mille francs.
+    actions:
+      - illustration: images/eb-15-promos.png
+        zoom: 1.02
+
+  # ------------------------------------------------------------------ partie 1 : le code promo (≈ 2 min)
+  - partie: "1. Le code promo TABASKI"
+    texte: >
+      Ouvrez Site Web, puis eCommerce, Remise et Fidélité. Odoo propose des modèles : choisissez Code promo.
+    actions:
+      - cliquer: '.o_app:has-text("Site Web")'
+      - attendre: 1
+      - ouvrir_menu: eCommerce
+      - cliquer: '.o-dropdown--menu a.dropdown-item:text-is("Remise & Fidélité")'
+      - attendre: 2.5
+      - cliquer: '.o_view_nocontent *:has-text("Code promo") >> nth=-1'
+      - attendre: 2.5
+  - texte: Donnez-lui un nom clair.
+    actions:
+      - champ: name
+        taper: "Tabaski : −10 % sur les gâteaux"
+  - texte: >
+      À gauche, la règle : cliquez dessus, et remplacez le code proposé par TABASKI, en majuscules. Enregistrez.
+    actions:
+      - cliquer: '[name="rule_ids"] .o_kanban_record >> nth=0'
+      - attendre: 1.5
+      - taper_dans: {dans: '.modal [name="code"] input', texte: TABASKI}
+      - cliquer: '.modal-footer button:has-text("Enregistrer") >> nth=0'
+      - attendre: 1.5
+  - texte: >
+      À droite, la récompense : dix pour cent. Ouvrez-la, choisissez Produits spécifiques, et dans les catégories, Gâteaux et Tartes.
+    actions:
+      - cliquer: '[name="reward_ids"] .o_kanban_record >> nth=0'
+      - attendre: 1.5
+      - cliquer: '.modal [name="discount_applicability"] label:has-text("Produits spécifiques")'
+      - attendre: 0.5
+      - cliquer: '.modal [name="discount_product_ids"] .o_delete'
+      - choisir: {champ: discount_product_category_id, valeur: Gâteaux et Tartes}
+      - attendre: 0.5
+  - texte: >
+      Écrivez aussi la description que verra la cliente sur sa commande, puis enregistrez.
+    actions:
+      - taper_dans: {dans: '.modal [name="description"] input', texte: "Tabaski : −10 % sur les gâteaux"}
+      - cliquer: '.modal-footer button:has-text("Enregistrer") >> nth=0'
+      - attendre: 1.5
+  - texte: >
+      Pensez à la date de fin : une promotion sans fin, ce n'est plus une promotion. Enregistrez le programme.
+    actions:
+      - surligner_champ: date_to
+        duree: 2.5
+      - enregistrer: oui
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ partie 2 : la promotion automatique (≈ 1 min 30)
+  - partie: "2. La livraison offerte"
+    texte: >
+      Revenez à la liste, et cliquez sur Nouveau. Par défaut, c'est une promotion automatique.
+      Nommez-la : Livraison offerte dès vingt-cinq mille francs.
+    actions:
+      - cliquer: '.o_breadcrumb a:has-text("Remise")'
+      - attendre: 2
+      - cliquer: '.o_control_panel button:has-text("Nouveau")'
+      - attendre: 2
+      - champ: name
+        taper: Livraison offerte dès 25 000 F
+  - texte: >
+      La règle : un minimum d'achat. Ouvrez-la, et tapez vingt-cinq mille. Enregistrez.
+    actions:
+      - cliquer: '[name="rule_ids"] .o_kanban_record >> nth=0'
+      - attendre: 1.5
+      - taper_dans: {dans: '.modal [name="minimum_amount"] input', texte: "25000"}
+      - cliquer: '.modal-footer button:has-text("Enregistrer") >> nth=0'
+      - attendre: 1.5
+  - texte: >
+      La récompense : ouvrez-la, et dans Type de récompense, choisissez Expédition gratuite. Enregistrez, puis enregistrez le programme.
+    actions:
+      - cliquer: '[name="reward_ids"] .o_kanban_record >> nth=0'
+      - attendre: 1.5
+      - cliquer: '.modal [name="reward_type"] input'
+      - attendre: 0.5
+      - cliquer: '.o-dropdown-item:has-text("Expédition gratuite")'
+      - attendre: 1
+      - cliquer: '.modal-footer button:has-text("Enregistrer") >> nth=0'
+      - attendre: 1.5
+      - enregistrer: oui
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ partie 3 : côté cliente (≈ 1 min 30)
+  - partie: "3. Ce que voit la cliente"
+    texte: >
+      Fatou a vu votre statut WhatsApp avec le code TABASKI. Elle se connecte, et met un gâteau d'anniversaire de huit parts dans son panier.
+    actions:
+      - aller: '/web/session/logout?redirect=/web/login'
+      - attendre: 2
+      - taper_dans: {dans: 'input[name="login"]', texte: '${ODOO_CLIENTE_LOGIN}'}
+      - taper_dans: {dans: 'input[name="password"]', texte: '${ODOO_CLIENTE_MOT_DE_PASSE}'}
+      - cliquer: '.oe_login_form button[type="submit"]'
+      - attendre: 2.5
+      - aller: /shop/gateau-d-anniversaire-37
+      - attendre: 2.5
+      - cliquer: 'label:has-text("8 parts")'
+      - attendre: 0.5
+      - cliquer: '#add_to_cart'
+      - attendre: 3
+  - texte: >
+      Dans le panier, la livraison offerte apparaît déjà toute seule : sa commande dépasse vingt-cinq mille francs.
+    actions:
+      - surligner: '#cart_products'
+        duree: 3
+  - texte: >
+      Elle tape le code TABASKI, et clique sur Appliquer. La remise s'affiche : moins trois mille francs sur le gâteau.
+    actions:
+      - taper_dans: {dans: '.o_total_card input[name="promo"] >> visible=true', texte: TABASKI}
+      - cliquer: '.o_total_card :is(a,button):has-text("Appliquer") >> visible=true'
+      - attendre: 3.5
+      - surligner: '#cart_products'
+        duree: 3
+  - texte: >
+      Elle habite en banlieue : la livraison coûterait deux mille cinq cents francs. Grâce à la promotion, elle est offerte.
+    actions:
+      - cliquer: '.o_total_card a:has-text("Payer") >> visible=true'
+      - attendre: 3.5
+      - cliquer: '#o_delivery_methods li:has-text("banlieue")'
+      - attendre: 2.5
+      - surligner: '.o_total_card >> visible=true'
+        duree: 3.5
+
+  # ------------------------------------------------------------------ pièges (≈ 1 min)
+  - chapitre: Pièges fréquents
+    texte: >
+      Trois pièges fréquents. Premier piège : une remise sur toute la commande, livraison comprise. Visez une catégorie,
+      sinon vous offrez aussi la remise sur des produits où votre marge est faible.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : oublier la date de fin. Après la fête, le code continue de marcher.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : un code trop simple, comme PROMO. Il circule partout. Un code par opération : TABASKI, KORITÉ, NOËL.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice (≈ 1 min)
+  - chapitre: À retenir
+    texte: >
+      Retenons l'essentiel. Un : les promotions sont dans eCommerce, Remise et Fidélité.
+      Deux : le code promo, un mot à taper, avec une remise sur une catégorie.
+      Trois : la promotion automatique, sans code, dès un montant d'achat.
+      Quatre : toujours une date de fin, et un test au panier.
+    apres: 1.2
+    actions:
+      - illustration: images/eb-15-recap.png
+        zoom: 1.02
+  - chapitre: Exercice
+    texte: >
+      À vous de jouer : préparez le code promo de votre prochaine fête, avec une date de fin, et testez-le dans votre panier.
+      Dans la prochaine capsule, nous ferons revenir vos clientes : carte de fidélité et paniers abandonnés.
+    actions:
+      - attendre: 1
