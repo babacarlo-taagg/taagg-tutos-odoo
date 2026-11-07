@@ -92,12 +92,19 @@ etapes:
       - surligner: 'site >> #generated_tracked_link'
         duree: 3
   - texte: >
-      Pour TikTok, cliquez sur Créer un autre suivi. Recollez l'adresse de la page du gâteau ; la campagne et le médium
-      sont gardés : changez seulement la source, TikTok, et générez le lien.
+      Pour TikTok, cliquez sur Créer un autre suivi. Recollez l'adresse de la page du gâteau, choisissez de nouveau
+      la campagne et le médium, puis la source : TikTok. Et générez le lien.
     actions:
       - cliquer: 'site >> button:has-text("Créer un autre")'
       - attendre: 2
       - taper_dans: {dans: 'site >> #url', texte: "https://edu-correction-les-delices-de-maimouna.odoo.com/shop/gateau-d-anniversaire-37"}
+      # Odoo laisse la campagne et le médium affichés mais ne les envoie pas : il faut les choisir de nouveau
+      - taper_dans: {dans: 'site >> input[placeholder^="par ex. June"]', texte: Anniversaires novembre}
+      - attendre: 1
+      - cliquer: 'site >> .o-dropdown-item:has-text("Anniversaires novembre") >> nth=0'
+      - taper_dans: {dans: 'site >> input[placeholder^="par ex. InMails"]', texte: Social}
+      - attendre: 1
+      - cliquer: 'site >> .o-dropdown-item:has-text("Social") >> nth=0'
       - cliquer: 'site >> input[placeholder^="par ex. LinkedIn"]'
       - taper_dans: {dans: 'site >> input[placeholder^="par ex. LinkedIn"]', texte: TikTok}
       - attendre: 1
