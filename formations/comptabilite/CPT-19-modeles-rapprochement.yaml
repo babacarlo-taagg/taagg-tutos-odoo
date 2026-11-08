@@ -1,0 +1,148 @@
+# CPT-19 · Les modèles de rapprochement [E]
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-19`) :
+#   le modèle « Frais bancaires » tel que livré par Odoo : manuel, libellé contient « Bank Fees », contrepartie 601100 ;
+#   aucun relevé « novembre-2 ». (Le relevé de CPT-17/18 peut rester tel quel : toutes ses lignes sont rapprochées.)
+# Odoo 19 : pas de menu Configuration › Modèles de rapprochement ; on passe par le menu « ⋮ » de la carte Banque › Modèles.
+# Fichier importé : formations/comptabilite/fichiers/releve-banque-novembre-2.csv (2 lignes de frais : −1 000 et −500).
+# Ce que la capsule fait : modèle corrigé (libellé contient FRAIS, journal Banque, compte 631800, libellé « Frais bancaires »),
+#   automatisé, puis import du relevé : les deux frais sont rapprochés tout seuls. etat-depart.py remet tout comme avant.
+titre: Les modèles de rapprochement
+sous_titre: Formation Comptabilité Odoo · CPT-19
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+  CSV: C S V
+  Charger: Chargé
+  Tester: Testé
+  Importer: Importé
+  Automatiser: Automatisé
+fin:
+  message: "Prochaine capsule : la caisse"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette dix-neuvième capsule. Chaque mois, les mêmes frais bancaires reviennent sur le relevé,
+      et chaque mois, il faut les rapprocher à la main. Un modèle de rapprochement le fait à votre place.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez régler un modèle, l'automatiser, et le voir travailler sur un nouveau relevé.
+      Comme le rapprochement, les modèles font partie de la version Enterprise d'Odoo.
+    actions:
+      - surligner: '.o_kanban_record:has-text("Banque")'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 1 : trouver les modèles
+  - partie: "1. Trouver les modèles"
+    texte: >
+      Sur la carte Banque, ouvrez le petit menu, en haut à droite, puis choisissez Modèles.
+    actions:
+      - cliquer: '.o_kanban_record:has-text("Banque") .o_dropdown_kanban .dropdown-toggle'
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Modèles"), .o-dropdown--menu a:text-is("Modèles")'
+  - texte: >
+      Odoo en fournit deux : Virements internes, et Frais bancaires. Ouvrez Frais bancaires.
+    actions:
+      - surligner: '.o_list_renderer'
+        duree: 2.5
+      - cliquer: '.o_data_row:has-text("Frais bancaires") td.o_data_cell'
+
+  # ------------------------------------------------------------------ partie 2 : régler le modèle
+  - partie: "2. Régler le modèle"
+    texte: >
+      Tel quel, il ne servira jamais : il cherche le libellé anglais Bank Fees, et il range les frais dans les achats de marchandises.
+    actions:
+      - surligner_champ: match_label_param
+        duree: 2.5
+      - surligner: '.o_field_widget[name="line_ids"] .o_data_row td[name="account_id"]'
+        duree: 2.5
+  - texte: >
+      Sur nos relevés, tous les frais commencent par le mot FRAIS. Écrivez-le dans le libellé. Et limitez le modèle au journal Banque.
+    actions:
+      - champ: match_label_param
+        taper: FRAIS
+      - choisir: {champ: match_journal_ids, valeur: Banque}
+  - texte: >
+      Dans les éléments de contrepartie, remplacez le compte par celui des frais bancaires, six cent trente et un mille huit cents,
+      et le libellé par : Frais bancaires.
+    actions:
+      - cliquer: '.o_field_widget[name="line_ids"] .o_data_row td[name="account_id"]'
+      - choisir: {champ: account_id, valeur: "631800"}
+      - champ: label
+        taper: Frais bancaires
+      - enregistrer: oui
+
+  # ------------------------------------------------------------------ partie 3 : automatiser
+  - partie: "3. Automatiser"
+    texte: >
+      Le modèle est encore manuel : il se propose, mais attend votre clic. Cliquez sur Automatiser : désormais,
+      Odoo l'applique tout seul, dès qu'une ligne correspond.
+    actions:
+      - surligner: '.o_statusbar_status'
+        duree: 2
+      - cliquer: '.o_statusbar_buttons button:has-text("Automatiser")'
+      - attendre: 1
+      - surligner: '.o_statusbar_status'
+        duree: 2
+
+  # ------------------------------------------------------------------ partie 4 : le résultat
+  - partie: "4. Le modèle au travail"
+    texte: >
+      Vérifions. Revenez au tableau de bord, ouvrez Transactions, et chargez le relevé de la deuxième quinzaine de novembre.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Tableau de bord")'
+      - cliquer: '.o_kanban_record:has-text("Banque") button:has-text("Transactions")'
+      - televerser:
+          cliquer: '.o_control_panel button:has-text("Charger")'
+          fichier: formations/comptabilite/fichiers/releve-banque-novembre-2.csv
+  - texte: "Deux lignes : des frais de virement, et des frais d'alerte SMS. Cliquez sur Importer."
+    actions:
+      - surligner: 'table'
+        duree: 2.5
+      - cliquer: '.o_control_panel button:has-text("Importer")'
+      - attendre: 3
+  - texte: >
+      Revenez à la réconciliation bancaire. Les deux frais sont déjà rapprochés, sur le compte des frais bancaires,
+      sans un seul clic.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Réconciliation")'
+      - attendre: 2
+      - surligner_texte: FRAIS VIREMENT SORTANT
+        duree: 2.5
+      - surligner_texte: FRAIS SMS BANKING NOVEMBRE
+        duree: 2.5
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : un libellé trop large. Si un client s'appelle Frais et fils, son virement
+      partirait en frais bancaires. Choisissez un mot que seuls les frais contiennent.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : automatiser trop tôt. Laissez d'abord le modèle en manuel quelques semaines, et vérifiez ce qu'il propose.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : oublier de limiter le journal. Un modèle pour la banque n'a rien à faire sur Wave ou sur la caisse.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Un modèle de rapprochement reconnaît une ligne par son libellé, et la range sur le bon compte.
+      En manuel, il propose ; automatisé, il rapproche tout seul.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : créez un modèle pour les agios de votre banque, laissez-le en manuel un mois, puis automatisez-le.
+      Dans la prochaine capsule, nous passerons à la caisse. À tout de suite !
+    actions:
+      - attendre: 1

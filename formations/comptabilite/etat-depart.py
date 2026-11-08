@@ -458,8 +458,39 @@ def cpt_18():
     return odoo('account.bank.statement.line', 'search_read', [['journal_id', '=', banque], ['is_reconciled', '=', False]], ['payment_ref', 'amount'])
 
 
+def cpt_19():
+    # le modèle « Frais bancaires » (livré par Odoo : manuel, libellé « Bank Fees », compte 601100) est corrigé et automatisé
+    # à l'écran, puis un second relevé (2 lignes de frais) est importé : on remet le modèle d'origine et on supprime ce relevé
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    modele = odoo('account.reconcile.model', 'search', [['name', '=', 'Frais bancaires']], context=fr)
+    if modele:
+        odoo('account.reconcile.model', 'write', modele, {'trigger': 'manual', 'match_label': 'contains', 'match_label_param': 'Bank Fees',
+                                                          'match_journal_ids': [[6, 0, []]]}, context=fr)
+        lignes_modele = odoo('account.reconcile.model', 'read', modele, ['line_ids'], context=fr)[0]['line_ids']
+        achats = odoo('account.account', 'search', [['code', '=', '601100']], context=fr)
+        odoo('account.reconcile.model.line', 'write', lignes_modele[:1], {'account_id': achats[0], 'label': 'Bank Fees'}, context=fr)
+        if len(lignes_modele) > 1:
+            odoo('account.reconcile.model.line', 'unlink', lignes_modele[1:], context=fr)
+    banque = odoo('account.journal', 'search', [['code', '=', 'BNK1'], ['company_id', '=', SOCIETE]])[0]
+    lignes = odoo('account.bank.statement.line', 'search', [['journal_id', '=', banque],
+                  ['payment_ref', 'in', ['FRAIS VIREMENT SORTANT', 'FRAIS SMS BANKING NOVEMBRE']]], context=fr)
+    releves = set()
+    for l in lignes:
+        info = odoo('account.bank.statement.line', 'read', [l], ['is_reconciled', 'statement_id'], context=fr)[0]
+        if info['is_reconciled']:
+            odoo('account.bank.statement.line', 'action_undo_reconciliation', [l], context=fr)
+        if info['statement_id']:
+            releves.add(info['statement_id'][0])
+    if releves:
+        odoo('account.bank.statement', 'unlink', list(releves), context=fr)
+    lignes = odoo('account.bank.statement.line', 'search', [['id', 'in', lignes]], context=fr)
+    if lignes:
+        odoo('account.bank.statement.line', 'unlink', lignes, context=fr)
+    return len(lignes), len(releves)
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''
