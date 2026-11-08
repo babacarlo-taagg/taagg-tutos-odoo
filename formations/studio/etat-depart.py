@@ -170,14 +170,62 @@ def stu_05():
     return devis_demo(), fin_stu_02()
 
 
-CAPSULES = {'STU-01': stu_01, 'STU-02': stu_02, 'STU-03': stu_03, 'STU-04': stu_04, 'STU-05': stu_05}
+REGLE_STU06 = 'Mariage confirmé → dégustation'
+REF_DEVIS_TEST = 'Mariage Sarr'  # devis confirmé à l'écran dans STU-06 (Khady Sarr, client de démonstration)
+CLIENT_TEST = 34
+
+
+def devis_test_stu06():
+    """Le devis « Mariage Sarr » en brouillon : 100 × Fraisier à 8 000 F, Mariage, 100 convives. Créé s'il manque."""
+    ids = odoo('sale.order', 'search', [['client_order_ref', '=', REF_DEVIS_TEST]])
+    if not ids:
+        if not (OUI or PREPARER):
+            print(f'  à créer  devis de démonstration « {REF_DEVIS_TEST} » (Khady Sarr, Mariage, 100 convives)')
+            return None
+        ids = [odoo('sale.order', 'create', {'partner_id': CLIENT_TEST, 'client_order_ref': REF_DEVIS_TEST, 'user_id': FORMATEUR,
+                                             'x_studio_type_evenement': 'Mariage', 'x_studio_nombre_de_convives': 100,
+                                             'order_line': [[0, 0, {'product_id': FRAISIER, 'name': 'Fraisier — buffet de mariage',
+                                                                    'product_uom_qty': 100, 'price_unit': 8000}]]})]
+    return odoo('sale.order', 'read', ids, fields=['name', 'state'])[0]
+
+
+def stu_06():
+    # STU-06 crée à l'écran la règle « Mariage confirmé → dégustation » (statut défini sur Commande client, appliquée aux
+    # mariages, action : activité pour le vendeur du devis) et confirme le devis « Mariage Sarr ».
+    # Remise à zéro : la règle et ses actions, le devis « Mariage Sarr » (annulé puis retiré, avec sa livraison et
+    # ses activités), puis la fin de STU-02 ; le devis « Mariage Sarr » est recréé en brouillon.
+    regles = odoo('base.automation', 'search', [['name', '=', REGLE_STU06]], context={'active_test': False})
+    if regles:
+        actions = odoo('ir.actions.server', 'search', [['base_automation_id', 'in', regles]])
+        retirer('base.automation', regles, 'règle d\'automatisation')
+        if OUI and actions:
+            actions = odoo('ir.actions.server', 'search', [['id', 'in', actions]])
+        retirer('ir.actions.server', actions, 'actions de la règle')
+    devis = odoo('sale.order', 'search_read', [['client_order_ref', '=', REF_DEVIS_TEST]], fields=['name', 'state'])
+    for d in devis:
+        if d['state'] == 'sale':
+            print(('  ANNULÉ  ' if OUI else '  à annuler  ') + f"devis {d['name']} (et sa livraison)")
+            if OUI:
+                odoo('sale.order', 'action_cancel', [d['id']])
+        livraisons = odoo('stock.picking', 'search', [['origin', '=', d['name']]])
+        if OUI and livraisons:
+            odoo('stock.picking', 'action_cancel', livraisons)
+        retirer('stock.picking', livraisons, 'livraison du devis de test')
+        retirer('sale.order', [d['id']], 'devis de test')
+    defaire_champs('sale.order', champs_studio('sale.order', ["Type d'événement", 'Nombre de convives', 'Prix par convive',
+                                                              'Nouveau Sélection', 'Nouveau Entier']))
+    return devis_demo(), fin_stu_02(), devis_test_stu06()
+
+
+CAPSULES = {'STU-01': stu_01, 'STU-02': stu_02, 'STU-03': stu_03, 'STU-04': stu_04, 'STU-05': stu_05, 'STU-06': stu_06}
 
 if __name__ == '__main__':
     code = next((a for a in sys.argv[1:] if not a.startswith('--')), '')
     if PREPARER:
         # --preparer : seulement créer ce qui manque (devis, livraison, fin de STU-02), sans rien retirer
         print(code, '— préparation (création seulement) :', devis_demo(), livraison_demo(),
-              fin_stu_02() if code in ('STU-04', 'STU-05', 'STU-06', 'STU-07') else '')
+              fin_stu_02() if code in ('STU-04', 'STU-05', 'STU-06', 'STU-07') else '',
+              devis_test_stu06() if code == 'STU-06' else '')
         sys.exit(0)
     if code not in CAPSULES:
         sys.exit(f"Capsule inconnue : {code} (connues : {', '.join(CAPSULES)})")

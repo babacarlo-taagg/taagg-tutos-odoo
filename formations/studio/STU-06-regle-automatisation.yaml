@@ -1,0 +1,176 @@
+# STU-06 · Une règle d'automatisation : le mariage confirmé
+# État de départ attendu (`python3 formations/studio/etat-depart.py STU-06 --preparer` sur une base remise à zéro) :
+#   la fin de STU-02 (« Type d'événement », « Nombre de convives » sous le client) ; le devis « Mariage Ndiaye » (S00083)
+#   et le devis de test « Mariage Sarr » (Khady Sarr, Mariage, 100 convives, 100 × Fraisier) en brouillon ;
+#   aucune règle d'automatisation.
+# Ce que la capsule crée : la règle « Mariage confirmé → dégustation » (le statut est défini sur Commande client,
+#   appliquée aux devis dont le type est Mariage) et son action « Créer une activité » (To-Do, traduction manquante dans la base, « Préparer la
+#   dégustation », échéance 3 jours, pour le vendeur du devis). Le devis « Mariage Sarr » est confirmé à l'écran :
+#   Odoo crée sa livraison et l'activité. etat-depart.py STU-06 --oui défait tout cela.
+# L'activité va au vendeur du devis (choix de Babacar) : un rôle plutôt qu'un nom, la règle survit aux départs.
+titre: "Une règle d'automatisation : le mariage confirmé"
+sous_titre: Formation Studio Odoo · STU-06
+depart: /odoo/sales?debug=1
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+  To-Do: tou dou
+fin:
+  message: "Prochaine capsule : le devis PDF"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour. Deux fois cette année, la cuisine des Délices de Maïmouna a appris la veille qu'elle devait préparer
+      un mariage de trois cents couverts. Aujourd'hui, nous allons faire en sorte qu'Odoo prévienne tout seul,
+      le jour même de la confirmation.
+    actions:
+      - attendre: 1
+  - texte: >
+      Une automatisation se dit toujours en une phrase : QUAND quelque chose arrive, SI une condition est remplie,
+      ALORS Odoo fait une action. Ici : quand un devis devient une commande, si c'est un mariage, alors on crée
+      une activité « Préparer la dégustation » pour le vendeur.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : le déclencheur
+  - partie: "1. QUAND : le déclencheur"
+    texte: Ouvrons un devis, puis Studio, et le menu Automatisations.
+    actions:
+      - rechercher: Mariage Ndiaye
+      - cliquer: '.o_data_row td[name="name"]'
+      - cliquer: '[title="Toggle Studio"]'
+      - attendre: 1.5
+      - cliquer: '.o_web_studio_menu .o_menu_sections button:has-text("Automatisations")'
+      - attendre: 1.5
+  - texte: >
+      Cliquez sur Nouveau. Donnez à la règle un nom qui dit QUAND et ALORS : on la relit en un coup d'œil.
+    actions:
+      - cliquer: '.o_control_panel button:has-text("Nouveau")'
+      - ecrire: '.o_field_widget[name="name"] input'
+        taper: Mariage confirmé → dégustation
+  - texte: >
+      Le déclencheur : Le statut est défini sur. Il agit au moment précis où le devis change de statut,
+      et pas à chaque modification.
+    actions:
+      - cliquer: '.o_field_widget[name="trigger"] input'
+      - cliquer: '.o_select_menu_item:has-text("Le statut est défini sur")'
+      - attendre: 1
+  - texte: "Quel statut ? Commande client : c'est l'état d'un devis confirmé."
+    actions:
+      - choisir: {champ: trg_selection_field_id, valeur: Commande client}
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 2 : la condition
+  - partie: "2. SI : la condition"
+    texte: >
+      Maintenant, la condition. Dans Appliquer sur, cliquez sur Modifier le domaine : la règle ne concernera
+      que les devis qui correspondent.
+    actions:
+      - cliquer: ':nth-match(button:has-text("Modifier le domaine"), 2)'
+      - attendre: 1
+  - texte: Ajoutez une règle, choisissez le champ Type d'événement, et la valeur Mariage.
+    actions:
+      - cliquer: '.modal a:has-text("Nouvelle règle")'
+      - cliquer: '.modal .o_model_field_selector'
+      - ecrire: '.o_model_field_selector_popover_search input'
+        taper: Type
+      - cliquer: '.o_model_field_selector_popover li[data-name="x_studio_type_evenement"] button'
+      - selectionner: {dans: '.modal .o_tree_editor_editor select', option: est égal à}
+      - selectionner: {dans: ':nth-match(.modal .o_tree_editor_editor select, 2)', option: Mariage}
+      - attendre: 1
+  - texte: Confirmez. Seuls les mariages déclencheront la règle.
+    actions:
+      - cliquer: '.modal-footer button:has-text("Confirmer")'
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 3 : l'action
+  - partie: "3. ALORS : l'action"
+    texte: >
+      Reste l'action. Cliquez sur Ajouter une action. Odoo sait mettre à jour la fiche, envoyer un e-mail ou un SMS,
+      ajouter des abonnés… Choisissez Créer une activité.
+    actions:
+      - cliquer: 'button:has-text("Ajouter une action")'
+      - attendre: 1.5
+      - cliquer: '.modal .o_field_widget[name="state"] span:has-text("Créer une activité")'
+      - attendre: 1
+  - texte: "Le type : To-Do, c'est-à-dire à faire. Le titre : Préparer la dégustation. L'échéance : dans trois jours."
+    actions:
+      - choisir: {champ: activity_type_id, valeur: To-Do}
+      - ecrire: '.modal .o_field_widget[name="activity_summary"] input'
+        taper: Préparer la dégustation
+      - ecrire: '.modal .o_field_widget[name="activity_date_deadline_range"] input'
+        taper: '3'
+      - attendre: 1
+  - texte: >
+      Pour qui ? Plutôt qu'un nom, choisissez un rôle : un utilisateur dynamique, ici le vendeur du devis.
+      Le jour où quelqu'un quitte l'entreprise, la règle continue de fonctionner.
+    actions:
+      - cliquer: '.modal .o_field_widget[name="activity_user_type"] input'
+      - cliquer: '.o_select_menu_item:has-text("dynamique")'
+      - attendre: 1.5
+  - texte: Enregistrez l'action, puis la règle. Elle est active immédiatement.
+    actions:
+      - cliquer: '.modal-footer button:has-text("Enregistrer & Fermer")'
+      - attendre: 1
+      - cliquer: '.o_form_button_save'
+      - attendre: 1.5
+  - texte: Fermez Studio.
+    actions:
+      - cliquer: '.o_studio_navbar a.btn-primary:has-text("Fermer")'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ partie 4 : tester
+  - partie: "4. Tester"
+    texte: Testons sur un autre mariage, celui de la famille Sarr, encore en devis.
+    actions:
+      - aller: /odoo/sales?debug=1
+      - rechercher: Mariage Sarr
+      - cliquer: '.o_data_row td[name="name"]'
+  - texte: Le client accepte. Cliquez sur Confirmer.
+    actions:
+      - cliquer: 'button[name="action_confirm"]:visible'
+      - attendre: 2
+  - texte: >
+      Le devis devient une commande, et à droite, une activité est apparue toute seule : Préparer la dégustation,
+      pour le vendeur, dans trois jours. Personne n'a eu à y penser.
+    actions:
+      - surligner_texte: Préparer la dégustation
+        duree: 3
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : un déclencheur trop large. Avec « à la mise à jour » sans précaution,
+      chaque modification d'un mariage confirmé créerait une nouvelle activité. Au bout d'une semaine,
+      le vendeur en aurait quinze, et n'en lirait plus aucune.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : une boucle. Si l'action modifie le champ qui déclenche la règle, la règle se relance sans fin.
+      Ne surveillez jamais le champ que vous modifiez.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : tester sur de vrais clients. Une règle qui envoie un e-mail se teste d'abord avec un contact
+      dont l'adresse est la vôtre. Et si une règle se trompe, archivez-la : elle s'arrête sans rien perdre.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. On écrit d'abord la phrase QUAND, SI, ALORS. Dans Studio, Automatisations, Nouveau :
+      le déclencheur, le domaine dans Appliquer sur, puis Ajouter une action. Et on teste sur un devis de test.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : créez une règle qui, quand un devis de séminaire est confirmé, ajoute une activité
+      « Réserver la salle ». Dans la prochaine capsule, nous ferons apparaître l'événement sur le devis PDF.
+      À tout de suite !
+    actions:
+      - attendre: 1
