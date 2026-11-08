@@ -185,7 +185,7 @@ etapes:
       - enregistrer: oui
   - texte: >
       Le devis porte maintenant son événement. Une liste de choix fixes garantit des valeurs propres :
-      vous pourrez compter vos mariages, et non des mariage, MARIAGE ou mariage Thiès.
+      pas de fautes de frappe ni de variantes écrites à la main. Vous pourrez compter vos mariages sans vous tromper.
     actions:
       - surligner_champ: x_studio_type_evenement
         duree: 3

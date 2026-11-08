@@ -168,7 +168,8 @@ etapes:
   - partie: "Les pièges à éviter"
     texte: >
       Trois pièges fréquents. Premier piège : un texte à la place d'un Many2One. Un livreur tapé à la main,
-      Modou, modou F., ne se relie à personne : impossible de compter les livraisons par livreur.
+      avec son nom écrit de trois façons différentes, ne se relie à personne : impossible de compter les livraisons
+      par livreur.
     actions:
       - attendre: 1
   - texte: >

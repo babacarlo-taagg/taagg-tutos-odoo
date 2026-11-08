@@ -12,6 +12,7 @@ voix:
   vitesse: 1.0
 prononciation:
   TAAGG: Tag
+  Fermer: Fermé
 fin:
   message: "Prochaine capsule : ajouter des champs"
   lien: taagg-gui.com
@@ -102,7 +103,7 @@ etapes:
       - cliquer: '.o_web_studio_menu .o_menu_sections button:has-text("Vues")'
       - attendre: 2
   - texte: >
-      Formulaire, liste, kanban, calendrier, graphique… Studio peut modifier chacune séparément.
+      Formulaire, liste, kanban, calendrier, graphique : Studio peut modifier chacune séparément.
     actions:
       - surligner: '.o_web_studio_thumbnail_list'
         duree: 2
