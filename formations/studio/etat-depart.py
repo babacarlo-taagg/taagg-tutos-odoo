@@ -160,7 +160,14 @@ def stu_04():
     return devis_demo(), fin_stu_02()
 
 
-CAPSULES = {'STU-01': stu_01, 'STU-02': stu_02, 'STU-03': stu_03, 'STU-04': stu_04}
+def stu_05():
+    # STU-05 part de la fin de STU-02 et crée « Prix par convive » (Monétaire calculé, stocké) sur les devis.
+    defaire_champs('sale.order', champs_studio('sale.order', ["Type d'événement", 'Nombre de convives', 'Prix par convive',
+                                                              'Nouveau Monétaire', 'Nouveau Sélection', 'Nouveau Entier']))
+    return devis_demo(), fin_stu_02()
+
+
+CAPSULES = {'STU-01': stu_01, 'STU-02': stu_02, 'STU-03': stu_03, 'STU-04': stu_04, 'STU-05': stu_05}
 
 if __name__ == '__main__':
     code = next((a for a in sys.argv[1:] if not a.startswith('--')), '')

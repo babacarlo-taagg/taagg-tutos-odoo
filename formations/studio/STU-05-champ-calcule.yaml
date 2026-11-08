@@ -1,0 +1,183 @@
+# STU-05 · Un champ calculé : le prix par convive
+# État de départ attendu : la fin de STU-02 recréée par l'API (`python3 formations/studio/etat-depart.py STU-05 --preparer`
+#   sur une base remise à zéro) : « Type d'événement » et « Nombre de convives » sous le client, le devis
+#   « Mariage Ndiaye » (S00083) avec Mariage, 150 convives, 1 200 000 F hors taxes.
+# Ce que la capsule crée : x_studio_prix_par_convive (Monétaire, calculé, stocké ; dépendances amount_untaxed et
+#   x_studio_nombre_de_convives), sa place sous le nombre de convives (Studio ajoute aussi la Devise à côté).
+#   Le nombre de convives du devis passe à 160 puis revient à 150.
+# Calcul sur le montant HORS TAXES : 1 200 000 / 150 = 8 000 F (avec la TVA, 1 416 000 / 150 donnerait 9 440 F).
+titre: "Un champ calculé : le prix par convive"
+sous_titre: Formation Studio Odoo · STU-05
+depart: /odoo/settings#sale_management
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+  record: rékord
+  self: self
+fin:
+  message: "Prochaine capsule : une règle d'automatisation"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour. Maïmouna compare ses mariages au prix par convive. Aujourd'hui, elle le calcule à la main
+      sur son téléphone. Dans cette capsule, Odoo va le calculer pour elle, à partir du total du devis
+      et du nombre de convives.
+    actions:
+      - attendre: 1
+  - texte: >
+      Un champ calculé ne se saisit pas : Odoo le remplit tout seul. C'est la limite du sans-code :
+      nous écrirons deux lignes de Python, pas plus.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : le standard d'abord
+  - partie: "1. Vérifier le standard d'abord"
+    texte: >
+      Avant de créer un champ calculé, vérifiez qu'Odoo ne le fait pas déjà. Dans les paramètres des ventes,
+      cherchons Marges.
+    actions:
+      - ecrire: '.o_searchview_input'
+        taper: Marges
+      - attendre: 1
+  - texte: >
+      La marge sur les ventes existe en standard : il suffit de cocher cette case, inutile de la recalculer.
+      Le prix par convive, lui, n'existe pas : nous le créons.
+    actions:
+      - surligner_texte: Marges
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 2 : le champ Monétaire
+  - partie: "2. Le champ Monétaire"
+    texte: Ouvrons le devis du mariage de la famille Ndiaye, puis Studio.
+    actions:
+      - aller: /odoo/sales?debug=1
+      - rechercher: Mariage Ndiaye
+      - cliquer: '.o_data_row td[name="name"]'
+      - cliquer: '[title="Toggle Studio"]'
+      - attendre: 2
+  - texte: >
+      Un prix, c'est un montant en francs CFA : prenez Monétaire, et glissez-le sous le nombre de convives.
+      Studio ajoute aussi la devise, juste en dessous.
+    actions:
+      - deposer: '.o_web_studio_sidebar .o_web_studio_component:has-text("Monétaire")'
+        sur: '.o_web_studio_form_view_editor [data-field-name="partner_invoice_id"]'
+        decalage: [0, -12]
+      - attendre: 1
+  - texte: "Le libellé : Prix par convive. Puis le nom technique : prix par convive."
+    actions:
+      - ecrire: '.o_web_studio_sidebar input#string'
+        taper: Prix par convive
+      - touche: Tab
+      - attendre: 1
+      - ecrire: '.o_web_studio_sidebar input#technical_name'
+        taper: prix_par_convive
+      - touche: Tab
+      - touche: Escape
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ partie 3 : le calcul
+  - partie: "3. Écrire le calcul"
+    texte: >
+      Le calcul ne se règle pas dans ce panneau. En bas, cliquez sur Plus : Odoo ouvre la fiche technique du champ.
+    actions:
+      - cliquer: '.o_web_studio_sidebar button:has-text("Plus")'
+      - attendre: 2
+  - texte: >
+      Ouvrez l'onglet Calculer. Odoo rappelle en dessous comment on écrit un champ calculé.
+    actions:
+      - cliquer: '.o_notebook .nav-link:has-text("Calculer")'
+      - attendre: 1.5
+  - texte: >
+      D'abord, les dépendances : les champs qui, en changeant, doivent relancer le calcul.
+      Ici, le montant hors taxes, et le nombre de convives.
+    actions:
+      - ecrire: '.o_field_widget[name="depends"] input'
+        taper: amount_untaxed, x_studio_nombre_de_convives
+      - attendre: 1
+  - texte: >
+      Puis le calcul. Première ligne : pour chaque devis. Odoo calcule souvent plusieurs fiches à la fois.
+    actions:
+      - cliquer: '.o_field_widget[name="compute"] .ace_content'
+      - clavier: "for record in self:\n"
+  - texte: >
+      Deuxième ligne : le prix par convive vaut le montant hors taxes divisé par le nombre de convives,
+      s'il y en a. Sinon, zéro. Ce « sinon » est obligatoire : chaque devis doit recevoir une valeur.
+    actions:
+      - clavier: "record['x_studio_prix_par_convive'] = record.amount_untaxed / record.x_studio_nombre_de_convives if record.x_studio_nombre_de_convives else 0"
+      - attendre: 1
+  - texte: Enregistrez.
+    actions:
+      - cliquer: '.o_form_button_save'
+      - attendre: 1.5
+  - texte: >
+      Dans l'onglet Propriétés, la case Enregistré est cochée : la valeur est gardée en base. On pourra donc
+      trier et regrouper les devis par prix par convive. Fermez Studio.
+    actions:
+      - cliquer: '.o_notebook .nav-link:has-text("Propriétés")'
+      - surligner_texte: Enregistré
+        duree: 2
+      - cliquer: '.o_studio_navbar a.btn-primary:has-text("Fermer")'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ partie 4 : tester
+  - partie: "4. Tester"
+    texte: >
+      Surprise : le prix par convive affiche zéro. Un champ calculé ajouté après coup ne recalcule pas tout seul
+      les devis déjà existants. Il attend qu'une de ses dépendances change.
+    actions:
+      - surligner_champ: x_studio_prix_par_convive
+        duree: 3
+  - texte: Passons à cent soixante convives.
+    actions:
+      - ecrire: '.o_field_widget[name="x_studio_nombre_de_convives"] input'
+        taper: '160'
+      - touche: Tab
+      - attendre: 1.5
+  - texte: "Le calcul se fait aussitôt : un million deux cent mille divisé par cent soixante, sept mille cinq cents francs."
+    actions:
+      - surligner_champ: x_studio_prix_par_convive
+        duree: 2.5
+  - texte: "Revenons à cent cinquante, et enregistrez : huit mille francs par convive."
+    actions:
+      - ecrire: '.o_field_widget[name="x_studio_nombre_de_convives"] input'
+        taper: '150'
+      - touche: Tab
+      - enregistrer: oui
+      - surligner_champ: x_studio_prix_par_convive
+        duree: 2.5
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : oublier une dépendance. Le calcul ne se relance plus quand ce champ change,
+      et la valeur affichée devient fausse sans que personne ne s'en aperçoive.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : les devis existants restent à zéro. Après avoir créé le champ, prévoyez de les mettre à jour,
+      ou prévenez le client que seuls les nouveaux devis seront calculés.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : aller trop loin. Si la formule dépasse quelques lignes ou va chercher des données dans
+      trois écrans différents, arrêtez-vous : c'est un travail de développeur, à faire dans un module.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. On vérifie d'abord le standard. On crée le champ avec Studio, puis Plus, onglet Calculer :
+      les dépendances, et deux lignes de calcul qui donnent toujours une valeur. Et on teste avec un vrai devis.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : créez un champ Acompte, égal à la moitié du total du devis. Dans la prochaine capsule,
+      Odoo agira tout seul : nous créerons une règle d'automatisation. À tout de suite !
+    actions:
+      - attendre: 1

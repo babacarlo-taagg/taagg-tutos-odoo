@@ -371,6 +371,10 @@ class Realisateur {
       await this.cliquer(p.locator('.o_menu_sections .dropdown-toggle').filter({ hasText: a.ouvrir_menu }).first());
     } else if ('onglet' in a) {
       await this.cliquer(p.locator('.o_notebook .nav-link').filter({ hasText: a.onglet }).first());
+    } else if ('clavier' in a) {
+      // tape au clavier là où se trouve le curseur (éditeur de code d'Odoo, qui gère seul les retraits) ; \n = Entrée
+      await p.keyboard.type(String(a.clavier), { delay: 45 });
+      await pause(300);
     } else if ('ecrire' in a) {
       // taper dans n'importe quelle case visée par un sélecteur (panneau de Studio, fenêtre de condition…)
       await this.taper(p.locator(a.ecrire).filter({ visible: true }).first(), a.taper ?? '', a.entree);
