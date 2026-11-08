@@ -486,6 +486,16 @@ def cpt_19():
     lignes = odoo('account.bank.statement.line', 'search', [['id', 'in', lignes]], context=fr)
     if lignes:
         odoo('account.bank.statement.line', 'unlink', lignes, context=fr)
+    # les lignes ajoutées après l'import de CPT-17 (frais saisis à la main, virement du traiteur) n'ont pas de relevé :
+    # le relevé importé ici paraîtrait « invalide » (solde de départ faux). On les range dans le relevé de CPT-17.
+    premiere = odoo('account.bank.statement.line', 'search_read', [['journal_id', '=', banque], ['payment_ref', 'like', 'VIR GRANDS MOULINS']], ['statement_id'])
+    if premiere and premiere[0]['statement_id']:
+        releve = premiere[0]['statement_id'][0]
+        orphelines = odoo('account.bank.statement.line', 'search', [['journal_id', '=', banque], ['statement_id', '=', False]])
+        if orphelines:
+            odoo('account.bank.statement.line', 'write', orphelines, {'statement_id': releve}, context=fr)
+        fin = odoo('account.bank.statement', 'read', [releve], ['balance_end'], context=fr)[0]['balance_end']
+        odoo('account.bank.statement', 'write', [releve], {'balance_end_real': fin}, context=fr)
     return len(lignes), len(releves)
 
 
