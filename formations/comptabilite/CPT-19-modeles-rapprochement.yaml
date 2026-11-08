@@ -51,7 +51,7 @@ etapes:
     actions:
       - surligner: '.o_list_renderer'
         duree: 2.5
-      - cliquer: '.o_data_row:has-text("Frais bancaires") td.o_data_cell'
+      - cliquer: '.o_data_row:has-text("Frais bancaires") td[name="name"]'
 
   # ------------------------------------------------------------------ partie 2 : régler le modèle
   - partie: "2. Régler le modèle"
