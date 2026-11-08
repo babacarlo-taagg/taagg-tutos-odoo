@@ -70,7 +70,10 @@ def defaire_champs(modele, ids):
                 fields=['arch_db'], context={'active_test': False})
     retirer('ir.ui.view', [v['id'] for v in vues if any(n in v['arch_db'] for n in noms)], 'vue Studio qui affiche ces champs')
     retirer('ir.default', odoo('ir.default', 'search', [['field_id', 'in', ids]]), 'valeurs par défaut')
-    retirer('ir.model.fields', ids, 'champs Studio')
+    # les champs calculés d'abord : Odoo refuse de retirer un champ dont un autre dépend
+    calcules = [c['id'] for c in odoo('ir.model.fields', 'read', ids, fields=['depends']) if c['depends']]
+    retirer('ir.model.fields', calcules, 'champs Studio calculés')
+    retirer('ir.model.fields', [i for i in ids if i not in calcules], 'champs Studio')
 
 
 def devis_demo():

@@ -102,7 +102,7 @@ etapes:
   - texte: >
       Puis le calcul. Première ligne : pour chaque devis. Odoo calcule souvent plusieurs fiches à la fois.
     actions:
-      - cliquer: '.o_field_widget[name="compute"] .ace_content'
+      - cliquer: '.o_field_widget[name="compute"] .ace_editor'
       - clavier: "for record in self:\n"
   - texte: >
       Deuxième ligne : le prix par convive vaut le montant hors taxes divisé par le nombre de convives,
@@ -119,7 +119,7 @@ etapes:
       trier et regrouper les devis par prix par convive. Fermez Studio.
     actions:
       - cliquer: '.o_notebook .nav-link:has-text("Propriétés")'
-      - surligner_texte: Enregistré
+      - surligner_champ: store
         duree: 2
       - cliquer: '.o_studio_navbar a.btn-primary:has-text("Fermer")'
       - attendre: 2
