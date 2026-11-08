@@ -56,6 +56,7 @@ etapes:
       - ecrire: '.o_web_studio_sidebar input#string'
         taper: Événement
       - touche: Tab
+      - touche: Escape
       - attendre: 1.5
   - texte: Faites maintenant glisser le type d'événement dans l'onglet.
     actions:
@@ -64,8 +65,7 @@ etapes:
   - texte: Et le nombre de convives, juste en dessous.
     actions:
       - deposer: '.o_web_studio_form_view_editor .o_wrap_label[data-field-name="x_studio_nombre_de_convives"]'
-        sur: '.o_web_studio_form_view_editor .o_notebook .tab-pane.active .o_wrap_label[data-field-name="x_studio_type_evenement"]'
-        decalage: [0, 20]
+        sur: '.o_web_studio_form_view_editor .o_notebook .tab-pane.active .o_wrap_label[data-field-name="x_studio_type_evenement"] ~ .o_web_studio_hook'
   - texte: >
       Le haut de la fiche retrouve sa clarté, et tout ce qui concerne l'événement est rangé au même endroit.
     actions:
@@ -108,7 +108,7 @@ etapes:
       - cliquer: '.o_searchview_dropdown_toggler'
       - selectionner: {dans: '.o-dropdown--menu select.o_add_custom_group_menu', option: "Type d'événement"}
       - attendre: 1
-      - touche: Escape
+      - cliquer: '.o_searchview_dropdown_toggler'
   - texte: >
       Les devis sont rangés par événement : les mariages d'un côté, les commandes de la boutique de l'autre,
       avec le total de chaque groupe. Pour retrouver ce regroupement chaque matin, enregistrez-le dans les favoris.

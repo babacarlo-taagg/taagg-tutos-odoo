@@ -376,16 +376,28 @@ class Realisateur {
       await this.taper(p.locator(a.ecrire).filter({ visible: true }).first(), a.taper ?? '', a.entree);
     } else if ('deposer' in a) {
       // glisser-déposer à la main (Studio : un nouveau champ vers sa place dans la fiche)
-      await this.viser(p.locator(a.deposer).filter({ visible: true }).first());
+      // on appuie dès que le curseur arrive : une pause au survol ouvrirait l'infobulle d'aide du champ, qui bloque le glisser
+      const source = p.locator(a.deposer).filter({ visible: true }).first();
+      await source.waitFor({ state: 'visible', timeout: 15000 });
+      await source.scrollIntoViewIfNeeded();
+      const s = await source.boundingBox();
+      await this.glisser(s.x + s.width / 2, s.y + s.height / 2);
       await p.mouse.down();
       await pause(150);
       await this.glisser(this.x + 30, this.y + 10); // petit décalage : Odoo commence alors le glisser
+      await pause(400); // le champ quitte sa place et la fiche se resserre : on mesure la cible après
       const cible = p.locator(a.sur).filter({ visible: true }).first();
       await cible.waitFor({ state: 'visible', timeout: 15000 });
-      const b = await cible.boundingBox();
       const [dx, dy] = a.decalage ?? [0, 0];
-      await this.glisser(b.x + b.width / 2 + dx, b.y + b.height / 2 + dy);
-      await pause(500);
+      // la page bouge encore pendant le glisser : on vise, on revérifie la cible, on corrige si elle a bougé
+      for (let essai = 0; essai < 3; essai++) {
+        const b = await cible.boundingBox();
+        const [x, y] = [b.x + b.width / 2 + dx, b.y + b.height / 2 + dy];
+        if (essai && Math.hypot(x - this.x, y - this.y) < 3) break;
+        await this.glisser(x, y);
+        await pause(300);
+      }
+      await pause(300);
       await p.mouse.up();
       await pause(400);
       await attendreOdoo(p, 8000);
