@@ -47,7 +47,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 |---|---|---|---|---|
 | CPT-17 | Importer un relevé bancaire | import CSV / OFX / CAMT, saisie manuelle d'une ligne | Tableau de bord › Banque | 🎙 3:14 |
 | CPT-18 | Le rapprochement bancaire **[E]** | relier chaque ligne du relevé à une facture ou un paiement | Rapprochement | ✎ 3:16 |
-| CPT-19 | Modèles de rapprochement **[E]** | automatiser les frais bancaires, agios, commissions | Modèles de rapprochement | ☐ |
+| CPT-19 | Modèles de rapprochement **[E]** | automatiser les frais bancaires, agios, commissions | Modèles de rapprochement | ✎ 2:54 |
 | CPT-20 | La caisse | encaissements et décaissements en espèces, contrôle de caisse | Journal de caisse | ☐ |
 | CPT-21 | Les emprunts **[E]** | créer un emprunt, échéancier, écritures automatiques | Actif & passif › Emprunts | ☐ |
 
@@ -161,6 +161,10 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
   **Voix à générer après la remise à zéro du crédit ElevenLabs (17 novembre).** Part de la fin de CPT-17 (etat-depart.py
   s'arrête si le relevé manque) ; ajoute le virement du traiteur (127 440 F) lettré avec INV/2026/00006 ; frais → 631800 ;
   versement d'espèces → 585001 (la sortie de caisse de CPT-20 utilisera le même compte).
+- **CPT-19** (8 novembre 2026) : brouillon muet, 2 min 54 s, 19 étapes, ≈ 2 600 caractères. **Voix après le 17 novembre.**
+  Odoo 19 : modèles accessibles par le menu « ⋮ » de la carte Banque › Modèles. Le modèle livré « Frais bancaires »
+  (Bank Fees, 601100, manuel) est corrigé (FRAIS, Banque, 631800) et automatisé ; import de `releve-banque-novembre-2.csv`
+  (2 frais) rapprochés seuls. etat-depart.py range les lignes sans relevé dans le relevé de CPT-17 (sinon « relevé invalide »).
 
 ## Ordre de tournage proposé
 
