@@ -132,3 +132,24 @@ Une automatisation se dit toujours en une phrase : QUAND quelque chose arrive, S
 
 Formation « Studio & Personnalisation low-code » — TAAGG School · taagg-gui.com
 ```
+
+## STU-07 · Le devis PDF : l'événement et les convives (3:52)
+
+- **Titre YouTube** : STU-07 · Le devis PDF : l'événement et les convives dans Odoo Studio
+- **Leçon taagg-school.com** : n° 2826 (brouillon), section 4 du cours 234
+- **Fichiers** : `STU-07-le-devis-pdf-l-evenement-et-les-convives.mp4`, `.srt`, `-chapitres.txt`, `STU-07-vignette.png`
+- **Description** :
+
+```
+Dans cette capsule, nous allons voir ce qui se règle sans Studio, puis ajouter ces deux informations au devis PDF avec l'éditeur de rapports.
+
+0:00 Introduction
+0:27 1. Ce qui se règle sans Studio
+0:49 2. Ouvrir le rapport du devis
+1:29 3. Insérer les champs
+2:14 4. Vérifier avec un vrai devis
+2:46 Les pièges à éviter
+3:18 Récapitulatif
+
+Formation « Studio & Personnalisation low-code » — TAAGG School · taagg-gui.com
+```
