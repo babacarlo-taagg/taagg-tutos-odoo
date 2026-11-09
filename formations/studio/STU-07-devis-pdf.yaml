@@ -1,0 +1,197 @@
+# STU-07 · Le devis PDF : l'événement et les convives
+# État de départ attendu (`python3 formations/studio/etat-depart.py STU-07 --oui`, puis `--preparer`) :
+#   la fin de STU-02 (champs « Type d'événement » et « Nombre de convives », devis « Mariage Ndiaye » S00083 :
+#   Mariage, 150) ; aucune personnalisation Studio du rapport « Devis / Commande ».
+# Ce que la capsule crée : la personnalisation Studio du rapport « Devis / Commande » (une ligne « Événement : … ·
+#   Convives : … » dans la zone libre sous les informations du devis) et la copie de sauvegarde que Studio garde du
+#   modèle d'origine. La mise en page de la société (filmée par CPT-02) est seulement montrée, jamais modifiée.
+# Clause d'acompte réservée aux mariages : montrée (bouton « Modifier les sources ») et expliquée, pas tapée à l'écran ;
+#   le code est dans la fiche 2813.
+# Pièges techniques (vérifiés le 9/11) : Entrée dans l'éditeur crée une nouvelle zone que Studio n'arrive pas à
+#   enregistrer (« list index out of range ») → tout sur une ligne ; on insère d'abord les convives (le curseur est en
+#   fin de ligne), puis on revient au début de la ligne pour le type d'événement.
+titre: "Le devis PDF : l'événement et les convives"
+sous_titre: Formation Studio Odoo · STU-07
+depart: /odoo/settings
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+  NINEA: ninéa
+  PDF: pé dé effe
+fin:
+  message: "Prochaine capsule : les droits d'accès"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour. Le devis PDF est le visage de l'entreprise face à ses clients. Maïmouna veut y voir le type
+      d'événement et le nombre de convives, pour que le client relise exactement ce qu'il commande.
+    actions:
+      - attendre: 1
+  - texte: >
+      Dans cette capsule, nous allons voir ce qui se règle sans Studio, puis ajouter ces deux informations
+      au devis PDF avec l'éditeur de rapports.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : sans Studio
+  - partie: "1. Ce qui se règle sans Studio"
+    texte: >
+      Le logo, les couleurs, la police et le pied de page avec le NINEA et le registre du commerce ne se règlent pas
+      rapport par rapport. Dans les paramètres, cherchez Mise en page.
+    actions:
+      - ecrire: '.o_searchview_input'
+        taper: mise en page
+      - attendre: 1
+  - texte: >
+      Configurer la mise en page du document : un seul réglage, appliqué à tous les documents de la société,
+      devis, factures et bons de livraison. Commencez toujours par là.
+    actions:
+      - surligner: 'button:has-text("Configurer la"), a:has-text("Configurer la")'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 2 : l'éditeur de rapports
+  - partie: "2. Ouvrir le rapport du devis"
+    texte: >
+      Ce qui est propre aux devis, en revanche, se fait dans Studio. Ouvrons le devis du mariage Ndiaye,
+      puis Studio, et le menu Rapports.
+    actions:
+      - aller: /odoo/sales?debug=1
+      - rechercher: Mariage Ndiaye
+      - cliquer: '.o_data_row td[name="name"]'
+      - cliquer: '[title="Toggle Studio"]'
+      - attendre: 1.5
+      - cliquer: '.o_web_studio_menu .o_menu_sections button:has-text("Rapports")'
+      - attendre: 1.5
+  - texte: >
+      Les devis ont plusieurs documents. Celui qu'on imprime et qu'on envoie, c'est Devis / Commande.
+    actions:
+      - cliquer: '.o_kanban_record:has-text("Devis / Commande")'
+      - attendre: 3
+  - texte: >
+      L'éditeur montre le modèle du document, avec des données d'exemple. Les zones en pointillés sont calculées
+      par Odoo. Sous les informations du devis, il y a une zone libre, prévue pour ajouter du contenu.
+    actions:
+      - surligner: 'iframe >> internal:control=enter-frame >> #informations'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 3 : insérer les champs
+  - partie: "3. Insérer les champs"
+    texte: Cliquez dans la zone libre et tapez le texte qui précédera les valeurs.
+    actions:
+      - cliquer: 'iframe >> internal:control=enter-frame >> #informations ~ .oe_structure'
+      - clavier: "Événement :  · Convives : "
+      - attendre: 0.5
+  - texte: >
+      Pour insérer une valeur du devis, tapez la barre oblique : un menu s'ouvre. Choisissez Champ.
+    actions:
+      - clavier: "/"
+      - attendre: 0.8
+      - clavier: "Champ"
+      - touche: Enter
+      - attendre: 1
+  - texte: Cherchez Nombre de convives, puis cliquez sur Insérer.
+    actions:
+      - cliquer: '.o_model_field_selector'
+      - ecrire: '.o_model_field_selector_popover_search input'
+        taper: convives
+      - cliquer: '.o_model_field_selector_popover li[data-name="x_studio_nombre_de_convives"] button'
+      - attendre: 0.8
+      - cliquer: 'button:has-text("Insérer")'
+      - attendre: 1
+  - texte: >
+      Revenez juste après Événement, et faites de même avec le champ Type d'événement.
+    actions:
+      - cliquer: 'iframe >> internal:control=enter-frame >> #informations ~ .oe_structure'
+      - touche: Home
+      - touche: ArrowRight
+      - touche: ArrowRight
+      - touche: ArrowRight
+      - touche: ArrowRight
+      - touche: ArrowRight
+      - touche: ArrowRight
+      - touche: ArrowRight
+      - touche: ArrowRight
+      - touche: ArrowRight
+      - touche: ArrowRight
+      - touche: ArrowRight
+      - touche: ArrowRight
+      - clavier: "/"
+      - attendre: 0.8
+      - clavier: "Champ"
+      - touche: Enter
+      - attendre: 1
+      - cliquer: '.o_model_field_selector'
+      - ecrire: '.o_model_field_selector_popover_search input'
+        taper: Type
+      - cliquer: '.o_model_field_selector_popover li[data-name="x_studio_type_evenement"] button'
+      - attendre: 0.8
+      - cliquer: 'button:has-text("Insérer")'
+      - attendre: 1
+  - texte: >
+      Les deux champs sont en place. Ici, contrairement au reste de Studio, il faut enregistrer : cliquez sur Enregistrer.
+    actions:
+      - surligner: 'iframe >> internal:control=enter-frame >> #informations ~ .oe_structure'
+        duree: 2
+      - cliquer: '.o_studio_navbar button:has-text("Enregistrer"), button:has-text("Enregistrer")'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ partie 4 : vérifier
+  - partie: "4. Vérifier avec un vrai devis"
+    texte: >
+      Cochez Aperçu : le document s'affiche avec un vrai devis. Choisissons celui du mariage Ndiaye.
+    actions:
+      - cliquer: 'label:has-text("Aperçu")'
+      - attendre: 2
+      - ecrire: 'input.o-autocomplete--input:not(.o_web_studio_sidebar input)'
+        taper: S00083
+      - attendre: 1
+      - cliquer: '.o-autocomplete--dropdown-item:has-text("S00083")'
+      - attendre: 2.5
+  - texte: "Sous les informations du devis : Événement, Mariage. Convives, cent cinquante."
+    actions:
+      - surligner: 'iframe >> internal:control=enter-frame >> .oe_structure:has-text("Événement")'
+        duree: 3
+  - texte: >
+      Et pour une clause d'acompte réservée aux mariages ? Il faut une condition, qui se pose dans le code du rapport,
+      avec le bouton Modifier les sources. La fiche de cette leçon donne les trois lignes à ajouter.
+    actions:
+      - surligner: '.o_web_studio_sidebar button:has-text("Modifier les sources")'
+        duree: 3
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : refaire le logo et le pied de page dans chaque rapport.
+      La mise en page de la société le fait une fois pour tous.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : juger le document sur les données d'exemple. Cochez toujours Aperçu, avec un devis
+      où les champs sont remplis, et un autre où ils sont vides.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : oublier qu'on peut revenir en arrière. Le bouton Réinitialiser le rapport efface toutes
+      les personnalisations Studio de ce document, et rend le modèle d'origine.
+    actions:
+      - surligner: '.o_web_studio_sidebar button:has-text("Réinitialiser")'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Ce qui vaut pour tous les documents se règle dans la mise en page de la société. Ce qui est
+      propre au devis se fait dans Studio, menu Rapports : on tape le texte, la barre oblique, Champ, on insère,
+      on enregistre, et on vérifie avec l'aperçu.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : ajoutez le prix par convive sur la même ligne du devis. Dans la prochaine capsule,
+      nous verrons qui peut voir quoi : les droits d'accès. À tout de suite !
+    actions:
+      - attendre: 1

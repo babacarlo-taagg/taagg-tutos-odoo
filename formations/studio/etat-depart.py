@@ -219,7 +219,20 @@ def stu_06():
     return devis_demo(), fin_stu_02(), devis_test_stu06()
 
 
-CAPSULES = {'STU-01': stu_01, 'STU-02': stu_02, 'STU-03': stu_03, 'STU-04': stu_04, 'STU-05': stu_05, 'STU-06': stu_06}
+def stu_07():
+    # STU-07 modifie à l'écran le rapport « Devis / Commande » : Studio enregistre une vue de personnalisation
+    # (web_studio.report_editor_customization_diff…) et une copie de sauvegarde inactive du modèle d'origine.
+    # Remise à zéro : ces deux vues (créées par le formateur), puis les champs de STU-02 ; la fin de STU-02 est recréée.
+    vues = odoo('ir.ui.view', 'search', ['|', ['key', '=like', 'web_studio.report_editor_customization_diff.view._sale.report_saleorder%'],
+                                         ['key', '=like', 'web_studio.__backup__.%sale.report_saleorder%'],
+                                         ['create_uid', 'in', [FORMATEUR, UID]]], context={'active_test': False})
+    retirer('ir.ui.view', vues, 'personnalisation Studio du rapport Devis / Commande')
+    stu_02()
+    return devis_demo(), fin_stu_02()
+
+
+CAPSULES = {'STU-01': stu_01, 'STU-02': stu_02, 'STU-03': stu_03, 'STU-04': stu_04, 'STU-05': stu_05, 'STU-06': stu_06,
+            'STU-07': stu_07}
 
 if __name__ == '__main__':
     code = next((a for a in sys.argv[1:] if not a.startswith('--')), '')

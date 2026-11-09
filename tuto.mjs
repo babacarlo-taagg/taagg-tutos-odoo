@@ -66,7 +66,8 @@ async function attendreOdoo(page, max = 15000) {
       () => {
         if (document.querySelector('.o_loading_indicator, .o_blockUI')) return false;
         if (!document.querySelector('.o_web_client')) return true; // pas l'interface Odoo (site, page de test)
-        return !!document.querySelector('.o_action_manager > .o_action, .o_home_menu, .o_action_manager .o_view_controller');
+        // .o_studio : écrans de Studio (éditeur de vues, de rapports), qui n'ont pas la classe o_action
+        return !!document.querySelector('.o_action_manager > .o_action, .o_action_manager > .o_studio, .o_home_menu, .o_action_manager .o_view_controller');
       },
       null,
       { timeout: max, polling: 100 },
