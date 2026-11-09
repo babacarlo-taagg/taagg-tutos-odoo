@@ -126,9 +126,9 @@ etapes:
 
   # ------------------------------------------------------------------ partie 4 : tester
   - partie: "4. Tester"
-    texte: Testons sur un autre mariage, celui de la famille Sarr, encore en devis.
+    texte: Testons sur un autre mariage, celui de la famille Sarr, pas encore confirmé.
     actions:
-      - aller: /odoo/sales?debug=1
+      - aller: /odoo/sales
       - rechercher: Mariage Sarr
       - cliquer: '.o_data_row td[name="name"]'
   - texte: Le client accepte. Cliquez sur Confirmer.

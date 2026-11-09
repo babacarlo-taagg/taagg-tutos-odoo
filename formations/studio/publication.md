@@ -111,3 +111,24 @@ Un champ calculé ne se saisit pas : Odoo le remplit tout seul. C'est la limite 
 
 Formation « Studio & Personnalisation low-code » — TAAGG School · taagg-gui.com
 ```
+
+## STU-06 · Une règle d'automatisation : le mariage confirmé (4:04)
+
+- **Titre YouTube** : STU-06 · Une règle d'automatisation : le mariage confirmé dans Odoo Studio
+- **Leçon taagg-school.com** : n° 2825 (brouillon), section 3 du cours 234
+- **Fichiers** : `STU-06-une-regle-d-automatisation-le-mariage-confirme.mp4`, `.srt`, `-chapitres.txt`, `STU-06-vignette.png`
+- **Description** :
+
+```
+Une automatisation se dit toujours en une phrase : QUAND quelque chose arrive, SI une condition est remplie, ALORS Odoo fait une action. Ici : quand un devis devient une commande, si c'est un mariage, alors on crée une activité « Préparer la dégustation » pour le vendeur.
+
+0:00 Introduction
+0:39 1. QUAND : le déclencheur
+1:14 2. SI : la condition
+1:38 3. ALORS : l'action
+2:22 4. Tester
+2:49 Les pièges à éviter
+3:29 Récapitulatif
+
+Formation « Studio & Personnalisation low-code » — TAAGG School · taagg-gui.com
+```

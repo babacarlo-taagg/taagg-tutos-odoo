@@ -186,6 +186,8 @@ def devis_test_stu06():
                                              'x_studio_type_evenement': 'Mariage', 'x_studio_nombre_de_convives': 100,
                                              'order_line': [[0, 0, {'product_id': FRAISIER, 'name': 'Fraisier — buffet de mariage',
                                                                     'product_uom_qty': 100, 'price_unit': 8000}]]})]
+    elif OUI or PREPARER:  # le devis existe déjà : on lui remet son événement (perdu si les champs ont été retirés)
+        odoo('sale.order', 'write', ids, {'x_studio_type_evenement': 'Mariage', 'x_studio_nombre_de_convives': 100})
     return odoo('sale.order', 'read', ids, fields=['name', 'state'])[0]
 
 
