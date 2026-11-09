@@ -39,13 +39,15 @@ etapes:
   # ------------------------------------------------------------------ partie 1 : le constat
   - partie: "1. Le constat"
     texte: >
-      Voici les bons de livraison des deux mariages. Le champ Livreur, créé dans la capsule sur les liens,
+      Voici les bons de livraison des deux mariages. Sur chacun, le champ Livreur, créé dans la capsule sur les liens,
       indique qui livre : Modou pour la famille Ndiaye, un autre livreur pour la famille Sarr.
     actions:
       - rechercher: Mariage
-      - attendre: 1
       - surligner: '.o_list_renderer'
-        duree: 3
+        duree: 2
+      - cliquer: '.o_data_row:has-text("Mariage Ndiaye") td[name="name"]'
+      - surligner_champ: x_studio_livreur
+        duree: 2.5
   - texte: >
       Aujourd'hui, Modou verrait toutes les livraisons de l'entreprise, avec les adresses de tous les clients.
       Construisons sa protection.
@@ -91,7 +93,10 @@ etapes:
     actions:
       - ecrire: '.modal .o_field_widget[name="name"] input'
         taper: "Livreur : ses livraisons seulement"
-      - choisir: {champ: model_id, valeur: Transfert}
+      - ecrire: '.modal .o_field_widget[name="model_id"] input'
+        taper: Transfert
+      - attendre: 0.8
+      - cliquer: '.o-autocomplete--dropdown-item >> text="Transfert"'
       - attendre: 1
   - texte: >
       Et le domaine, la condition à remplir : le livreur de la livraison est l'utilisateur connecté.
@@ -102,6 +107,7 @@ etapes:
       - attendre: 1
   - texte: >
       Les quatre cases, lire, écrire, créer et supprimer, restent cochées : la règle s'applique à tout.
+      La case Global est encore cochée : elle s'enlève quand la règle est rattachée au groupe, à l'enregistrement.
       Enregistrez la règle, puis le groupe.
     actions:
       - surligner: '.modal .o_field_widget[name="perm_read"]'
@@ -120,10 +126,10 @@ etapes:
       - connexion: {login: modou.livreur@exemple.sn, mot_de_passe: MODOU_MOT_DE_PASSE}
       - attendre: 1
   - texte: >
-      Modou n'a que l'application Inventaire. Ouvrons les livraisons et cherchons les deux mariages.
+      Voici l'accueil de Modou. Ouvrons Inventaire, les transferts, et cherchons les deux mariages.
     actions:
-      - surligner: '.o_home_menu, .o_apps'
-        duree: 2
+      - cliquer: '.o_app:has-text("Inventaire")'
+      - attendre: 1
       - aller: /odoo/action-stock.action_picking_tree_all
       - rechercher: Mariage
       - attendre: 1
