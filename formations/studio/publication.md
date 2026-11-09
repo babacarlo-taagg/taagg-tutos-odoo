@@ -153,3 +153,24 @@ Dans cette capsule, nous allons voir ce qui se règle sans Studio, puis ajouter 
 
 Formation « Studio & Personnalisation low-code » — TAAGG School · taagg-gui.com
 ```
+
+## STU-08 · Le livreur ne voit que ses livraisons (3:52)
+
+- **Titre YouTube** : STU-08 · Le livreur ne voit que ses livraisons : groupes et règles d'accès dans Odoo
+- **Leçon taagg-school.com** : n° 2827 (brouillon), section 5 du cours 234
+- **Fichiers** : `STU-08-le-livreur-ne-voit-que-ses-livraisons.mp4`, `.srt`, `-chapitres.txt`, `STU-08-vignette.png`
+- **Description** :
+
+```
+Cacher une colonne ne protège pas une donnée. Dans cette capsule, on crée un groupe « Livraison : Livreur » et une règle sur les enregistrements pour que Modou, le livreur, ne voie que ses livraisons, puis on teste avec son compte.
+
+0:00 Introduction
+0:28 1. Le constat
+0:52 2. Un groupe pour les livreurs
+1:14 3. La règle : ses livraisons seulement
+2:06 4. Tester avec le compte de Modou
+2:44 Les pièges à éviter
+3:19 Récapitulatif
+
+Formation « Studio & Personnalisation low-code » — TAAGG School · taagg-gui.com
+```
