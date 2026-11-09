@@ -372,6 +372,22 @@ class Realisateur {
       await this.cliquer(p.locator('.o_menu_sections .dropdown-toggle').filter({ hasText: a.ouvrir_menu }).first());
     } else if ('onglet' in a) {
       await this.cliquer(p.locator('.o_notebook .nav-link').filter({ hasText: a.onglet }).first());
+    } else if ('connexion' in a) {
+      // se déconnecter puis se connecter avec un autre compte (test d'un profil) : le mot de passe est lu dans la
+      // variable d'environnement nommée par mot_de_passe, jamais écrit dans le scénario ; à l'écran, des points
+      const { login, mot_de_passe } = a.connexion;
+      await p.goto(urlOdoo('/web/session/logout'));
+      await attendreOdoo(p);
+      const base = process.env.ODOO_BASE ? `?db=${encodeURIComponent(process.env.ODOO_BASE)}` : '';
+      await p.goto(urlOdoo('/web/login' + base));
+      await attendreOdoo(p);
+      await this.taper(p.locator('input[name="login"]').first(), login);
+      const mdp = p.locator('input[name="password"]').first();
+      await this.cliquer(mdp);
+      await mdp.pressSequentially(process.env[mot_de_passe] || '', { delay: 40 });
+      await Promise.all([p.waitForURL((u) => !u.pathname.startsWith('/web/login'), { timeout: 20000 }).catch(() => {}), p.keyboard.press('Enter')]);
+      if (new URL(p.url()).pathname.startsWith('/web/login')) throw new Error(`connexion refusée pour ${login}`);
+      await attendreOdoo(p);
     } else if ('clavier' in a) {
       // tape au clavier là où se trouve le curseur (éditeur de code d'Odoo, qui gère seul les retraits) ; \n = Entrée
       await p.keyboard.type(String(a.clavier), { delay: 45 });

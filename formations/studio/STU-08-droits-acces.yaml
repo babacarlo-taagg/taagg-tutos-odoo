@@ -1,0 +1,167 @@
+# STU-08 · Le livreur ne voit que ses livraisons
+# État de départ attendu (`python3 formations/studio/etat-depart.py STU-08 --oui`, puis `--preparer` avec
+#   MODOU_MOT_DE_PASSE dans l'environnement) : le champ « Livreur » de STU-03 sur les transferts (API) ; le compte de test
+#   « Modou GUEYE (livreur) » (modou.livreur@exemple.sn, utilisateur interne, Inventaire / Utilisateur) actif ;
+#   deux livraisons de démonstration : WH/OUT/… « Mariage Ndiaye » (livreur : Modou) et « Mariage Sarr » (livreur :
+#   Formateur TAAGG). Aucun groupe « Livraison : Livreur », aucune règle sur les transferts en dehors du standard.
+# Ce que la capsule crée : le groupe « Livraison : Livreur » (Modou dedans) et la règle d'enregistrement
+#   « Livreur : ses livraisons seulement » sur les transferts, domaine [('x_studio_livreur', '=', user.id)].
+#   La fin de la capsule se joue connecté avec le compte de Modou (geste connexion, mot de passe lu dans
+#   MODOU_MOT_DE_PASSE, jamais écrit ici).
+# Données visibles : la fenêtre « Ajouter : Utilisateur » liste brièvement les comptes internes de la base (dont
+#   l'adresse de Babacar) avant la recherche « Modou ».
+titre: "Le livreur ne voit que ses livraisons"
+sous_titre: Formation Studio Odoo · STU-08
+depart: /odoo/action-stock.action_picking_tree_all?debug=1
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : du test à la production"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour. Modou, le livreur des Délices de Maïmouna, va recevoir un compte Odoo pour valider ses livraisons
+      depuis son téléphone. Maïmouna pose une condition : il ne doit voir que ses livraisons à lui.
+    actions:
+      - attendre: 1
+  - texte: >
+      Cacher une colonne ne suffit pas : la donnée resterait accessible par un autre écran ou par un export.
+      Pour protéger, on utilise les groupes et les règles d'accès. C'est ce que nous allons faire.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : le constat
+  - partie: "1. Le constat"
+    texte: >
+      Voici les bons de livraison des deux mariages. Le champ Livreur, créé dans la capsule sur les liens,
+      indique qui livre : Modou pour la famille Ndiaye, un autre livreur pour la famille Sarr.
+    actions:
+      - rechercher: Mariage
+      - attendre: 1
+      - surligner: '.o_list_renderer'
+        duree: 3
+  - texte: >
+      Aujourd'hui, Modou verrait toutes les livraisons de l'entreprise, avec les adresses de tous les clients.
+      Construisons sa protection.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 2 : le groupe
+  - partie: "2. Un groupe pour les livreurs"
+    texte: >
+      Les droits se donnent à des groupes, pas à des personnes. En mode développeur, ouvrez Paramètres,
+      Utilisateurs et sociétés, Groupes, et cliquez sur Nouveau.
+    actions:
+      - aller: /odoo/action-base.action_res_groups?debug=1
+      - bouton: Nouveau
+      - attendre: 1
+  - texte: "Nommez-le comme un rôle : Livraison, Livreur."
+    actions:
+      - ecrire: '.o_field_widget[name="name"] input'
+        taper: "Livraison : Livreur"
+  - texte: >
+      Dans l'onglet Utilisateurs, ajoutez Modou. Le jour où un deuxième livreur arrive, il suffira de l'ajouter ici.
+    actions:
+      - cliquer: '.o_field_widget[name="user_ids"] a:has-text("Ajouter une ligne")'
+      - ecrire: '.modal .o_searchview_input'
+        taper: Modou
+        entree: true
+      - attendre: 1
+      - cliquer: '.modal .o_data_row td.o_data_cell'
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 3 : la règle
+  - partie: "3. La règle : ses livraisons seulement"
+    texte: >
+      Les droits d'accès disent ce qu'un groupe peut faire sur un type de fiche. Les règles sur les enregistrements
+      disent sur quelles fiches. Ouvrez cet onglet, Ajouter une ligne, puis Nouveau.
+    actions:
+      - onglet: Règles sur les enregistrements
+      - cliquer: '.tab-pane.active a:has-text("Ajouter une ligne")'
+      - attendre: 1
+      - cliquer: '.modal-footer button:has-text("Nouveau")'
+      - attendre: 1.5
+  - texte: "Un nom clair : Livreur, ses livraisons seulement. Le modèle : Transfert, c'est-à-dire les livraisons."
+    actions:
+      - ecrire: '.modal .o_field_widget[name="name"] input'
+        taper: "Livreur : ses livraisons seulement"
+      - choisir: {champ: model_id, valeur: Transfert}
+      - attendre: 1
+  - texte: >
+      Et le domaine, la condition à remplir : le livreur de la livraison est l'utilisateur connecté.
+      Le mot user désigne la personne qui utilise Odoo à ce moment-là.
+    actions:
+      - ecrire: '.modal .o_field_widget[name="domain_force"] textarea'
+        taper: "[('x_studio_livreur', '=', user.id)]"
+      - attendre: 1
+  - texte: >
+      Les quatre cases, lire, écrire, créer et supprimer, restent cochées : la règle s'applique à tout.
+      Enregistrez la règle, puis le groupe.
+    actions:
+      - surligner: '.modal .o_field_widget[name="perm_read"]'
+        duree: 1.5
+      - cliquer: '.modal-footer button:has-text("Enregistrer & Fermer")'
+      - attendre: 1.5
+      - enregistrer: oui
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 4 : tester avec le compte de Modou
+  - partie: "4. Tester avec le compte de Modou"
+    texte: >
+      Votre compte d'administrateur voit presque tout : un test fait avec lui ne prouve rien.
+      On se connecte donc avec le compte de Modou.
+    actions:
+      - connexion: {login: modou.livreur@exemple.sn, mot_de_passe: MODOU_MOT_DE_PASSE}
+      - attendre: 1
+  - texte: >
+      Modou n'a que l'application Inventaire. Ouvrons les livraisons et cherchons les deux mariages.
+    actions:
+      - surligner: '.o_home_menu, .o_apps'
+        duree: 2
+      - aller: /odoo/action-stock.action_picking_tree_all
+      - rechercher: Mariage
+      - attendre: 1
+  - texte: >
+      Une seule ligne : la livraison de la famille Ndiaye, la sienne. Celle de la famille Sarr, confiée à un autre
+      livreur, n'existe pas pour lui. C'est Odoo qui filtre, sur tous les écrans, les exports et les recherches.
+    actions:
+      - surligner: '.o_list_renderer'
+        duree: 3
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : croire qu'une colonne masquée est protégée. Faites toujours le test de
+      l'export avec le compte de la personne : si la donnée y apparaît, elle n'est pas protégée.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : les groupes s'additionnent. Si Modou recevait aussi un rôle plus large sur les livraisons,
+      c'est la règle la plus large qui l'emporterait. Ne donnez jamais un rôle « au cas où ».
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : tester avec votre propre compte. Gardez un compte de test par profil, et vérifiez
+      chaque règle avec lui avant de la livrer au client.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Les droits se donnent à un groupe, jamais à une personne. Les droits d'accès disent quoi,
+      les règles sur les enregistrements disent sur quelles fiches. Et on teste toujours avec le compte concerné.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : créez une règle pour que chaque vendeur ne voie que ses propres devis. Dans la prochaine
+      capsule, nous verrons comment faire passer une personnalisation de la base de test à la production.
+      À tout de suite !
+    actions:
+      - attendre: 1

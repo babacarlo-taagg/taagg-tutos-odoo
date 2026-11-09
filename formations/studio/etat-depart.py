@@ -20,7 +20,7 @@ ENV = {}
 if (ICI / '.env').exists():
     ENV = dict(l.split('=', 1) for l in (ICI / '.env').read_text().splitlines() if '=' in l and not l.startswith('#'))
     ENV = {k.strip(): v.split('#')[0].strip() for k, v in ENV.items()}
-ENV.update({k: v for k, v in os.environ.items() if k.startswith('ODOO_')})  # l'environnement passe avant le .env
+ENV.update({k: v for k, v in os.environ.items() if k.startswith(('ODOO_', 'MODOU_'))})  # l'environnement passe avant le .env
 ENV.setdefault('ODOO_BASE', 'edu-correction-les-delices-de-maimouna')
 FORMATEUR = 6  # « Formateur TAAGG », le compte qui filme : tout ce que Studio crée à l'écran porte son nom
 CLIENT_DEMO = 33  # Moussa Ndiaye (client de démonstration)
@@ -231,8 +231,86 @@ def stu_07():
     return devis_demo(), fin_stu_02()
 
 
+LOGIN_MODOU = 'modou.livreur@exemple.sn'  # compte de test de STU-08 (adresse fictive) ; mot de passe : MODOU_MOT_DE_PASSE
+GROUPE_STU08 = 'Livraison : Livreur'
+REGLE_STU08 = 'Livreur : ses livraisons seulement'
+REF_LIVRAISON_2 = 'Mariage Sarr'  # seconde livraison de démonstration, confiée à un autre livreur
+
+
+def fin_stu_03():
+    """Recrée par l'API le champ « Livreur » (Many2One vers Utilisateur) de STU-03 et sa place dans le bon de livraison."""
+    if odoo('ir.model.fields', 'search', [['model', '=', 'stock.picking'], ['name', '=', 'x_studio_livreur']]):
+        return 'déjà là'
+    if not (OUI or PREPARER):
+        print('  à créer  champ « Livreur » sur les transferts et sa place dans la fiche')
+        return None
+    modele = odoo('ir.model', 'search', [['model', '=', 'stock.picking']])[0]
+    odoo('ir.model.fields', 'create', {'model_id': modele, 'name': 'x_studio_livreur', 'ttype': 'many2one', 'state': 'manual',
+                                       'relation': 'res.users', 'field_description': 'Livreur', 'copied': True})
+    fiche = odoo('ir.model.data', 'search_read', [['module', '=', 'stock'], ['name', '=', 'view_picking_form']], fields=['res_id'])[0]['res_id']
+    odoo('ir.ui.view', 'create', {'name': 'Odoo Studio: stock.picking.form customization', 'model': 'stock.picking', 'type': 'form',
+                                  'mode': 'extension', 'inherit_id': fiche, 'priority': 99, 'arch_db':
+                                  "<data><xpath expr=\"/form/sheet/group/group/field[@name='picking_type_id']\" position=\"after\">"
+                                  "<field name=\"x_studio_livreur\"/></xpath></data>"})
+    return 'recréée'
+
+
+def modou():
+    """Le compte de test « Modou GUEYE (livreur) » : utilisateur interne, Inventaire / Utilisateur. Créé ou réactivé."""
+    ids = odoo('res.users', 'search', [['login', '=', LOGIN_MODOU]], context={'active_test': False})
+    if not (OUI or PREPARER):
+        if not ids:
+            print('  à créer  utilisateur de test « Modou GUEYE (livreur) »')
+        return ids[0] if ids else None
+    if not ENV.get('MODOU_MOT_DE_PASSE'):
+        sys.exit('MODOU_MOT_DE_PASSE manque (mot de passe du compte de test, jamais dans le dépôt)')
+    groupes = [odoo('ir.model.data', 'search_read', [['module', '=', m], ['name', '=', n]], fields=['res_id'])[0]['res_id']
+               for m, n in (('base', 'group_user'), ('stock', 'group_stock_user'))]
+    if ids:
+        odoo('res.users', 'write', ids, {'active': True, 'password': ENV['MODOU_MOT_DE_PASSE'], 'group_ids': [[6, 0, groupes]]})
+        return ids[0]
+    return odoo('res.users', 'create', {'name': 'Modou GUEYE (livreur)', 'login': LOGIN_MODOU, 'lang': 'fr_FR', 'tz': 'Africa/Dakar',
+                                        'password': ENV['MODOU_MOT_DE_PASSE'], 'group_ids': [[6, 0, groupes]]})
+
+
+def livraisons_stu08(livreur):
+    """Deux livraisons de démonstration : « Mariage Ndiaye » confiée à Modou, « Mariage Sarr » au formateur."""
+    une = livraison_demo()
+    ids = odoo('stock.picking', 'search', [['origin', '=', REF_LIVRAISON_2], ['partner_id', '=', CLIENT_TEST], ['picking_type_code', '=', 'outgoing']])
+    if not ids and (OUI or PREPARER):
+        ids = [odoo('stock.picking', 'create', {'picking_type_id': 2, 'partner_id': CLIENT_TEST, 'origin': REF_LIVRAISON_2,
+                                                'location_id': 5, 'location_dest_id': 2,
+                                                'move_ids': [[0, 0, {'product_id': FRAISIER, 'product_uom_qty': 100,
+                                                                     'location_id': 5, 'location_dest_id': 2}]]})]
+    if (OUI or PREPARER) and une and ids and livreur:
+        odoo('stock.picking', 'write', [une['id']], {'x_studio_livreur': livreur})
+        odoo('stock.picking', 'write', ids, {'x_studio_livreur': FORMATEUR})
+    return une, ids
+
+
+def stu_08():
+    # STU-08 crée à l'écran le groupe « Livraison : Livreur », y ajoute Modou, et pose la règle d'enregistrement
+    # « Livreur : ses livraisons seulement » sur les transferts. État de départ : le champ « Livreur » de STU-03 (API),
+    # deux livraisons de démonstration (une à Modou, une au formateur), le compte de test de Modou actif.
+    # Remise à zéro : la règle, le groupe, le compte de Modou archivé (jamais supprimé), puis le champ « Livreur ».
+    retirer('ir.rule', odoo('ir.rule', 'search', [['name', '=', REGLE_STU08]], context={'active_test': False}), "règle d'enregistrement")
+    retirer('res.groups', odoo('res.groups', 'search', [['name', '=', GROUPE_STU08]]), 'groupe')
+    m = odoo('res.users', 'search', [['login', '=', LOGIN_MODOU], ['active', '=', True]])
+    if m:
+        print(('  ARCHIVÉ  ' if OUI else '  à archiver  ') + 'utilisateur de test « Modou GUEYE (livreur) »')
+        if OUI:
+            odoo('res.users', 'write', m, {'active': False})
+    defaire_champs('stock.picking', champs_studio('stock.picking', ['Livreur', 'Téléphone du client', 'Nouveau Many2One']))
+    return livraison_demo()
+
+
+def preparer_stu08():
+    fin_stu_03()
+    return livraisons_stu08(modou())
+
+
 CAPSULES = {'STU-01': stu_01, 'STU-02': stu_02, 'STU-03': stu_03, 'STU-04': stu_04, 'STU-05': stu_05, 'STU-06': stu_06,
-            'STU-07': stu_07}
+            'STU-07': stu_07, 'STU-08': stu_08}
 
 if __name__ == '__main__':
     code = next((a for a in sys.argv[1:] if not a.startswith('--')), '')
@@ -240,7 +318,8 @@ if __name__ == '__main__':
         # --preparer : seulement créer ce qui manque (devis, livraison, fin de STU-02), sans rien retirer
         print(code, '— préparation (création seulement) :', devis_demo(), livraison_demo(),
               fin_stu_02() if code in ('STU-04', 'STU-05', 'STU-06', 'STU-07') else '',
-              devis_test_stu06() if code == 'STU-06' else '')
+              devis_test_stu06() if code == 'STU-06' else '',
+              preparer_stu08() if code == 'STU-08' else '')
         sys.exit(0)
     if code not in CAPSULES:
         sys.exit(f"Capsule inconnue : {code} (connues : {', '.join(CAPSULES)})")
