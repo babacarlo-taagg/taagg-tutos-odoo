@@ -157,7 +157,7 @@ Formation « Studio & Personnalisation low-code » — TAAGG School · taagg-gui
 ## STU-08 · Le livreur ne voit que ses livraisons (3:52)
 
 - **Titre YouTube** : STU-08 · Le livreur ne voit que ses livraisons : groupes et règles d'accès dans Odoo
-- **Leçon taagg-school.com** : n° 2827 (brouillon), section 5 du cours 234
+- **Leçon taagg-school.com** : n° 2827 (publiée le 10/11), section 5 du cours 234
 - **Fichiers** : `STU-08-le-livreur-ne-voit-que-ses-livraisons.mp4`, `.srt`, `-chapitres.txt`, `STU-08-vignette.png`
 - **Description** :
 
