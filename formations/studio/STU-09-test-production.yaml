@@ -1,0 +1,151 @@
+# STU-09 · Du test à la production
+# État de départ attendu (`python3 formations/studio/etat-depart.py STU-09 --preparer`) : la fin de STU-02 (champs
+#   « Type d'événement » et « Nombre de convives » sur les devis) et le champ « Livreur » de STU-03 sur les transferts,
+#   pour que la liste des champs Studio et l'export ne soient pas vides.
+# Ce que la capsule crée : rien dans la base. Studio › Exporter télécharge un fichier .zip (sur l'ordinateur du
+#   tournage, jamais dans le dépôt) ; la fenêtre Studio › Import est ouverte puis fermée sans rien charger.
+#   `etat-depart.py STU-09 --oui` retire ensuite les champs préparés.
+# Le lien « Configurer les données et les données de démonstration à exporter » est montré, pas ouvert.
+titre: "Du test à la production"
+sous_titre: Formation Studio Odoo · STU-09
+depart: /odoo/action-base.action_model_fields?debug=1
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+  x_studio: ix studio
+  .zip: point zip
+fin:
+  message: "Prochaine étape : l'atelier des cinq demandes de Maïmouna"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour. Tout ce que nous avons construit pour les Délices de Maïmouna l'a été dans une base de test.
+      Il reste à le livrer dans la vraie base, celle où l'équipe travaille chaque jour, sans rien refaire à la main
+      et sans rien casser.
+    actions:
+      - attendre: 1
+  - texte: >
+      Dans cette capsule : tenir le registre des personnalisations, faire la recette, puis exporter depuis le test
+      et importer en production.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : le registre
+  - partie: "1. Le registre des personnalisations"
+    texte: >
+      Odoo garde la liste technique de ce que Studio a créé. En mode développeur, Paramètres, Technique, Champs :
+      cherchez x_studio.
+    actions:
+      - rechercher: x_studio
+      - attendre: 1
+  - texte: >
+      Voici nos champs : le type d'événement et le nombre de convives sur les devis, le livreur sur les transferts.
+      Le nom technique, le modèle, le type : tout y est.
+    actions:
+      - surligner: '.o_list_renderer'
+        duree: 3
+  - texte: >
+      Mais Odoo ne sait pas pourquoi un champ existe, ni qui l'a demandé. C'est le rôle du registre :
+      un simple tableur, une ligne par personnalisation, avec la date, le nom technique, le pourquoi et le demandeur.
+      Dans deux ans, c'est lui qui dira si un champ peut être retiré.
+    actions:
+      - surligner: '.o_data_row td[name="name"]'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 2 : la recette
+  - partie: "2. La recette avant la livraison"
+    texte: >
+      Avant d'exporter, on fait la recette dans la base de test : chaque champ est utile et lu quelque part,
+      chaque automatisation est testée dans ses trois cas, chaque droit est vérifié avec le compte de la personne.
+    actions:
+      - attendre: 1
+  - texte: >
+      La check-list de la fiche de cette leçon se fait signer par un utilisateur du client. Une seule case vide,
+      et la personnalisation n'est pas terminée.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 3 : exporter
+  - partie: "3. Exporter depuis la base de test"
+    texte: >
+      Ouvrez Studio depuis l'écran d'accueil. En haut, deux boutons : Exporter et Import.
+    actions:
+      - aller: /odoo?debug=0
+      - cliquer: '[title="Toggle Studio"]'
+      - attendre: 1.5
+      - surligner: '.o_web_studio_export, .o_web_studio_import'
+        duree: 2
+  - texte: >
+      Cliquez sur Exporter. Par défaut, Odoo exporte la structure : les champs, les vues, les automatisations,
+      les rapports. Pas les devis ni les clients : la vraie base a déjà les siens.
+    actions:
+      - cliquer: '.o_web_studio_export'
+      - attendre: 1.5
+      - surligner: '.modal >> text=Configurer les données'
+        duree: 2.5
+  - texte: >
+      Cliquez sur Exporter : Odoo télécharge un fichier point zip. Renommez-le avec la date et le nom du client,
+      et rangez-le avec le registre : c'est la trace exacte de ce qui a été livré.
+    actions:
+      - cliquer: '.modal-footer button:has-text("Exporter")'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ partie 4 : importer
+  - partie: "4. Importer en production"
+    texte: >
+      Dans la base de production, première chose : une sauvegarde, faite le jour même. Si l'import se passe mal,
+      c'est elle qui vous sauve.
+    actions:
+      - attendre: 1
+  - texte: >
+      Puis Studio, Import. On choisit le fichier point zip, et on clique sur Installer.
+    actions:
+      - cliquer: '.o_web_studio_import'
+      - attendre: 1.5
+      - surligner: '.modal .modal-body'
+        duree: 2.5
+  - texte: >
+      Laissez décochées les deux cases : on ne charge jamais de données de démonstration dans une vraie base.
+    actions:
+      - surligner: '.modal label:has-text("démonstration")'
+        duree: 2.5
+  - texte: "Ici, nous sommes sur la base de test : on annule."
+    actions:
+      - cliquer: '.modal-footer button:has-text("Annuler")'
+      - attendre: 1
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : personnaliser directement la production pendant la réunion avec le client.
+      C'est rapide, et c'est la source de la plupart des catastrophes.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : importer dans une base différente. La base de production doit avoir la même version d'Odoo
+      et les mêmes applications installées que la base de test.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : oublier le registre. Sans lui, personne ne saura plus pourquoi un champ existe,
+      et on n'osera plus jamais rien retirer.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. On construit dans une base de test, on tient le registre, on fait la recette avec la check-list.
+      Puis Studio, Exporter, une sauvegarde de la production, et Studio, Import.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : remplissez le registre pour toutes les personnalisations de cette formation, puis faites
+      un export daté. Ensuite, place à l'atelier : les cinq demandes de Maïmouna. À vous de jouer !
+    actions:
+      - attendre: 1

@@ -309,15 +309,24 @@ def preparer_stu08():
     return livraisons_stu08(modou())
 
 
+def stu_09():
+    # STU-09 ne crée rien dans la base : l'export Studio est un fichier téléchargé, la fenêtre d'import est fermée sans
+    # rien charger. Pour avoir quelque chose à exporter, --preparer remet la fin de STU-02 (champs du devis) et le
+    # champ « Livreur » de STU-03 ; --oui les retire.
+    stu_03()
+    return stu_02()
+
+
 CAPSULES = {'STU-01': stu_01, 'STU-02': stu_02, 'STU-03': stu_03, 'STU-04': stu_04, 'STU-05': stu_05, 'STU-06': stu_06,
-            'STU-07': stu_07, 'STU-08': stu_08}
+            'STU-07': stu_07, 'STU-08': stu_08, 'STU-09': stu_09}
 
 if __name__ == '__main__':
     code = next((a for a in sys.argv[1:] if not a.startswith('--')), '')
     if PREPARER:
         # --preparer : seulement créer ce qui manque (devis, livraison, fin de STU-02), sans rien retirer
         print(code, '— préparation (création seulement) :', devis_demo(), livraison_demo(),
-              fin_stu_02() if code in ('STU-04', 'STU-05', 'STU-06', 'STU-07') else '',
+              fin_stu_02() if code in ('STU-04', 'STU-05', 'STU-06', 'STU-07', 'STU-09') else '',
+              fin_stu_03() if code == 'STU-09' else '',
               devis_test_stu06() if code == 'STU-06' else '',
               preparer_stu08() if code == 'STU-08' else '')
         sys.exit(0)
