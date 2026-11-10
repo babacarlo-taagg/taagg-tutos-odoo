@@ -174,3 +174,24 @@ Cacher une colonne ne protège pas une donnée. Dans cette capsule, on crée un 
 
 Formation « Studio & Personnalisation low-code » — TAAGG School · taagg-gui.com
 ```
+
+## STU-09 · Du test à la production (3:27)
+
+- **Titre YouTube** : STU-09 · Du test à la production : exporter et importer une personnalisation Odoo Studio
+- **Leçon taagg-school.com** : n° 2828 (brouillon), section 6 du cours 234
+- **Fichiers** : `STU-09-du-test-a-la-production.mp4`, `.srt`, `-chapitres.txt`, `STU-09-vignette.png`
+- **Description** :
+
+```
+Tout a été construit dans une base de test : comment le livrer dans la vraie base sans rien refaire ni rien casser ? Le registre des personnalisations, la recette, Studio › Exporter, la sauvegarde, puis Studio › Import.
+
+0:00 Introduction
+0:27 1. Le registre des personnalisations
+1:02 2. La recette avant la livraison
+1:28 3. Exporter depuis la base de test
+2:01 4. Importer en production
+2:27 Les pièges à éviter
+2:57 Récapitulatif
+
+Formation « Studio & Personnalisation low-code » — TAAGG School · taagg-gui.com
+```
