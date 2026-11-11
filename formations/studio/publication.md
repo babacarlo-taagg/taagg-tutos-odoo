@@ -199,7 +199,7 @@ Formation « Studio & Personnalisation low-code » — TAAGG School · taagg-gui
 ## STU-10 · Atelier : les cinq demandes de Maïmouna — corrigé (3:40)
 
 - **Titre YouTube** : STU-10 · Atelier Odoo Studio : les cinq demandes de Maïmouna (corrigé)
-- **Leçon taagg-school.com** : n° 2829 (brouillon), section 6 du cours 234
+- **Leçon taagg-school.com** : n° 2829 (publiée le 11/11), section 6 du cours 234
 - **Fichiers** : `STU-10-atelier-les-cinq-demandes-de-maimouna.mp4`, `.srt`, `-chapitres.txt`, `STU-10-vignette.png`
 - **Description** :
 
