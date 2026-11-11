@@ -178,7 +178,7 @@ Formation « Studio & Personnalisation low-code » — TAAGG School · taagg-gui
 ## STU-09 · Du test à la production (3:27)
 
 - **Titre YouTube** : STU-09 · Du test à la production : exporter et importer une personnalisation Odoo Studio
-- **Leçon taagg-school.com** : n° 2828 (brouillon), section 6 du cours 234
+- **Leçon taagg-school.com** : n° 2828 (publiée le 11/11), section 6 du cours 234
 - **Fichiers** : `STU-09-du-test-a-la-production.mp4`, `.srt`, `-chapitres.txt`, `STU-09-vignette.png`
 - **Description** :
 
