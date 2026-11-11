@@ -28,7 +28,7 @@ Avancement : ☐ à écrire · 📝 scénario écrit · ✎ brouillon muet OK ·
 | STU-07 | 4. Rapports PDF | Le devis PDF : l'événement et les convives | ce qui relève de la mise en page (sans Studio) et ce qui relève du rapport ; insérer des champs avec « / » ; paragraphe d'acompte réservé aux mariages ; impression de contrôle | Studio › Rapports › Devis / Commande | 4.1, 2812, 2813 | ✅ 3:52 (publiée le 9/11) |
 | STU-08 | 5. Sécurité et droits | Le livreur ne voit que ses livraisons | cacher n'est pas protéger (test de l'export) ; groupe « Livraison : Livreur », droits d'accès, règle d'enregistrement ; test avec le compte du livreur | Paramètres › Groupes, Règles | 5.1, 2814, 2815 | ✅ 3:52 (publiée le 10/11) |
 | STU-09 | 6. Synthèse | Du test à la production | le registre des personnalisations, la check-list de recette, Studio › Exporter (le .zip), Importer dans une autre base, ce qu'il faut sauvegarder avant | Studio (accueil) | 6.1, 2816, 2817 | ✅ 3:27 (publiée le 11/11) |
-| STU-10 | 6. Synthèse | Atelier : les 5 demandes de Maïmouna | présenter les 5 demandes de l'atelier et la bonne réponse à chacune (dont 2 sans Studio) ; à voir après avoir fait l'exercice | revue rapide des écrans des capsules 2 à 8 | 2818, 2819 | ☐ |
+| STU-10 | 6. Synthèse | Atelier : les 5 demandes de Maïmouna | présenter les 5 demandes de l'atelier et la bonne réponse à chacune (dont 2 sans Studio) ; à voir après avoir fait l'exercice | revue rapide des écrans des capsules 2 à 8 | 2818, 2819 | ✎ 3:48 (brouillon muet) |
 
 **10 capsules ≈ 45 minutes.** STU-10 est facultative : elle peut rester un exercice écrit (fiche 2818).
 

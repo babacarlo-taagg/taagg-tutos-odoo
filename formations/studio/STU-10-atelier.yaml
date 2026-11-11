@@ -1,0 +1,161 @@
+# STU-10 · Atelier : les 5 demandes de Maïmouna (corrigé de la fiche 2818, à voir après l'exercice)
+# État de départ attendu (`python3 formations/studio/etat-depart.py STU-10 --preparer`) : la fin de STU-02 (champs
+#   « Type d'événement » et « Nombre de convives », devis « Mariage Ndiaye » S00083 : Mariage) pour le regroupement.
+# Ce que la capsule crée : rien. C'est une revue des écrans : fiche produit, paramètres de mise en page (montrés,
+#   jamais modifiés : CPT-02 les filme), règle d'automatisation ouverte dans Studio puis abandonnée avec le bouton
+#   « Ignorer les modifications » (aucune règle enregistrée), regroupement des devis (non enregistré).
+#   `etat-depart.py STU-10 --oui` retire ensuite les champs préparés.
+titre: "Atelier : les cinq demandes de Maïmouna"
+sous_titre: Formation Studio Odoo · STU-10
+depart: /odoo/action-sale.product_template_action
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+  NINEA: ninéa
+fin:
+  message: "Fin de la formation Studio & Personnalisation low-code"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour. Voici le corrigé de l'atelier : les cinq demandes de Maïmouna. Si vous n'avez pas encore fait
+      l'exercice, mettez cette vidéo en pause et faites-le d'abord : c'est en cherchant qu'on apprend.
+    actions:
+      - attendre: 1
+  - texte: >
+      Pour chaque demande, une seule question : est-ce du standard, un paramètre, Studio, ou un développement ?
+      Vous allez voir que deux demandes sur cinq se règlent sans Studio.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ demande 1
+  - partie: "1. Les allergènes sur le devis"
+    texte: >
+      Première demande : savoir quels produits contiennent de l'arachide, du gluten ou du lait, et le voir sur le devis.
+    actions:
+      - rechercher: Fraisier
+      - cliquer: '.o_kanban_record:has-text("Fraisier")'
+      - attendre: 1
+  - texte: >
+      C'est Studio. Sur la fiche produit, un champ Allergènes à étiquettes, un lien plusieurs à plusieurs,
+      comme dans la capsule sur les liens. Puis on l'ajoute au devis PDF avec l'éditeur de rapports.
+    actions:
+      - surligner: '.o_form_sheet .o_notebook'
+        duree: 3
+
+  # ------------------------------------------------------------------ demande 2
+  - partie: "2. Le NINEA et le numéro Wave"
+    texte: >
+      Deuxième demande : le NINEA et le numéro Wave en bas de toutes les factures. Aucune ligne de Studio :
+      c'est un paramètre.
+    actions:
+      - aller: /odoo/settings
+      - ecrire: '.o_searchview_input'
+        taper: mise en page
+      - attendre: 1
+  - texte: >
+      Configurer la mise en page du document : le pied de page saisi ici s'imprime sur tous les documents
+      de la société, factures comprises. Modifier chaque rapport un par un serait une erreur.
+    actions:
+      - surligner: 'button:has-text("Configurer la"), a:has-text("Configurer la")'
+        duree: 3
+
+  # ------------------------------------------------------------------ demande 3
+  - partie: "3. Rappeler le client au bout de cinq jours"
+    texte: >
+      Troisième demande : quand un devis traiteur n'a pas de réponse au bout de cinq jours, penser à rappeler le client.
+      C'est une règle d'automatisation, dans Studio.
+    actions:
+      - aller: /odoo/sales
+      - cliquer: '[title="Toggle Studio"]'
+      - attendre: 1.5
+      - cliquer: '.o_web_studio_menu .o_menu_sections button:has-text("Automatisations")'
+      - attendre: 1.5
+      - cliquer: '.o_control_panel button:has-text("Nouveau")'
+      - attendre: 1
+  - texte: >
+      Cette fois, le déclencheur est une condition temporelle : Sur la base du champ de date. Par exemple la date
+      du devis, plus cinq jours, si le devis est toujours au statut envoyé. L'action : créer une activité
+      Rappeler le client, pour le vendeur.
+    actions:
+      - cliquer: '.o_field_widget[name="trigger"] input'
+      - attendre: 0.8
+      - surligner: '.o_select_menu_item:has-text("Sur la base du champ de date")'
+        duree: 3
+      - touche: Escape
+  - texte: "Nous ne l'enregistrons pas ici : abandonnez la fiche, et fermez Studio."
+    actions:
+      - cliquer: '.o_form_button_cancel'
+      - attendre: 1
+      - cliquer: '.o_studio_navbar a.btn-primary:has-text("Fermer")'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ demande 4
+  - partie: "4. Les ventes par type d'événement"
+    texte: >
+      Quatrième demande : voir les ventes du mois par type d'événement. Pas de nouveau champ : le type d'événement
+      existe déjà, et il est enregistré dans la base. Il suffit de regrouper.
+    actions:
+      - cliquer: '.o_searchview_dropdown_toggler'
+      - selectionner: {dans: '.o-dropdown--menu select.o_add_custom_group_menu', option: "Type d'événement"}
+      - attendre: 1
+      - cliquer: '.o_searchview_dropdown_toggler'
+  - texte: >
+      Les devis se rangent par événement, avec leur total. Ajoutez un filtre sur le mois, enregistrez le tout
+      dans les favoris, et Maïmouna a son tableau de bord. C'est du standard.
+    actions:
+      - surligner: '.o_group_header'
+        duree: 3
+
+  # ------------------------------------------------------------------ demande 5
+  - partie: "5. Le coût caché aux commis"
+    texte: >
+      Cinquième demande : les commis ne doivent pas voir le coût des produits. Le piège est de masquer
+      le champ avec Studio.
+    actions:
+      - aller: /odoo/action-sale.product_template_action
+      - rechercher: Fraisier
+      - cliquer: '.o_kanban_record:has-text("Fraisier")'
+      - surligner_champ: standard_price
+        duree: 2.5
+  - texte: >
+      Un champ masqué reste lisible par un export ou un autre écran. La bonne réponse : faire le test de l'export
+      avec le compte d'un commis. Si le coût apparaît, sa vraie protection, un groupe posé sur le champ lui-même,
+      relève d'un petit développement. Le dire au client, c'est aussi le travail du consultant.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges, que cet atelier met en lumière. Premier piège : ouvrir Studio avant d'avoir cherché dans
+      le standard et les paramètres.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : masquer au lieu de protéger. Une donnée sensible se teste toujours avec le compte
+      de la personne, et avec l'export.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : réaliser sans écrire. Chaque demande passe par une fiche de conception, puis par le registre
+      et la check-list de recette.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Les allergènes et la relance : Studio. Le pied de page : un paramètre. Les ventes par événement :
+      un regroupement standard. Le coût : un test, puis un développement. Ce qui compte, c'est la justesse du choix.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre dernier exercice : comparez ce corrigé à vos réponses, complétez votre fiche de conception,
+      et rendez les cinq livrables de l'atelier. Bravo, vous avez terminé la formation Studio !
+    actions:
+      - attendre: 1

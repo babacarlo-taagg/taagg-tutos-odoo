@@ -317,15 +317,21 @@ def stu_09():
     return stu_02()
 
 
+def stu_10():
+    # STU-10 est une revue : rien n'est créé (la règle d'automatisation est ouverte puis abandonnée sans être
+    # enregistrée). --preparer remet la fin de STU-02 pour le regroupement par type d'événement ; --oui la retire.
+    return stu_02()
+
+
 CAPSULES = {'STU-01': stu_01, 'STU-02': stu_02, 'STU-03': stu_03, 'STU-04': stu_04, 'STU-05': stu_05, 'STU-06': stu_06,
-            'STU-07': stu_07, 'STU-08': stu_08, 'STU-09': stu_09}
+            'STU-07': stu_07, 'STU-08': stu_08, 'STU-09': stu_09, 'STU-10': stu_10}
 
 if __name__ == '__main__':
     code = next((a for a in sys.argv[1:] if not a.startswith('--')), '')
     if PREPARER:
         # --preparer : seulement créer ce qui manque (devis, livraison, fin de STU-02), sans rien retirer
         print(code, '— préparation (création seulement) :', devis_demo(), livraison_demo(),
-              fin_stu_02() if code in ('STU-04', 'STU-05', 'STU-06', 'STU-07', 'STU-09') else '',
+              fin_stu_02() if code in ('STU-04', 'STU-05', 'STU-06', 'STU-07', 'STU-09', 'STU-10') else '',
               fin_stu_03() if code == 'STU-09' else '',
               devis_test_stu06() if code == 'STU-06' else '',
               preparer_stu08() if code == 'STU-08' else '')
