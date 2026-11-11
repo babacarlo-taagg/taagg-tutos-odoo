@@ -195,3 +195,25 @@ Tout a été construit dans une base de test : comment le livrer dans la vraie b
 
 Formation « Studio & Personnalisation low-code » — TAAGG School · taagg-gui.com
 ```
+
+## STU-10 · Atelier : les cinq demandes de Maïmouna — corrigé (3:40)
+
+- **Titre YouTube** : STU-10 · Atelier Odoo Studio : les cinq demandes de Maïmouna (corrigé)
+- **Leçon taagg-school.com** : n° 2829 (brouillon), section 6 du cours 234
+- **Fichiers** : `STU-10-atelier-les-cinq-demandes-de-maimouna.mp4`, `.srt`, `-chapitres.txt`, `STU-10-vignette.png`
+- **Description** :
+
+```
+Le corrigé de l'atelier final : cinq demandes d'une cliente, et pour chacune la bonne réponse — Studio, paramètre, standard ou développement. À regarder après avoir fait l'exercice.
+
+0:00 Introduction
+0:25 1. Les allergènes sur le devis
+0:45 2. Le NINEA et le numéro Wave
+1:08 3. Rappeler le client au bout de cinq jours
+1:43 4. Les ventes par type d'événement
+2:06 5. Le coût caché aux commis
+2:40 Les pièges à éviter
+3:08 Récapitulatif
+
+Formation « Studio & Personnalisation low-code » — TAAGG School · taagg-gui.com
+```
