@@ -76,6 +76,26 @@ def con_01():
     return 'aucun projet de formation'
 
 
+ARTICLES_CON02 = ['Projet Délices de Maïmouna', 'Projet Délices de Maïmouna (formation)']  # racines, et leurs sous-articles
+
+
+def con_02():
+    # CON-02 crée à l'écran, dans l'espace privé du formateur, l'article « Projet Délices de Maïmouna » et ses
+    # sous-articles (compte-rendu d'atelier, cahier des charges). Rien n'est partagé ni envoyé.
+    racines = odoo('knowledge.article', 'search', [['name', 'in', ARTICLES_CON02], ['create_uid', '=', FORMATEUR]],
+                   context={'active_test': False})
+    if racines:
+        tous = odoo('knowledge.article', 'search', [['id', 'child_of', racines]], context={'active_test': False})
+        enfants = [i for i in tous if i not in racines]
+        retirer('knowledge.article', enfants, 'sous-articles')
+        retirer('knowledge.article', racines, 'article du projet')
+    # un tournage interrompu laisse parfois un article privé vide (« Sans titre ») dans l'espace du formateur
+    retirer('knowledge.article', odoo('knowledge.article', 'search', [['name', '=', False], ['create_uid', '=', FORMATEUR],
+                                                                       ['category', '=', 'private']],
+                                      context={'active_test': False}), 'article vide laissé par un essai')
+    return 'aucun article de formation'
+
+
 def employe():
     """CON-06 : le compte « Formateur TAAGG » a besoin d'une fiche employé pour saisir du temps (accord de Babacar)."""
     e = odoo('hr.employee', 'search', [['user_id', '=', FORMATEUR]], context={'active_test': False})
@@ -86,7 +106,7 @@ def employe():
     return f'employé {EMPLOYE} créé'
 
 
-CAPSULES = {'CON-01': con_01}
+CAPSULES = {'CON-01': con_01, 'CON-02': con_02}
 
 if __name__ == '__main__':
     code = next((a for a in sys.argv[1:] if not a.startswith('--')), '')

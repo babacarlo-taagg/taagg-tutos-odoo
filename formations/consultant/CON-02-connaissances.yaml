@@ -1,0 +1,172 @@
+# CON-02 · Le cahier des charges et les comptes-rendus dans Connaissances
+# État de départ attendu (`python3 formations/consultant/etat-depart.py CON-02 --oui`) : aucun article
+#   « Projet Délices de Maïmouna » dans l'espace privé du formateur.
+# Ce que la capsule crée : dans l'espace PRIVÉ du compte « Formateur TAAGG », l'article « Projet Délices de Maïmouna »
+#   et deux sous-articles (« Atelier commandes traiteur — 12/11 », « Cahier des charges »). Le panneau Partager est
+#   ouvert et refermé sans inviter personne (on y voit l'adresse du compte de démonstration du formateur).
+# Odoo 19 : le nom de l'article se tape dans la case de titre en haut (pas dans le grand titre du texte) ;
+#   « /tableau » puis Entrée affiche le choix de la taille, Entrée encore pour 3 × 3.
+titre: "Le cahier des charges dans Connaissances"
+sous_titre: Formation Consultant Odoo · CON-02
+depart: /odoo/knowledge
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : combien coûtent les licences ?"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour. Comptes-rendus dans les e-mails, cahier des charges dans un fichier envoyé en trois versions :
+      au bout d'un mois, plus personne ne sait quelle est la bonne.
+    actions:
+      - attendre: 1
+  - texte: >
+      Aujourd'hui, nous allons réunir tous les documents du projet des Délices de Maïmouna au même endroit,
+      dans l'application Connaissances d'Odoo.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : l'espace du projet
+  - partie: "1. Un article pour le projet"
+    texte: >
+      Cliquez sur Nouvel article. Il est créé dans votre espace privé : personne d'autre ne le voit tant que vous
+      ne l'avez pas partagé. Nommez-le d'après le projet.
+    actions:
+      - cliquer_texte: Nouvel article
+      - attendre: 1.5
+      - ecrire: '.o_knowledge_header input'
+        taper: Projet Délices de Maïmouna
+        entree: true
+  - texte: "En haut de la page, un titre et une phrase qui dit à quoi sert cet espace."
+    actions:
+      - cliquer: '.note-editable'
+      - clavier: "Projet Délices de Maïmouna\nTout le projet au même endroit : comptes-rendus, cahier des charges, décisions."
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 2 : le compte-rendu
+  - partie: "2. Le compte-rendu d'atelier"
+    texte: >
+      Chaque document devient un sous-article. Survolez le projet dans la colonne de gauche et cliquez sur le plus.
+    actions:
+      - survoler: '.o_knowledge_sidebar li.o_article:has-text("Projet Délices") .o_article_handle'
+      - attendre: 0.5
+      - cliquer: '.o_knowledge_sidebar li.o_article:has-text("Projet Délices") .o_article_create'
+      - attendre: 1.5
+      - ecrire: '.o_knowledge_header input'
+        taper: Atelier commandes traiteur — 12/11
+        entree: true
+  - texte: >
+      On reprend la trame du compte-rendu : les présents, puis les décisions, avec qui a validé.
+    actions:
+      - cliquer: '.note-editable'
+      - clavier: "Atelier commandes traiteur — 12 novembre\nPrésents : Maïmouna DIOP, Awa (vente), le consultant.\nDécisions : devis traiteur dans Odoo dès janvier ; acompte de 50 % en ligne. Validé par Maïmouna.\n"
+      - attendre: 0.5
+  - texte: >
+      Pour les actions, une liste à cocher : tapez la barre oblique, puis Check-list. Chaque action a un nom et une date.
+    actions:
+      - clavier: "/check"
+      - attendre: 0.8
+      - touche: Enter
+      - clavier: "Awa : envoyer trois devis réels — 15/11\nConsultant : cahier des charges v1 — 20/11"
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 3 : le cahier des charges
+  - partie: "3. Le cahier des charges et ses exigences"
+    texte: "Un deuxième sous-article pour le cahier des charges."
+    actions:
+      - survoler: '.o_knowledge_sidebar li.o_article:has-text("Projet Délices") .o_article_handle'
+      - attendre: 0.5
+      - cliquer: '.o_knowledge_sidebar li.o_article:has-text("Projet Délices") .o_article_create'
+      - attendre: 1.5
+      - ecrire: '.o_knowledge_header input'
+        taper: Cahier des charges
+        entree: true
+      - cliquer: '.note-editable'
+      - clavier: "Cahier des charges — chapitre 3 : les commandes traiteur\nExigences numérotées, chacune vérifiable :\n"
+  - texte: >
+      Les exigences tiennent dans un tableau : la barre oblique, Tableau, et la taille. Un numéro, l'exigence,
+      et la réponse retenue.
+    actions:
+      - clavier: "/tableau"
+      - attendre: 0.8
+      - touche: Enter
+      - attendre: 0.8
+      - touche: Enter
+      - attendre: 0.8
+      - clavier: "N°"
+      - touche: Tab
+      - clavier: "Exigence"
+      - touche: Tab
+      - clavier: "Réponse"
+      - touche: Tab
+      - clavier: "T-01"
+      - touche: Tab
+      - clavier: "Un devis traiteur se crée en moins de 3 minutes"
+      - touche: Tab
+      - clavier: "Standard + Studio"
+      - touche: Tab
+      - clavier: "T-02"
+      - touche: Tab
+      - clavier: "Le client signe et paie l'acompte en ligne"
+      - touche: Tab
+      - clavier: "Paramètre"
+      - attendre: 1
+  - texte: >
+      Chaque numéro se retrouvera dans la grille de recette. Et l'enregistrement est automatique : le nuage
+      indique que tout est sauvegardé.
+    actions:
+      - surligner: '.note-editable table'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 4 : partager
+  - partie: "4. Partager avec le client"
+    texte: >
+      Quand le cahier des charges est prêt, le bouton Partager permet d'inviter le client, en lecture ou en
+      modification. Les sous-articles suivent l'article parent.
+    actions:
+      - cliquer: '.o_knowledge_header button:has-text("Partager")'
+      - attendre: 1.5
+      - surligner: '.o_knowledge_permission_panel'
+        duree: 3
+  - texte: >
+      Ici, nous n'invitons personne : on partage seulement une version relue, jamais un brouillon.
+    actions:
+      - touche: Escape
+      - attendre: 1
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : écrire le cahier des charges dans un espace partagé dès le premier jour.
+      Le client lit vos brouillons et les prend pour des engagements. Travaillez en privé, partagez une version relue.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : des comptes-rendus qui racontent la réunion. Gardez les décisions et les actions,
+      chacune avec un nom et une date.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : des exigences sans numéro. Sans numéro, impossible de les retrouver dans la recette,
+      ni de dire au client ce qui est fait.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Un article par projet, un sous-article par document. Des comptes-rendus avec décisions et
+      actions cochables, des exigences numérotées dans un tableau. Et un partage seulement quand c'est relu.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : ajoutez le chapitre des livraisons au cahier des charges, avec trois exigences numérotées.
+      Dans la prochaine capsule, nous verrons combien coûtent les licences Odoo. À tout de suite !
+    actions:
+      - attendre: 1
