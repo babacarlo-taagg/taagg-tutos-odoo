@@ -19,7 +19,7 @@ Avancement : ☐ à écrire · 📝 scénario écrit · ✎ brouillon muet OK ·
 
 | Code | Section du cours | Capsule | Ce qu'on apprend | Écrans | Fiches liées | État |
 |---|---|---|---|---|---|---|
-| CON-01 | 2. Méthodologie | Piloter le déploiement dans Projet | un projet « Déploiement Odoo — Délices de Maïmouna » ; les 6 phases en **étapes** ; une tâche par livrable avec responsable et échéance ; la vue liste et le filtre « en retard » ; le client abonné au projet (montré, pas invité) | Projet | 2.1, 2836, 2839 | ☐ |
+| CON-01 | 2. Méthodologie | Piloter le déploiement dans Projet | un projet « Déploiement Odoo — Délices de Maïmouna » ; les 6 phases en **étapes** ; une tâche par livrable avec responsable et échéance ; la vue liste et le filtre « en retard » ; le client abonné au projet (montré, pas invité) | Projet | 2.1, 2836, 2839 || ✎ 3:12 (brouillon muet) |
 | CON-02 | 2. Méthodologie | Le cahier des charges et les comptes-rendus dans Connaissances | un article « Projet Maïmouna » et ses sous-articles ; le compte-rendu d'atelier à partir de la trame ; un tableau d'exigences numérotées ; partager un article (bouton montré, aucune invitation envoyée) | Connaissances | 2.2, 2.3, 2836, 2838 | ☐ |
 | CON-03 | 2. Méthodologie | Combien coûtent les licences ? Lire sa base comme un acheteur | compter les utilisateurs internes et les comptes portail (gratuits) ; repérer ce qui impose le plan Custom : Studio installé, plusieurs sociétés ; où noter la date de renouvellement ; relever les prix sur odoo.com (montré en image fixe, pas filmé en direct) | Paramètres › Utilisateurs, Applications | 2830, 2831, 2832 | ☐ |
 | CON-04 | 3. Recette | Suivre la recette dans Projet | un projet « Recette » aux 5 étapes (Signalée → Clôturée) ; une tâche par anomalie, la gravité en étiquette, le testeur abonné ; distinguer anomalie, erreur de formation et nouvelle demande ; le filtre « gravité 1 ouvertes » avant de signer le PV | Projet | 3.1, 2840, 2841 | ☐ |
@@ -43,7 +43,7 @@ dont se servent CON-04, CON-06 et CON-07), puis CON-02, CON-04, CON-06, CON-07, 
 
 | Capsule | Créé à l'écran ou préparé par l'API |
 |---|---|
-| CON-01 | le projet « Déploiement Odoo — Délices de Maïmouna (formation) », ses étapes et ses tâches |
+| CON-01 | le projet « Déploiement Odoo — Délices de Maïmouna », ses étapes et ses tâches |
 | CON-02 | l'article privé « Projet Maïmouna (formation) » et ses sous-articles |
 | CON-03 | rien (lecture seule) |
 | CON-04 | le projet « Recette — Délices de Maïmouna (formation) », ses étapes, étiquettes de gravité et tâches |
@@ -51,7 +51,7 @@ dont se servent CON-04, CON-06 et CON-07), puis CON-02, CON-04, CON-06, CON-07, 
 | CON-06 | l'employé « Formateur TAAGG » (nécessaire pour saisir du temps, archivé ensuite) et ses feuilles de temps sur le projet de démonstration |
 | CON-07 | les To-do et activités du formateur créés à l'écran |
 
-## Questions pour Babacar avant de tourner
+## Questions pour Babacar avant de tourner (réponses du 12/11 : flou au montage pour CON-03 ; employé « Formateur TAAGG » créé ; prix non filmés)
 
 1. **CON-03 montre la liste des utilisateurs** : on y voit ton compte (nom et adresse e-mail). Je
    propose la vue regroupée par type (internes / portail) avec les adresses masquées par un flou au

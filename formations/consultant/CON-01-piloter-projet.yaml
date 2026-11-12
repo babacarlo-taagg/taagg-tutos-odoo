@@ -1,0 +1,182 @@
+# CON-01 · Piloter le déploiement dans Projet
+# État de départ attendu (`python3 formations/consultant/etat-depart.py CON-01 --oui`) : aucun projet
+#   « Déploiement Odoo — Délices de Maïmouna ». Les autres projets (« Ouverture boutique Almadies », « Interne »)
+#   ne sont ni ouverts ni modifiés.
+# Ce que la capsule crée : le projet « Déploiement Odoo — Délices de Maïmouna », ses 6 étapes (les phases du projet,
+#   propres à ce projet) et 3 tâches ; l'une est assignée au formateur, avec une date limite et 8 h allouées.
+#   Aucun paramètre général n'est changé (jalons et dépendances restent désactivés), aucune invitation envoyée.
+titre: "Piloter le déploiement dans Projet"
+sous_titre: Formation Consultant Odoo · CON-01
+depart: /odoo/project
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : le cahier des charges dans Connaissances"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour. Un projet Odoo, c'est six phases, des dizaines de livrables et plusieurs personnes. Si tout tient
+      dans votre tête ou dans un cahier, quelque chose finira par tomber.
+    actions:
+      - attendre: 1
+  - texte: >
+      Aujourd'hui, nous allons piloter le déploiement d'Odoo chez les Délices de Maïmouna avec l'application Projet :
+      les phases, les livrables, les responsables et les échéances, au même endroit.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : le projet
+  - partie: "1. Créer le projet"
+    texte: Dans l'application Projet, cliquez sur Nouveau. Donnez au projet le nom du client et de ce qu'on lui livre.
+    actions:
+      - bouton: Nouveau
+      - attendre: 1
+      - ecrire: '.modal .o_field_widget[name="name"] input'
+        taper: "Déploiement Odoo — Délices de Maïmouna"
+  - texte: >
+      Gardez les feuilles de temps : elles serviront à comparer le temps passé au temps prévu. Créez le projet.
+    actions:
+      - surligner: '.modal .o_field_widget[name="allow_timesheets"]'
+        duree: 2
+      - cliquer: '.modal-footer button.btn-primary'
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ partie 2 : les étapes
+  - partie: "2. Les six phases en étapes"
+    texte: >
+      Odoo propose de créer les étapes, c'est-à-dire les colonnes du tableau. Chez nous, une étape, c'est une phase
+      du projet. Avant-vente, cadrage, paramétrage…
+    actions:
+      - ecrire: '.o_column_quick_create input'
+        taper: "1. Avant-vente"
+        entree: true
+      - attendre: 0.8
+      - ecrire: '.o_column_quick_create input'
+        taper: "2. Cadrage"
+        entree: true
+      - attendre: 0.8
+      - ecrire: '.o_column_quick_create input'
+        taper: "3. Paramétrage"
+        entree: true
+      - attendre: 0.8
+  - texte: "…migration des données, recette, et mise en production. Numérotez-les : l'ordre se lit d'un coup d'œil."
+    actions:
+      - ecrire: '.o_column_quick_create input'
+        taper: "4. Migration des données"
+        entree: true
+      - attendre: 0.8
+      - ecrire: '.o_column_quick_create input'
+        taper: "5. Recette"
+        entree: true
+      - attendre: 0.8
+      - ecrire: '.o_column_quick_create input'
+        taper: "6. Mise en production"
+        entree: true
+      - attendre: 0.8
+      - touche: Escape
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 3 : les livrables
+  - partie: "3. Une tâche par livrable"
+    texte: >
+      Chaque livrable devient une tâche, rangée dans sa phase. Dans Cadrage, avec le plus : l'atelier sur les commandes
+      traiteur, puis le cahier des charges signé.
+    actions:
+      - cliquer: '.o_kanban_group:has-text("2. Cadrage") .o_kanban_quick_add'
+      - ecrire: '.o_kanban_quick_create .o_field_widget[name="display_name"] input'
+        taper: Atelier commandes traiteur
+        entree: true
+      - attendre: 1
+      - ecrire: '.o_kanban_quick_create .o_field_widget[name="display_name"] input'
+        taper: Cahier des charges signé
+        entree: true
+      - attendre: 1
+      - touche: Escape
+  - texte: "Et dans Recette, le livrable qui autorise la mise en production : le procès-verbal de recette signé."
+    actions:
+      - cliquer: '.o_kanban_group:has-text("5. Recette") .o_kanban_quick_add'
+      - ecrire: '.o_kanban_quick_create .o_field_widget[name="display_name"] input'
+        taper: PV de recette signé
+        entree: true
+      - attendre: 1
+      - touche: Escape
+      - attendre: 1
+  - texte: >
+      Ouvrons le cahier des charges. Une tâche sans responsable ni date n'avance pas : assignez-la, ici au consultant.
+    actions:
+      - cliquer: '.o_kanban_record:has-text("Cahier des charges signé")'
+      - attendre: 1
+      - choisir: {champ: user_ids, valeur: Formateur TAAGG}
+  - texte: >
+      Une date limite, convenue avec le client. Et le temps alloué : huit heures. C'est votre budget pour ce livrable.
+    actions:
+      - ecrire: '.o_field_widget[name="date_deadline"] input'
+        taper: "27/11/2026"
+        entree: true
+      - ecrire: '.o_field_widget[name="allocated_hours"] input'
+        taper: "8"
+      - attendre: 0.5
+  - texte: >
+      Dans la description, ce qui fait que le livrable est terminé : ici, la signature de Maïmouna sur la version finale.
+      Enregistrez.
+    actions:
+      - cliquer: '.o_field_widget[name="description"] .odoo-editor-editable, .o_field_widget[name="description"] [contenteditable="true"]'
+      - clavier: "Terminé quand : version finale signée par Maïmouna DIOP."
+      - enregistrer: oui
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 4 : suivre
+  - partie: "4. Suivre l'avancement"
+    texte: >
+      En haut de la tâche, les phases s'affichent comme un parcours. Quand le cahier des charges est signé, un clic
+      suffit pour avancer.
+    actions:
+      - surligner: '.o_statusbar_status'
+        duree: 2.5
+  - texte: >
+      Revenons au projet. La vue calendrier montre les échéances du mois : c'est le point à faire chaque lundi
+      avec le client.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Déploiement")'
+      - attendre: 1.5
+      - cliquer: '.o_switch_view.o_calendar'
+      - attendre: 2
+      - surligner_texte: Cahier des charges signé
+        duree: 2.5
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : une tâche trop grosse, comme « Paramétrage ». On ne sait jamais si elle
+      avance. Découpez en livrables qu'on peut cocher en une ou deux journées.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : des tâches sans responsable ni date. Elles s'accumulent dans la colonne, et personne ne s'en
+      sent chargé.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : un tableau que vous seul regardez. Montrez-le au client à chaque point d'avancement :
+      il voit le projet bouger, et les retards se discutent tôt.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Un projet par client, une étape par phase, une tâche par livrable, avec un responsable,
+      une date limite et un temps alloué. Et un point régulier sur le calendrier des échéances.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : ajoutez les livrables des phases de paramétrage et de migration, avec leurs dates.
+      Dans la prochaine capsule, nous rédigerons le cahier des charges dans Connaissances. À tout de suite !
+    actions:
+      - attendre: 1
