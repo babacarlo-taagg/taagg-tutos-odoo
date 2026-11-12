@@ -5,7 +5,7 @@ Playlist YouTube : « Formation Consultant fonctionnel Odoo ». Fichiers dans `s
 ## CON-01 · Piloter le déploiement dans Projet (3:07)
 
 - **Titre YouTube** : CON-01 · Piloter un déploiement Odoo avec l'application Projet
-- **Leçon taagg-school.com** : n° 2852 (brouillon), section 2 du cours 235
+- **Leçon taagg-school.com** : n° 2852 (publiée le 12/11), section 2 du cours 235
 - **Fichiers** : `CON-01-piloter-le-deploiement-dans-projet.mp4`, `.srt`, `-chapitres.txt`, `CON-01-vignette.png`
 - **Description** :
 
