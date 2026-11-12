@@ -300,6 +300,9 @@ def stu_08():
         print(('  ARCHIVÉ  ' if OUI else '  à archiver  ') + 'utilisateur de test « Modou GUEYE (livreur) »')
         if OUI:
             odoo('res.users', 'write', m, {'active': False})
+    # à la création du compte, Odoo ajoute tout seul un article privé « Bienvenue … » dans Connaissances
+    retirer('knowledge.article', odoo('knowledge.article', 'search', [['name', '=', 'Bienvenue Modou GUEYE (livreur)']],
+                                      context={'active_test': False}), 'article de bienvenue du compte de test')
     defaire_champs('stock.picking', champs_studio('stock.picking', ['Livreur', 'Téléphone du client', 'Nouveau Many2One']))
     return livraison_demo()
 
