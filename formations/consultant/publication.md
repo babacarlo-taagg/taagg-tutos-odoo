@@ -22,3 +22,24 @@ Un projet Odoo, c'est six phases, des dizaines de livrables et plusieurs personn
 
 Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui.com
 ```
+
+## CON-02 · Le cahier des charges dans Connaissances (3:12)
+
+- **Titre YouTube** : CON-02 · Cahier des charges et comptes-rendus dans Odoo Connaissances
+- **Leçon taagg-school.com** : n° 2853 (brouillon), section 2 du cours 235
+- **Fichiers** : `CON-02-le-cahier-des-charges-dans-connaissances.mp4`, `.srt`, `-chapitres.txt`, `CON-02-vignette.png`
+- **Description** :
+
+```
+Comptes-rendus dans les e-mails, cahier des charges en trois versions : au bout d'un mois, plus personne ne sait quelle est la bonne. Dans cette capsule, on réunit tous les documents du projet des Délices de Maïmouna dans l'application Connaissances : un article par projet, des comptes-rendus avec décisions et actions, des exigences numérotées, et un partage seulement quand c'est relu.
+
+0:00 Introduction
+0:23 1. Un article pour le projet
+0:41 2. Le compte-rendu d'atelier
+1:09 3. Le cahier des charges et ses exigences
+1:49 4. Partager avec le client
+2:06 Les pièges à éviter
+2:38 Récapitulatif
+
+Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui.com
+```
