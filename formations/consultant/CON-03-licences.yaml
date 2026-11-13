@@ -1,0 +1,148 @@
+# CON-03 · Combien coûtent les licences ? Lire sa base comme un acheteur
+# État de départ : rien à préparer, la capsule ne crée ni ne modifie rien (lecture seule).
+#   Base au 13/11 : 3 utilisateurs internes, 1 compte portail (Fatou Ba, cliente de démonstration), Modou archivé,
+#   Studio installé, 2 sociétés (« correction les délices de maimouna » et « SEN EQUIP », d'une autre formation).
+# Données personnelles : les identifiants (adresses e-mail) de la liste des utilisateurs sont floutés PENDANT le
+#   tournage (option `flou`), à la demande de Babacar. On n'ouvre aucune fiche utilisateur.
+# Les prix ne sont pas filmés (ils changent) : la capsule renvoie à odoo.com et à la fiche 2831.
+titre: "Combien coûtent les licences ?"
+sous_titre: Formation Consultant Odoo · CON-03
+depart: /odoo/settings
+flou:
+  - '.o_data_cell[name="login"]'
+  - '.o_list_renderer th[data-name="login"]'
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+  odoo.com: odoo point com
+fin:
+  message: "Prochaine capsule : suivre la recette dans Projet"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour. Avant de chiffrer un projet, ou un an après, au moment du renouvellement, le client demande toujours :
+      combien vont me coûter les licences ? La réponse se lit dans sa base.
+    actions:
+      - attendre: 1
+  - texte: >
+      Le prix d'Odoo Enterprise dépend de deux choses : le nombre d'utilisateurs internes, et le plan.
+      Nous allons trouver les deux, sans rien modifier.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : les utilisateurs internes
+  - partie: "1. Compter les utilisateurs internes"
+    texte: "Dans les paramètres, cherchez Utilisateurs. Odoo affiche le nombre d'utilisateurs actifs."
+    actions:
+      - ecrire: '.o_searchview_input'
+        taper: utilisateurs
+      - attendre: 1
+      - surligner: 'span.o_form_label:has-text("actifs") >> xpath=..'
+        duree: 2.5
+  - texte: >
+      Ouvrons la liste. Le filtre Utilisateurs internes est déjà posé : ce sont les comptes qui travaillent dans Odoo.
+      Chacun compte pour une licence.
+    actions:
+      - aller: /odoo/action-base.action_res_users
+      - attendre: 1
+      - surligner: '.o_list_renderer'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 2 : ce qui ne coûte rien
+  - partie: "2. Les comptes qui ne coûtent rien"
+    texte: >
+      Changeons de filtre : Utilisateurs du portail. Ce sont les clients et les fournisseurs qui consultent
+      leurs devis ou leurs factures en ligne. Ils ne paient pas de licence.
+    actions:
+      - cliquer: '.o_searchview_dropdown_toggler'
+      - cliquer: '.o_filter_menu .o-dropdown-item:has-text("Utilisateurs internes")'
+      - cliquer: '.o_filter_menu .o-dropdown-item:has-text("Utilisateurs du portail")'
+      - cliquer: '.o_searchview_dropdown_toggler'
+      - attendre: 1.5
+  - texte: >
+      Et les utilisateurs inactifs, archivés, ne comptent pas non plus. Un employé parti ou un compte de test :
+      on l'archive, et sa licence disparaît au prochain renouvellement.
+    actions:
+      - cliquer: '.o_searchview_dropdown_toggler'
+      - cliquer: '.o_filter_menu .o-dropdown-item:has-text("Utilisateurs du portail")'
+      - cliquer: '.o_filter_menu .o-dropdown-item:has-text("Utilisateurs inactifs")'
+      - cliquer: '.o_searchview_dropdown_toggler'
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ partie 3 : le plan
+  - partie: "3. Ce qui impose le plan Custom"
+    texte: >
+      Deuxième question : le plan. Certaines applications et options imposent le plan Custom, plus cher par utilisateur.
+      D'abord, Studio : dans Applications, cherchons-le.
+    actions:
+      - aller: /odoo/action-base.open_module_tree
+      - rechercher: Studio
+      - attendre: 1
+  - texte: >
+      Pas de bouton Activer : Studio est installé. Toute personnalisation Studio fait donc passer la base au plan
+      Custom, pour tous les utilisateurs.
+    actions:
+      - surligner: '.o_kanban_record:has-text("Studio")'
+        duree: 3
+  - texte: >
+      Ensuite, le nombre de sociétés. Dans les paramètres, cherchez Sociétés.
+    actions:
+      - aller: /odoo/settings
+      - ecrire: '.o_searchview_input'
+        taper: sociétés
+      - attendre: 1
+  - texte: >
+      Deux sociétés. Gérer plusieurs sociétés dans la même base, c'est aussi une option du plan Custom.
+      Si le client n'en a qu'une en réalité, la deuxième doit être archivée.
+    actions:
+      - surligner: 'span:has-text("Sociétés") >> xpath=..'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 4 : le chiffrage
+  - partie: "4. Du relevé au chiffrage"
+    texte: >
+      Vous avez vos deux chiffres : le nombre d'utilisateurs internes et le plan. Relevez le prix du jour sur odoo.com,
+      pour le pays du client, la première année et au renouvellement. Notez la date du relevé.
+    actions:
+      - attendre: 1.5
+  - texte: >
+      La fiche de cette leçon donne la méthode complète : le coût total sur trois ans, licences, intégration,
+      hébergement et formation compris.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : proposer Studio sans dire qu'il change le plan. Le client découvre
+      la différence sur sa facture, et c'est vous qu'il en tient pour responsable.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : oublier les comptes inutiles. Un compte de test ou un employé parti, encore actif,
+      se paie chaque mois.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : donner un prix de mémoire. Les tarifs d'Odoo changent avec les versions et selon les pays :
+      relevez-les le jour même, et datez-les.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Le prix dépend des utilisateurs internes et du plan. Les comptes portail et archivés ne coûtent rien.
+      Studio et le multi-sociétés imposent le plan Custom. Et les prix se relèvent le jour même, sur odoo.com.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : dans votre base d'essai, comptez les utilisateurs internes, listez ce qui impose le plan Custom,
+      et calculez le coût des licences sur trois ans. Prochaine capsule : suivre la recette dans Projet. À tout de suite !
+    actions:
+      - attendre: 1

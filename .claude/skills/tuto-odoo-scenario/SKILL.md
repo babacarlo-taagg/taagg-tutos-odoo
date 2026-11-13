@@ -32,6 +32,7 @@ titre: Paramétrer les taxes de vente        # générique de début + nom du fi
 sous_titre: Comptabilité — épisode 3        # sous le titre (facultatif)
 depart: /odoo                               # page ouverte avant la première étape
 ecran: [1600, 900]                          # taille du navigateur (agrandi en 1080p : texte bien lisible)
+flou: ['.o_data_cell[name="login"]']        # facultatif : zones floutées pendant le tournage (e-mails, données perso)
 voix: {moteur: elevenlabs, vitesse: 1.0}    # elevenlabs | openai | fichiers | muet
 prononciation: {TAAGG: Tag, FCFA: "francs CFA", TVA: "té-vé-a"}
 musique: ../musiques/douce.mp3              # facultatif, relatif au scénario

@@ -529,6 +529,22 @@ async function tourner(sc, pistes, dossier, visible) {
   const [l, h] = sc.ecran;
   const ctx = await navigateur.newContext({ viewport: { width: l, height: h }, locale: 'fr-FR', storageState: etat });
   await ctx.addInitScript(DECOR);
+  if (sc.flou?.length) {
+    // flou: [sélecteurs CSS] — floute ces zones sur chaque page dès le tournage (adresses e-mail, données personnelles) :
+    // la donnée n'est jamais enregistrée en clair, rien à refaire au montage
+    const css = `${sc.flou.join(', ')} { filter: blur(7px) !important; }`;
+    await ctx.addInitScript((regle) => {
+      const poser = () => {
+        if (document.getElementById('tuto-flou')) return;
+        const st = document.createElement('style');
+        st.id = 'tuto-flou';
+        st.textContent = regle;
+        (document.head || document.documentElement).appendChild(st);
+      };
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', poser);
+      else poser();
+    }, css);
+  }
   const page = await ctx.newPage();
   const t0 = Date.now();
   const brut = path.join(dossier, 'brut.mp4');
