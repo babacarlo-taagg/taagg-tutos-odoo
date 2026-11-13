@@ -47,7 +47,7 @@ Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui
 ## CON-03 · Combien coûtent les licences ? (3:13)
 
 - **Titre YouTube** : CON-03 · Combien coûtent les licences Odoo ? Lire sa base comme un acheteur
-- **Leçon taagg-school.com** : n° 2854 (brouillon), section 2 du cours 235
+- **Leçon taagg-school.com** : n° 2854 (publiée le 13/11), section 2 du cours 235
 - **Fichiers** : `CON-03-combien-coutent-les-licences.mp4`, `.srt`, `-chapitres.txt`, `CON-03-vignette.png`
 - **Description** :
 
