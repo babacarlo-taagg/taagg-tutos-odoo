@@ -1,0 +1,161 @@
+# CON-04 · Suivre la recette dans Projet
+# État de départ (`python3 formations/consultant/etat-depart.py CON-04 --oui`, puis `--preparer`) : le projet
+#   « Recette — Délices de Maïmouna » aux 5 étapes (Signalée, Qualifiée, En correction, À re-tester, Clôturée), les
+#   étiquettes « Gravité 1 — bloquant », « Gravité 2 — contournable », « Gravité 3 — mineur », « Erreur de formation »,
+#   « Nouvelle demande », et 3 signalements déjà reçus, assignés au formateur (créés hors caméra par l'API).
+# Ce que la capsule crée à l'écran : le signalement « R-T-01 : convives absents du devis PDF » ; elle change l'étape
+#   et les étiquettes des signalements. Rien n'est envoyé. `etat-depart.py CON-04 --oui` retire projet, étapes, tâches
+#   et ces 5 étiquettes (les étiquettes de projet sont communes à la base : seules celles-ci, par leur nom).
+titre: "Suivre la recette dans Projet"
+sous_titre: Formation Consultant Odoo · CON-04
+depart: /odoo/project
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+  PV: procès-verbal
+  R-T-01: R T zéro un
+  R-T-03: R T zéro trois
+fin:
+  message: "Prochaine capsule : le temps passé contre le temps prévu"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour. Pendant la recette, les remarques arrivent de partout : un appel, un message, une phrase en passant.
+      Si elles ne sont pas suivies au même endroit, certaines se perdent, et d'autres reviennent après la mise en production.
+    actions:
+      - attendre: 1
+  - texte: >
+      Aujourd'hui, nous allons suivre la recette des Délices de Maïmouna dans un projet Odoo : une tâche par anomalie,
+      une gravité, et un état qui dit où elle en est.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : le tableau
+  - partie: "1. Le tableau de la recette"
+    texte: >
+      Voici le projet Recette. Ses cinq étapes suivent le circuit d'une anomalie : signalée, qualifiée, en correction,
+      à re-tester, et clôturée.
+    actions:
+      - cliquer: '.o_kanban_record:has-text("Recette")'
+      - attendre: 1.5
+      - surligner: '.o_kanban_renderer'
+        duree: 3
+  - texte: >
+      Trois signalements sont déjà arrivés. Une anomalie bloquante est qualifiée : l'activité de Moussa n'est pas créée
+      quand on confirme un mariage.
+    actions:
+      - surligner: '.o_kanban_record:has-text("R-T-03")'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 2 : signaler
+  - partie: "2. Signaler une anomalie"
+    texte: "Awa en signale une nouvelle. Dans Signalée, avec le plus, un titre qui commence par le numéro du scénario."
+    actions:
+      - cliquer: '.o_kanban_group:has-text("Signalée") .o_kanban_quick_add'
+      - ecrire: '.o_kanban_quick_create .o_field_widget[name="display_name"] input'
+        taper: "R-T-01 : convives absents du devis PDF"
+        entree: true
+      - attendre: 1
+      - touche: Escape
+      - attendre: 0.8
+  - texte: >
+      Ouvrons-la. Un bon signalement dit quatre choses : le scénario, ce qu'on a fait, ce qu'on attendait,
+      et ce qu'on a obtenu.
+    actions:
+      - cliquer: '.o_kanban_record:has-text("R-T-01")'
+      - attendre: 1
+      - cliquer: '.o_field_widget[name="description"] .odoo-editor-editable, .o_field_widget[name="description"] [contenteditable="true"]'
+      - clavier: "Scénario : R-T-01 (Awa). Fait : imprimé le devis S00083. Attendu : le nombre de convives sous l'événement. Obtenu : la ligne est vide."
+      - attendre: 0.5
+
+  # ------------------------------------------------------------------ partie 3 : qualifier
+  - partie: "3. Qualifier chaque signalement"
+    texte: >
+      Le consultant reproduit, puis qualifie. Ici, le devis s'imprime quand même : c'est gênant mais contournable,
+      gravité deux. Puis l'étape Qualifiée.
+    actions:
+      - choisir: {champ: tag_ids, valeur: Gravité 2}
+      - attendre: 0.5
+      - cliquer: '.o_statusbar_status button:has-text("Qualifiée")'
+      - attendre: 1
+  - texte: >
+      Tous les signalements ne sont pas des anomalies. Awa ne trouve pas le bouton Envoyer : c'est une erreur de formation.
+      On complète la fiche mémo, et on clôture.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Recette")'
+      - attendre: 1
+      - cliquer: '.o_kanban_record:has-text("bouton Envoyer")'
+      - attendre: 1
+      - choisir: {champ: tag_ids, valeur: Erreur de formation}
+      - cliquer: '.o_statusbar_status button:has-text("Clôturée")'
+      - attendre: 1
+  - texte: >
+      Et le rapport des baptêmes n'a jamais été demandé : c'est une nouvelle demande. Elle sort de la recette,
+      pour la phase deux ou un avenant.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Recette")'
+      - attendre: 1
+      - cliquer: '.o_kanban_record:has-text("baptêmes")'
+      - attendre: 1
+      - choisir: {champ: tag_ids, valeur: Nouvelle demande}
+      - cliquer: '.o_statusbar_status button:has-text("Clôturée")'
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 4 : avant le PV
+  - partie: "4. Avant de signer le procès-verbal"
+    texte: >
+      Revenons au tableau. Chaque carte dit sa gravité, et sa colonne dit où elle en est.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Recette")'
+      - attendre: 1.5
+      - surligner: '.o_kanban_renderer'
+        duree: 2.5
+  - texte: >
+      Avant de signer le procès-verbal, une seule question : reste-t-il une gravité un ouverte ? Cherchez l'étiquette.
+    actions:
+      - ecrire: '.o_searchview_input'
+        taper: Gravité 1
+      - attendre: 0.8
+      - cliquer: '.o_searchview_autocomplete b:text-is("Étiquettes")'
+      - attendre: 1.5
+  - texte: >
+      Il en reste une. Tant qu'elle n'est pas corrigée et re-testée, on ne met pas en production.
+    actions:
+      - surligner: '.o_kanban_record:has-text("R-T-03")'
+        duree: 3
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : une nouvelle demande déguisée en anomalie. Si on la corrige sans rien dire,
+      la recette ne finit jamais, et le budget non plus.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : clôturer soi-même ce qu'on a corrigé. C'est le testeur qui refait le scénario complet,
+      et qui clôture.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : des signalements vagues, comme « ça ne marche pas ». Exigez toujours le scénario, l'attendu
+      et l'obtenu. Sinon, vous passerez votre temps à deviner.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Un projet de recette, cinq étapes, une tâche par signalement. On qualifie : anomalie avec sa gravité,
+      erreur de formation, ou nouvelle demande. Et pas de procès-verbal tant qu'une gravité un reste ouverte.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : faites passer l'anomalie R-T-01 par toutes les étapes, jusqu'à la clôture par le testeur.
+      Dans la prochaine capsule, nous comparerons le temps passé au temps prévu. À tout de suite !
+    actions:
+      - attendre: 1

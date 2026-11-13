@@ -96,6 +96,47 @@ def con_02():
     return 'aucun article de formation'
 
 
+PROJET_CON04 = 'Recette — Délices de Maïmouna'
+ETAPES_CON04 = ['Signalée', 'Qualifiée', 'En correction', 'À re-tester', 'Clôturée']
+ETIQUETTES_CON04 = ['Gravité 1 — bloquant', 'Gravité 2 — contournable', 'Gravité 3 — mineur', 'Erreur de formation',
+                    'Nouvelle demande']
+
+
+def con_04():
+    # CON-04 : le projet de recette (préparé par l'API), ses étapes, ses tâches, puis les étiquettes de gravité
+    # (les étiquettes de projet sont communes à toute la base : on ne retire que celles-ci, aux noms de la capsule).
+    defaire_projet(PROJET_CON04)
+    retirer('project.tags', odoo('project.tags', 'search', [['name', 'in', ETIQUETTES_CON04]]), 'étiquettes de la recette')
+    return 'aucun projet de recette'
+
+
+def preparer_con04():
+    """Le projet « Recette » aux 5 étapes, les étiquettes, et deux signalements déjà reçus (créés hors caméra)."""
+    if odoo('project.project', 'search', [['name', '=', PROJET_CON04]]):
+        return 'projet de recette déjà prêt'
+    tags = {}
+    for n in ETIQUETTES_CON04:
+        t = odoo('project.tags', 'search', [['name', '=', n]])
+        tags[n] = t[0] if t else odoo('project.tags', 'create', {'name': n})
+    projet = odoo('project.project', 'create', {'name': PROJET_CON04, 'allow_timesheets': False})
+    etapes = {n: odoo('project.task.type', 'create', {'name': n, 'sequence': i, 'project_ids': [[6, 0, [projet]]],
+                                                      'fold': False})
+              for i, n in enumerate(ETAPES_CON04)}
+    taches = [
+        ("R-T-03 : pas d'activité pour Moussa quand on confirme un mariage", 'Qualifiée', 'Gravité 1 — bloquant',
+         "<p><b>Scénario :</b> R-T-03 (Awa). <b>Fait :</b> confirmé le devis S00083 (mariage). <b>Attendu :</b> une activité "
+         "pour Moussa. <b>Obtenu :</b> aucune activité.</p>"),
+        ("Je ne trouve pas le bouton Envoyer sur le devis", 'Signalée', None,
+         "<p><b>Signalé par :</b> Awa. <b>Fait :</b> devis ouvert, cherché le bouton d'envoi en bas de page.</p>"),
+        ("Ce serait bien d'avoir aussi un rapport des baptêmes", 'Signalée', None,
+         "<p><b>Signalé par :</b> Maïmouna DIOP, pendant la recette.</p>"),
+    ]
+    for nom, etape, tag, desc in taches:
+        odoo('project.task', 'create', {'name': nom, 'project_id': projet, 'stage_id': etapes[etape], 'description': desc,
+                                        'tag_ids': [[6, 0, [tags[tag]] if tag else []]], 'user_ids': [[6, 0, [FORMATEUR]]]})
+    return f'projet de recette prêt ({len(taches)} signalements)'
+
+
 def employe():
     """CON-06 : le compte « Formateur TAAGG » a besoin d'une fiche employé pour saisir du temps (accord de Babacar)."""
     e = odoo('hr.employee', 'search', [['user_id', '=', FORMATEUR]], context={'active_test': False})
@@ -106,12 +147,13 @@ def employe():
     return f'employé {EMPLOYE} créé'
 
 
-CAPSULES = {'CON-01': con_01, 'CON-02': con_02}
+CAPSULES = {'CON-01': con_01, 'CON-02': con_02, 'CON-04': con_04}
 
 if __name__ == '__main__':
     code = next((a for a in sys.argv[1:] if not a.startswith('--')), '')
     if PREPARER:
-        print(code, '— préparation (création seulement) :', employe() if code == 'CON-06' or '--employe' in sys.argv else '')
+        print(code, '— préparation (création seulement) :', employe() if code == 'CON-06' or '--employe' in sys.argv else '',
+              preparer_con04() if code == 'CON-04' else '')
         sys.exit(0)
     if code not in CAPSULES:
         sys.exit(f"Capsule inconnue : {code} (connues : {', '.join(CAPSULES)})")
