@@ -64,3 +64,24 @@ Le prix d'Odoo Enterprise dépend du nombre d'utilisateurs internes et du plan. 
 
 Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui.com
 ```
+
+## CON-04 · Suivre la recette dans Projet (3:09)
+
+- **Titre YouTube** : CON-04 · Suivre la recette d'un projet Odoo dans l'application Projet
+- **Leçon taagg-school.com** : n° 2855 (brouillon), section 3 du cours 235
+- **Fichiers** : `CON-04-suivre-la-recette-dans-projet.mp4`, `.srt`, `-chapitres.txt`, `CON-04-vignette.png`
+- **Description** :
+
+```
+Pendant la recette, les remarques arrivent de partout. Dans cette capsule, on les suit dans un projet Odoo : une tâche par signalement, la gravité en étiquette, cinq étapes de « signalée » à « clôturée ». On apprend à distinguer anomalie, erreur de formation et nouvelle demande, et à vérifier qu'aucune gravité 1 ne reste ouverte avant de signer le procès-verbal.
+
+0:00 Introduction
+0:29 1. Le tableau de la recette
+0:49 2. Signaler une anomalie
+1:08 3. Qualifier chaque signalement
+1:45 4. Avant de signer le procès-verbal
+2:05 Les pièges à éviter
+2:35 Récapitulatif
+
+Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui.com
+```
