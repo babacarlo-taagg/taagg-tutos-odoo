@@ -100,7 +100,7 @@ etapes:
       Deux sociétés. Gérer plusieurs sociétés dans la même base, c'est aussi une option du plan Custom.
       Si le client n'en a qu'une en réalité, la deuxième doit être archivée.
     actions:
-      - surligner: 'span:has-text("Sociétés") >> xpath=..'
+      - surligner: 'span.o_form_label:has-text("Sociétés") >> xpath=..'
         duree: 3
 
   # ------------------------------------------------------------------ partie 4 : le chiffrage

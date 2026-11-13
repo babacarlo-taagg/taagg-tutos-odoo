@@ -43,3 +43,24 @@ Comptes-rendus dans les e-mails, cahier des charges en trois versions : au bout 
 
 Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui.com
 ```
+
+## CON-03 · Combien coûtent les licences ? (3:13)
+
+- **Titre YouTube** : CON-03 · Combien coûtent les licences Odoo ? Lire sa base comme un acheteur
+- **Leçon taagg-school.com** : n° 2854 (brouillon), section 2 du cours 235
+- **Fichiers** : `CON-03-combien-coutent-les-licences.mp4`, `.srt`, `-chapitres.txt`, `CON-03-vignette.png`
+- **Description** :
+
+```
+Le prix d'Odoo Enterprise dépend du nombre d'utilisateurs internes et du plan. Dans cette capsule, on les retrouve dans la base, sans rien modifier : les comptes internes, les comptes portail et archivés qui ne coûtent rien, et ce qui impose le plan Custom (Studio, plusieurs sociétés). Les prix, eux, se relèvent le jour même sur odoo.com.
+
+0:00 Introduction
+0:25 1. Compter les utilisateurs internes
+0:42 2. Les comptes qui ne coûtent rien
+1:04 3. Ce qui impose le plan Custom
+1:45 4. Du relevé au chiffrage
+2:09 Les pièges à éviter
+2:38 Récapitulatif
+
+Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui.com
+```
