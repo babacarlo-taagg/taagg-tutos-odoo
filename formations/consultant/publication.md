@@ -26,7 +26,7 @@ Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui
 ## CON-02 · Le cahier des charges dans Connaissances (3:12)
 
 - **Titre YouTube** : CON-02 · Cahier des charges et comptes-rendus dans Odoo Connaissances
-- **Leçon taagg-school.com** : n° 2853 (brouillon), section 2 du cours 235
+- **Leçon taagg-school.com** : n° 2853 (publiée le 13/11), section 2 du cours 235
 - **Fichiers** : `CON-02-le-cahier-des-charges-dans-connaissances.mp4`, `.srt`, `-chapitres.txt`, `CON-02-vignette.png`
 - **Description** :
 
