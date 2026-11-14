@@ -106,3 +106,24 @@ Le succès d'un projet Odoo se mesure à l'adoption, pas au jour de la formation
 
 Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui.com
 ```
+
+## CON-06 · Le temps passé contre le temps prévu (2:49)
+
+- **Titre YouTube** : CON-06 · Temps passé contre temps prévu : des faits pour l'avenant (Odoo Feuilles de temps)
+- **Leçon taagg-school.com** : n° 2857 (brouillon), section 4 du cours 235
+- **Fichiers** : `CON-06-le-temps-passe-contre-le-temps-prevu.mp4`, `.srt`, `-chapitres.txt`, `CON-06-vignette.png`
+- **Description** :
+
+```
+« Vous aviez dit deux semaines. » Face à cette phrase, le consultant qui a des chiffres garde le client. Dans cette capsule, on compare le temps passé au temps prévu sur le projet des Délices de Maïmouna avec les feuilles de temps d'Odoo : le budget en heures, la saisie quotidienne, l'écart livrable par livrable, et un avenant chiffré sur des faits.
+
+0:00 Introduction
+0:30 1. Le budget en heures
+0:47 2. Saisir son temps chaque jour
+1:06 3. Lire l'écart, livrable par livrable
+1:28 4. Des faits pour l'avenant
+1:50 Les pièges à éviter
+2:17 Récapitulatif
+
+Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui.com
+```
