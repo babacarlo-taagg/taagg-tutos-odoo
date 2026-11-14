@@ -38,11 +38,11 @@ etapes:
   - partie: "1. L'écran de la caisse"
     texte: >
       Sur la carte Caisse boutique, cliquez sur Transactions. C'est le même écran que pour la banque :
-      les mouvements de la caisse, et en haut, le solde.
+      les mouvements de la caisse, regroupés en relevés, avec leur solde.
     actions:
       - cliquer: '.o_kanban_record:has-text("Caisse boutique") button:has-text("Transactions")'
       - attendre: 2
-      - surligner_texte: Solde actuel
+      - surligner_texte: Caisse — début novembre
         duree: 2.5
   - texte: >
       Les ventes au comptoir du début du mois y sont déjà : trois cent mille francs.
