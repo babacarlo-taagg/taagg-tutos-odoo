@@ -48,7 +48,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | CPT-17 | Importer un relevé bancaire | import CSV / OFX / CAMT, saisie manuelle d'une ligne | Tableau de bord › Banque | 🎙 3:14 |
 | CPT-18 | Le rapprochement bancaire **[E]** | relier chaque ligne du relevé à une facture ou un paiement | Rapprochement | ✎ 3:16 |
 | CPT-19 | Modèles de rapprochement **[E]** | automatiser les frais bancaires, agios, commissions | Modèles de rapprochement | ✎ 2:54 |
-| CPT-20 | La caisse | encaissements et décaissements en espèces, contrôle de caisse | Journal de caisse | ☐ |
+| CPT-20 | La caisse | encaissements et décaissements en espèces, contrôle de caisse | Journal de caisse | ✎ 3:50 |
 | CPT-21 | Les emprunts **[E]** | créer un emprunt, échéancier, écritures automatiques | Actif & passif › Emprunts | ☐ |
 
 ## Parcours 5 — Opérations comptables
@@ -165,6 +165,10 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
   Odoo 19 : modèles accessibles par le menu « ⋮ » de la carte Banque › Modèles. Le modèle livré « Frais bancaires »
   (Bank Fees, 601100, manuel) est corrigé (FRAIS, Banque, 631800) et automatisé ; import de `releve-banque-novembre-2.csv`
   (2 frais) rapprochés seuls. etat-depart.py range les lignes sans relevé dans le relevé de CPT-17 (sinon « relevé invalide »).
+- **CPT-20** (14 novembre 2026) : brouillon muet, 3 min 50 s, 21 étapes. **Voix après le 17 novembre.**
+  Caisse boutique : recette de départ « Ventes comptoir » 300 000 F (créée par l'API, rangée en 701100, dans un relevé, sinon
+  pas de « Solde actuel ») ; encaissement en espèces de INV/2026/00005 relié seul par Odoo ; gaz −6 000 F → 605300 ;
+  versement à la banque −300 000 F → 585001 ; écart de caisse −500 F → 658800. Solde : 29 400 F puis 28 900 F.
 
 ## Ordre de tournage proposé
 
