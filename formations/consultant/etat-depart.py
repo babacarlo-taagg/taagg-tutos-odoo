@@ -195,7 +195,41 @@ def preparer_con06():
     return 'projet de déploiement prêt (3 livrables, 17 h déjà passées)'
 
 
-CAPSULES = {'CON-01': con_01, 'CON-02': con_02, 'CON-04': con_04, 'CON-05': con_05, 'CON-06': con_06}
+TODOS_CON07 = ["Envoyer le compte-rendu de l'atelier", 'Relancer Maïmouna pour la signature', 'Préparer la recette du 20/11',
+               "Envoyer le compte-rendu de l'atelier (essai)", 'Bienvenue Formateur TAAGG !']
+ACTIVITE_CON07 = "Relancer pour l'acompte"
+
+
+def odoo_formateur(modele, methode, *args, **kw):
+    """Appel au nom du compte « Formateur TAAGG » (ses To-do sont privés : le compte API ne les voit pas)."""
+    global UID_FORMATEUR
+    if 'UID_FORMATEUR' not in globals():
+        UID_FORMATEUR = appel('common', 'authenticate', ENV['ODOO_BASE'], ENV['ODOO_LOGIN'], ENV['ODOO_MOT_DE_PASSE'], {})
+    return appel('object', 'execute_kw', ENV['ODOO_BASE'], UID_FORMATEUR, ENV['ODOO_MOT_DE_PASSE'], modele, methode, list(args), kw)
+
+
+def retirer_formateur(modele, ids, quoi):
+    if not ids:
+        return
+    noms = [r['display_name'] for r in odoo_formateur(modele, 'read', ids, fields=['display_name'])]
+    print(('  RETIRÉ  ' if OUI else '  à retirer  ') + f'{quoi} ({modele}) : ' + ' ; '.join(noms))
+    if OUI:
+        odoo_formateur(modele, 'unlink', ids)
+
+
+def con_07():
+    # CON-07 : les To-do créés à l'écran (et celui de bienvenue qu'Odoo crée à la première visite du formateur),
+    # et l'activité « Relancer pour l'acompte » planifiée sur le devis de démonstration. Rien d'autre.
+    retirer_formateur('project.task', odoo_formateur('project.task', 'search', [['project_id', '=', False],
+                                                                               ['name', 'in', TODOS_CON07]],
+                                                     context={'active_test': False}), 'To-do de la capsule')
+    retirer_formateur('mail.activity', odoo_formateur('mail.activity', 'search', [['summary', '=', ACTIVITE_CON07],
+                                                                                 ['user_id', '=', FORMATEUR]]),
+                      'activité de la capsule')
+    return 'aucun To-do ni activité de la capsule'
+
+
+CAPSULES = {'CON-01': con_01, 'CON-02': con_02, 'CON-04': con_04, 'CON-05': con_05, 'CON-06': con_06, 'CON-07': con_07}
 
 if __name__ == '__main__':
     code = next((a for a in sys.argv[1:] if not a.startswith('--')), '')

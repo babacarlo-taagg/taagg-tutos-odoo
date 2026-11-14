@@ -1,0 +1,138 @@
+# CON-07 · S'organiser au quotidien avec To-do et les activités
+# État de départ (`python3 formations/consultant/etat-depart.py CON-07 --oui`) : aucun To-do de la capsule chez le
+#   formateur, aucune activité « Relancer pour l'acompte » ; le devis de démonstration « Mariage Ndiaye » (S00083) existe.
+# Ce que la capsule crée : 3 To-do privés du formateur et une activité « Relancer pour l'acompte » sur S00083.
+#   Le nettoyage passe par le compte du formateur (ses To-do sont privés : le compte API ne les voit pas).
+titre: "S'organiser au quotidien avec To-do"
+sous_titre: Formation Consultant Odoo · CON-07
+depart: /odoo/to-do
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+  To-do: tou dou
+fin:
+  message: "Fin de la formation Posture & Méthodologie Consultant"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour. Un consultant suit plusieurs clients à la fois : relances, comptes-rendus, rendez-vous. Ce qui n'est
+      écrit nulle part finit par être oublié, et c'est toujours la relance qui comptait.
+    actions:
+      - attendre: 1
+  - texte: >
+      Dans cette dernière capsule, nous allons organiser la journée du consultant avec deux outils d'Odoo :
+      les To-do, pour sa liste personnelle, et les activités, rattachées aux dossiers des clients.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : la liste du jour
+  - partie: "1. La liste personnelle"
+    texte: >
+      L'application To-do est votre liste privée : personne d'autre ne la voit. Les colonnes rangent par échéance :
+      aujourd'hui, cette semaine, ce mois.
+    actions:
+      - surligner: '.o_kanban_renderer'
+        duree: 2.5
+  - texte: >
+      Les actions du compte-rendu de l'atelier deviennent des To-do. Aujourd'hui : envoyer le compte-rendu,
+      et relancer Maïmouna pour la signature.
+    actions:
+      - cliquer: '.o_kanban_group:has-text("Aujourd") .o_kanban_quick_add'
+      - ecrire: '.o_kanban_quick_create .o_field_widget[name="display_name"] input'
+        taper: Envoyer le compte-rendu de l'atelier
+        entree: true
+      - attendre: 1
+      - ecrire: '.o_kanban_quick_create .o_field_widget[name="display_name"] input'
+        taper: Relancer Maïmouna pour la signature
+        entree: true
+      - attendre: 1
+      - touche: Escape
+  - texte: "Et pour cette semaine : préparer la recette du vingt novembre."
+    actions:
+      - cliquer: '.o_kanban_group:has-text("Cette semaine") .o_kanban_quick_add'
+      - ecrire: '.o_kanban_quick_create .o_field_widget[name="display_name"] input'
+        taper: Préparer la recette du 20/11
+        entree: true
+      - attendre: 1
+      - touche: Escape
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 2 : l'activité sur le dossier
+  - partie: "2. Une activité sur le dossier du client"
+    texte: >
+      Ce qui concerne un dossier client se planifie sur le dossier lui-même. Ouvrons le devis du mariage Ndiaye.
+    actions:
+      - aller: /odoo/sales
+      - rechercher: Mariage Ndiaye
+      - cliquer: '.o_data_row td[name="name"]'
+      - attendre: 1
+  - texte: >
+      Bouton Activité, type Appeler, et un résumé clair : relancer pour l'acompte. L'échéance, et vous comme responsable.
+    actions:
+      - cliquer: '.o-mail-Chatter button:has-text("Activité")'
+      - attendre: 1.5
+      - cliquer: '.modal >> text=Appeler'
+      - ecrire: '.modal .o_field_widget[name="summary"] input'
+        taper: Relancer pour l'acompte
+      - attendre: 0.5
+  - texte: >
+      Enregistrez. L'activité est visible sur le devis : si vous êtes absent, un collègue sait exactement où en est
+      le client.
+    actions:
+      - cliquer: '.modal-footer button:has-text("Enregistrer")'
+      - attendre: 1.5
+      - surligner: '.o-mail-Chatter'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 3 : le point du matin
+  - partie: "3. Le point du matin"
+    texte: >
+      Chaque matin, l'horloge en haut de l'écran rassemble toutes vos activités, tous dossiers confondus.
+      C'est votre première vue de la journée, avec votre liste To-do.
+    actions:
+      - cliquer: '.o_menu_systray button:has(i.fa-clock-o)'
+      - attendre: 1.5
+      - surligner: '.o-mail-ActivityMenu'
+        duree: 3
+      - touche: Escape
+  - texte: >
+      Quand une action est faite, marquez-la comme terminée. Ce qui reste ouvert dit, sans effort de mémoire,
+      ce que vous devez encore à chaque client.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : mettre dans sa liste privée ce qui concerne un client. Si vous êtes
+      malade, personne ne le verra. Ce qui touche un dossier va sur le dossier.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : des To-do vagues, comme « Maïmouna ». Un verbe et un objet : relancer pour la signature,
+      envoyer le compte-rendu.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : ne jamais vider la liste. Une liste de cinquante lignes n'est plus lue. Chaque vendredi,
+      terminez, replanifiez ou supprimez.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Les To-do pour votre liste personnelle, rangée par échéance. Les activités pour ce qui touche
+      un client, sur son dossier. Et chaque matin, le point avec l'horloge et votre liste.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : transformez les actions de votre dernier compte-rendu en To-do et en activités, puis faites
+      le point demain matin. C'est la fin de cette formation : bravo, et bonne route de consultant !
+    actions:
+      - attendre: 1
