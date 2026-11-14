@@ -2,7 +2,7 @@
 # État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-20`) :
 #   journal « Caisse boutique » (CAI, compte 571001) : une seule ligne, « VENTES COMPTOIR DU 1er AU 4 NOVEMBRE », +300 000 F,
 #   déjà rangée en 701100 ; plus le paiement en espèces des Almadies de CPT-12 (50 000 F, hors écran de la caisse).
-#   INV/2026/00005 (Almadies, 35 400 F, CPT-13) due.
+#   INV/2026/00005 (Almadies, 35 400 F, CPT-13) due ; Odoo relie seul l'encaissement en espèces (client + montant exacts).
 # Ce que la capsule fait : encaissement en espèces de INV/2026/00005 (Lettrer), achat de gaz −6 000 F → 605300,
 #   versement à la banque −300 000 F → 585001 (la ligne de la banque de CPT-17/18 utilise le même compte),
 #   écart de caisse −500 F → 658800. etat-depart.py supprime ces lignes et recrée la recette de départ.
@@ -68,12 +68,9 @@ etapes:
       - cliquer: 'button:has-text("Ajouter & Fermer")'
       - attendre: 1.5
   - texte: >
-      Comme à la banque, Odoo propose Lettrer. Choisissez la facture de trente-cinq mille quatre cents francs, et Sélectionnez.
+      Odoo reconnaît le client et le montant exact de sa facture : il relie tout seul l'encaissement à la facture de réassort.
+      Elle est payée, et le solde de la caisse augmente d'autant.
     actions:
-      - cliquer: '.o_kanban_record:has-text("ESPECES BOUTIQUE LES ALMADIES") button:has-text("Lettrer")'
-      - cliquer: '.modal .o_data_row:has-text("INV/2026/00005") .o_list_record_selector input'
-      - cliquer: '.modal-footer button:has-text("Sélectionner")'
-      - attendre: 1.5
       - surligner_texte: INV/2026/00005
         duree: 2.5
 
@@ -121,8 +118,8 @@ etapes:
   # ------------------------------------------------------------------ partie 5 : compter
   - partie: "5. Compter la caisse"
     texte: >
-      Le soir, on compte les billets et les pièces. Odoo annonce le solde : trois cent soixante-dix-neuf mille quatre cents francs.
-      Le tiroir n'en contient que trois cent soixante-dix-huit mille neuf cents. Il manque cinq cents francs.
+      Le soir, on compte les billets et les pièces. Odoo annonce le solde : vingt-neuf mille quatre cents francs.
+      Le tiroir n'en contient que vingt-huit mille neuf cents. Il manque cinq cents francs.
     actions:
       - surligner_texte: Solde actuel
         duree: 4
@@ -163,7 +160,7 @@ etapes:
   # ------------------------------------------------------------------ récapitulatif et exercice
   - chapitre: Récapitulatif
     texte: >
-      Récapitulons. La caisse se tient dans Transactions, comme la banque : Lettrer pour une facture payée en espèces,
+      Récapitulons. La caisse se tient dans Transactions, comme la banque : une facture payée en espèces se relie à sa facture,
       Compte pour une dépense, le compte de transfert pour un versement à la banque, et un écart de caisse quand le comptage diffère.
     actions:
       - attendre: 0.5
