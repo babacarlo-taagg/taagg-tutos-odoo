@@ -85,3 +85,24 @@ Pendant la recette, les remarques arrivent de partout. Dans cette capsule, on le
 
 Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui.com
 ```
+
+## CON-05 · Mesurer la formation et l'adoption avec Sondages (3:16)
+
+- **Titre YouTube** : CON-05 · Mesurer la formation et l'adoption d'Odoo avec Sondages
+- **Leçon taagg-school.com** : n° 2856 (brouillon), section 3 du cours 235
+- **Fichiers** : `CON-05-mesurer-la-formation-et-l-adoption-avec-sondages.mp4`, `.srt`, `-chapitres.txt`, `CON-05-vignette.png`
+- **Description** :
+
+```
+Le succès d'un projet Odoo se mesure à l'adoption, pas au jour de la formation. Dans cette capsule, on construit avec l'application Sondages un questionnaire court — une note d'aisance, une question d'usage, une zone de texte —, on le teste soi-même, et on voit comment le partager et lire les résultats, juste après la formation puis un mois plus tard.
+
+0:00 Introduction
+0:24 1. Créer le questionnaire
+0:38 2. Trois questions qui mesurent
+1:18 3. Le tester soi-même
+1:46 4. Envoyer et lire les résultats
+2:20 Les pièges à éviter
+2:47 Récapitulatif
+
+Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui.com
+```
