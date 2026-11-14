@@ -68,7 +68,7 @@ Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui
 ## CON-04 · Suivre la recette dans Projet (3:09)
 
 - **Titre YouTube** : CON-04 · Suivre la recette d'un projet Odoo dans l'application Projet
-- **Leçon taagg-school.com** : n° 2855 (brouillon), section 3 du cours 235
+- **Leçon taagg-school.com** : n° 2855 (publiée le 14/11), section 3 du cours 235
 - **Fichiers** : `CON-04-suivre-la-recette-dans-projet.mp4`, `.srt`, `-chapitres.txt`, `CON-04-vignette.png`
 - **Description** :
 
