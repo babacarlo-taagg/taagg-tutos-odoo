@@ -2,7 +2,7 @@
 # État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-21`) : aucun emprunt.
 # Menu : Comptabilité › Comptabilité › Actif & passif › Emprunts (module account_loans, Odoo Enterprise).
 # Ce que la capsule crée : l'emprunt « Prêt four — Banque », 3 000 000 F à 9 % sur 2 ans, début le 1er décembre 2026 :
-#   24 échéances de 137 054 F, 288 293 F d'intérêts. Comptes : 162000 (long et court terme, le plan SYSCOHADA ne les
+#   24 échéances de 137 054 F, 288 293,98 F d'intérêts → on saisit 288 294 (le champ « Intérêt » doit égaler la somme arrondie). Comptes : 162000 (long et court terme, le plan SYSCOHADA ne les
 #   sépare pas), intérêts 671200, journal Opérations diverses. Odoo refuse de confirmer tant que le champ « Intérêt » de
 #   l'emprunt ne vaut pas la somme des intérêts du tableau : on le saisit à l'écran. etat-depart.py supprime l'emprunt.
 titre: Les emprunts
@@ -77,12 +77,13 @@ etapes:
       - surligner: '.o_field_widget[name="line_ids"]'
         duree: 6
   - texte: >
-      Comparez avec le tableau remis par la banque. Le coût total des intérêts : deux cent quatre-vingt-huit mille
-      deux cent quatre-vingt-treize francs. Reportez-le dans le champ Intérêt de l'emprunt : Odoo vérifie que les deux concordent.
+      Comparez avec le tableau remis par la banque. Le coût total des intérêts, arrondi au franc : deux cent quatre-vingt-huit mille
+      deux cent quatre-vingt-quatorze francs. Reportez-le dans le champ Intérêt de l'emprunt : Odoo vérifie que les deux concordent.
     actions:
       - champ: interest
-        taper: "288293"
+        taper: "288294"
       - touche: Tab
+      - touche: Escape
 
   # ------------------------------------------------------------------ partie 3 : les comptes
   - partie: "3. Les comptes"
