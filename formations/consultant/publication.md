@@ -110,7 +110,7 @@ Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui
 ## CON-06 · Le temps passé contre le temps prévu (2:49)
 
 - **Titre YouTube** : CON-06 · Temps passé contre temps prévu : des faits pour l'avenant (Odoo Feuilles de temps)
-- **Leçon taagg-school.com** : n° 2857 (brouillon), section 4 du cours 235
+- **Leçon taagg-school.com** : n° 2857 (publiée le 14/11), section 4 du cours 235
 - **Fichiers** : `CON-06-le-temps-passe-contre-le-temps-prevu.mp4`, `.srt`, `-chapitres.txt`, `CON-06-vignette.png`
 - **Description** :
 
