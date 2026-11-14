@@ -1,0 +1,174 @@
+# CPT-20 · La caisse
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-20`) :
+#   journal « Caisse boutique » (CAI, compte 571001) : une seule ligne, « VENTES COMPTOIR DU 1er AU 4 NOVEMBRE », +300 000 F,
+#   déjà rangée en 701100 ; plus le paiement en espèces des Almadies de CPT-12 (50 000 F, hors écran de la caisse).
+#   INV/2026/00005 (Almadies, 35 400 F, CPT-13) due.
+# Ce que la capsule fait : encaissement en espèces de INV/2026/00005 (Lettrer), achat de gaz −6 000 F → 605300,
+#   versement à la banque −300 000 F → 585001 (la ligne de la banque de CPT-17/18 utilise le même compte),
+#   écart de caisse −500 F → 658800. etat-depart.py supprime ces lignes et recrée la recette de départ.
+titre: La caisse
+sous_titre: Formation Comptabilité Odoo · CPT-20
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : les emprunts"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette vingtième capsule. Dans une pâtisserie, beaucoup d'argent passe en espèces.
+      La caisse se tient comme une banque : chaque entrée, chaque sortie, et un comptage régulier.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez encaisser une facture en espèces, enregistrer une dépense,
+      verser la caisse à la banque, et traiter un écart de caisse.
+    actions:
+      - surligner: '.o_kanban_record:has-text("Caisse boutique")'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 1 : l'écran
+  - partie: "1. L'écran de la caisse"
+    texte: >
+      Sur la carte Caisse boutique, cliquez sur Transactions. C'est le même écran que pour la banque :
+      les mouvements de la caisse, et en haut, le solde.
+    actions:
+      - cliquer: '.o_kanban_record:has-text("Caisse boutique") button:has-text("Transactions")'
+      - attendre: 2
+      - surligner_texte: Solde actuel
+        duree: 2.5
+  - texte: >
+      Les ventes au comptoir du début du mois y sont déjà : trois cent mille francs.
+    actions:
+      - surligner_texte: VENTES COMPTOIR DU 1er AU 4 NOVEMBRE
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 2 : encaisser une facture
+  - partie: "2. Encaisser une facture en espèces"
+    texte: >
+      La Boutique Les Almadies passe régler sa facture de réassort, trente-cinq mille quatre cents francs, en espèces.
+      Cliquez sur Nouveau.
+    actions:
+      - cliquer: '.o_control_panel button:has-text("Nouveau")'
+  - texte: >
+      Le libellé, le client, et le montant reçu. Puis Ajouter et fermer.
+    actions:
+      - champ: payment_ref
+        taper: ESPECES BOUTIQUE LES ALMADIES
+      - choisir: {champ: partner_id, valeur: Boutique Les Almadies}
+      - champ: amount
+        taper: "35400"
+      - cliquer: 'button:has-text("Ajouter & Fermer")'
+      - attendre: 1.5
+  - texte: >
+      Comme à la banque, Odoo propose Lettrer. Choisissez la facture de trente-cinq mille quatre cents francs, et Sélectionnez.
+    actions:
+      - cliquer: '.o_kanban_record:has-text("ESPECES BOUTIQUE LES ALMADIES") button:has-text("Lettrer")'
+      - cliquer: '.modal .o_data_row:has-text("INV/2026/00005") .o_list_record_selector input'
+      - cliquer: '.modal-footer button:has-text("Sélectionner")'
+      - attendre: 1.5
+      - surligner_texte: INV/2026/00005
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 3 : une dépense
+  - partie: "3. Une petite dépense"
+    texte: >
+      On a acheté une bonbonne de gaz pour le four, six mille francs, payés en espèces. Nouveau, le libellé, et le montant en négatif.
+    actions:
+      - cliquer: '.o_control_panel button:has-text("Nouveau")'
+      - champ: payment_ref
+        taper: ACHAT BONBONNE DE GAZ
+      - champ: amount
+        taper: "-6000"
+      - cliquer: 'button:has-text("Ajouter & Fermer")'
+      - attendre: 1.5
+  - texte: >
+      Cliquez sur Compte, et choisissez le compte des autres énergies, six cent cinq mille trois cents.
+    actions:
+      - cliquer: '.o_kanban_record:has-text("ACHAT BONBONNE DE GAZ") button:has-text("Compte")'
+      - rechercher: "605300"
+      - cliquer: '.modal .o_data_row:has-text("605300")'
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ partie 4 : verser à la banque
+  - partie: "4. Verser la caisse à la banque"
+    texte: >
+      Trois cent mille francs ont été déposés à la banque. Nouveau : versement à la banque, moins trois cent mille.
+    actions:
+      - cliquer: '.o_control_panel button:has-text("Nouveau")'
+      - champ: payment_ref
+        taper: VERSEMENT A LA BANQUE
+      - champ: amount
+        taper: "-300000"
+      - cliquer: 'button:has-text("Ajouter & Fermer")'
+      - attendre: 1.5
+  - texte: >
+      Compte : transfert de liquidités, cinq cent quatre-vingt-cinq mille un. C'est le compte choisi à la banque, à l'arrivée
+      de l'argent. La sortie de la caisse et l'entrée à la banque s'y annulent : le compte revient à zéro.
+    actions:
+      - cliquer: '.o_kanban_record:has-text("VERSEMENT A LA BANQUE") button:has-text("Compte")'
+      - rechercher: "585001"
+      - cliquer: '.modal .o_data_row:has-text("585001")'
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ partie 5 : compter
+  - partie: "5. Compter la caisse"
+    texte: >
+      Le soir, on compte les billets et les pièces. Odoo annonce le solde : trois cent soixante-dix-neuf mille quatre cents francs.
+      Le tiroir n'en contient que trois cent soixante-dix-huit mille neuf cents. Il manque cinq cents francs.
+    actions:
+      - surligner_texte: Solde actuel
+        duree: 4
+  - texte: >
+      L'écart ne se cache pas : on l'enregistre. Nouveau, écart de caisse, moins cinq cents, sur le compte des autres charges
+      diverses, six cent cinquante-huit mille huit cents. Le solde d'Odoo est maintenant celui du tiroir.
+    actions:
+      - cliquer: '.o_control_panel button:has-text("Nouveau")'
+      - champ: payment_ref
+        taper: ECART DE CAISSE
+      - champ: amount
+        taper: "-500"
+      - cliquer: 'button:has-text("Ajouter & Fermer")'
+      - attendre: 1.5
+      - cliquer: '.o_kanban_record:has-text("ECART DE CAISSE") button:has-text("Compte")'
+      - rechercher: "658800"
+      - cliquer: '.modal .o_data_row:has-text("658800")'
+      - attendre: 1.5
+      - surligner_texte: Solde actuel
+        duree: 2.5
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : payer de petites dépenses dans le tiroir sans les noter. Le soir, la caisse ne tombe plus juste.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : enregistrer le versement à la banque comme une dépense. L'argent n'est pas dépensé, il change de place :
+      utilisez le compte de transfert.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : compter rarement. Un écart d'un jour s'explique ; un écart d'un mois, jamais. Comptez chaque soir.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. La caisse se tient dans Transactions, comme la banque : Lettrer pour une facture payée en espèces,
+      Compte pour une dépense, le compte de transfert pour un versement à la banque, et un écart de caisse quand le comptage diffère.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : enregistrez les mouvements d'espèces d'une journée, comptez votre caisse, et traitez l'écart s'il y en a un.
+      Dans la prochaine capsule, nous verrons les emprunts. À tout de suite !
+    actions:
+      - attendre: 1

@@ -499,8 +499,41 @@ def cpt_19():
     return len(lignes), len(releves)
 
 
+def cpt_20():
+    # journal « Caisse boutique » : on supprime toutes ses lignes de relevé (encaissement de la facture des Almadies,
+    # achat de gaz, versement à la banque, écart de caisse faits à l'écran) et on recrée la recette de départ :
+    # « VENTES COMPTOIR DU 1er AU 4 NOVEMBRE », +300 000 F, déjà rangée en 701100 (sans quoi la caisse ne pourrait pas
+    # verser 300 000 F à la banque). La facture INV/2026/00005 (Almadies, 35 400 F, CPT-13) redevient due.
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    caisse = odoo('account.journal', 'search', [['code', '=', 'CAI'], ['company_id', '=', SOCIETE]])[0]
+    lignes = odoo('account.bank.statement.line', 'search', [['journal_id', '=', caisse]], context=fr)
+    for l in lignes:
+        if odoo('account.bank.statement.line', 'read', [l], ['is_reconciled'], context=fr)[0]['is_reconciled']:
+            odoo('account.bank.statement.line', 'action_undo_reconciliation', [l], context=fr)
+    releves = odoo('account.bank.statement', 'search', [['journal_id', '=', caisse]], context=fr)
+    if releves:
+        odoo('account.bank.statement', 'unlink', releves, context=fr)
+    lignes = odoo('account.bank.statement.line', 'search', [['journal_id', '=', caisse]], context=fr)
+    if lignes:
+        odoo('account.bank.statement.line', 'unlink', lignes, context=fr)
+    ligne = odoo('account.bank.statement.line', 'create', {'journal_id': caisse, 'date': '2026-11-04', 'amount': 300000,
+                                                           'payment_ref': 'VENTES COMPTOIR DU 1er AU 4 NOVEMBRE'}, context=fr)
+    piece = odoo('account.bank.statement.line', 'read', [ligne], ['move_id'], context=fr)[0]['move_id'][0]
+    especes = odoo('account.journal', 'read', [caisse], ['default_account_id'], context=fr)[0]['default_account_id'][0]
+    attente = odoo('account.move.line', 'search', [['move_id', '=', piece], ['account_id', '!=', especes]])
+    ventes = odoo('account.account', 'search', [['code', '=', '701100']], context=fr)[0]
+    odoo('account.move', 'button_draft', [piece], context=fr)
+    odoo('account.move.line', 'write', attente, {'account_id': ventes}, context=fr)
+    odoo('account.move', 'action_post', [piece], context=fr)
+    reassort = odoo('account.move', 'search', [['ref', '=', 'Réassort de la vitrine'], ['move_type', '=', 'out_invoice']])
+    traces = odoo('mail.message', 'search', [['model', '=', 'account.move'], ['res_id', 'in', reassort], ['date', '>=', '2026-11-08 00:00:00']])
+    if traces:
+        odoo('mail.message', 'unlink', traces)
+    return odoo('account.move', 'read', reassort, ['name', 'amount_residual'])
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19, 'CPT-20': cpt_20}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''
