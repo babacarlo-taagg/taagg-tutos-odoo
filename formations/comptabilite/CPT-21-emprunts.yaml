@@ -62,6 +62,7 @@ etapes:
         taper: "9"
       - champ: loan_term
         taper: "2"
+      - cliquer: '.modal .o_field_widget[name="start_date"] button, .modal .o_field_widget[name="start_date"] input'
       - champ: start_date
         taper: "01/12/2026"
         entree: true
