@@ -535,8 +535,29 @@ def cpt_20():
     return odoo('account.move', 'read', reassort, ['name', 'amount_residual'])
 
 
+def cpt_21():
+    # l'emprunt « Prêt four — CBAO » (3 000 000 F, 9 %, 2 ans) est créé, calculé et confirmé à l'écran : on supprime
+    # tous les emprunts de la société (écritures prévues comprises)
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    emprunts = odoo('account.loan', 'search', [['company_id', '=', SOCIETE]], context=dict(fr, active_test=False))
+    for e in emprunts:
+        info = odoo('account.loan', 'read', [e], ['state', 'line_ids'], context=fr)[0]
+        if info['state'] != 'draft':
+            odoo('account.loan', 'action_reset', [e], context=fr)
+        lignes = odoo('account.loan.line', 'read', info['line_ids'], ['generated_move_ids'], context=fr) if info['line_ids'] else []
+        pieces = sorted({m for l in lignes for m in l.get('generated_move_ids', [])}, reverse=True)
+        for m in pieces:
+            if odoo('account.move', 'read', [m], ['state'], context=fr)[0]['state'] != 'draft':
+                odoo('account.move', 'button_draft', [m], context=fr)
+        if pieces:
+            odoo('account.move', 'unlink', pieces, context=fr)
+    if emprunts:
+        odoo('account.loan', 'unlink', emprunts, context=fr)
+    return len(emprunts)
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19, 'CPT-20': cpt_20}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19, 'CPT-20': cpt_20, 'CPT-21': cpt_21}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''

@@ -1,0 +1,146 @@
+# CPT-21 · Les emprunts [E]
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-21`) : aucun emprunt.
+# Menu : Comptabilité › Comptabilité › Actif & passif › Emprunts (module account_loans, Odoo Enterprise).
+# Ce que la capsule crée : l'emprunt « Prêt four — Banque », 3 000 000 F à 9 % sur 2 ans, début le 1er décembre 2026 :
+#   24 échéances de 137 054 F, 288 293 F d'intérêts. Comptes : 162000 (long et court terme, le plan SYSCOHADA ne les
+#   sépare pas), intérêts 671200, journal Opérations diverses. Odoo refuse de confirmer tant que le champ « Intérêt » de
+#   l'emprunt ne vaut pas la somme des intérêts du tableau : on le saisit à l'écran. etat-depart.py supprime l'emprunt.
+titre: Les emprunts
+sous_titre: Formation Comptabilité Odoo · CPT-21
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+  Calculer: Calculé
+  Confirmer: Confirmé
+  Appliquer: Appliqué
+fin:
+  message: "Prochaine capsule : les écritures d'opérations diverses"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette vingt-et-unième capsule. La boutique achète un nouveau four, et emprunte trois millions
+      de francs à sa banque, sur deux ans. Chaque mois, une échéance : du capital remboursé, et des intérêts.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez enregistrer un emprunt, calculer son tableau d'amortissement,
+      et laisser Odoo passer les écritures de chaque échéance. Les emprunts font partie de la version Enterprise.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : créer
+  - partie: "1. Créer l'emprunt"
+    texte: >
+      Ouvrez le menu Comptabilité, puis Emprunts, et cliquez sur Nouveau. Donnez-lui un nom clair : prêt four, banque.
+    actions:
+      - ouvrir_menu: Comptabilité
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Emprunts")'
+      - bouton: Nouveau
+      - champ: name
+        taper: Prêt four — Banque
+
+  # ------------------------------------------------------------------ partie 2 : calculer
+  - partie: "2. Le tableau d'amortissement"
+    texte: >
+      Inutile de recopier le tableau de la banque : cliquez sur Calculer.
+    actions:
+      - cliquer: '.o_statusbar_buttons button:has-text("Calculer")'
+  - texte: >
+      Le montant, trois millions. Le taux, neuf pour cent par an. La durée, deux ans. Et la date de la première période,
+      le premier décembre.
+    actions:
+      - champ: loan_amount
+        taper: "3000000"
+      - champ: interest_rate
+        taper: "9"
+      - champ: loan_term
+        taper: "2"
+      - champ: start_date
+        taper: "01/12/2026"
+        entree: true
+  - texte: Cliquez sur Appliquer.
+    actions:
+      - cliquer: '.modal-footer button[name="action_save"]'
+      - attendre: 1.5
+  - texte: >
+      Voici les vingt-quatre échéances : cent trente-sept mille cinquante-quatre francs par mois. Au début, beaucoup
+      d'intérêts et peu de capital ; à la fin, l'inverse. La dernière colonne montre ce qui reste dû.
+    actions:
+      - surligner: '.o_field_widget[name="line_ids"]'
+        duree: 6
+  - texte: >
+      Comparez avec le tableau remis par la banque. Le coût total des intérêts : deux cent quatre-vingt-huit mille
+      deux cent quatre-vingt-treize francs. Reportez-le dans le champ Intérêt de l'emprunt : Odoo vérifie que les deux concordent.
+    actions:
+      - champ: interest
+        taper: "288293"
+      - touche: Tab
+
+  # ------------------------------------------------------------------ partie 3 : les comptes
+  - partie: "3. Les comptes"
+    texte: >
+      Dans l'onglet Paramètres, les comptes. Le capital dû va dans le compte des emprunts auprès des banques,
+      cent soixante-deux mille. Le plan SYSCOHADA ne sépare pas long et court terme : le même compte, deux fois.
+    actions:
+      - onglet: Paramètres d’emprunt
+      - choisir: {champ: long_term_account_id, valeur: "162000"}
+      - choisir: {champ: short_term_account_id, valeur: "162000"}
+  - texte: >
+      Les intérêts sont une charge : six cent soixante et onze mille deux cents. Et les écritures iront dans le journal
+      des opérations diverses.
+    actions:
+      - choisir: {champ: expense_account_id, valeur: "671200"}
+      - choisir: {champ: journal_id, valeur: Opérations diverses}
+
+  # ------------------------------------------------------------------ partie 4 : confirmer
+  - partie: "4. Confirmer"
+    texte: >
+      Tout est en place. Cliquez sur Confirmer.
+    actions:
+      - cliquer: '.o_statusbar_buttons button:has-text("Confirmer")'
+      - attendre: 2
+  - texte: >
+      L'emprunt est en cours. Odoo a préparé une écriture pour chaque échéance : elle sera comptabilisée toute seule, à sa date.
+      Le solde impayé, en haut, diminuera mois après mois.
+    actions:
+      - surligner: '.o_statusbar_status'
+        duree: 2.5
+      - onglet: Tableau d'amortissement
+      - surligner_champ: outstanding_balance
+        duree: 3
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : enregistrer le prêt comme une recette. L'argent reçu n'est pas un gain :
+      c'est une dette, à rembourser.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : passer toute l'échéance en charge. Seuls les intérêts sont une charge ; le capital diminue la dette.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : ne pas comparer avec le tableau de la banque. Un taux ou une date différente, et tout est décalé.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Un emprunt se crée dans Comptabilité, Emprunts. Calculer produit le tableau d'amortissement ;
+      on reporte les intérêts, on choisit les comptes, on confirme, et Odoo passe chaque échéance à sa date.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : enregistrez un emprunt de votre entreprise, et comparez le tableau d'Odoo à celui de votre banque.
+      Dans la prochaine capsule, nous ouvrirons le parcours des opérations comptables. À tout de suite !
+    actions:
+      - attendre: 1
