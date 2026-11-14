@@ -525,6 +525,9 @@ def cpt_20():
     odoo('account.move', 'button_draft', [piece], context=fr)
     odoo('account.move.line', 'write', attente, {'account_id': ventes}, context=fr)
     odoo('account.move', 'action_post', [piece], context=fr)
+    # dans un relevé, sinon l'écran n'affiche pas le « Solde actuel »
+    odoo('account.bank.statement', 'create', {'name': 'Caisse — début novembre', 'journal_id': caisse, 'date': '2026-11-04',
+                                              'line_ids': [[6, 0, [ligne]]], 'balance_start': 0, 'balance_end_real': 300000}, context=fr)
     reassort = odoo('account.move', 'search', [['ref', '=', 'Réassort de la vitrine'], ['move_type', '=', 'out_invoice']])
     traces = odoo('mail.message', 'search', [['model', '=', 'account.move'], ['res_id', 'in', reassort], ['date', '>=', '2026-11-08 00:00:00']])
     if traces:
