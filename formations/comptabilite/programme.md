@@ -49,7 +49,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | CPT-18 | Le rapprochement bancaire **[E]** | relier chaque ligne du relevé à une facture ou un paiement | Rapprochement | ✎ 3:16 |
 | CPT-19 | Modèles de rapprochement **[E]** | automatiser les frais bancaires, agios, commissions | Modèles de rapprochement | ✎ 2:54 |
 | CPT-20 | La caisse | encaissements et décaissements en espèces, contrôle de caisse | Journal de caisse | ✎ 3:50 |
-| CPT-21 | Les emprunts **[E]** | créer un emprunt, échéancier, écritures automatiques | Actif & passif › Emprunts | ☐ |
+| CPT-21 | Les emprunts **[E]** | créer un emprunt, échéancier, écritures automatiques | Actif & passif › Emprunts | ✎ 3:05 |
 
 ## Parcours 5 — Opérations comptables
 
@@ -169,6 +169,10 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
   Caisse boutique : recette de départ « Ventes comptoir » 300 000 F (créée par l'API, rangée en 701100, dans un relevé, sinon
   pas de « Solde actuel ») ; encaissement en espèces de INV/2026/00005 relié seul par Odoo ; gaz −6 000 F → 605300 ;
   versement à la banque −300 000 F → 585001 ; écart de caisse −500 F → 658800. Solde : 29 400 F puis 28 900 F.
+- **CPT-21** (14 novembre 2026) : brouillon muet, 3 min 05 s, 19 étapes. **Voix après le 17 novembre.** Parcours 4 complet en brouillon.
+  « Prêt four — Banque », 3 000 000 F, 9 %, 2 ans, début 1er décembre : 24 échéances de 137 054 F. Odoo 19 : la date de début
+  de la fenêtre Calculer est un bouton (clic avant de taper) ; le champ « Intérêt » doit égaler la somme arrondie des intérêts
+  (288 293,98 → 288 294), sinon « Opération invalide ». Comptes 162000 (×2), 671200, journal Opérations diverses.
 
 ## Ordre de tournage proposé
 
