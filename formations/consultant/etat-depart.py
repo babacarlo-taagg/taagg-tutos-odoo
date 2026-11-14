@@ -161,13 +161,47 @@ def employe():
     return f'employé {EMPLOYE} créé'
 
 
-CAPSULES = {'CON-01': con_01, 'CON-02': con_02, 'CON-04': con_04, 'CON-05': con_05}
+def con_06():
+    # CON-06 : le projet de déploiement préparé par l'API (étapes, tâches, temps alloué, premières feuilles de temps),
+    # les feuilles de temps saisies à l'écran ; l'employé « Formateur TAAGG » est archivé (jamais supprimé).
+    defaire_projet(PROJET_CON01)
+    e = odoo('hr.employee', 'search', [['user_id', '=', FORMATEUR], ['active', '=', True]])
+    if e:
+        print(('  ARCHIVÉ  ' if OUI else '  à archiver  ') + f'employé « {EMPLOYE} »')
+        if OUI:
+            odoo('hr.employee', 'write', e, {'active': False})
+    return 'aucun projet de déploiement'
+
+
+def preparer_con06():
+    """Le projet de déploiement avec ses phases, trois livrables, leur temps alloué et le temps déjà passé."""
+    employe()
+    if odoo('project.project', 'search', [['name', '=', PROJET_CON01]]):
+        return 'projet de déploiement déjà prêt'
+    emp = odoo('hr.employee', 'search', [['user_id', '=', FORMATEUR]])[0]
+    projet = odoo('project.project', 'create', {'name': PROJET_CON01, 'allow_timesheets': True, 'allocated_hours': 80})
+    etapes = {n: odoo('project.task.type', 'create', {'name': n, 'sequence': i, 'project_ids': [[6, 0, [projet]]]})
+              for i, n in enumerate(['1. Avant-vente', '2. Cadrage', '3. Paramétrage', '4. Migration des données',
+                                     '5. Recette', '6. Mise en production'])}
+    taches = [('Atelier commandes traiteur', '2. Cadrage', 4, [('2026-11-03', 'Préparation et atelier', 5)]),
+              ('Cahier des charges signé', '2. Cadrage', 8, [('2026-11-05', 'Rédaction v1', 4), ('2026-11-10', 'Corrections v2', 2)]),
+              ('Paramétrage des ventes', '3. Paramétrage', 16, [('2026-11-12', 'Produits et listes de prix', 6)])]
+    for nom, etape, alloue, temps in taches:
+        t = odoo('project.task', 'create', {'name': nom, 'project_id': projet, 'stage_id': etapes[etape],
+                                            'allocated_hours': alloue, 'user_ids': [[6, 0, [FORMATEUR]]]})
+        for date, libelle, h in temps:
+            odoo('account.analytic.line', 'create', {'project_id': projet, 'task_id': t, 'employee_id': emp,
+                                                     'name': libelle, 'unit_amount': h, 'date': date})
+    return 'projet de déploiement prêt (3 livrables, 17 h déjà passées)'
+
+
+CAPSULES = {'CON-01': con_01, 'CON-02': con_02, 'CON-04': con_04, 'CON-05': con_05, 'CON-06': con_06}
 
 if __name__ == '__main__':
     code = next((a for a in sys.argv[1:] if not a.startswith('--')), '')
     if PREPARER:
         print(code, '— préparation (création seulement) :', employe() if code == 'CON-06' or '--employe' in sys.argv else '',
-              preparer_con04() if code == 'CON-04' else '')
+              preparer_con04() if code == 'CON-04' else '', preparer_con06() if code == 'CON-06' else '')
         sys.exit(0)
     if code not in CAPSULES:
         sys.exit(f"Capsule inconnue : {code} (connues : {', '.join(CAPSULES)})")

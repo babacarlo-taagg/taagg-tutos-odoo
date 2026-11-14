@@ -1,0 +1,134 @@
+# CON-06 · Le temps passé contre le temps prévu : des faits pour l'avenant
+# État de départ (`python3 formations/consultant/etat-depart.py CON-06 --oui`, puis `--preparer`) : l'employé
+#   « Formateur TAAGG » actif ; le projet « Déploiement Odoo — Délices de Maïmouna » (80 h allouées, 6 étapes) et
+#   3 livrables avec leur temps alloué et le temps déjà passé (17 h, saisies par l'API au nom du formateur) :
+#   Atelier commandes traiteur 4 h / 5 h passées · Cahier des charges signé 8 h / 6 h · Paramétrage des ventes 16 h / 6 h.
+# Ce que la capsule crée à l'écran : une ligne de feuille de temps de 3 h sur « Cahier des charges signé ».
+#   `etat-depart.py CON-06 --oui` retire le projet et toutes ses feuilles de temps, et archive l'employé.
+titre: "Le temps passé contre le temps prévu"
+sous_titre: Formation Consultant Odoo · CON-06
+depart: /odoo/project
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : s'organiser au quotidien avec To-do"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour. « Vous aviez dit que ce serait fini en deux semaines. » Face à cette phrase, un consultant qui n'a que
+      des impressions perd la discussion. Celui qui a des chiffres la gagne, et garde le client.
+    actions:
+      - attendre: 1
+  - texte: >
+      Aujourd'hui, nous allons comparer le temps passé au temps prévu sur le projet des Délices de Maïmouna, avec les
+      feuilles de temps d'Odoo, et nous en servir pour chiffrer une demande nouvelle.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : le budget
+  - partie: "1. Le budget en heures"
+    texte: >
+      Sur la carte du projet, Odoo affiche le temps qui reste : quatre-vingts heures prévues au départ, soixante-trois
+      restantes.
+    actions:
+      - surligner: '.o_kanban_record:has-text("Déploiement")'
+        duree: 3
+  - texte: >
+      Ouvrons le projet, puis le livrable Cahier des charges. Huit heures allouées, six déjà passées : soixante-quinze
+      pour cent du budget.
+    actions:
+      - cliquer: '.o_kanban_record:has-text("Déploiement")'
+      - attendre: 1
+      - cliquer: '.o_kanban_record:has-text("Cahier des charges")'
+      - attendre: 1
+      - surligner_champ: allocated_hours
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 2 : saisir
+  - partie: "2. Saisir son temps chaque jour"
+    texte: >
+      Dans l'onglet Feuilles de temps, chaque ligne dit quand, qui, quoi, et combien. Ajoutons la séance d'aujourd'hui.
+    actions:
+      - onglet: Feuilles de temps
+      - cliquer: '.tab-pane.active a:has-text("Ajouter une ligne")'
+      - attendre: 0.8
+      - ecrire: '.o_selected_row .o_field_widget[name="name"] input'
+        taper: Relecture avec Maïmouna
+      - ecrire: '.o_selected_row .o_field_widget[name="unit_amount"] input'
+        taper: "3"
+      - attendre: 0.5
+  - texte: >
+      Trois heures de relecture. Enregistrez : le temps passé monte à neuf heures, pour huit prévues.
+      Le livrable a dépassé son budget d'une heure.
+    actions:
+      - enregistrer: oui
+      - attendre: 1
+      - surligner: '.tab-pane.active'
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 3 : l'écart
+  - partie: "3. Lire l'écart, livrable par livrable"
+    texte: >
+      Revenons au projet, en vue liste. La colonne de progression montre, pour chaque livrable, la part du temps
+      prévu déjà consommée.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Déploiement")'
+      - attendre: 1
+      - cliquer: '.o_switch_view.o_list'
+      - attendre: 1.5
+      - surligner: '.o_list_renderer'
+        duree: 3
+  - texte: >
+      L'atelier a pris cinq heures pour quatre prévues, le cahier des charges neuf pour huit. Le paramétrage, lui,
+      est dans les temps. Ces écarts se discutent maintenant, pas à la facture.
+    actions:
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ partie 4 : l'avenant
+  - partie: "4. Des faits pour l'avenant"
+    texte: >
+      Quand Maïmouna demande la boutique en ligne en pleine recette, vous ne chiffrez pas au jugé. Les feuilles de temps
+      disent combien ont réellement coûté des livrables comparables : c'est la base de votre avenant.
+    actions:
+      - attendre: 1.5
+  - texte: >
+      Et si le client conteste, vous lui montrez les lignes : date, travail fait, durée. Les faits apaisent la
+      discussion bien mieux que les arguments.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : remplir ses feuilles de temps le vendredi, de mémoire. Les petites tâches
+      disparaissent, et vos chiffres sont faux. Saisissez chaque jour.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : ne pas saisir les petites demandes « gratuites ». Dix fois une demi-heure, c'est une journée
+      que personne ne verra.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : cacher un dépassement. Annoncé tôt, il se discute ; découvert à la facture, il se conteste.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Un temps alloué par livrable, une feuille de temps saisie chaque jour, et un coup d'œil régulier à
+      la progression. Les écarts se discutent tôt, et les avenants se chiffrent sur des faits.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : saisissez une semaine de feuilles de temps sur votre propre projet, puis repérez le livrable qui
+      dépasse. Dans la prochaine capsule, nous organiserons la journée du consultant avec To-do. À tout de suite !
+    actions:
+      - attendre: 1
