@@ -74,6 +74,7 @@ etapes:
 | `ecrire: '<sélecteur>'` + `taper: Mariage` | tape dans n'importe quelle case visée par un sélecteur (panneau de Studio, fenêtre) ; `entree: true` pour valider |
 | `connexion: {login: modou@exemple.sn, mot_de_passe: MODOU_MOT_DE_PASSE}` | se déconnecter puis se connecter avec un autre compte (tester un profil) ; `mot_de_passe` = nom de la variable d'environnement, jamais le mot de passe |
 | `clavier: "for record in self:\n"` | tape au clavier là où se trouve le curseur (éditeur de code : cliquer d'abord dedans) ; `\n` = Entrée |
+| `cliquer_onglet: 'button[name="action_test_survey"]'` | clic sur un bouton qui ouvre un nouvel onglet (Tester un sondage, Aperçu) : l'adresse est rouverte dans la page filmée |
 | `deposer: '<sélecteur>'` + `sur: '<sélecteur>'` | glisser-déposer à la main (Studio : un nouveau champ vers sa place) ; `decalage: [dx, dy]` pour viser à côté du centre de la cible |
 | `selectionner: {dans: '<sélecteur>', option: est défini}` | liste déroulante classique (`<select>`) : opérateur d'une condition… |
 | `touche: Escape` | appuie sur une touche |

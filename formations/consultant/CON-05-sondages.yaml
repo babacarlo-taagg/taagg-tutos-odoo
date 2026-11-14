@@ -1,0 +1,169 @@
+# CON-05 · Mesurer la formation et l'adoption avec Sondages
+# État de départ attendu (`python3 formations/consultant/etat-depart.py CON-05 --oui`) : aucun sondage
+#   « Formation Odoo — votre avis ». Les sondages modèles d'Odoo ne sont ni ouverts ni modifiés.
+# Ce que la capsule crée : le sondage « Formation Odoo — votre avis » (3 questions) et une réponse de TEST (le bouton
+#   Tester, marquée « entrée d'un sondage test »). Le bouton Partager est ouvert puis fermé : aucune invitation envoyée.
+# « Tester » ouvre un nouvel onglet : le geste `cliquer_onglet` rouvre son adresse dans la page filmée.
+titre: "Mesurer la formation et l'adoption avec Sondages"
+sous_titre: Formation Consultant Odoo · CON-05
+depart: /odoo/surveys
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : le temps passé contre le temps prévu"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour. Une formation peut sembler réussie, et pourtant, un mois plus tard, les utilisateurs sont revenus à leur
+      cahier. Le succès d'un projet Odoo se mesure à l'adoption.
+    actions:
+      - attendre: 1
+  - texte: >
+      Aujourd'hui, nous allons construire avec l'application Sondages un court questionnaire, à envoyer après la formation
+      puis un mois après la mise en production.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : le questionnaire
+  - partie: "1. Créer le questionnaire"
+    texte: "Dans Sondages, cliquez sur Nouveau, et donnez-lui un titre que l'utilisateur comprend tout de suite."
+    actions:
+      - cliquer: '.o_control_panel button:has-text("Nouveau")'
+      - attendre: 1.5
+      - ecrire: '.o_field_widget[name="title"] input, .o_field_widget[name="title"] textarea'
+        taper: Formation Odoo — votre avis
+  - texte: >
+      Peu de questions, cinq au plus : un questionnaire court est rempli, un long est abandonné. Ajoutez une question.
+    actions:
+      - cliquer: '.o_field_widget[name="question_and_page_ids"] a:has-text("Ajouter une question")'
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ partie 2 : les questions
+  - partie: "2. Trois questions qui mesurent"
+    texte: >
+      La première mesure l'aisance. Le type Balance donne une échelle : réglez-la de un à cinq.
+    actions:
+      - ecrire: '.modal .o_field_widget[name="title"] input'
+        taper: "Sur 5, êtes-vous à l'aise pour faire un devis seul ?"
+      - cliquer: '.modal .o_field_widget[name="question_type"] label:has-text("Balance")'
+      - attendre: 1
+      - ecrire: '.modal .o_field_widget[name="scale_min"] input'
+        taper: "1"
+      - ecrire: '.modal .o_field_widget[name="scale_max"] input'
+        taper: "5"
+      - cliquer: '.modal-footer button:has-text("Enregistrer & Créer")'
+      - attendre: 1.5
+  - texte: >
+      La deuxième mesure l'usage réel, avec un choix unique : oui, en partie, non.
+    actions:
+      - ecrire: '.modal .o_field_widget[name="title"] input'
+        taper: Utilisez-vous Odoo pour tous vos devis ?
+      - cliquer: '.modal a:has-text("Ajouter une ligne")'
+      - attendre: 0.8
+      - clavier: "Oui"
+      - touche: Enter
+      - attendre: 1
+      - clavier: "En partie"
+      - touche: Enter
+      - attendre: 1
+      - clavier: "Non"
+      - attendre: 0.8
+      - cliquer: '.modal-footer button:has-text("Enregistrer & Créer")'
+      - attendre: 1.5
+  - texte: >
+      La troisième laisse la parole : une zone de texte. C'est souvent là qu'on apprend le plus.
+    actions:
+      - ecrire: '.modal .o_field_widget[name="title"] input'
+        taper: Qu'est-ce qui vous bloque encore ?
+      - cliquer: '.modal .o_field_widget[name="question_type"] label:has-text("lignes multiples")'
+      - attendre: 0.8
+      - cliquer: '.modal-footer button:has-text("Enregistrer & Fermer")'
+      - attendre: 1.5
+
+  # ------------------------------------------------------------------ partie 3 : tester
+  - partie: "3. Le tester soi-même"
+    texte: >
+      Avant d'envoyer, testez toujours. Le bouton Tester ouvre le questionnaire comme le verra l'utilisateur ;
+      la réponse est marquée comme un test.
+    actions:
+      - cliquer_onglet: 'button[name="action_test_survey"]'
+      - attendre: 1
+      - cliquer: 'button:has-text("Lancer le sondage")'
+      - attendre: 1.5
+  - texte: "Répondons comme Awa après sa formation : quatre sur cinq."
+    actions:
+      - cliquer: 'label:has-text("4")'
+      - cliquer: 'button:has-text("Continuer")'
+      - attendre: 1.5
+  - texte: "En partie."
+    actions:
+      - cliquer: 'label:has-text("En partie")'
+      - cliquer: 'button:has-text("Continuer")'
+      - attendre: 1.5
+  - texte: "Et ce qui la bloque encore : les acomptes payés par Wave. Soumettez."
+    actions:
+      - cliquer: 'textarea'
+      - clavier: "L'enregistrement des acomptes payés par Wave."
+      - cliquer: 'button:has-text("Soumettre")'
+      - attendre: 1
+      - cliquer: '.modal button:has-text("Soumettre")'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ partie 4 : partager
+  - partie: "4. Envoyer et lire les résultats"
+    texte: >
+      De retour dans Odoo, le bouton Partager donne un lien à poster dans le groupe de l'équipe, ou envoie
+      le questionnaire par e-mail. Ici, nous n'envoyons rien : fermez.
+    actions:
+      - aller: /odoo/surveys
+      - cliquer: '.o_kanban_record:has-text("Formation Odoo — votre avis"), .o_data_row:has-text("Formation Odoo — votre avis")'
+      - attendre: 1.5
+      - cliquer: 'button[name="action_send_survey"]'
+      - attendre: 1.5
+      - surligner: '.modal .modal-body'
+        duree: 2.5
+      - cliquer: '.modal-footer button:has-text("Fermer")'
+      - attendre: 1
+  - texte: >
+      Les vraies réponses arrivent dans Participants, les tests n'y comptent pas, et les résultats se lisent question par question. Comparez la note
+      d'aisance juste après la formation, puis un mois plus tard : c'est votre mesure d'adoption.
+    actions:
+      - surligner: 'button[name="action_survey_user_input_completed"]'
+        duree: 3
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : un questionnaire trop long. Au-delà de cinq questions, les réponses
+      se font rares et bâclées.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : ne mesurer qu'à chaud, à la fin de la formation. Tout le monde est content ce jour-là.
+      La vraie mesure, c'est un mois plus tard.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : envoyer sans tester. Une question mal posée, une échelle de zéro à dix au lieu de un à cinq,
+      et toutes les réponses sont faussées.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Un questionnaire court : une note d'aisance, une question d'usage, une zone de texte. On le teste
+      soi-même, on l'envoie après la formation puis un mois après, et on compare.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : ajoutez deux questions à ce questionnaire, sur les factures et sur les livraisons, puis testez-le.
+      Dans la prochaine capsule, nous comparerons le temps passé au temps prévu. À tout de suite !
+    actions:
+      - attendre: 1

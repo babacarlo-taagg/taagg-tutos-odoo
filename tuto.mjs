@@ -345,6 +345,16 @@ class Realisateur {
       await pause(500);
     } else if ('cliquer' in a) {
       await this.cliquer(p.locator(a.cliquer).first());
+    } else if ('cliquer_onglet' in a) {
+      // bouton qui ouvre un nouvel onglet (Tester un sondage, Aperçu…) : on reprend son adresse dans la page filmée
+      const [onglet] = await Promise.all([p.context().waitForEvent('page', { timeout: 20000 }), this.cliquer(p.locator(a.cliquer_onglet).first())]);
+      await onglet.waitForLoadState('domcontentloaded').catch(() => {});
+      await onglet.waitForURL((u) => u.href !== 'about:blank', { timeout: 20000 }).catch(() => {});
+      const adresse = onglet.url();
+      await onglet.close();
+      await p.goto(adresse);
+      await attendreOdoo(p);
+      await pause(500);
     } else if ('bouton' in a) {
       const role = p.getByRole('button', { name: a.bouton, exact: false });
       await this.cliquer((await role.count()) ? role.first() : p.getByText(a.bouton, { exact: true }).first());

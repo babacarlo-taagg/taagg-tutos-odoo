@@ -137,6 +137,20 @@ def preparer_con04():
     return f'projet de recette prêt ({len(taches)} signalements)'
 
 
+SONDAGES_CON05 = ['Formation Odoo — votre avis', 'Formation Odoo — votre avis (essai)']
+
+
+def con_05():
+    # CON-05 crée à l'écran le sondage « Formation Odoo — votre avis » (questions, réponses de test). Jamais les sondages
+    # modèles d'Odoo (« 360 Feedback », « Employee Appraisal Form »).
+    ids = odoo('survey.survey', 'search', [['title', 'in', SONDAGES_CON05], ['create_uid', '=', FORMATEUR]],
+               context={'active_test': False})
+    if ids:
+        retirer('survey.user_input', odoo('survey.user_input', 'search', [['survey_id', 'in', ids]]), 'réponses (dont les tests)')
+        retirer('survey.survey', ids, 'sondage de la formation')
+    return 'aucun sondage de formation'
+
+
 def employe():
     """CON-06 : le compte « Formateur TAAGG » a besoin d'une fiche employé pour saisir du temps (accord de Babacar)."""
     e = odoo('hr.employee', 'search', [['user_id', '=', FORMATEUR]], context={'active_test': False})
@@ -147,7 +161,7 @@ def employe():
     return f'employé {EMPLOYE} créé'
 
 
-CAPSULES = {'CON-01': con_01, 'CON-02': con_02, 'CON-04': con_04}
+CAPSULES = {'CON-01': con_01, 'CON-02': con_02, 'CON-04': con_04, 'CON-05': con_05}
 
 if __name__ == '__main__':
     code = next((a for a in sys.argv[1:] if not a.startswith('--')), '')
