@@ -89,7 +89,7 @@ Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui
 ## CON-05 · Mesurer la formation et l'adoption avec Sondages (3:16)
 
 - **Titre YouTube** : CON-05 · Mesurer la formation et l'adoption d'Odoo avec Sondages
-- **Leçon taagg-school.com** : n° 2856 (brouillon), section 3 du cours 235
+- **Leçon taagg-school.com** : n° 2856 (publiée le 14/11), section 3 du cours 235
 - **Fichiers** : `CON-05-mesurer-la-formation-et-l-adoption-avec-sondages.mp4`, `.srt`, `-chapitres.txt`, `CON-05-vignette.png`
 - **Description** :
 
