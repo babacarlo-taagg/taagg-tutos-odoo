@@ -127,3 +127,23 @@ Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui
 
 Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui.com
 ```
+
+## CON-07 · S'organiser au quotidien avec To-do (2:46)
+
+- **Titre YouTube** : CON-07 · S'organiser au quotidien avec Odoo To-do et les activités
+- **Leçon taagg-school.com** : n° 2858 (brouillon), section 5 du cours 235
+- **Fichiers** : `CON-07-s-organiser-au-quotidien-avec-to-do.mp4`, `.srt`, `-chapitres.txt`, `CON-07-vignette.png`
+- **Description** :
+
+```
+Relances, comptes-rendus, rendez-vous : ce qui n'est écrit nulle part finit par être oublié. Dans cette dernière capsule, on organise la journée du consultant avec deux outils d'Odoo : les To-do pour sa liste personnelle, rangée par échéance, et les activités planifiées sur le dossier de chaque client. Et chaque matin, le point avec l'horloge des activités.
+
+0:00 Introduction
+0:27 1. La liste personnelle
+0:56 2. Une activité sur le dossier du client
+1:24 3. Le point du matin
+1:43 Les pièges à éviter
+2:15 Récapitulatif
+
+Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui.com
+```
