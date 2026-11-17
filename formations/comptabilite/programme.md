@@ -46,16 +46,16 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | Code | Capsule | Ce qu'on apprend | Écrans | État |
 |---|---|---|---|---|
 | CPT-17 | Importer un relevé bancaire | import CSV / OFX / CAMT, saisie manuelle d'une ligne | Tableau de bord › Banque | 🎙 3:14 |
-| CPT-18 | Le rapprochement bancaire **[E]** | relier chaque ligne du relevé à une facture ou un paiement | Rapprochement | ✎ 3:16 |
-| CPT-19 | Modèles de rapprochement **[E]** | automatiser les frais bancaires, agios, commissions | Modèles de rapprochement | ✎ 2:54 |
-| CPT-20 | La caisse | encaissements et décaissements en espèces, contrôle de caisse | Journal de caisse | ✎ 3:50 |
-| CPT-21 | Les emprunts **[E]** | créer un emprunt, échéancier, écritures automatiques | Actif & passif › Emprunts | ✎ 3:05 |
+| CPT-18 | Le rapprochement bancaire **[E]** | relier chaque ligne du relevé à une facture ou un paiement | Rapprochement | 🎙 3:09 |
+| CPT-19 | Modèles de rapprochement **[E]** | automatiser les frais bancaires, agios, commissions | Modèles de rapprochement | 🎙 2:46 |
+| CPT-20 | La caisse | encaissements et décaissements en espèces, contrôle de caisse | Journal de caisse | 🎙 3:39 |
+| CPT-21 | Les emprunts **[E]** | créer un emprunt, échéancier, écritures automatiques | Actif & passif › Emprunts | 🎙 3:08 |
 
 ## Parcours 5 — Opérations comptables
 
 | Code | Capsule | Ce qu'on apprend | Écrans | État |
 |---|---|---|---|---|
-| CPT-22 | Écritures d'opérations diverses | saisir une OD, extourner, dupliquer | Pièces comptables | ✎ 3:10 |
+| CPT-22 | Écritures d'opérations diverses | saisir une OD, extourner, dupliquer | Pièces comptables | 🎙 3:21 |
 | CPT-23 | Le lettrage | relier factures et paiements, lettrage manuel, comptes non lettrés | Clôture › Lettrer | ☐ |
 | CPT-24 | Immobilisations et amortissements **[E]** | modèles d'immobilisations, créer une immobilisation, tableau d'amortissement, cession | Immobilisations, Modèles d'immobilisations | ☐ |
 | CPT-25 | Charges et produits constatés d'avance **[E]** | étaler une charge ou un produit sur plusieurs mois | Écritures de régularisation | ☐ |
@@ -180,3 +180,4 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 1. CPT-01 (pilote : valide le ton, la voix et la durée de 10 min).
 2. Parcours 1 dans l'ordre (le paramétrage conditionne tout le reste).
 3. Parcours 2 et 3, puis 4, 5, 6.
+- **CPT-18 à CPT-22** (17 novembre 2026) : voix générées et contrôlées (≈ −16 LUFS, transcription de chaque piste). Corrections : « Lettrer » → prononciation « Lettré » (CPT-18) ; « carte Banque » lue « carte bancaire » → « la carte de la banque » (CPT-19) ; « euh » parasites régénérés (CPT-21 étape 5, CPT-22 étape 12) ; « Odoo date » entendu « au dos date » → reformulé (CPT-22).
