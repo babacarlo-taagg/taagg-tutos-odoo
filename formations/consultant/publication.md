@@ -131,7 +131,7 @@ Formation « Posture & Méthodologie Consultant » — TAAGG School · taagg-gui
 ## CON-07 · S'organiser au quotidien avec To-do (2:46)
 
 - **Titre YouTube** : CON-07 · S'organiser au quotidien avec Odoo To-do et les activités
-- **Leçon taagg-school.com** : n° 2858 (brouillon), section 5 du cours 235
+- **Leçon taagg-school.com** : n° 2858 (publiée le 17/11), section 5 du cours 235
 - **Fichiers** : `CON-07-s-organiser-au-quotidien-avec-to-do.mp4`, `.srt`, `-chapitres.txt`, `CON-07-vignette.png`
 - **Description** :
 
