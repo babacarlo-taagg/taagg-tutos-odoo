@@ -42,7 +42,7 @@ etapes:
   # ------------------------------------------------------------------ partie 1 : trouver les modèles
   - partie: "1. Trouver les modèles"
     texte: >
-      Sur la carte Banque, ouvrez le petit menu, en haut à droite, puis choisissez Modèles.
+      Sur la carte de la banque, ouvrez le petit menu, en haut à droite, puis choisissez Modèles.
     actions:
       - cliquer: '.o_kanban_record:has-text("Banque") .o_dropdown_kanban .dropdown-toggle'
       - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Modèles"), .o-dropdown--menu a:text-is("Modèles")'
