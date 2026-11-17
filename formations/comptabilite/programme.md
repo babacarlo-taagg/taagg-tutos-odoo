@@ -55,7 +55,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 
 | Code | Capsule | Ce qu'on apprend | Écrans | État |
 |---|---|---|---|---|
-| CPT-22 | Écritures d'opérations diverses | saisir une OD, extourner, dupliquer | Pièces comptables | ☐ |
+| CPT-22 | Écritures d'opérations diverses | saisir une OD, extourner, dupliquer | Pièces comptables | ✎ 3:10 |
 | CPT-23 | Le lettrage | relier factures et paiements, lettrage manuel, comptes non lettrés | Clôture › Lettrer | ☐ |
 | CPT-24 | Immobilisations et amortissements **[E]** | modèles d'immobilisations, créer une immobilisation, tableau d'amortissement, cession | Immobilisations, Modèles d'immobilisations | ☐ |
 | CPT-25 | Charges et produits constatés d'avance **[E]** | étaler une charge ou un produit sur plusieurs mois | Écritures de régularisation | ☐ |
@@ -170,6 +170,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
   pas de « Solde actuel ») ; encaissement en espèces de INV/2026/00005 relié seul par Odoo ; gaz −6 000 F → 605300 ;
   versement à la banque −300 000 F → 585001 ; écart de caisse −500 F → 658800. Solde : 29 400 F puis 28 900 F.
 - **CPT-21** (14 novembre 2026) : brouillon muet, 3 min 05 s, 19 étapes. **Voix après le 17 novembre.** Parcours 4 complet en brouillon.
+- **CPT-22** (17 novembre 2026) : brouillon muet, 3 min 10 s, 17 étapes. Odoo 19 : le bouton s'appelle « Écriture d'extourne » et la fenêtre ne demande plus de motif (journal + date seulement). Une extourne datée dans le futur reste en brouillon (« comptabilisée automatiquement à la date ») : la capsule saisit donc les salaires d'octobre (31/10) et garde la date du jour proposée pour l'extourne. Voix à faire.
   « Prêt four — Banque », 3 000 000 F, 9 %, 2 ans, début 1er décembre : 24 échéances de 137 054 F. Odoo 19 : la date de début
   de la fenêtre Calculer est un bouton (clic avant de taper) ; le champ « Intérêt » doit égaler la somme arrondie des intérêts
   (288 293,98 → 288 294), sinon « Opération invalide ». Comptes 162000 (×2), 671200, journal Opérations diverses.
