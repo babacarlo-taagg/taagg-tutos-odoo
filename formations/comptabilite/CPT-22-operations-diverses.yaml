@@ -110,7 +110,7 @@ etapes:
   - texte: >
       Cliquez sur Écriture d'extourne. Indiquez le motif, prime comptée deux fois, et validez.
     actions:
-      - cliquer: '.o_statusbar_buttons button:has-text("Écriture d\'extourne")'
+      - cliquer: '.o_statusbar_buttons button:has-text("Écriture d''extourne")'
       - champ: reason
         taper: Prime comptée deux fois
       - cliquer: '.modal-footer button[name="refund_moves"], .modal-footer button[name="reverse_moves"]'
