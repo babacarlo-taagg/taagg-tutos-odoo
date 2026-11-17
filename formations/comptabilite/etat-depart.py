@@ -561,7 +561,7 @@ def cpt_22():
     # puis on supprime les écritures de salaires saisies, dupliquées et extournées à l'écran
     fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
     cpt_21()
-    salaires = odoo('account.move', 'search', [['move_type', '=', 'entry'], ['ref', 'ilike', 'Salaires de']], context=fr)
+    salaires = odoo('account.move', 'search', [['move_type', '=', 'entry'], ['ref', 'ilike', 'Salaires d']], context=fr)
     extournes = odoo('account.move', 'search', [['reversed_entry_id', 'in', salaires]], context=fr) if salaires else []
     for m in sorted(set(salaires + extournes), reverse=True):
         if odoo('account.move', 'read', [m], ['state'], context=fr)[0]['state'] != 'draft':

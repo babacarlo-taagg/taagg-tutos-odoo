@@ -2,8 +2,9 @@
 # État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-22`) :
 #   journal Opérations diverses (MISC) vide : l'emprunt de CPT-21 et ses écritures prévues sont supprimés,
 #   ainsi que les écritures « Salaires de… » et leurs extournes.
-# Ce que la capsule crée : MISC/2026/11/0001 « Salaires de novembre » (661100 débit / 422000 crédit, 450 000 F),
-#   sa copie « Salaires de décembre » en brouillon (31/12/2026), et l'extourne de novembre. etat-depart.py supprime tout.
+# Ce que la capsule crée : MISC/2026/10/0001 « Salaires d'octobre » (31/10/2026, 661100 débit / 422000 crédit, 450 000 F),
+#   sa copie « Salaires de novembre » en brouillon (30/11/2026), et l'extourne d'octobre, datée du jour du tournage
+#   (date proposée par Odoo : comptabilisée tout de suite ; une date future la laisserait en brouillon). etat-depart.py supprime tout.
 titre: Les écritures d'opérations diverses
 sous_titre: Formation Comptabilité Odoo · CPT-22
 depart: /odoo/accounting
@@ -15,6 +16,7 @@ prononciation:
   TAAGG: Tag
   Comptabiliser: Comptabilisé
   Dupliquer: Dupliqué
+  Extourner: Extourné
 fin:
   message: "Prochaine capsule : le lettrage"
   lien: taagg-gui.com
@@ -35,22 +37,22 @@ etapes:
   # ------------------------------------------------------------------ partie 1 : saisir
   - partie: "1. Saisir une écriture"
     texte: >
-      Exemple : les salaires de novembre, quatre cent cinquante mille francs. Ouvrez Comptabilité, puis Pièces comptables,
+      Exemple : les salaires d'octobre, quatre cent cinquante mille francs. Ouvrez Comptabilité, puis Pièces comptables,
       et cliquez sur Nouveau.
     actions:
       - ouvrir_menu: Comptabilité
       - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Pièces comptables")'
       - bouton: Nouveau
   - texte: >
-      Le journal des opérations diverses est déjà choisi. Une référence claire : salaires de novembre. Et la date : le trente novembre.
+      Le journal des opérations diverses est déjà choisi. Une référence claire : salaires d'octobre. Et la date : le trente et un octobre.
     actions:
       - surligner_champ: journal_id
         duree: 2
       - champ: ref
-        taper: Salaires de novembre
+        taper: Salaires d'octobre
       - cliquer: '.o_field_widget[name="date"] button, .o_field_widget[name="date"] input'
       - champ: date
-        taper: "30/11/2026"
+        taper: "31/10/2026"
         entree: true
   - texte: >
       Première ligne : la charge. Compte des salaires, six cent soixante et un mille cent, au débit : quatre cent cinquante mille.
@@ -58,7 +60,7 @@ etapes:
       - cliquer: '.o_field_widget[name="line_ids"] .o_field_x2many_list_row_add a'
       - choisir: {champ: account_id, valeur: "661100"}
       - champ: name
-        taper: Salaires de novembre
+        taper: Salaires d'octobre
       - champ: debit
         taper: "450000"
   - texte: >
@@ -86,14 +88,14 @@ etapes:
       - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Dupliquer")'
       - attendre: 1.5
   - texte: >
-      La copie est en brouillon. Changez la référence, salaires de décembre, et la date, le trente et un décembre. Enregistrez :
+      La copie est en brouillon. Changez la référence, salaires de novembre, et la date, le trente novembre. Enregistrez :
       on la comptabilisera le moment venu, en vérifiant le montant.
     actions:
       - champ: ref
-        taper: Salaires de décembre
+        taper: Salaires de novembre
       - cliquer: '.o_field_widget[name="date"] button, .o_field_widget[name="date"] input'
       - champ: date
-        taper: "31/12/2026"
+        taper: "30/11/2026"
         entree: true
       - enregistrer: oui
       - surligner: '.o_statusbar_status'
@@ -102,18 +104,21 @@ etapes:
   # ------------------------------------------------------------------ partie 3 : extourner
   - partie: "3. Extourner"
     texte: >
-      Mauvaise nouvelle : l'écriture de novembre comptait une prime de trop. Une écriture comptabilisée ne se supprime pas :
-      on l'extourne. Revenez aux pièces comptables, et ouvrez les salaires de novembre.
+      Mauvaise nouvelle : l'écriture d'octobre comptait une prime de trop. Une écriture comptabilisée ne se supprime pas :
+      on l'extourne. Revenez aux pièces comptables, et ouvrez les salaires d'octobre.
     actions:
       - cliquer: '.breadcrumb-item a:has-text("Pièces comptables")'
-      - cliquer: '.o_data_row:has-text("Salaires de novembre") td.o_data_cell'
+      - cliquer: '.o_data_row:has-text("Salaires d''octobre") td.o_data_cell'
   - texte: >
-      Cliquez sur Écriture d'extourne. Indiquez le motif, prime comptée deux fois, et validez.
+      Cliquez sur Écriture d'extourne. Le journal reste celui des opérations diverses, et Odoo date l'extourne d'aujourd'hui :
+      l'erreur est corrigée le jour où on la découvre. Cliquez sur Extourner.
     actions:
       - cliquer: '.o_statusbar_buttons button:has-text("Écriture d''extourne")'
-      - champ: reason
-        taper: Prime comptée deux fois
-      - cliquer: '.modal-footer button[name="refund_moves"], .modal-footer button[name="reverse_moves"]'
+      - surligner_champ: journal_id
+        duree: 1.5
+      - surligner_champ: date
+        duree: 2
+      - cliquer: '.modal-footer button:has-text("Extourner")'
       - attendre: 2
   - texte: >
       L'extourne est l'écriture inverse : la dette au débit, la charge au crédit. Les deux écritures s'annulent ; il ne reste
