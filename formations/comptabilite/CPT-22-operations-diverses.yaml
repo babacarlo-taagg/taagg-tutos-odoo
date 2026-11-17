@@ -1,0 +1,153 @@
+# CPT-22 · Les écritures d'opérations diverses
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-22`) :
+#   journal Opérations diverses (MISC) vide : l'emprunt de CPT-21 et ses écritures prévues sont supprimés,
+#   ainsi que les écritures « Salaires de… » et leurs extournes.
+# Ce que la capsule crée : MISC/2026/11/0001 « Salaires de novembre » (661100 débit / 422000 crédit, 450 000 F),
+#   sa copie « Salaires de décembre » en brouillon (31/12/2026), et l'extourne de novembre. etat-depart.py supprime tout.
+titre: Les écritures d'opérations diverses
+sous_titre: Formation Comptabilité Odoo · CPT-22
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+  Comptabiliser: Comptabilisé
+  Extourner: Extourné
+  Dupliquer: Dupliqué
+fin:
+  message: "Prochaine capsule : le lettrage"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans le cinquième parcours : les opérations comptables. Certaines écritures ne viennent ni d'une
+      facture, ni d'un paiement, ni de la banque : les salaires, une correction, une régularisation. Ce sont les opérations diverses.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez saisir une écriture à la main, la dupliquer, et l'annuler proprement par une extourne.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : saisir
+  - partie: "1. Saisir une écriture"
+    texte: >
+      Exemple : les salaires de novembre, quatre cent cinquante mille francs. Ouvrez Comptabilité, puis Pièces comptables,
+      et cliquez sur Nouveau.
+    actions:
+      - ouvrir_menu: Comptabilité
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Pièces comptables")'
+      - bouton: Nouveau
+  - texte: >
+      Le journal des opérations diverses est déjà choisi. Une référence claire : salaires de novembre. Et la date : le trente novembre.
+    actions:
+      - surligner_champ: journal_id
+        duree: 2
+      - champ: ref
+        taper: Salaires de novembre
+      - cliquer: '.o_field_widget[name="date"] button, .o_field_widget[name="date"] input'
+      - champ: date
+        taper: "30/11/2026"
+        entree: true
+  - texte: >
+      Première ligne : la charge. Compte des salaires, six cent soixante et un mille cent, au débit : quatre cent cinquante mille.
+    actions:
+      - cliquer: '.o_field_widget[name="line_ids"] .o_field_x2many_list_row_add a'
+      - choisir: {champ: account_id, valeur: "661100"}
+      - champ: name
+        taper: Salaires de novembre
+      - champ: debit
+        taper: "450000"
+  - texte: >
+      Deuxième ligne : la dette envers le personnel, quatre cent vingt-deux mille. Odoo propose déjà le crédit qui équilibre l'écriture.
+    actions:
+      - cliquer: '.o_field_widget[name="line_ids"] .o_field_x2many_list_row_add a'
+      - choisir: {champ: account_id, valeur: "422000"}
+      - touche: Tab
+      - surligner: '.o_field_widget[name="line_ids"]'
+        duree: 3
+  - texte: >
+      Débit et crédit sont égaux : l'écriture est équilibrée. Cliquez sur Comptabiliser.
+    actions:
+      - cliquer: '.o_statusbar_buttons button[name="action_post"]'
+      - attendre: 1.5
+      - surligner_champ: name
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 2 : dupliquer
+  - partie: "2. Dupliquer"
+    texte: >
+      Le mois prochain, la même écriture reviendra. Inutile de tout ressaisir : ouvrez le menu de l'engrenage, et choisissez Dupliquer.
+    actions:
+      - cliquer: '.o_cp_action_menus .dropdown-toggle, .o_control_panel .fa-cog'
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Dupliquer")'
+      - attendre: 1.5
+  - texte: >
+      La copie est en brouillon. Changez la référence, salaires de décembre, et la date, le trente et un décembre. Enregistrez :
+      on la comptabilisera le moment venu, en vérifiant le montant.
+    actions:
+      - champ: ref
+        taper: Salaires de décembre
+      - cliquer: '.o_field_widget[name="date"] button, .o_field_widget[name="date"] input'
+      - champ: date
+        taper: "31/12/2026"
+        entree: true
+      - enregistrer: oui
+      - surligner: '.o_statusbar_status'
+        duree: 2
+
+  # ------------------------------------------------------------------ partie 3 : extourner
+  - partie: "3. Extourner"
+    texte: >
+      Mauvaise nouvelle : l'écriture de novembre comptait une prime de trop. Une écriture comptabilisée ne se supprime pas :
+      on l'extourne. Revenez aux pièces comptables, et ouvrez les salaires de novembre.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Pièces comptables")'
+      - cliquer: '.o_data_row:has-text("Salaires de novembre") td.o_data_cell'
+  - texte: >
+      Cliquez sur Extourner. Indiquez le motif, prime comptée deux fois, et validez.
+    actions:
+      - cliquer: '.o_statusbar_buttons button[name="action_reverse"]'
+      - champ: reason
+        taper: Prime comptée deux fois
+      - cliquer: '.modal-footer button[name="refund_moves"], .modal-footer button[name="reverse_moves"]'
+      - attendre: 2
+  - texte: >
+      L'extourne est l'écriture inverse : la dette au débit, la charge au crédit. Les deux écritures s'annulent ; il ne reste
+      qu'à saisir la bonne. Et la trace de l'erreur, et de sa correction, reste visible.
+    actions:
+      - surligner: '.o_field_widget[name="line_ids"]'
+        duree: 5
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : une opération diverse pour ce qui a sa place ailleurs. Une facture fournisseur
+      se saisit en facture, un paiement en paiement : sinon, rien n'est relié.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : remettre en brouillon une écriture d'une période déjà déclarée. Corrigez par une extourne, datée d'aujourd'hui.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : comptabiliser une copie sans relire le montant. Une écriture dupliquée reprend tout, même ce qui a changé.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Une opération diverse se saisit dans Pièces comptables : un journal, une référence, une date, et des lignes
+      équilibrées. Dupliquer évite de ressaisir ; Extourner annule proprement une écriture comptabilisée.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : enregistrez les salaires du mois de votre entreprise en opération diverse, puis dupliquez-la pour le mois suivant.
+      Dans la prochaine capsule, nous verrons le lettrage. À tout de suite !
+    actions:
+      - attendre: 1
