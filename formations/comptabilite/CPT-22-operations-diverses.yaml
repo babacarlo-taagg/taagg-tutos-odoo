@@ -14,7 +14,6 @@ prononciation:
   SYSCOHADA: Syscoada
   TAAGG: Tag
   Comptabiliser: Comptabilisé
-  Extourner: Extourné
   Dupliquer: Dupliqué
 fin:
   message: "Prochaine capsule : le lettrage"
@@ -109,9 +108,9 @@ etapes:
       - cliquer: '.breadcrumb-item a:has-text("Pièces comptables")'
       - cliquer: '.o_data_row:has-text("Salaires de novembre") td.o_data_cell'
   - texte: >
-      Cliquez sur Extourner. Indiquez le motif, prime comptée deux fois, et validez.
+      Cliquez sur Écriture d'extourne. Indiquez le motif, prime comptée deux fois, et validez.
     actions:
-      - cliquer: '.o_statusbar_buttons button[name="action_reverse"]'
+      - cliquer: '.o_statusbar_buttons button:has-text("Écriture d\'extourne")'
       - champ: reason
         taper: Prime comptée deux fois
       - cliquer: '.modal-footer button[name="refund_moves"], .modal-footer button[name="reverse_moves"]'
@@ -143,7 +142,7 @@ etapes:
   - chapitre: Récapitulatif
     texte: >
       Récapitulons. Une opération diverse se saisit dans Pièces comptables : un journal, une référence, une date, et des lignes
-      équilibrées. Dupliquer évite de ressaisir ; Extourner annule proprement une écriture comptabilisée.
+      équilibrées. Dupliquer évite de ressaisir ; l'écriture d'extourne annule proprement une écriture comptabilisée.
     actions:
       - attendre: 0.5
   - texte: >
