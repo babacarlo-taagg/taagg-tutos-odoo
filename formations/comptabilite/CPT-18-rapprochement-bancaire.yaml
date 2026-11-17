@@ -15,6 +15,7 @@ voix:
 prononciation:
   SYSCOHADA: Syscoada
   TAAGG: Tag
+  Lettrer: Lettré
 fin:
   message: "Prochaine capsule : les modèles de rapprochement"
   lien: taagg-gui.com

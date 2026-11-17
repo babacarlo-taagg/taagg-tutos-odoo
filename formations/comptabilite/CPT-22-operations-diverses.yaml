@@ -110,7 +110,7 @@ etapes:
       - cliquer: '.breadcrumb-item a:has-text("Pièces comptables")'
       - cliquer: '.o_data_row:has-text("Salaires d''octobre") td.o_data_cell'
   - texte: >
-      Cliquez sur Écriture d'extourne. Le journal reste celui des opérations diverses, et Odoo date l'extourne d'aujourd'hui :
+      Cliquez sur Écriture d'extourne. Le journal reste celui des opérations diverses, et la date proposée est celle d'aujourd'hui :
       l'erreur est corrigée le jour où on la découvre. Cliquez sur Extourner.
     actions:
       - cliquer: '.o_statusbar_buttons button:has-text("Écriture d''extourne")'
