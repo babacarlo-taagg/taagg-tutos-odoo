@@ -181,3 +181,4 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 2. Parcours 1 dans l'ordre (le paramétrage conditionne tout le reste).
 3. Parcours 2 et 3, puis 4, 5, 6.
 - **CPT-18 à CPT-22** (17 novembre 2026) : voix générées et contrôlées (≈ −16 LUFS, transcription de chaque piste). Corrections : « Lettrer » → prononciation « Lettré » (CPT-18) ; « carte Banque » lue « carte bancaire » → « la carte de la banque » (CPT-19) ; « euh » parasites régénérés (CPT-21 étape 5, CPT-22 étape 12) ; « Odoo date » entendu « au dos date » → reformulé (CPT-22).
+- Leçons taagg-school.com (brouillon, cours 238) : vidéos 2877 (CPT-18), 2879 (19), 2881 (20), 2883 (21), 2885 (22), 3 questions chacune ; fiches 2878, 2880, 2882, 2884, 2886. Vidéos en attente des liens Drive.
