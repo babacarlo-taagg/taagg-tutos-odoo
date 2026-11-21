@@ -70,7 +70,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 
 | Code | Capsule | Ce qu'on apprend | Écrans | État |
 |---|---|---|---|---|
-| EB-17 | Du message WhatsApp au client : le CRM | noter une demande, suivre ses prospects, transformer en devis | CRM | ☐ |
+| EB-17 | Du message WhatsApp au client : le CRM | noter une demande, suivre ses prospects, transformer en devis | CRM | ✎ |
 | EB-18 | Devis en ligne pour les commandes sur mesure | devis envoyé par lien, accepté et payé en ligne (gâteau de mariage) | Ventes › Devis | ☐ |
 | EB-19 | Facturation, coûts et marge | factures des commandes, paiements, coût et marge par produit | Facturation, Produits | ☐ |
 | EB-20 | Le tableau de bord de la boutique | ventes, panier moyen, produits les plus vendus, paniers abandonnés, taux de conversion | Rapports eCommerce, Analytics | ☐ |

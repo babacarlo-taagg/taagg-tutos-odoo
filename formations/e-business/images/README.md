@@ -43,6 +43,8 @@ Règles : compétence `tuto-odoo-illustrations`. Babacar valide chaque image ava
 | `eb-15-recap.png` | EB-15 | les 4 points à retenir | ☐ |
 | `eb-16-fidelite.png` | EB-16 | la carte de fidélité : commande, points, remise | ☐ |
 | `eb-16-recap.png` | EB-16 | les 4 points à retenir | ☐ |
+| `eb-17-pipeline.png` | EB-17 | Nouveau, Qualifié, Proposition, Gagné | ☐ |
+| `eb-17-recap.png` | EB-17 | les 4 points à retenir | ☐ |
 | `logo-delices-maimouna.png` | toutes | logo fictif de la boutique d'exemple (posé sur le site par `etat-depart.py`) | ☐ |
 
 ## Images IA (sans texte)
