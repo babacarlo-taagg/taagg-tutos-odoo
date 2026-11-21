@@ -1,0 +1,152 @@
+# CPT-23 · Le lettrage
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-23`) :
+#   le traiteur a payé 40 120 F par Wave (« Acompte commande de baptême », 3 jours avant) avant que la facture
+#   « Commande de baptême » (2 opéras, 40 120 F TTC, datée du jour) soit faite : paiement et facture sont enregistrés
+#   chacun de son côté, non lettrés, sur le compte 411100. Le compte 585001 garde ses deux lignes de 300 000 F
+#   (banque CPT-18, caisse CPT-20) non lettrées.
+# Menu : Comptabilité › Lettrer (/odoo/reconcile) : lignes « avec résidus », groupées par compte puis par partenaire.
+# Ce que la capsule fait : lettre la facture et le paiement du traiteur, puis les deux lignes du compte de transfert ;
+#   la facture passe « En paiement » (l'argent attend encore le relevé Wave, compte 521003). etat-depart.py défait tout.
+# Le groupe « Fatou Ba » (411100) appartient à une autre session de travail : on n'y touche pas, on ne clique jamais
+#   « Lettrage automatique » (il lettrerait tout).
+titre: Le lettrage
+sous_titre: Formation Comptabilité Odoo · CPT-23
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+  Lettrer: Lettré
+fin:
+  message: "Prochaine capsule : les immobilisations et les amortissements"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette vingt-troisième capsule. Lettrer, c'est relier une facture et le paiement qui la règle,
+      pour dire : cette dette est soldée. D'habitude, Odoo le fait tout seul, quand on enregistre le paiement depuis la facture.
+    actions:
+      - attendre: 1
+  - texte: >
+      Mais quand un paiement arrive avant la facture, ou qu'il a été saisi à part, les deux restent ouverts. À la fin de cette
+      capsule, vous saurez les retrouver, et les lettrer à la main.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : l'écran
+  - partie: "1. Ce qui reste à lettrer"
+    texte: >
+      Ouvrez le menu Comptabilité, puis Lettrer. Odoo affiche toutes les lignes encore ouvertes, rangées par compte, puis par
+      client ou fournisseur.
+    actions:
+      - ouvrir_menu: Comptabilité
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Lettrer")'
+      - attendre: 1.5
+      - surligner: '.o_list_renderer'
+        duree: 2.5
+  - texte: >
+      Le compte des paiements en suspens attend le relevé de Wave : il se lettrera au rapprochement. Regardons plutôt le compte clients.
+    actions:
+      - surligner: '.o_group_header:has-text("521003")'
+        duree: 2.5
+      - surligner: '.o_group_header:has-text("411100")'
+        duree: 2
+
+  # ------------------------------------------------------------------ partie 2 : lettrer une facture et un paiement
+  - partie: "2. Lettrer une facture et son paiement"
+    texte: >
+      Le traiteur a payé sa commande de baptême par Wave, avant même que la facture soit faite. Ouvrez son groupe :
+      la facture au débit, le paiement au crédit, quarante mille cent vingt francs chacun.
+    actions:
+      - cliquer: '.o_group_header:has-text("Traiteur Saveurs du Plateau") >> nth=0'
+      - attendre: 1
+      - surligner: '.o_data_row:has-text("INV/")'
+        duree: 2
+      - surligner: '.o_data_row:has-text("PWAV/")'
+        duree: 2
+  - texte: >
+      Cochez les deux lignes. Le total est à zéro : elles se compensent exactement. Cliquez sur Lettrer.
+    actions:
+      - cliquer: '.o_data_row:has-text("INV/") td.o_list_record_selector'
+      - cliquer: '.o_data_row:has-text("PWAV/") td.o_list_record_selector'
+      - attendre: 1
+      - surligner: '.o_list_footer, tfoot'
+        duree: 2
+      - cliquer: '.o_control_panel button:text-is("Lettrer")'
+      - attendre: 2
+  - texte: >
+      Les deux lignes disparaissent de la liste : elles sont lettrées. Le traiteur ne doit plus rien.
+    actions:
+      - surligner: '.o_group_header:has-text("411100")'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 3 : le compte de transfert
+  - partie: "3. Le compte de transfert"
+    texte: >
+      Autre cas : le compte de transfert de liquidités. La sortie de la caisse et l'entrée à la banque, trois cent mille francs
+      chacune, s'annulent déjà : le solde est à zéro. Mais tant qu'elles ne sont pas lettrées, elles restent ouvertes.
+    actions:
+      - surligner: '.o_group_header:has-text("585001")'
+        duree: 3
+      - cliquer: '.o_group_header:has-text("Aucun")'
+      - attendre: 1
+  - texte: >
+      Cochez les deux, et lettrez-les. Le compte de transfert est propre.
+    actions:
+      - cliquer: '.o_data_row:has-text("VERSEMENT ESPECES") td.o_list_record_selector'
+      - cliquer: '.o_data_row:has-text("VERSEMENT A LA BANQUE") td.o_list_record_selector'
+      - attendre: 1
+      - cliquer: '.o_control_panel button:text-is("Lettrer")'
+      - attendre: 2
+      - surligner: '.o_list_renderer'
+        duree: 2
+
+  # ------------------------------------------------------------------ partie 4 : le résultat
+  - partie: "4. Le résultat sur la facture"
+    texte: >
+      Vérifions la facture. Ouvrez Clients, puis Factures, et la commande de baptême.
+    actions:
+      - ouvrir_menu: Clients
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Factures")'
+      - cliquer: '.o_data_row:has-text("Commande de baptême") td.o_data_cell'
+      - attendre: 1.5
+  - texte: >
+      Elle est en paiement : le paiement est bien relié. Elle passera à payée quand l'argent de Wave sera rapproché.
+    actions:
+      - surligner: '.o_form_view .ribbon'
+        duree: 3
+      - surligner: '.o_field_widget[name="tax_totals"]'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : lettrer deux lignes de clients différents. Le total serait à zéro, mais les deux
+      comptes clients seraient faux. Lettrez toujours dans le groupe d'un même client.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : cliquer sur Lettrage automatique sans regarder. Odoo relie tout ce qui se ressemble ; vérifiez d'abord, groupe par groupe.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : laisser traîner des lignes ouvertes. Avant chaque fin de mois, cet écran ne doit garder que ce qui est vraiment dû.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Le menu Lettrer montre tout ce qui reste ouvert, par compte et par partenaire. On coche les lignes qui se
+      compensent, on clique sur Lettrer, et elles sont soldées.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : ouvrez l'écran Lettrer de votre entreprise, et expliquez chaque ligne qui reste ouverte.
+      Dans la prochaine capsule, nous verrons les immobilisations et leurs amortissements. À tout de suite !
+    actions:
+      - attendre: 1

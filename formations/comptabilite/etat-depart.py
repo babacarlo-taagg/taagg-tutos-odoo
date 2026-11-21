@@ -570,8 +570,45 @@ def cpt_22():
     return len(salaires), len(extournes)
 
 
+def cpt_23():
+    # le traiteur a payé par Wave (40 120 F) avant que la facture « Commande de baptême » soit faite : paiement et facture
+    # sont enregistrés chacun de son côté, non lettrés (compte 411100). Le compte 585001 garde ses deux lignes de 300 000 F
+    # (banque CPT-18, caisse CPT-20) non lettrées. Les lettrages faits à l'écran sont défaits ici.
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    traiteur = odoo('res.partner', 'search', [['name', '=', 'Traiteur Saveurs du Plateau']])[0]
+    paiements = odoo('account.payment', 'search', [['partner_id', '=', traiteur], ['memo', '=', 'Acompte commande de baptême']], context=fr)
+    if paiements:
+        valides = odoo('account.payment', 'search', [['id', 'in', paiements], ['state', '!=', 'draft']])
+        if valides:
+            odoo('account.payment', 'action_draft', valides, context=fr)
+        odoo('account.payment', 'unlink', paiements, context=fr)
+    for f in odoo('account.move', 'search', [['move_type', '=', 'out_invoice'], ['ref', '=', 'Commande de baptême']], order='name desc', context=fr):
+        if odoo('account.move', 'read', [f], ['state'], context=fr)[0]['state'] != 'draft':
+            odoo('account.move', 'button_draft', [f], context=fr)
+        odoo('account.move', 'unlink', [f], context=fr)
+    transfert = odoo('account.move.line', 'search', [['account_id.code', '=', '585001'], ['reconciled', '=', True]], context=fr)
+    if transfert:
+        odoo('account.move.line', 'remove_move_reconcile', transfert, context=fr)
+    wave = odoo('account.journal', 'search', [['code', '=', 'WAV']], context=fr)[0]
+    attente = odoo('account.account', 'search', [['code', '=', '521003']], context=fr)[0]
+    lignes = odoo('account.payment.method.line', 'search', [['journal_id', '=', wave], ['payment_type', '=', 'inbound']], context=fr)
+    odoo('account.payment.method.line', 'write', lignes, {'payment_account_id': attente}, context=fr)
+    aujourdhui = datetime.date.today()
+    paiement = odoo('account.payment', 'create', {
+        'payment_type': 'inbound', 'partner_type': 'customer', 'partner_id': traiteur, 'amount': 40120,
+        'journal_id': wave, 'payment_method_line_id': lignes[0], 'date': str(aujourdhui - datetime.timedelta(days=3)),
+        'memo': 'Acompte commande de baptême'}, context=fr)
+    odoo('account.payment', 'action_post', [paiement], context=fr)
+    facture = odoo('account.move', 'create', {
+        'move_type': 'out_invoice', 'partner_id': traiteur, 'ref': 'Commande de baptême', 'invoice_date': str(aujourdhui),
+        'invoice_line_ids': [[0, 0, {'product_id': odoo('product.product', 'search', [['name', '=', 'Opéra']])[0],
+                                     'quantity': 2, 'price_unit': 17000}]]}, context=fr)
+    odoo('account.move', 'action_post', [facture], context=fr)
+    return odoo('account.move', 'read', [facture], ['name', 'amount_total', 'amount_residual'], context=fr)[0], len(transfert)
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19, 'CPT-20': cpt_20, 'CPT-21': cpt_21, 'CPT-22': cpt_22}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19, 'CPT-20': cpt_20, 'CPT-21': cpt_21, 'CPT-22': cpt_22, 'CPT-23': cpt_23}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''
