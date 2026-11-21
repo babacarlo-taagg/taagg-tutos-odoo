@@ -6,7 +6,7 @@
 #   (banque CPT-18, caisse CPT-20) non lettrées.
 # Menu : Comptabilité › Lettrer (/odoo/reconcile) : lignes « avec résidus », groupées par compte puis par partenaire.
 # Ce que la capsule fait : lettre la facture et le paiement du traiteur, puis les deux lignes du compte de transfert ;
-#   la facture passe « En paiement » (l'argent attend encore le relevé Wave, compte 521003). etat-depart.py défait tout.
+#   la facture passe « En cours de paiement » (l'argent attend encore le relevé Wave, compte 521003). etat-depart.py défait tout.
 # Le groupe « Fatou Ba » (411100) appartient à une autre session de travail : on n'y touche pas, on ne clique jamais
 #   « Lettrage automatique » (il lettrerait tout).
 titre: Le lettrage
@@ -76,7 +76,7 @@ etapes:
       - attendre: 1
       - surligner: '.o_list_footer, tfoot'
         duree: 2
-      - cliquer: '.o_control_panel button:text-is("Lettrer")'
+      - cliquer: '.o_control_panel button:has-text("Lettrer")'
       - attendre: 2
   - texte: >
       Les deux lignes disparaissent de la liste : elles sont lettrées. Le traiteur ne doit plus rien.
@@ -100,7 +100,7 @@ etapes:
       - cliquer: '.o_data_row:has-text("VERSEMENT ESPECES") td.o_list_record_selector'
       - cliquer: '.o_data_row:has-text("VERSEMENT A LA BANQUE") td.o_list_record_selector'
       - attendre: 1
-      - cliquer: '.o_control_panel button:text-is("Lettrer")'
+      - cliquer: '.o_control_panel button:has-text("Lettrer")'
       - attendre: 2
       - surligner: '.o_list_renderer'
         duree: 2
@@ -108,14 +108,16 @@ etapes:
   # ------------------------------------------------------------------ partie 4 : le résultat
   - partie: "4. Le résultat sur la facture"
     texte: >
-      Vérifions la facture. Ouvrez Clients, puis Factures, et la commande de baptême.
+      Vérifions la facture. Ouvrez Clients, puis Factures clients. Cherchez le traiteur, et ouvrez sa facture de quarante mille cent vingt francs.
     actions:
       - ouvrir_menu: Clients
-      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Factures")'
-      - cliquer: '.o_data_row:has-text("Commande de baptême") td.o_data_cell'
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Factures clients")'
+      - rechercher: Traiteur Saveurs du Plateau
+      - cliquer: '.o_data_row:has-text("40 120") td.o_data_cell'
       - attendre: 1.5
-  - texte: >
-      Elle est en paiement : le paiement est bien relié. Elle passera à payée quand l'argent de Wave sera rapproché.
+  - sous_titres: haut
+    texte: >
+      Elle est en cours de paiement : le paiement est bien relié. Elle passera à payée quand l'argent de Wave sera rapproché.
     actions:
       - surligner: '.o_form_view .ribbon'
         duree: 3
