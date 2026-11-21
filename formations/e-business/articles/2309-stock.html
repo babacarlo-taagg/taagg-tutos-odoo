@@ -1,0 +1,44 @@
+<h2>L'histoire</h2>
+<p>Samedi, 10 h 30. Moussa, qui travaille dans un bureau du Plateau, commande sur la boutique 20 croissants et 10 pains au chocolat
+pour la réunion de son équipe : 13 000 F. Maïmouna voit la commande arriver, et son cœur se serre.
+La fournée du matin est partie depuis une heure, vendue au comptoir. Il ne reste que trois croissants.</p>
+<p>Elle appelle Moussa pour s'excuser. Il est poli, mais déçu : <em>« Si c'était épuisé, il fallait l'écrire.
+J'aurais pris autre chose ailleurs. »</em></p>
+<p>Le soir, Maïmouna comprend son erreur. Pour ses gâteaux, tout va bien : elle les prépare à la commande,
+elle n'a pas besoin de compter un stock. Mais les croissants, c'est l'inverse : elle en fait un nombre fixe chaque matin,
+et quand c'est fini, c'est fini. Sa boutique doit le savoir.</p>
+<p>Elle active le suivi du stock sur ses viennoiseries. Désormais, chaque matin, elle saisit la quantité de la fournée.
+Le site affiche « Plus que 7 » quand il en reste peu, et « Fournée épuisée » quand il n'y en a plus.</p>
+
+<h2>Ce qu'il faut comprendre</h2>
+<ul>
+  <li><strong>Tous les produits ne se gèrent pas pareil.</strong> Les produits faits à la demande (gâteaux sur commande)
+    n'ont pas de stock à suivre. Les produits fabriqués ou achetés à l'avance (viennoiseries, boîtes de macarons) en ont un.</li>
+  <li><strong>Le stock en ligne doit dire la vérité.</strong> Vendre un produit qui n'existe plus, c'est décevoir deux fois :
+    au moment du « désolée, il n'y en a plus », et en remboursant ou en proposant autre chose.</li>
+  <li><strong>Afficher la quantité restante fait vendre.</strong> « Plus que 7 » rassure et pousse à commander tout de suite.</li>
+  <li><strong>Les alertes de réapprovisionnement préviennent avant la panne.</strong> Pour ce que vous achetez et revendez,
+    vous fixez un minimum : quand le stock passe dessous, Odoo vous propose de recommander.</li>
+  <li><strong>L'inventaire mensuel remet les compteurs à zéro.</strong> Une fois par mois, vous comptez ce qui est vraiment là,
+    et vous corrigez les écarts : casse, erreurs, produits offerts.</li>
+</ul>
+
+<h2>Dans Odoo</h2>
+<p>Regardez la vidéo <strong>EB-07 · Stock et disponibilité en ligne</strong>, juste au-dessus de cette leçon. Les gestes clés :</p>
+<ul>
+  <li>Sur les gâteaux sur commande : le stock <strong>n'est pas suivi</strong>, ils restent toujours disponibles.</li>
+  <li>Sur la fiche du croissant : cocher <strong>Suivre l'inventaire</strong>, puis saisir la quantité du matin.</li>
+  <li>Onglet <strong>Ventes</strong> de la fiche : interdire la vente en rupture de stock, afficher la quantité quand il en reste moins de 10,
+    et écrire le message <strong>« Fournée épuisée »</strong>.</li>
+  <li><strong>Inventaire › Opérations › Inventaire physique</strong> : compter et corriger les quantités en fin de mois.</li>
+</ul>
+
+<h2>À vous</h2>
+<ul>
+  <li>☐ Classez vos produits en deux colonnes : « faits à la demande » et « en stock ».</li>
+  <li>☐ Activez le suivi du stock sur vos produits « en stock » et choisissez le message affiché en cas de rupture.</li>
+  <li>☐ Notez dans votre agenda une date fixe chaque mois pour votre inventaire physique.</li>
+</ul>
+
+<h2>Le piège à éviter</h2>
+<p>Suivre le stock de vos produits faits à la demande : ils afficheront « épuisé » alors que vous pouvez les préparer.</p>
