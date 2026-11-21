@@ -56,7 +56,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | Code | Capsule | Ce qu'on apprend | Écrans | État |
 |---|---|---|---|---|
 | CPT-22 | Écritures d'opérations diverses | saisir une OD, extourner, dupliquer | Pièces comptables | 🎙 3:21 |
-| CPT-23 | Le lettrage | relier factures et paiements, lettrage manuel, comptes non lettrés | Clôture › Lettrer | ☐ |
+| CPT-23 | Le lettrage | relier factures et paiements, lettrage manuel, comptes non lettrés | Clôture › Lettrer | ✎ 3:15 |
 | CPT-24 | Immobilisations et amortissements **[E]** | modèles d'immobilisations, créer une immobilisation, tableau d'amortissement, cession | Immobilisations, Modèles d'immobilisations | ☐ |
 | CPT-25 | Charges et produits constatés d'avance **[E]** | étaler une charge ou un produit sur plusieurs mois | Écritures de régularisation | ☐ |
 | CPT-26 | Factures à recevoir et à émettre **[E]** | régularisations de fin de période liées aux achats et ventes | Révision › Achats / Ventes | ☐ |
@@ -182,3 +182,5 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 3. Parcours 2 et 3, puis 4, 5, 6.
 - **CPT-18 à CPT-22** (17 novembre 2026) : voix générées et contrôlées (≈ −16 LUFS, transcription de chaque piste). Corrections : « Lettrer » → prononciation « Lettré » (CPT-18) ; « carte Banque » lue « carte bancaire » → « la carte de la banque » (CPT-19) ; « euh » parasites régénérés (CPT-21 étape 5, CPT-22 étape 12) ; « Odoo date » entendu « au dos date » → reformulé (CPT-22).
 - Leçons taagg-school.com (brouillon, cours 238) : vidéos 2877 (CPT-18), 2879 (19), 2881 (20), 2883 (21), 2885 (22), 3 questions chacune ; fiches 2878, 2880, 2882, 2884, 2886. Vidéos en attente des liens Drive.
+- **CPT-23** (21 novembre 2026) : brouillon muet, 3 min 15 s, 16 étapes. Menu Comptabilité › Lettrer (/odoo/reconcile), bouton « Lettrer » quand on coche des lignes. Cas filmés : paiement Wave du traiteur saisi avant la facture (40 120 F, compte 411100) et les deux lignes du compte 585001 (banque CPT-18 / caisse CPT-20). La facture passe « En cours de paiement » (l'argent attend le relevé Wave, compte 521003). Le groupe « Fatou Ba » vient d'une autre session : on n'y touche pas, et on ne clique jamais « Lettrage automatique ». Liste des factures : pas de colonne Référence, on cherche le traiteur et on ouvre la ligne « 40 120 ».
+- CPT-18 : fiche publiée le 21 novembre ; la leçon vidéo 2877 porte le lien Drive de CPT-19 (à corriger par Babacar, le robot ne peut pas changer un lien Drive) ; le bon fichier : CPT-18-rapprochement-bancaire.mp4 (1LadPVmg9VD3iJz9WGDEbEX8avp37Th6G).
