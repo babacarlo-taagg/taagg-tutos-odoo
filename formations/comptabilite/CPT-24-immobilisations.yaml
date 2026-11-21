@@ -108,10 +108,12 @@ etapes:
   # ------------------------------------------------------------------ partie 3 : le tableau
   - partie: "3. Le tableau d'amortissement"
     texte: >
-      Cliquez sur Calcul des amortissements.
+      Cliquez sur Calcul des amortissements, puis ouvrez l'onglet Tableau des amortissements.
     actions:
       - cliquer: '.o_statusbar_buttons button:has-text("Calcul des amortissements")'
       - attendre: 2
+      - cliquer: 'a.nav-link:has-text("Tableau des amortissements")'
+      - attendre: 1
   - sous_titres: haut
     texte: >
       Six dotations. La première ne compte que novembre et décembre : cent mille francs. Puis six cent mille francs par an,
@@ -123,18 +125,20 @@ etapes:
       Tout est juste : cliquez sur Confirmer. Chaque dotation sera comptabilisée toute seule, à sa date, dans les opérations diverses.
     actions:
       - cliquer: '.o_statusbar_buttons button:has-text("Confirmer")'
-      - attendre: 2
-      - surligner: '.o_statusbar_status'
-        duree: 2.5
+      - attendre: 4
 
   # ------------------------------------------------------------------ partie 4 : la sortie
   - partie: "4. Le jour où le four sort"
     texte: >
-      Le jour où le four est vendu ou jeté, ne supprimez rien : le bouton Vendre ou mettre au rebut arrête les amortissements
-      et enregistre la sortie, avec la plus-value ou la moins-value.
+      Le jour où le four est vendu ou mis au rebut, ne supprimez rien. Cliquez sur Modifier l'amortissement : l'action Vendre,
+      ou Céder, arrête les amortissements et enregistre la sortie, avec la plus-value ou la moins-value. Ici, on referme sans rien changer.
     actions:
-      - surligner: '.o_statusbar_buttons button:has-text("Vendre")'
-        duree: 3
+      - cliquer: '.o_statusbar_buttons button:has-text("Modifier l")'
+      - attendre: 1.5
+      - surligner: '.modal .o_field_widget[name="modify_action"]'
+        duree: 8
+      - cliquer: '.modal-header .btn-close'
+      - attendre: 1
 
   # ------------------------------------------------------------------ pièges fréquents
   - partie: "Les pièges à éviter"
