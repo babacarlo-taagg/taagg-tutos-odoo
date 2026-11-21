@@ -91,7 +91,7 @@ etapes:
     actions:
       - cliquer: '.o-mail-Chatter-topbar button:has-text("Activité"), button:has-text("Activité") >> nth=0'
       - attendre: 1.5
-      - cliquer: '.modal button:has-text("Appeler")'
+      - cliquer: '.modal [name="activity_type_id"] :text-is("Appeler")'
       - attendre: 0.5
       - taper_dans: {dans: '.modal [name="summary"] input', texte: Rappeler Khady pour la dégustation}
       - cliquer: '.modal-footer button:has-text("Enregistrer")'
