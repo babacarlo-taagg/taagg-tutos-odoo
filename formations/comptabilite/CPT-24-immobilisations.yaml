@@ -1,0 +1,166 @@
+# CPT-24 · Immobilisations et amortissements [E]
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-24`) :
+#   facture fournisseur validée de Cuisines Pro Dakar (réf. CPD-2026-077, datée du 01/11/2026) : « Four à sole
+#   professionnel 3 étages », 3 000 000 F HT sur 241100 Matériel industriel, TVA 18 % (3 540 000 F TTC) ;
+#   aucune immobilisation, aucun modèle d'immobilisation.
+# Menus : Configuration › Modèles d'immobilisations (/odoo/asset-models) ; Comptabilité › Immobilisations (/odoo/assets).
+# Ce que la capsule crée : le modèle « Matériel de pâtisserie » (linéaire, 5 ans, 284100 / 681300, Opérations diverses),
+#   l'immobilisation « Four à sole » reliée à la ligne de la facture, son tableau (prorata au 1er novembre :
+#   100 000 F en 2026, 600 000 F de 2027 à 2030, 500 000 F en 2031), confirmée. etat-depart.py supprime tout.
+titre: Immobilisations et amortissements
+sous_titre: Formation Comptabilité Odoo · CPT-24
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+  Confirmer: Confirmé
+fin:
+  message: "Prochaine capsule : les charges et produits constatés d'avance"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette vingt-quatrième capsule. La boutique a acheté un four à sole : trois millions de francs.
+      Il servira plusieurs années. Ce n'est donc pas une charge du mois : c'est une immobilisation.
+    actions:
+      - attendre: 1
+  - texte: >
+      Chaque année, une partie de sa valeur passe en charge : c'est l'amortissement. À la fin de cette capsule, vous saurez
+      créer un modèle, enregistrer l'immobilisation depuis sa facture, et laisser Odoo calculer les amortissements.
+      Les immobilisations font partie de la version Enterprise.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : le modèle
+  - partie: "1. Le modèle d'immobilisation"
+    texte: >
+      Un modèle regroupe les réglages communs à un type de matériel. Ouvrez Configuration, puis Modèles d'immobilisations,
+      et cliquez sur Nouveau.
+    actions:
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Modèles d")'
+      - bouton: Nouveau
+  - texte: >
+      Son nom : matériel de pâtisserie. Le mode linéaire, sur cinq ans : la même dotation chaque année.
+    actions:
+      - champ: name
+        taper: Matériel de pâtisserie
+      - surligner_champ: method
+        duree: 1.5
+      - surligner_champ: method_number
+        duree: 1.5
+  - texte: >
+      Les comptes du plan SYSCOHADA. L'amortissement cumulé : deux cent quatre-vingt-quatre mille cent. La charge de chaque année :
+      la dotation aux amortissements, six cent quatre-vingt-un mille trois cents. Le journal des opérations diverses est déjà choisi.
+      Enregistrez.
+    actions:
+      - choisir: {champ: account_depreciation_id, valeur: "284100"}
+      - choisir: {champ: account_depreciation_expense_id, valeur: "681300"}
+      - surligner_champ: journal_id
+        duree: 1.5
+      - enregistrer: oui
+
+  # ------------------------------------------------------------------ partie 2 : l'immobilisation
+  - partie: "2. Enregistrer l'immobilisation"
+    texte: >
+      Ouvrez le menu Comptabilité, puis Immobilisations, et cliquez sur Nouveau. Le nom : four à sole.
+    actions:
+      - ouvrir_menu: Comptabilité
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Immobilisations")'
+      - bouton: Nouveau
+      - champ: name
+        taper: Four à sole
+  - texte: >
+      Inutile de recopier le prix : reliez la facture. Dans l'onglet Factures fournisseurs, ajoutez une ligne, et choisissez
+      celle du four, sur le compte du matériel industriel.
+    actions:
+      - cliquer: 'a.nav-link:has-text("Factures fournisseurs")'
+      - cliquer: '.o_field_widget[name="original_move_line_ids"] .o_field_x2many_list_row_add a'
+      - attendre: 1
+      - surligner: '.modal .o_data_row:has-text("Four à sole professionnel")'
+        duree: 2
+      - cliquer: '.modal .o_data_row:has-text("Four à sole professionnel") td.o_data_cell'
+      - attendre: 1
+  - texte: >
+      Revenez à l'onglet Immobilisation. La valeur d'origine, trois millions, et la date d'acquisition, le premier novembre,
+      viennent de la facture.
+    actions:
+      - cliquer: 'a.nav-link:text-is("Immobilisation")'
+      - surligner_champ: original_value
+        duree: 2
+      - surligner_champ: acquisition_date
+        duree: 2
+  - texte: >
+      Choisissez le modèle : matériel de pâtisserie. La méthode, la durée et les comptes se remplissent tout seuls.
+    actions:
+      - choisir: {champ: model_id, valeur: Matériel de pâtisserie}
+      - attendre: 1
+      - surligner_champ: account_depreciation_id
+        duree: 1.5
+      - surligner_champ: account_depreciation_expense_id
+        duree: 1.5
+
+  # ------------------------------------------------------------------ partie 3 : le tableau
+  - partie: "3. Le tableau d'amortissement"
+    texte: >
+      Cliquez sur Calcul des amortissements.
+    actions:
+      - cliquer: '.o_statusbar_buttons button:has-text("Calcul des amortissements")'
+      - attendre: 2
+  - sous_titres: haut
+    texte: >
+      Six dotations. La première ne compte que novembre et décembre : cent mille francs. Puis six cent mille francs par an,
+      et cinq cent mille la dernière année, pour finir les cinq ans. La valeur comptable descend jusqu'à zéro.
+    actions:
+      - surligner: '.o_field_widget[name="depreciation_move_ids"]'
+        duree: 7
+  - texte: >
+      Tout est juste : cliquez sur Confirmer. Chaque dotation sera comptabilisée toute seule, à sa date, dans les opérations diverses.
+    actions:
+      - cliquer: '.o_statusbar_buttons button:has-text("Confirmer")'
+      - attendre: 2
+      - surligner: '.o_statusbar_status'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 4 : la sortie
+  - partie: "4. Le jour où le four sort"
+    texte: >
+      Le jour où le four est vendu ou jeté, ne supprimez rien : le bouton Vendre ou mettre au rebut arrête les amortissements
+      et enregistre la sortie, avec la plus-value ou la moins-value.
+    actions:
+      - surligner: '.o_statusbar_buttons button:has-text("Vendre")'
+        duree: 3
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : passer un gros achat durable en charge. Le résultat de l'année est faussé,
+      et le matériel disparaît du bilan.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : oublier de relier la facture. La valeur et la date se tapent à la main, et les erreurs arrivent.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : confirmer sans regarder le tableau. Une mauvaise durée, et toutes les dotations sont fausses pendant des années.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Un modèle porte la méthode, la durée et les comptes. L'immobilisation se crée depuis sa facture ;
+      Calcul des amortissements produit le tableau ; Confirmer, et Odoo passe chaque dotation à sa date.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : enregistrez un matériel de votre entreprise en immobilisation, et vérifiez son tableau d'amortissement.
+      Dans la prochaine capsule, nous verrons les charges et produits constatés d'avance. À tout de suite !
+    actions:
+      - attendre: 1
