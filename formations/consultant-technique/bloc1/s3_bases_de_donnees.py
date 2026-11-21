@@ -175,12 +175,13 @@ DETAIL:  Key (zone_id)=(99) is not present in table "zone".""", "psql"),
 ("code", """SELECT c.client, z.nom AS zone, z.tarif
 FROM course c
 JOIN zone z ON z.id = c.zone_id
-ORDER BY z.tarif;""", "psql"),
+ORDER BY z.tarif, c.client;""", "psql"),
 ("code", """    client     |   zone   | tarif
 ---------------+----------+-------
+ Khady Ba      | Médina   |  1000
  Moussa Ndiaye | Plateau  |  1000
  Awa Diop      | Mermoz   |  1500
- Fatou Sarr    | Rufisque |  3000""", "Résultat (après la suppression d'Ibou Fall)"),
+ Fatou Sarr    | Rufisque |  3000""", "Résultat (après l'ajout de Khady Ba et la suppression d'Ibou Fall)"),
 ("p", "<code>course c</code> et <code>zone z</code> donnent un surnom court à chaque table. <code>ON z.id = c.zone_id</code> dit comment les relier."),
 ("h", "Compter par groupe : GROUP BY"),
 ("code", """SELECT z.nom, COUNT(c.id) AS nb_courses
@@ -188,6 +189,13 @@ FROM zone z
 LEFT JOIN course c ON c.zone_id = z.id
 GROUP BY z.nom
 ORDER BY nb_courses DESC, z.nom;""", "psql"),
+("code", """         nom         | nb_courses
+---------------------+------------
+ Mermoz              |          1
+ Médina              |          1
+ Plateau             |          1
+ Rufisque            |          1
+ Parcelles Assainies |          0""", "Résultat"),
 ("p", "<code>LEFT JOIN</code> garde aussi les zones <b>sans</b> course (avec 0). Avec un simple <code>JOIN</code>, elles disparaîtraient du résultat."),
 ("astuce", "Dans Odoo", "Quand tu écriras <code>course.zone_id.nom</code> en Python, Odoo fera cette jointure pour toi. Et les vues « Regrouper par » des listes d'Odoo font des <code>GROUP BY</code>."),
 ],

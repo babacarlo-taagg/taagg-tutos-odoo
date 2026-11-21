@@ -311,7 +311,7 @@ depart = datetime(2026, 11, 21, 9, 30, tzinfo=ZoneInfo("Africa/Dakar"))
 print(depart.astimezone(ZoneInfo("Europe/Paris")).strftime("%H:%M"))   # 10:30
 print(datetime.strptime("21/11/2026 14:05", "%d/%m/%Y %H:%M"))      # texte → date""", "dates.py"),
 ("p", "Dakar est à l'heure UTC toute l'année (pas d'heure d'été). Mais un client à Paris, à Abidjan ou à Douala ne voit pas la même heure."),
-("version", "Dans Odoo (toutes versions récentes, 20 compris), les champs Date et Heure sont <b>enregistrés en UTC</b>, sans fuseau. Odoo les convertit au fuseau de l'utilisateur seulement à l'affichage. Règle : dans ton code, travaille en UTC ; pour afficher une heure locale dans un document, utilise <code>fields.Datetime.context_timestamp(record, valeur)</code>."),
+("astuce", "Dans Odoo", "Dans Odoo (toutes versions récentes, 20 compris), les champs Date et Heure sont <b>enregistrés en UTC</b>, sans fuseau. Odoo les convertit au fuseau de l'utilisateur seulement à l'affichage. Règle : dans ton code, travaille en UTC ; pour afficher une heure locale dans un document, utilise <code>fields.Datetime.context_timestamp(record, valeur)</code>."),
 ("h", "Les nombres et l'argent"),
 ("code", """print(0.1 + 0.2)              # 0.30000000000000004
 print(0.1 + 0.2 == 0.3)       # False !
