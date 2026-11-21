@@ -261,7 +261,7 @@ print(resume(**valeurs))       # Ibou → Médina : le dictionnaire est « dépl
   "<code>**kwargs</code> récupère les valeurs nommées dans un dictionnaire.",
   "Dans Odoo, les méthodes surchargées s'écrivent souvent <code>def write(self, vals)</code> ou avec <code>**kwargs</code> pour transmettre tout à <code>super()</code>.",
 ]),
-("version", "Odoo fournit aussi ses propres outils qui ressemblent à des compréhensions : <code>courses.mapped(\"client\")</code>, <code>courses.filtered(lambda c: c.poids &gt; 5)</code>. On les verra au Bloc 2."),
+("astuce", "Dans Odoo", "Odoo fournit aussi ses propres outils qui ressemblent à des compréhensions : <code>courses.mapped(\"client\")</code>, <code>courses.filtered(lambda c: c.poids &gt; 5)</code>. On les verra au Bloc 2."),
 ],
 exercice=[
 ("p", "À partir de la liste <code>courses</code> ci-dessus : (1) avec une compréhension, fais la liste des courses de la zone Mermoz ; (2) calcule le poids moyen ; (3) trie les clients par ordre alphabétique. Chaque réponse doit tenir en une ligne."),

@@ -253,7 +253,7 @@ SELECT module, name, model, res_id FROM ir_model_data WHERE model = 'res.partner
   "<code>ir_model</code> : la liste des modèles.",
   "<code>ir_model_data</code> : les <b>identifiants externes</b> (par exemple <code>base.main_partner</code>) qui permettent à un module de retrouver « sa » fiche. On s'en servira beaucoup au Bloc 2.",
 ]),
-("version", "Dans les versions récentes d'Odoo, les textes traduisibles sont rangés en JSON, une valeur par langue. Par exemple la colonne <code>name</code> de <code>ir_model</code> contient <code>{\"en_US\": \"Contact\"}</code> : on lit <code>name-&gt;&gt;'en_US'</code> en SQL."),
+("version", "Depuis Odoo 16, les textes traduisibles sont rangés en JSON, une valeur par langue. Par exemple la colonne <code>name</code> de <code>ir_model</code> contient <code>{\"en_US\": \"Contact\"}</code> : on lit <code>name-&gt;&gt;'en_US'</code> en SQL."),
 ("attention", "Règle d'or : lecture seule", "On ne modifie <b>jamais</b> une base Odoo en SQL (<code>UPDATE</code>, <code>DELETE</code>) : on contournerait les règles, les calculs, les droits et l'historique d'Odoo. On lit en SQL, on modifie avec Odoo (écran, code Python ou API). Et on ne fait jamais ces essais sur la base d'un client."),
 ],
 exercice=[

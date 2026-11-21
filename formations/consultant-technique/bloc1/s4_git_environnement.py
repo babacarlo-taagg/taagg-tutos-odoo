@@ -451,7 +451,7 @@ corps=[
 }""", ".vscode/launch.json"),
 ("p", "Puis <b>F5</b> : Odoo démarre sous le contrôle de VS Code. Clique dans la marge à gauche d'une ligne de code pour poser un <b>point d'arrêt</b> (un rond rouge). Quand Odoo passe par cette ligne, il s'arrête : tu vois toutes les variables à gauche, et tu avances ligne par ligne avec <b>F10</b> (ligne suivante) et <b>F11</b> (entrer dans la fonction)."),
 ("astuce", "Le rechargement marche aussi ici", "Odoo 20 sait redémarrer sous le débogueur : avec <code>--dev=xml,reload</code>, quand tu enregistres un fichier Python, Odoo relance un nouveau processus et VS Code continue de le suivre. Tes points d'arrêt restent actifs."),
-("version", "Le débogueur de VS Code s'appuie sur <code>debugpy</code> ; on a vérifié qu'Odoo 20 démarre normalement sous <code>debugpy</code>. Avec une ancienne extension Python, le type peut s'appeler <code>\"python\"</code> au lieu de <code>\"debugpy\"</code>."),
+("astuce", "Bon à savoir", "Le débogueur de VS Code s'appuie sur <code>debugpy</code> ; on a vérifié qu'Odoo 20 démarre normalement sous <code>debugpy</code>."),
 ],
 exercice=[
 ("p", "Installe VS Code et ses extensions, crée le <code>launch.json</code>, lance Odoo avec F5. Ouvre <code>~/odoo/odoo/addons/base/models/res_partner.py</code>, cherche (Ctrl+F) <code>def _compute_display_name</code> et pose un point d'arrêt sur la première ligne de la boucle de cette méthode. Ouvre un contact dans Odoo : VS Code doit s'arrêter. Regarde la valeur de <code>partner.name</code>, puis continue avec F5."),
