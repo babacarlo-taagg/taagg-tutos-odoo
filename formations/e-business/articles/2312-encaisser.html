@@ -1,0 +1,46 @@
+<h2>L'histoire</h2>
+<p>Mardi, 22 heures. La boutique en ligne de Maïmouna tourne depuis trois jours. Une notification : nouvelle commande,
+un fraisier à 18 000 F, au nom de Fatou. Maïmouna ne la connaît pas. C'est sa première cliente venue uniquement du site.</p>
+<p>Une minute plus tard, un message WhatsApp : <em>« Bonsoir, j'ai payé par Wave. »</em> Puis un deuxième, d'un autre numéro :
+<em>« C'est fait pour le fraisier, je vous ai envoyé 18 000. »</em> Deux virements de 18 000 F sur son téléphone, deux commandes de fraisier ce soir-là,
+et aucun moyen de savoir quel argent va avec quelle commande. Maïmouna passe une demi-heure à rappeler les deux femmes.</p>
+<p>Le lendemain, elle change une seule chose : sur son site, le paiement par virement s'appelle désormais
+« Wave ou Orange Money », avec une consigne claire : <em>« Envoyez le montant au 77 000 00 00 et écrivez votre numéro de commande
+dans le message. »</em> La commande suivante arrive avec la mention S00024. Elle retrouve le paiement en dix secondes.</p>
+
+<h2>Ce qu'il faut comprendre</h2>
+<ul>
+  <li><strong>Proposez les moyens de paiement que vos clientes utilisent déjà.</strong> Au Sénégal, c'est d'abord le mobile money
+    (Wave, Orange Money), puis le paiement à la livraison, et la carte bancaire pour une partie de la clientèle.
+    Une cliente qui ne trouve pas son moyen de paiement abandonne son panier.</li>
+  <li><strong>Deux façons d'encaisser le mobile money.</strong> La simple : la cliente envoie l'argent sur votre numéro et vous vérifiez
+    à la main. L'automatique : un fournisseur de paiement (un intermédiaire relié à Odoo) encaisse pour vous et confirme
+    la commande tout seul. Il demande un contrat, des clés de connexion et prend des frais sur chaque paiement :
+    comparez-les avant de signer.</li>
+  <li><strong>Le paiement à la livraison rassure, mais il coûte.</strong> La cliente paie quand elle a le gâteau en main.
+    En échange, vous risquez le refus au dernier moment. Réservez-le aux petits montants ou aux clientes connues.</li>
+  <li><strong>Rapprocher, c'est relier chaque argent reçu à une commande.</strong> Si l'argent arrive sans référence,
+    vous ne savez plus qui a payé. D'où l'importance du numéro de commande dans le message.</li>
+</ul>
+
+<h2>Dans Odoo</h2>
+<p>Regardez les vidéos <strong>EB-08 · Les moyens de paiement</strong> et <strong>EB-09 · Où arrive l'argent</strong>,
+juste au-dessus de cette leçon. Les gestes clés :</p>
+<ul>
+  <li><strong>Site Web › Configuration › Fournisseurs de paiement</strong> : activer le <em>Virement bancaire</em>,
+    le renommer « Wave ou Orange Money » et écrire les instructions (numéro, montant, numéro de commande).</li>
+  <li>Un fournisseur comme Flutterwave demande des clés de connexion fournies par lui : à faire quand vous avez signé avec lui.</li>
+  <li>Le fournisseur <strong>Démo</strong> permet de tester un paiement par carte sans argent réel.</li>
+  <li><strong>eCommerce › Commandes non payées</strong> : vérifier le paiement sur votre téléphone, confirmer la commande,
+    créer la facture, puis <strong>Enregistrer le paiement</strong> dans le journal « Wave ».</li>
+</ul>
+
+<h2>À vous</h2>
+<ul>
+  <li>☐ Demandez à 5 clientes comment elles préfèrent payer, et notez les deux réponses qui reviennent le plus.</li>
+  <li>☐ Écrivez vos instructions de paiement en trois lignes maximum, avec le numéro de commande obligatoire.</li>
+  <li>☐ Passez une commande test avec la carte Démo, puis retrouvez-la dans les commandes d'Odoo.</li>
+</ul>
+
+<h2>Le piège à éviter</h2>
+<p>Confirmer une commande sur la seule capture d'écran envoyée par la cliente : vérifiez toujours que l'argent est vraiment arrivé sur votre téléphone.</p>
