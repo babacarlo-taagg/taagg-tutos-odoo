@@ -293,7 +293,9 @@ tournage (`executer: oui`), soit copiées de vrais essais (Ubuntu 24.04, Odoo 20
 | `CT1-45-docker` | 1.4.5 (2909) | compose.yaml, up, ps, version, journal, down | ✎ |
 | — | 1.4.7 VS Code | interface graphique : enregistrement d'écran par Babacar | ☐ |
 
+Brouillons tournés et contrôlés image par image le 22/11/2026 (durées : 1 min 06 à 1 min 27, voix muette).
 Restent à décider : la voix (ElevenLabs ou voix clonée de Babacar) avant la version finale (crédits ElevenLabs).
+Commande pour une version finale : `node tuto.mjs formations/consultant-technique/videos/<scénario>.yaml`.
 
 ## Volume
 

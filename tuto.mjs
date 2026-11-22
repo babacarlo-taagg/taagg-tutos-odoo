@@ -477,6 +477,9 @@ const PAGE_TERMINAL = `<!doctype html><html lang="fr"><head><meta charset="utf-8
     lettre(c) { T.ligneCourante.textContent += c; },
     afficher(texte, cls) {
       document.getElementById('curseur')?.remove();
+      // texte affiché sans commande : il remplace l'invite encore vide
+      if (cls !== 'apres-commande' && T.ligneCourante && T.ligneCourante.textContent === '' && T.ligneCourante.parentNode === ecran.lastElementChild) { ecran.lastElementChild.remove(); T.ligneCourante = null; }
+      if (cls === 'apres-commande') cls = 'sortie';
       for (const l of String(texte).replace(/\\n$/, '').split('\\n')) T.nouvelleLigne(cls || 'sortie').textContent = l;
       T.defiler();
     },
