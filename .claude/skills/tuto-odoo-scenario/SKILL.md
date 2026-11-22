@@ -64,7 +64,7 @@ etapes:
 | `cliquer: '<sélecteur>'` | clique un sélecteur Playwright (`.o_form_button_save`, `text=Archiver`, `button:has-text("Confirmer")`) |
 | `champ: name` + `taper: Awa Diop` | tape lettre par lettre dans le champ technique `name` (`entree: true` pour valider) |
 | `choisir: {champ: country_id, valeur: Sénégal}` | liste déroulante ou champ relié : tape puis choisit dans la liste (marche aussi pour les listes de choix d'Odoo 19, ex. `{champ: type, valeur: Espèces}`) |
-| `champ: deferred_start_date` + `taper:` + `rang: 2` | tape dans la 2e case d'un champ qui en a plusieurs (période « début → fin » : la date de fin) |
+| `champ: deferred_end_date` + `taper:` | date de fin d'une période « début → fin » (ligne de facture) : la 2e case est trouvée par son `data-field` |
 | `cocher: is_company` | coche une case |
 | `onglet: Notes internes` | ouvre un onglet de la fiche |
 | `rechercher: Awa` | tape dans la barre de recherche + Entrée |

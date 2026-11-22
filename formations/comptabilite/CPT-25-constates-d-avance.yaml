@@ -86,10 +86,10 @@ etapes:
       - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_data_row td[name="deferred_start_date"]'
       - champ: deferred_start_date
         taper: "01/11/2026"
-      - champ: deferred_start_date
-        rang: 2
+      - champ: deferred_end_date
         taper: "31/10/2027"
         entree: true
+      - cliquer: '.o_form_sheet h1'
       - attendre: 1
   - texte: Cliquez sur Confirmer.
     actions:
