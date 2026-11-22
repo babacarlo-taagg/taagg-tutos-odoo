@@ -1,0 +1,151 @@
+# CPT-25 · Charges et produits constatés d'avance [E]
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-25`) :
+#   réglages « constatés d'avance » comme livrés dans la base (faux : charges → 311100 Biens A1, produits → 151000) ;
+#   facture fournisseur en BROUILLON d'Assurances du Plateau (réf. AP-2026-1145, datée et comptée au 01/11/2026) :
+#   assurance multirisque 1 200 000 F sur 625100, sans TVA, sans période de report.
+# Ce que la capsule fait : corrige les comptes (476000 / 477000), saisit la période 01/11/2026 → 31/10/2027 sur la ligne
+#   (colonne optionnelle « Date de report »), valide : Odoo passe 1 200 000 F en 476000, puis 12 écritures de 100 000 F
+#   (une par fin de mois, comptabilisées à leur date). etat-depart.py supprime tout et remet la facture en brouillon.
+titre: Charges et produits constatés d'avance
+sous_titre: Formation Comptabilité Odoo · CPT-25
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+  Confirmer: Confirmé
+fin:
+  message: "Prochaine capsule : les factures à recevoir et à émettre"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette vingt-cinquième capsule. En novembre, la boutique paie son assurance pour un an :
+      un million deux cent mille francs. Mais cette dépense concerne douze mois, dont dix de l'année prochaine.
+    actions:
+      - attendre: 1
+  - texte: >
+      Chaque mois ne doit porter que sa part : cent mille francs. La part qui concerne l'avenir est une charge constatée
+      d'avance. À la fin de cette capsule, vous saurez laisser Odoo l'étaler tout seul. C'est une fonction de la version Enterprise.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : les réglages
+  - partie: "1. Les bons comptes"
+    texte: >
+      D'abord, les réglages. Ouvrez Configuration, puis Paramètres, et cherchez : constatées.
+    actions:
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Paramètres")'
+      - attendre: 2
+      - rechercher: constat
+      - attendre: 1
+  - texte: >
+      Odoo range la part en attente sur un compte d'attente. Ici, les comptes proposés sont faux : un compte de stock,
+      et un compte d'amortissement.
+    actions:
+      - surligner_champ: deferred_expense_account_id
+        duree: 2.5
+      - surligner_champ: deferred_revenue_account_id
+        duree: 2.5
+  - texte: >
+      Le plan SYSCOHADA prévoit quatre cent soixante-seize, pour les charges constatées d'avance, et quatre cent
+      soixante-dix-sept, pour les produits. Choisissez-les, et enregistrez.
+    actions:
+      - choisir: {champ: deferred_expense_account_id, valeur: "476000"}
+      - choisir: {champ: deferred_revenue_account_id, valeur: "477000"}
+      - cliquer: '.o_control_panel button:has-text("Enregistrer")'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ partie 2 : la facture
+  - partie: "2. Étaler une charge"
+    texte: >
+      Voici la facture de l'assureur, encore en brouillon. Ouvrez Fournisseurs, puis Factures fournisseurs, et cherchez Assurances du Plateau.
+    actions:
+      - aller: /odoo/accounting
+      - ouvrir_menu: Fournisseurs
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Factures fournisseurs")'
+      - rechercher: Assurances du Plateau
+      - cliquer: '.o_data_row:has-text("Assurances du Plateau") td.o_data_cell'
+      - attendre: 1
+  - texte: >
+      Une seule ligne, sur le compte des assurances. Pour l'étaler, affichez la colonne Date de report : elle est cachée.
+    actions:
+      - surligner: '.o_field_widget[name="invoice_line_ids"] .o_data_row'
+        duree: 2
+      - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_optional_columns_dropdown button, .o_field_widget[name="invoice_line_ids"] .o_optional_columns_dropdown_toggle'
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Date de report")'
+      - touche: Escape
+  - texte: >
+      Indiquez la période couverte : du premier novembre deux mille vingt-six au trente et un octobre deux mille vingt-sept.
+    actions:
+      - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_data_row td[name="deferred_start_date"]'
+      - champ: deferred_start_date
+        taper: "01/11/2026"
+      - champ: deferred_start_date
+        rang: 2
+        taper: "31/10/2027"
+        entree: true
+      - attendre: 1
+  - texte: Cliquez sur Confirmer.
+    actions:
+      - cliquer: '.o_statusbar_buttons button[name="action_post"]'
+      - attendre: 2.5
+
+  # ------------------------------------------------------------------ partie 3 : le résultat
+  - partie: "3. Ce qu'Odoo a fait"
+    texte: >
+      Odoo a préparé les écritures d'étalement. Ouvrez-les.
+    actions:
+      - surligner: '.oe_button_box'
+        duree: 2
+      - cliquer: '.oe_button_box button:has-text("report"), .oe_button_box button:has-text("différé"), .oe_button_box .oe_stat_button >> nth=0'
+      - attendre: 2
+  - sous_titres: haut
+    texte: >
+      La première, le premier novembre, met le million deux cent mille de côté, sur le compte quatre cent soixante-seize.
+      Puis, à chaque fin de mois, cent mille francs reviennent en charge d'assurance. Odoo les comptabilise tout seul, à leur date.
+    actions:
+      - surligner: '.o_list_renderer'
+        duree: 7
+
+  # ------------------------------------------------------------------ partie 4 : les produits
+  - partie: "4. Et les produits ?"
+    texte: >
+      C'est le même principe pour les ventes. Un client paie d'avance un an d'abonnement à vos gâteaux du dimanche :
+      indiquez la période sur la ligne de la facture client. Odoo met la part de l'avenir sur le compte quatre cent
+      soixante-dix-sept, et la ramène en vente, mois après mois.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : garder les comptes proposés par défaut sans les vérifier. Ici, ils étaient faux.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : étaler une petite dépense. Pour quelques milliers de francs, la charge de l'année suffit.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : se tromper de période. Vérifiez la date de début et la date de fin avant de confirmer la facture.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Les comptes quatre cent soixante-seize et quatre cent soixante-dix-sept se règlent une fois, dans les
+      paramètres. Ensuite, une période sur la ligne de facture suffit : Odoo étale le montant mois par mois.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : retrouvez une dépense de votre entreprise payée pour plusieurs mois, assurance ou loyer, et étalez-la.
+      Dans la prochaine capsule, nous verrons les factures à recevoir et à émettre. À tout de suite !
+    actions:
+      - attendre: 1
