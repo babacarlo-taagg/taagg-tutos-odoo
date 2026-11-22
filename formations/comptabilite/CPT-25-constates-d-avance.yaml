@@ -88,7 +88,6 @@ etapes:
         taper: "01/11/2026"
       - champ: deferred_end_date
         taper: "31/10/2027"
-        entree: true
       - cliquer: '.o_form_sheet h1'
       - attendre: 1
   - texte: Cliquez sur Confirmer.
@@ -99,11 +98,11 @@ etapes:
   # ------------------------------------------------------------------ partie 3 : le résultat
   - partie: "3. Ce qu'Odoo a fait"
     texte: >
-      Odoo a préparé les écritures d'étalement. Ouvrez-les.
+      Odoo a préparé les écritures d'étalement : cliquez sur Écritures de report, en haut.
     actions:
-      - surligner: '.oe_button_box'
+      - surligner: '.o_control_panel button:has-text("Écritures de report")'
         duree: 2
-      - cliquer: '.oe_button_box button:has-text("report"), .oe_button_box button:has-text("différé"), .oe_button_box .oe_stat_button >> nth=0'
+      - cliquer: '.o_control_panel button:has-text("Écritures de report")'
       - attendre: 2
   - sous_titres: haut
     texte: >
