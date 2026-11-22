@@ -25,6 +25,7 @@ etapes:
       - commande: nano compose.yaml
       - editeur:
           fichier: compose.yaml
+          taille: 15
           deja: |
             services:
               db:

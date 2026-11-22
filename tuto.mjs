@@ -432,12 +432,14 @@ class Realisateur {
 
 const PAGE_TERMINAL = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><style>
   html,body{margin:0;height:100%;background:#0B2633;font-family:'JetBrains Mono','DejaVu Sans Mono','Ubuntu Mono',monospace}
+  /* pas de ligatures : -> => >= doivent s'afficher tels qu'on les tape */
+  *{font-variant-ligatures:none;font-feature-settings:'liga' 0,'calt' 0}
   #fenetre{position:absolute;inset:28px;display:flex;flex-direction:column;border-radius:12px;overflow:hidden;
     box-shadow:0 18px 50px rgba(0,0,0,.45);background:#10202A;border:1px solid #23404F}
   #barre{height:46px;flex:none;background:#0B415B;display:flex;align-items:center;padding:0 18px;gap:9px;color:#E6EEF2;font-size:17px}
   #barre i{width:14px;height:14px;border-radius:50%;background:#A6A297;display:inline-block;opacity:.85}
   #barre span{margin-left:14px;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-weight:600}
-  #ecran{flex:1;overflow:hidden;padding:20px 26px;font-size:23px;line-height:1.45;color:#E8EEF1;white-space:pre-wrap;word-break:break-all}
+  #ecran{flex:1;overflow:hidden;padding:18px 26px 165px;font-size:20px;line-height:1.42;color:#E8EEF1;white-space:pre-wrap;word-break:break-all}
   .ligne{min-height:1.45em}
   .invite{color:#A6A297;font-weight:700}.chemin{color:#8EC5DC;font-weight:700}
   .sortie{color:#C9D3D8}.erreur{color:#F2A49B}
@@ -446,7 +448,7 @@ const PAGE_TERMINAL = `<!doctype html><html lang="fr"><head><meta charset="utf-8
   .ligne.marque{outline:3px solid #68C184;outline-offset:3px;border-radius:4px;background:rgba(104,193,132,.14);transition:all .3s}
   #editeur{position:absolute;inset:0;display:none;flex-direction:column;background:#10202A}
   #editeur .entete{background:#E8EEF1;color:#0B415B;text-align:center;font-size:18px;padding:4px 0;font-weight:700}
-  #editeur pre{flex:1;margin:0;padding:16px 26px;font:inherit;font-size:22px;line-height:1.45;color:#E8EEF1;white-space:pre-wrap;overflow:hidden}
+  #editeur pre{flex:1;margin:0;padding:14px 26px 150px;font:inherit;font-size:20px;line-height:1.38;color:#E8EEF1;white-space:pre-wrap;overflow:hidden}
   #editeur .pied{background:#E8EEF1;color:#0B415B;font-size:16px;padding:4px 14px}
 </style></head><body><div id="fenetre"><div id="barre"><i></i><i></i><i></i><span id="titre"></span></div>
 <div style="position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden"><div id="ecran"></div>
@@ -487,8 +489,9 @@ const PAGE_TERMINAL = `<!doctype html><html lang="fr"><head><meta charset="utf-8
       l.classList.add('marque'); setTimeout(() => l.classList.remove('marque'), ms);
       return true;
     },
-    ouvrirEditeur(nom, contenu) {
+    ouvrirEditeur(nom, contenu, taille) {
       document.getElementById('ed-titre').textContent = 'GNU nano      ' + nom;
+      document.getElementById('ed-texte').style.fontSize = (taille || 20) + 'px';
       document.getElementById('ed-texte').textContent = contenu || '';
       document.getElementById('editeur').style.display = 'flex';
     },
@@ -523,11 +526,12 @@ class Terminal {
   // Lance vraiment la commande (bash), dans le dossier courant ; suit les « cd ».
   executer(commande) {
     const marque = '__TUTO_PWD__';
-    const r = spawnSync('bash', ['-c', `${commande}\nprintf '\\n${marque}%s' "$PWD"`], {
+    // { … } 2>&1 : les erreurs s'affichent dans l'ordre, comme dans un vrai terminal (et un « cd » reste valable)
+    const r = spawnSync('bash', ['-c', `{\n${commande}\n} 2>&1\nprintf '\\n${marque}%s' "$PWD"`], {
       cwd: this.cwd, encoding: 'utf8', timeout: 120000,
       env: { ...process.env, HOME: this.maison, TERM: 'dumb', COLUMNS: '90', LANG: 'C.UTF-8' },
     });
-    let sortie = sansCouleurs((r.stdout || '') + (r.stderr || ''));
+    let sortie = sansCouleurs(r.stdout || '');
     const i = sortie.lastIndexOf(marque);
     if (i >= 0) {
       const dossier = sortie.slice(i + marque.length).trim();
@@ -589,8 +593,8 @@ class RealisateurTerminal extends Realisateur {
       await this.invite();
     } else if ('editeur' in a) {
       // ouvre un éditeur façon nano et y tape le contenu ; « enregistrer: oui » écrit aussi le fichier pour de vrai
-      const { fichier, contenu = '', deja = '' } = a.editeur;
-      await p.evaluate(([f, d]) => window.__term.ouvrirEditeur(f, d), [fichier, deja]);
+      const { fichier, contenu = '', deja = '', taille } = a.editeur;
+      await p.evaluate(([f, d, t]) => window.__term.ouvrirEditeur(f, d, t), [fichier, deja, taille]);
       await pause(400);
       await this.taperTexte(contenu, 'lettreEditeur', a.delai ?? 28);
       if (a.enregistrer) fs.writeFileSync(path.resolve(this.t.cwd, fichier), deja + contenu);

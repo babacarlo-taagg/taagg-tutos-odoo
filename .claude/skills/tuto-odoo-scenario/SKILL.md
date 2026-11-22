@@ -98,7 +98,7 @@ terminal:
 | `commande: pwd` + `sortie: /home/awa` | tape la commande et affiche le résultat écrit dans le scénario (rien n'est lancé) ; `erreur: oui` l'affiche en rouge |
 | `afficher: "texte"` | affiche des lignes sans commande (ex. journal qui défile) |
 | `surligner_ligne: scripts` + `duree: 2` | cadre vert autour de la dernière ligne de résultat qui contient ce texte |
-| `editeur: {fichier: tarifs.py, contenu: "…"}` | ouvre un éditeur façon nano et y tape le contenu ; `enregistrer: oui` écrit aussi le fichier (pour l'exécuter ensuite) |
+| `editeur: {fichier: tarifs.py, contenu: "…"}` | ouvre un éditeur façon nano et y tape le contenu ; `deja: "…"` = texte déjà présent (affiché d'un coup) ; `taille: 16` = police plus petite pour un long fichier (≈ 22 lignes visibles en taille 20, 28 en taille 16) ; `enregistrer: oui` écrit aussi le fichier (pour l'exécuter ensuite) |
 | `fermer_editeur: oui` | referme l'éditeur (le mettre au début de l'étape suivante pour laisser lire le fichier) |
 | `effacer: oui` | vide l'écran (comme `clear`) |
 | `invite: "(Pdb)"` | change l'invite (débogueur, `psql` : `baobab_sql=>`, PowerShell : `PS C:\Users\awa>`) ; `invite: normale` revient à `awa@baobab:~$` |
@@ -112,6 +112,7 @@ Règles :
 - Jamais de `sudo`, de commande qui modifie la machine, ni de secret dans une commande « executer ».
 - Le dossier d'essai et la sortie montrent le compte de l'apprenant (`awa awa` dans `ls -l`), pas celui du serveur.
 - Les actions d'Odoo (`menu`, `bouton`, `champ`…) sont refusées en mode terminal.
+- L'écran affiche environ 115 caractères par ligne et 20 lignes au-dessus des sous-titres : au-delà, la ligne passe à la suivante (comme dans un vrai terminal).
 - Si Playwright ne trouve pas son navigateur : `TUTO_CHROMIUM=/chemin/vers/chrome node tuto.mjs …`.
 
 ## Trouver les bons noms (Odoo 19 et 20, mêmes repères)
