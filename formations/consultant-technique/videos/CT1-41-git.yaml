@@ -1,0 +1,104 @@
+# Consultant technique Odoo — Bloc 1, leçon 1.4.1 « Git : dépôt, commit, historique » (fiche 2708).
+# Mode terminal : toutes les commandes sont lancées pour de vrai pendant le tournage (dossier d'essai vide,
+# configuration Git propre à ce dossier : rien n'est modifié sur la machine de tournage).
+titre: Git, l'appareil photo de ton code
+sous_titre: Consultant technique Odoo — Bloc 1
+mode: terminal
+terminal: {utilisateur: awa, machine: baobab}
+voix: {moteur: elevenlabs, vitesse: 1.0}
+prononciation:
+  TAAGG: Tag
+  Git: Guite
+  « git add »: « guite add »
+  « git commit »: « guite commit »
+  « git status »: « guite status »
+  « git log »: « guite log »
+  « git diff »: « guite diff »
+  « git init »: « guite init »
+fin: {message: À toi de jouer !, lien: taagg-school.com}
+
+etapes:
+  - chapitre: Se présenter à Git
+    texte: >
+      Git prend une photo de ton code à chaque étape importante : un commit.
+      D'abord, une seule fois, tu te présentes : ton nom, ton e-mail, et le nom de la branche principale.
+    actions:
+      - commande: git config --global user.name "Awa Diop"
+        executer: oui
+      - commande: git config --global user.email "awa@example.com"
+        executer: oui
+      - commande: git config --global init.defaultBranch main
+        executer: oui
+
+  - chapitre: Créer le dépôt
+    texte: "On crée le dossier du projet Baobab Livraison, et on en fait un dépôt avec « git init »."
+    actions:
+      - commande: mkdir -p ~/baobab_livraison && cd ~/baobab_livraison
+        executer: oui
+      - commande: git init
+        executer: oui
+
+  - texte: "On y écrit un premier fichier : les tarifs de deux zones."
+    actions:
+      - commande: nano tarifs.py
+      - editeur:
+          fichier: tarifs.py
+          contenu: |
+            TARIFS = {"Plateau": 1000, "Mermoz": 1500}
+        enregistrer: oui
+
+  - texte: "« git status » montre que Git voit le fichier, mais ne le suit pas encore."
+    actions:
+      - fermer_editeur: oui
+      - commande: git status
+        executer: oui
+      - surligner_ligne: tarifs.py
+        duree: 2
+
+  - chapitre: Le premier commit
+    texte: >
+      Deux gestes : « git add » prépare le fichier, puis « git commit » prend la photo, avec un message clair.
+    actions:
+      - commande: git add tarifs.py
+        executer: oui
+      - commande: git commit -m "Ajoute le dictionnaire des tarifs"
+        executer: oui
+
+  - texte: "« git log » affiche l'historique : notre premier commit est là."
+    actions:
+      - commande: git log --oneline
+        executer: oui
+      - surligner_ligne: Ajoute le dictionnaire
+        duree: 2
+
+  - chapitre: Un deuxième commit
+    texte: "Ajoutons la zone de Rufisque à la fin du fichier."
+    actions:
+      - commande: nano tarifs.py
+      - editeur:
+          fichier: tarifs.py
+          deja: |
+            TARIFS = {"Plateau": 1000, "Mermoz": 1500}
+          contenu: |
+            TARIFS["Rufisque"] = 3000
+        enregistrer: oui
+
+  - texte: "« git diff » montre exactement ce qui a changé depuis la dernière photo : une ligne ajoutée."
+    actions:
+      - fermer_editeur: oui
+      - commande: git diff
+        executer: oui
+      - surligner_ligne: Rufisque
+        duree: 2
+
+  - texte: "On enregistre ce changement, et l'historique compte maintenant deux commits."
+    actions:
+      - commande: git commit -am "Ajoute la zone de Rufisque"
+        executer: oui
+      - commande: git log --oneline
+        executer: oui
+
+  - texte: >
+      Retiens les trois gestes : « git add », « git commit », « git log ». Des petits commits, souvent, avec un message clair.
+    actions:
+      - attendre: 1.5

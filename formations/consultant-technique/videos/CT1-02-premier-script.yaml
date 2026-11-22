@@ -1,0 +1,87 @@
+# Consultant technique Odoo — Bloc 1, leçon 1.0.2 « Installer Python et écrire ton premier script » (fiche 2699).
+# Mode terminal. Sorties : « executer » = lancé pour de vrai pendant le tournage ;
+# « sortie » = copié d'un vrai essai sur Ubuntu 24.04 (22/11/2026).
+titre: Ton premier script Python
+sous_titre: Consultant technique Odoo — Bloc 1
+mode: terminal
+terminal: {utilisateur: awa, machine: baobab}
+voix: {moteur: elevenlabs, vitesse: 1.0}
+prononciation:
+  TAAGG: Tag
+  « python3 »: « python trois »
+  « print »: « printe »
+  « exit() »: « exit »
+fin: {message: À toi de jouer !, lien: taagg-school.com}
+
+etapes:
+  - chapitre: Vérifier Python
+    texte: >
+      Odoo est écrit en Python. Avant d'écrire du code, vérifions que Python est installé.
+      On tape « python3 » tiret tiret version.
+    actions:
+      - attendre: 0.8
+      - commande: python3 --version
+        sortie: Python 3.12.3
+      - surligner_ligne: Python 3.12.3
+        duree: 2
+
+  - texte: "Trois point douze ou plus : c'est bon. C'est le minimum demandé par Odoo 20."
+    actions:
+      - attendre: 1
+
+  - chapitre: Écrire le script
+    texte: "Créons un dossier de travail, baobab, et entrons dedans."
+    actions:
+      - commande: mkdir -p ~/baobab
+        executer: oui
+      - commande: cd ~/baobab
+        executer: oui
+
+  - texte: >
+      On ouvre l'éditeur nano avec le nom du fichier. On écrit une seule ligne :
+      « print », puis le texte à afficher entre guillemets.
+    actions:
+      - commande: nano premier.py
+      - editeur:
+          fichier: premier.py
+          contenu: |
+            print("Bonjour Baobab Livraison !")
+        enregistrer: oui
+        delai: 60
+
+  - texte: "Contrôle O pour enregistrer, contrôle X pour quitter."
+    actions:
+      - attendre: 1.2
+      - fermer_editeur: oui
+
+  - chapitre: Lancer le script
+    texte: "Pour lancer le script, on tape « python3 », puis le nom du fichier."
+    actions:
+      - commande: python3 premier.py
+        executer: oui
+      - surligner_ligne: Bonjour
+        duree: 2
+
+  - chapitre: La console Python
+    texte: >
+      Si tu tapes « python3 » tout seul, tu entres dans la console :
+      chaque ligne s'exécute tout de suite. Pratique pour essayer un calcul.
+    actions:
+      - commande: python3
+        sortie: |
+          Python 3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0] on linux
+          Type "help", "copyright", "credits" or "license" for more information.
+      - invite: ">>>"
+      - commande: 1500 * 3
+        sortie: "4500"
+
+  - texte: "Pour sortir de la console, tape « exit() »."
+    actions:
+      - commande: exit()
+      - invite: normale
+
+  - texte: >
+      Voilà ! Tu as vérifié Python, écrit et lancé ton premier script.
+      Dans la prochaine leçon, on range nos premières informations dans des variables.
+    actions:
+      - attendre: 1.5

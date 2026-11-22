@@ -275,6 +275,26 @@ Objectif : mettre le module en production, le faire évoluer et le surveiller sa
 
 ---
 
+## Vidéos du Bloc 1 (mode terminal de tuto.mjs)
+
+Scénarios dans `videos/`. Tutoiement (public TAAGG School). Sorties à l'écran : soit lancées pour de vrai pendant le
+tournage (`executer: oui`), soit copiées de vrais essais (Ubuntu 24.04, Odoo 20.0, PostgreSQL 16.15, Docker odoo:20).
+État : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée sur la fiche
+
+| Scénario | Leçon (fiche) | Contenu | État |
+|---|---|---|---|
+| `CT1-02-premier-script` | 1.0.2 (2699) | version de Python, nano, premier script, console | ✎ |
+| `CT1-11-ubuntu-wsl` | 1.1.1 (1353) | PowerShell `wsl --install` (sans résultat inventé), apt update, versions | ✎ |
+| `scenarios/02-terminal-premiers-pas` | 1.1.2 (2701) | pwd, mkdir, cd, ls -l, nano, python3 (exemple de l'outil) | ✎ |
+| `CT1-26-debogage` | 1.2.6 (2704) | vraie trace d'erreur, lecture de bas en haut, séance pdb | ✎ |
+| `CT1-31-postgresql` | 1.3.1 (2905) | installation, createuser, psql, CREATE/INSERT/SELECT | ✎ |
+| `CT1-41-git` | 1.4.1 (2708) | config, init, status, add, commit, log, diff | ✎ |
+| `CT1-44-installer-odoo` | 1.4.4 (2709) | apt, git clone, venv, pip, premier démarrage d'Odoo 20 | ✎ |
+| `CT1-45-docker` | 1.4.5 (2909) | compose.yaml, up, ps, version, journal, down | ✎ |
+| — | 1.4.7 VS Code | interface graphique : enregistrement d'écran par Babacar | ☐ |
+
+Restent à décider : la voix (ElevenLabs ou voix clonée de Babacar) avant la version finale (crédits ElevenLabs).
+
 ## Volume
 
 | Bloc | Leçons | dont à créer | Questions de quiz (3 par leçon) |

@@ -14,9 +14,8 @@ voix:
   vitesse: 1.0
 prononciation:
   TAAGG: Tag
-  pwd: P W D
-  mkdir: make dir
-  ls: L S
+  « pwd »: « P W D »
+  « cd »: « C D »
 fin:
   message: À toi de jouer !
   lien: taagg-school.com
@@ -25,7 +24,7 @@ etapes:
   - chapitre: Où suis-je ?
     texte: >
       Dans le terminal, pas de souris : tu donnes des ordres. Première question à se poser :
-      où suis-je ? La commande pwd affiche le dossier où tu te trouves.
+      où suis-je ? La commande « pwd » affiche le dossier où tu te trouves.
     actions:
       - attendre: 1
       - commande: pwd
@@ -39,7 +38,7 @@ etapes:
       - commande: ls
         executer: oui
 
-  - texte: On entre dans le dossier baobab avec cd. Regarde l'invite, elle indique maintenant où tu es.
+  - texte: On entre dans le dossier baobab avec « cd ». Regarde l'invite, elle indique maintenant où tu es.
     actions:
       - commande: cd baobab
         executer: oui

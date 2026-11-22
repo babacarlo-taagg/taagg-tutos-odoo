@@ -101,6 +101,8 @@ terminal:
 | `editeur: {fichier: tarifs.py, contenu: "…"}` | ouvre un éditeur façon nano et y tape le contenu ; `enregistrer: oui` écrit aussi le fichier (pour l'exécuter ensuite) |
 | `fermer_editeur: oui` | referme l'éditeur (le mettre au début de l'étape suivante pour laisser lire le fichier) |
 | `effacer: oui` | vide l'écran (comme `clear`) |
+| `invite: "(Pdb)"` | change l'invite (débogueur, `psql` : `baobab_sql=>`, PowerShell : `PS C:\Users\awa>`) ; `invite: normale` revient à `awa@baobab:~$` |
+| `fenetre: Windows PowerShell` | change le titre de la fenêtre |
 | `delai: 40` | (sur `commande` ou `editeur`) millisecondes par lettre tapée |
 | `attendre`, `touche` | comme en mode Odoo |
 

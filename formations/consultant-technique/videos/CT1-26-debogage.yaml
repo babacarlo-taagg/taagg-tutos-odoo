@@ -1,0 +1,125 @@
+# Consultant technique Odoo — Bloc 1, leçon 1.2.6 « Les erreurs et le débogage » (fiche 2704).
+# Mode terminal. La trace d'erreur est obtenue pour de vrai (executer). La séance pdb est interactive :
+# elle est copiée d'une vraie séance sous Python 3.12 (22/11/2026), sans rien changer sauf les lignes « … ».
+titre: Lire une erreur et utiliser le débogueur
+sous_titre: Consultant technique Odoo — Bloc 1
+mode: terminal
+terminal: {utilisateur: awa, machine: baobab}
+voix: {moteur: elevenlabs, vitesse: 1.0}
+prononciation:
+  TAAGG: Tag
+  KeyError: Kiye Erreur
+  pdb: P D B
+  « breakpoint() »: « brèque point »
+  « python3 »: « python trois »
+  « p zone »: « P, zone »
+  « c »: « C »
+  « q »: « Q »
+fin: {message: À toi de jouer !, lien: taagg-school.com}
+
+etapes:
+  - chapitre: Un programme qui plante
+    texte: >
+      Une trace d'erreur fait peur la première fois. Pourtant, elle dit exactement ce qui s'est passé, et où.
+      Voici un petit programme qui additionne les courses de la journée.
+    actions:
+      - commande: mkdir -p ~/baobab && cd ~/baobab
+        executer: oui
+      - commande: nano bug.py
+      - editeur:
+          fichier: bug.py
+          deja: |
+            TARIFS = {"Plateau": 1000, "Mermoz": 1500}
+
+            def prix_course(zone, poids):
+                prix = TARIFS[zone]
+                if poids > 5:
+                    prix += (poids - 5) * 200
+                return prix
+
+            def total_journee(courses):
+                total = 0
+                for zone, poids in courses:
+                    total += prix_course(zone, poids)
+                return total
+
+            print(total_journee([("Mermoz", 3), ("Yoff", 2)]))
+        enregistrer: oui
+
+  - texte: "Lançons-le."
+    actions:
+      - fermer_editeur: oui
+      - commande: python3 bug.py
+        executer: oui
+
+  - chapitre: Lire de bas en haut
+    texte: >
+      On lit la trace de bas en haut. La dernière ligne dit quoi : « KeyError » Yoff.
+      La clé Yoff n'existe pas dans le dictionnaire des tarifs.
+    actions:
+      - surligner_ligne: "KeyError: 'Yoff'"
+        duree: 3
+
+  - texte: "Juste au-dessus, elle dit où : dans le fichier bug point py, ligne 4, dans la fonction prix course."
+    actions:
+      - surligner_ligne: line 4, in prix_course
+        duree: 3
+
+  - chapitre: Le débogueur
+    texte: >
+      Pour regarder à l'intérieur du programme, on ajoute « breakpoint() » juste avant la ligne suspecte.
+    actions:
+      - commande: nano bug.py
+      - editeur:
+          fichier: bug.py
+          deja: |
+            TARIFS = {"Plateau": 1000, "Mermoz": 1500}
+
+            def prix_course(zone, poids):
+                breakpoint()
+                prix = TARIFS[zone]
+                if poids > 5:
+          contenu: ""
+
+  - texte: "On relance : le programme s'arrête, et on entre dans le débogueur, pdb."
+    actions:
+      - fermer_editeur: oui
+      - commande: python3 bug.py
+        sortie: |
+          > /home/awa/baobab/bug.py(5)prix_course()
+          -> prix = TARIFS[zone]
+      - invite: (Pdb)
+
+  - texte: >
+      « p zone » affiche la valeur de la variable zone : Mermoz. « c » continue jusqu'au prochain arrêt.
+    actions:
+      - commande: p zone
+        sortie: "'Mermoz'"
+      - commande: c
+        sortie: |
+          > /home/awa/baobab/bug.py(5)prix_course()
+          -> prix = TARIFS[zone]
+
+  - texte: "Deuxième tour de boucle : zone vaut Yoff. On a trouvé la course qui pose problème."
+    actions:
+      - commande: p zone
+        sortie: "'Yoff'"
+      - surligner_ligne: "'Yoff'"
+        duree: 2
+
+  - texte: >
+      « q » quitte le débogueur. Python affiche alors une longue trace qui finit par bdb point BdbQuit : c'est normal.
+    actions:
+      - commande: q
+        sortie: |
+          Traceback (most recent call last):
+            File "/home/awa/baobab/bug.py", line 16, in <module>
+              print(total_journee([("Mermoz", 3), ("Yoff", 2)]))
+          …
+          bdb.BdbQuit
+      - invite: normale
+
+  - texte: >
+      Retiens : on lit une trace de bas en haut, et on n'oublie jamais de retirer « breakpoint() » avant de committer.
+    actions:
+      - attendre: 1.5

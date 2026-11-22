@@ -458,11 +458,18 @@ const PAGE_TERMINAL = `<!doctype html><html lang="fr"><head><meta charset="utf-8
     defiler() { ecran.scrollTop = ecran.scrollHeight; },
     titre(t) { document.getElementById('titre').textContent = t; },
     nouvelleLigne(cls) { const d = document.createElement('div'); d.className = 'ligne ' + (cls || ''); ecran.appendChild(d); return d; },
-    invite(u, m, c) {
+    invite(u, m, c, perso) {
       document.getElementById('curseur')?.remove();
+      // une invite encore vide est remplacée (changement d'invite sans rien taper)
+      if (T.ligneCourante && T.ligneCourante.textContent === '' && T.ligneCourante.parentNode === ecran.lastElementChild) ecran.lastElementChild.remove();
       const d = T.nouvelleLigne('commande');
-      d.innerHTML = '<span class="invite"></span>:<span class="chemin"></span>$ <span class="saisie"></span><span id="curseur"></span>';
-      d.querySelector('.invite').textContent = u + '@' + m; d.querySelector('.chemin').textContent = c;
+      if (perso) {
+        d.innerHTML = '<span class="invite"></span> <span class="saisie"></span><span id="curseur"></span>';
+        d.querySelector('.invite').textContent = perso;
+      } else {
+        d.innerHTML = '<span class="invite"></span>:<span class="chemin"></span>$ <span class="saisie"></span><span id="curseur"></span>';
+        d.querySelector('.invite').textContent = u + '@' + m; d.querySelector('.chemin').textContent = c;
+      }
       T.ligneCourante = d.querySelector('.saisie'); T.defiler();
     },
     lettre(c) { T.ligneCourante.textContent += c; },
@@ -527,6 +534,8 @@ class Terminal {
       if (dossier && fs.existsSync(dossier)) this.cwd = dossier;
       sortie = sortie.slice(0, i).replace(/\n$/, '');
     }
+    // Le dossier d'essai apparaît comme le dossier personnel de l'apprenant.
+    sortie = sortie.replaceAll(this.maison, `/home/${this.utilisateur}`);
     // « ls -l » montre le compte de la machine qui tourne la vidéo : on affiche celui de l'apprenant.
     const moi = os.userInfo().username;
     let groupe = moi;
@@ -549,7 +558,7 @@ class RealisateurTerminal extends Realisateur {
   }
 
   async invite() {
-    await this.page.evaluate(([u, m, c]) => window.__term.invite(u, m, c), [this.t.utilisateur, this.t.machine, this.t.chemin()]);
+    await this.page.evaluate(([u, m, c, p]) => window.__term.invite(u, m, c, p), [this.t.utilisateur, this.t.machine, this.t.chemin(), this.t.perso || null]);
   }
 
   async taperTexte(texte, fonction, delai) {
@@ -586,6 +595,12 @@ class RealisateurTerminal extends Realisateur {
       await this.taperTexte(contenu, 'lettreEditeur', a.delai ?? 28);
       if (a.enregistrer) fs.writeFileSync(path.resolve(this.t.cwd, fichier), deja + contenu);
       await pause(600);
+    } else if ('invite' in a) {
+      // « invite: (Pdb) » ou « invite: 'PS C:\\Users\\awa>' » ; « invite: normale » revient à awa@baobab:~$
+      this.t.perso = ['normale', 'normal', null].includes(a.invite) ? null : String(a.invite);
+      await this.invite();
+    } else if ('fenetre' in a) {
+      await p.evaluate((t) => window.__term.titre(t), String(a.fenetre));
     } else if ('surligner_ligne' in a) {
       const ms = (a.duree ?? 2.5) * 1000;
       if (!(await p.evaluate(([t, d]) => window.__term.surligner(t, d), [String(a.surligner_ligne), ms]))) throw new Error(`aucune ligne ne contient « ${a.surligner_ligne} »`);

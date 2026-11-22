@@ -1,0 +1,104 @@
+# Consultant technique Odoo — Bloc 1, leçon 1.4.4 « Installer Odoo 20 Community depuis les sources » (fiche 2709).
+# Mode terminal. Rien n'est lancé pendant le tournage (téléchargement de 1,4 Go, compilation) : toutes les sorties sont
+# copiées d'une vraie installation sur Ubuntu 24.04 (Python 3.12, PostgreSQL 16, 21-22/11/2026). « … » = lignes coupées.
+titre: Installer Odoo 20 sur ton ordinateur
+sous_titre: Consultant technique Odoo — Bloc 1
+mode: terminal
+terminal: {utilisateur: awa, machine: baobab}
+voix: {moteur: elevenlabs, vitesse: 1.0}
+prononciation:
+  TAAGG: Tag
+  « sudo »: « soudo »
+  « apt »: « A P T »
+  « pip »: « pipe »
+  « venv »: « V env »
+  « odoo-bin »: « odoo bine »
+  localhost: local host
+  GitHub: Guite Hub
+fin: {message: À toi de jouer !, lien: taagg-school.com}
+
+etapes:
+  - chapitre: Les bibliothèques du système
+    texte: >
+      C'est le grand moment du Bloc 1 : installer Odoo 20, depuis son code source.
+      D'abord, les bibliothèques dont Odoo a besoin pour s'installer. Sans « apt » update avant, cette étape échoue.
+    actions:
+      - commande: sudo apt update
+        sortie: |
+          …
+          Reading package lists... Done
+      - commande: sudo apt install -y git python3-venv python3-dev build-essential libldap2-dev libpq-dev libsasl2-dev
+        delai: 30
+        sortie: …
+        attente: 1
+
+  - chapitre: Télécharger Odoo 20
+    texte: >
+      On télécharge le code d'Odoo depuis GitHub : la branche 20 point 0, sans tout l'historique. Compte environ 1,4 giga-octet.
+    actions:
+      - commande: git clone --depth 1 --branch 20.0 https://github.com/odoo/odoo.git ~/odoo
+        delai: 35
+        sortie: |
+          Cloning into '/home/awa/odoo'...
+          …
+          Updating files: 100% (51071/51071), done.
+        attente: 1.5
+
+  - chapitre: L'environnement virtuel
+    texte: >
+      On crée un environnement virtuel pour les bibliothèques Python d'Odoo, et on l'active.
+      Son nom apparaît devant l'invite.
+    actions:
+      - commande: python3 -m venv ~/venv-odoo
+      - commande: source ~/venv-odoo/bin/activate
+      - invite: (venv-odoo) awa@baobab:~$
+      - commande: cd ~/odoo
+      - invite: (venv-odoo) awa@baobab:~/odoo$
+
+  - texte: >
+      Puis « pip » installe toutes les bibliothèques listées dans le fichier requirements. Quelques minutes plus tard :
+      Successfully installed.
+    actions:
+      - commande: pip install setuptools wheel
+        sortie: …
+      - commande: pip install -r requirements.txt
+        sortie: |
+          Collecting asn1crypto==1.5.1 (from -r requirements.txt (line 1))
+          …
+          Successfully installed Babel-2.10.3 Jinja2-3.1.2 … psycopg2-2.9.9 … python-ldap-3.4.4 … zope.interface-8.7
+        attente: 2
+      - surligner_ligne: Successfully installed
+        duree: 2.5
+
+  - chapitre: Créer la base et démarrer
+    texte: >
+      Enfin, on lance Odoo : le dossier des modules, le nom de la base, baobab dev, et moins i base pour l'installer.
+    actions:
+      - commande: python3 odoo-bin --addons-path=addons -d baobab_dev -i base
+        delai: 45
+        sortie: |
+          2026-11-22 06:34:39,330 225 INFO ? odoo: Odoo version 20.0
+          2026-11-22 06:34:39,330 225 INFO ? odoo: addons paths: _NamespacePath(['/home/awa/odoo/odoo/addons', '/home/awa/.local/share/Odoo/addons/20.0', '/home/awa/odoo/addons'])
+          2026-11-22 06:34:39,331 225 INFO ? odoo: database: default@default:default
+          2026-11-22 06:34:43,530 225 INFO baobab_dev odoo.modules.loading: Initializing database baobab_dev
+          2026-11-22 06:34:59,092 225 INFO baobab_dev odoo.modules.loading: loading 1 modules...
+          …
+          2026-11-22 06:35:12,374 225 INFO baobab_dev odoo.modules.loading: 16 modules loaded in 4.39s, 5333 queries (+5333 extra)
+          2026-11-22 06:35:12,583 225 INFO baobab_dev odoo.modules.loading: Modules loaded.
+          2026-11-22 06:35:12,588 225 INFO baobab_dev odoo.registry: Registry loaded in 29.084s
+        attente: 2
+      - surligner_ligne: Modules loaded.
+        duree: 2.5
+
+  - texte: >
+      Quand tu lis « Modules loaded », ouvre ton navigateur à l'adresse localhost, deux points, 8069.
+      Identifiant : admin. Mot de passe : admin.
+    actions:
+      - afficher: "→ http://localhost:8069   (admin / admin)"
+      - surligner_ligne: localhost:8069
+        duree: 3
+
+  - texte: >
+      Bravo, Odoo 20 tourne sur ton ordinateur ! Dans la leçon suivante, tu verras la même chose avec Docker, en une seule commande.
+    actions:
+      - attendre: 1.5

@@ -1,0 +1,119 @@
+# Consultant technique Odoo — Bloc 1, leçon 1.4.5 « Variante : Odoo 20 avec Docker » (fiche 2909).
+# Mode terminal. Docker n'est pas lancé pendant le tournage : sorties copiées d'un vrai essai
+# (images odoo:20 et postgres:16, 22/11/2026). « … » = lignes coupées.
+titre: Odoo 20 avec Docker
+sous_titre: Consultant technique Odoo — Bloc 1
+mode: terminal
+terminal: {utilisateur: awa, machine: baobab}
+voix: {moteur: elevenlabs, vitesse: 1.0}
+prononciation:
+  TAAGG: Tag
+  compose.yaml: compose point yaml
+  « docker compose up -d »: « docker compose up, tiret D »
+  « docker compose ps »: « docker compose P S »
+  extra-addons: extra addons
+fin: {message: À toi de jouer !, lien: taagg-school.com}
+
+etapes:
+  - chapitre: Le fichier compose.yaml
+    texte: >
+      Docker fait tourner des logiciels déjà installés, dans des conteneurs. Un seul fichier,
+      compose.yaml, décrit Odoo 20 et sa base PostgreSQL 16.
+    actions:
+      - commande: mkdir -p ~/baobab-docker/addons && cd ~/baobab-docker
+        executer: oui
+      - commande: nano compose.yaml
+      - editeur:
+          fichier: compose.yaml
+          deja: |
+            services:
+              db:
+                image: postgres:16
+                environment:
+                  POSTGRES_USER: odoo
+                  POSTGRES_PASSWORD: odoo
+                  POSTGRES_DB: postgres
+                volumes:
+                  - db-data:/var/lib/postgresql/data
+
+              odoo:
+                image: odoo:20
+                depends_on:
+                  - db
+                ports:
+                  - "8069:8069"
+                environment:
+                  HOST: db
+                  USER: odoo
+                  PASSWORD: odoo
+                volumes:
+                  - odoo-data:/var/lib/odoo
+                  - ./addons:/mnt/extra-addons
+
+            volumes:
+              db-data:
+              odoo-data:
+        enregistrer: oui
+
+  - texte: >
+      Le port 8069 ouvre Odoo dans ton navigateur. Et la ligne addons relie ton dossier de modules à Odoo :
+      c'est là que tu mettras Baobab Livraison.
+    actions:
+      - attendre: 3
+
+  - chapitre: Démarrer
+    texte: "On démarre tout en arrière-plan avec « docker compose up -d »."
+    actions:
+      - fermer_editeur: oui
+      - commande: docker compose up -d
+        sortie: |
+           Network baobab-docker_default Created
+           Volume baobab-docker_db-data Created
+           Volume baobab-docker_odoo-data Created
+           Container baobab-docker-db-1 Started
+           Container baobab-docker-odoo-1 Started
+        attente: 2
+
+  - texte: "« docker compose ps » montre les deux conteneurs en marche, et le port 8069 ouvert."
+    actions:
+      - commande: docker compose ps
+        sortie: |
+          NAME                   IMAGE         COMMAND                  SERVICE   CREATED          STATUS          PORTS
+          baobab-docker-db-1     postgres:16   "docker-entrypoint.s…"   db        18 seconds ago   Up 17 seconds   5432/tcp
+          baobab-docker-odoo-1   odoo:20       "/entrypoint.sh odoo"    odoo      18 seconds ago   Up 16 seconds   0.0.0.0:8069->8069/tcp, 8071-8072/tcp
+      - surligner_ligne: 0.0.0.0:8069
+        duree: 2.5
+
+  - chapitre: Vérifier
+    texte: "On vérifie la version d'Odoo, à l'intérieur du conteneur."
+    actions:
+      - commande: docker compose exec odoo odoo --version
+        sortie: Odoo Server 20.0-20261112
+      - surligner_ligne: Odoo Server 20.0
+        duree: 2
+
+  - texte: >
+      Dans le journal, un avertissement : le dossier extra-addons est ignoré. C'est normal tant qu'il ne contient aucun module.
+    actions:
+      - commande: docker compose logs odoo
+        sortie: |
+          odoo-1  | 2026-11-22 06:36:42,885 1 WARNING ? odoo.tools.config: option addons_path, invalid addons directory '/mnt/extra-addons', skipped
+          odoo-1  | 2026-11-22 06:36:42,886 1 INFO ? odoo: Odoo version 20.0-20261112
+          odoo-1  | 2026-11-22 06:36:42,886 1 INFO ? odoo: database: odoo@db:5432
+          …
+      - surligner_ligne: invalid addons directory
+        duree: 3
+
+  - chapitre: Arrêter
+    texte: "Pour tout arrêter, « docker compose down ». Tes données restent dans les volumes."
+    actions:
+      - commande: docker compose down
+        sortie: |
+           Container baobab-docker-odoo-1 Removed
+           Container baobab-docker-db-1 Removed
+           Network baobab-docker_default Removed
+
+  - texte: >
+      Avec Docker, Odoo démarre en une commande. C'est aussi ainsi qu'on le met souvent en production : on le verra au Bloc 5.
+    actions:
+      - attendre: 1.5

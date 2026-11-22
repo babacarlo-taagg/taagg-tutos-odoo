@@ -1,0 +1,107 @@
+# Consultant technique Odoo — Bloc 1, leçon 1.3.1 « Installer PostgreSQL, créer un utilisateur et une base » (fiche 2905)
+# + premières requêtes de la leçon 1.3.2. Mode terminal. Toutes les sorties sont copiées d'un vrai essai
+# (Ubuntu 24.04, PostgreSQL 16.15, utilisateur awa, 22/11/2026) : psql n'est pas lancé pendant le tournage.
+titre: PostgreSQL, la base de données d'Odoo
+sous_titre: Consultant technique Odoo — Bloc 1
+mode: terminal
+terminal: {utilisateur: awa, machine: baobab}
+voix: {moteur: elevenlabs, vitesse: 1.0}
+prononciation:
+  TAAGG: Tag
+  PostgreSQL: Postgrès Q L
+  SQL: S Q L
+  « psql »: « P S Q L »
+  « sudo »: « soudo »
+  « createuser »: « create user »
+  « createdb »: « create D B »
+fin: {message: À toi de jouer !, lien: taagg-school.com}
+
+etapes:
+  - chapitre: Installer
+    texte: >
+      Odoo range toutes ses données dans une base PostgreSQL. On l'installe avec apt, après avoir mis à jour la liste des logiciels.
+    actions:
+      - commande: sudo apt update && sudo apt install -y postgresql postgresql-client
+        delai: 40
+        sortie: |
+          …
+          Setting up postgresql-client (16+257build1.1) ...
+          Setting up postgresql (16+257build1.1) ...
+        attente: 1.5
+
+  - texte: "Vérifions la version. Odoo 20 demande PostgreSQL 16 ou plus récent : c'est bon."
+    actions:
+      - commande: psql --version
+        sortie: psql (PostgreSQL) 16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)
+      - surligner_ligne: PostgreSQL) 16
+        duree: 2
+
+  - chapitre: Ton utilisateur PostgreSQL
+    texte: >
+      Odoo refuse de se connecter avec l'administrateur postgres. On crée donc un utilisateur
+      qui porte le même nom que toi, avec le droit de créer des bases.
+    actions:
+      - commande: sudo -u postgres createuser -d -R -S $USER
+        delai: 45
+
+  - texte: "On crée ensuite une base à ton nom, puis la base d'entraînement de Baobab Livraison."
+    actions:
+      - commande: createdb $USER
+      - commande: createdb baobab_sql
+
+  - chapitre: Se connecter avec psql
+    texte: >
+      On se connecte avec « psql ». L'invite change : tu parles maintenant à la base, en SQL.
+    actions:
+      - commande: psql -d baobab_sql
+        sortie: |
+          psql (16.15 (Ubuntu 16.15-0ubuntu0.24.04.1))
+          Type "help" for help.
+      - invite: baobab_sql=>
+
+  - chapitre: Première table
+    texte: >
+      Créons la table des zones de livraison : un numéro, un nom et un tarif.
+      Une requête SQL se termine toujours par un point-virgule.
+    actions:
+      - commande: "CREATE TABLE zone (id SERIAL PRIMARY KEY, nom VARCHAR(50) NOT NULL UNIQUE, tarif INTEGER NOT NULL);"
+        delai: 30
+        sortie: CREATE TABLE
+
+  - texte: "On ajoute cinq zones. PostgreSQL répond « INSERT 0 5 » : cinq lignes ajoutées."
+    actions:
+      - commande: "INSERT INTO zone (nom, tarif) VALUES ('Plateau', 1000), ('Médina', 1000), ('Mermoz', 1500), ('Parcelles Assainies', 2000), ('Rufisque', 3000);"
+        delai: 25
+        sortie: INSERT 0 5
+
+  - texte: "Et on lit les zones les plus chères, du tarif le plus élevé au plus bas."
+    actions:
+      - commande: SELECT nom, tarif FROM zone WHERE tarif >= 1500 ORDER BY tarif DESC;
+        delai: 35
+        sortie: |2
+                   nom         | tarif
+          ---------------------+-------
+           Rufisque            |  3000
+           Parcelles Assainies |  2000
+           Mermoz              |  1500
+          (3 rows)
+      - surligner_ligne: Rufisque
+        duree: 2
+
+  - texte: "Pour voir les tables, tape antislash D T. Pour quitter, antislash Q."
+    actions:
+      - commande: \dt
+        sortie: |2
+                 List of relations
+           Schema | Name | Type  | Owner
+          --------+------+-------+-------
+           public | zone | table | awa
+          (1 row)
+      - commande: \q
+      - invite: normale
+
+  - texte: >
+      Tu as installé PostgreSQL, créé ton utilisateur et ta première table.
+      Prochaine étape : relier deux tables avec une jointure.
+    actions:
+      - attendre: 1.5

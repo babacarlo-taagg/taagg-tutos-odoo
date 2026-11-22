@@ -1,0 +1,90 @@
+# Consultant technique Odoo — Bloc 1, leçon 1.1.1 « Pourquoi Linux ? Installer Ubuntu ou WSL sous Windows » (fiche 1353).
+# Mode terminal. La partie Windows (PowerShell) n'affiche aucun résultat inventé : la commande wsl n'a pas pu
+# être testée ici (pas de PC Windows). Sorties Ubuntu copiées d'un vrai Ubuntu 24.04 (22/11/2026).
+titre: Avoir Ubuntu sur ton ordinateur
+sous_titre: Consultant technique Odoo — Bloc 1
+mode: terminal
+terminal: {utilisateur: awa, machine: baobab, titre: Windows PowerShell}
+voix: {moteur: elevenlabs, vitesse: 1.0}
+prononciation:
+  TAAGG: Tag
+  WSL: W S L
+  PowerShell: Power Shell
+  « sudo »: « soudo »
+  « apt »: « A P T »
+  « python3 »: « python trois »
+  « lsb_release »: « L S B release »
+fin: {message: À toi de jouer !, lien: taagg-school.com}
+
+etapes:
+  - chapitre: Pourquoi Linux
+    texte: >
+      Presque tous les serveurs Odoo tournent sous Linux. En développant sous Linux,
+      tu travailles dans les mêmes conditions que tes futurs clients.
+    actions:
+      - invite: 'PS C:\Users\awa>'
+      - attendre: 1
+
+  - chapitre: Installer WSL
+    texte: >
+      Sous Windows, on installe WSL : un vrai Ubuntu à l'intérieur de Windows.
+      Ouvre PowerShell en administrateur, et tape cette commande.
+    actions:
+      - commande: wsl --install -d Ubuntu-24.04
+        delai: 70
+
+  - texte: >
+      Windows télécharge Ubuntu. Quand il te le demande, redémarre l'ordinateur.
+      Au premier lancement, choisis un nom d'utilisateur en minuscules, et un mot de passe.
+    actions:
+      - attendre: 2
+
+  - texte: >
+      Attention : quand tu tapes le mot de passe, rien ne s'affiche. C'est normal.
+      Retiens-le bien : il te sera demandé à chaque commande « sudo ».
+    actions:
+      - attendre: 1.5
+
+  - chapitre: Premiers pas dans Ubuntu
+    texte: "Voici le terminal d'Ubuntu. Première chose à faire : mettre à jour la liste des logiciels."
+    actions:
+      - effacer: oui
+      - fenetre: Ubuntu 24.04 — awa@baobab
+      - invite: normale
+      - commande: sudo apt update
+        sortie: |
+          [sudo] password for awa:
+          Hit:1 http://archive.ubuntu.com/ubuntu noble InRelease
+          Hit:2 http://archive.ubuntu.com/ubuntu noble-updates InRelease
+          Hit:3 http://archive.ubuntu.com/ubuntu noble-backports InRelease
+          Reading package lists... Done
+          Building dependency tree... Done
+          Reading state information... Done
+          37 packages can be upgraded. Run 'apt list --upgradable' to see them.
+        attente: 1
+
+  - texte: "Vérifions la version d'Ubuntu, puis celle de Python."
+    actions:
+      - commande: lsb_release -a
+        sortie: |
+          Distributor ID:	Ubuntu
+          Description:	Ubuntu 24.04.5 LTS
+          Release:	24.04
+          Codename:	noble
+      - commande: python3 --version
+        sortie: Python 3.12.3
+      - surligner_ligne: Python 3.12.3
+        duree: 2
+
+  - texte: >
+      Ubuntu 24 point 04 apporte Python 3 point 12 : exactement ce qu'il faut pour Odoo 20.
+      Dernier conseil : range toujours tes projets dans ton dossier Linux, pas sur le disque Windows. Odoo y est bien plus rapide.
+    actions:
+      - commande: pwd
+        sortie: /home/awa
+      - surligner_ligne: /home/awa
+        duree: 2
+
+  - texte: "Ton poste est prêt. Dans la leçon suivante, tu apprends à te déplacer dans le terminal."
+    actions:
+      - attendre: 1.5
