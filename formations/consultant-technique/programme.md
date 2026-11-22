@@ -1,7 +1,7 @@
 # Parcours « Consultant technique Odoo » — TAAGG School
 
 Suivi du contenu des 5 blocs techniques du programme 10 (taagg-school.com).
-Statut : **PROPOSITION — en attente de validation de Babacar** (rien n'a encore été créé ni modifié sur le site).
+Statut : programme **validé par Babacar le 21/11/2026** (fil rouge Baobab Livraison conservé). Bloc 1 rédigé, en brouillon sur le site, à relire.
 
 ## Repères
 
@@ -20,7 +20,7 @@ Statut : **PROPOSITION — en attente de validation de Babacar** (rien n'a encor
 - Chaque bloc a déjà un « Travail à rendre » et un grand quiz de fin de bloc (15 à 25 questions écrites).
 - Le fil rouge choisi dans ce squelette est **Baobab Livraison** (module `baobab_livraison`).
 
-**Méthode proposée.** On garde les sections existantes (pas de changement visible). On **remplit** les leçons
+**Méthode (validée).** On garde les sections existantes (pas de changement visible). On **remplit** les leçons
 brouillon existantes (repère `♻ id`) et on **crée** les leçons manquantes (repère `＋`). Chaque leçon = une fiche
 « article » d'environ 10 minutes : explication, code commenté, exercice, « À retenir », et 3 questions de quiz.
 🎥 = leçon qui gagnerait à avoir une vidéo plus tard.
@@ -67,50 +67,50 @@ Objectif du bloc : avoir un poste de travail prêt et les bases pour lire et éc
 ### Section « Semaine 0 — Remise à niveau Python (facultatif) » (2698)
 | # | Leçon | Objectif | Fiche |
 |---|---|---|---|
-| 1.0.1 | Bienvenue : le parcours, Baobab Livraison et ta méthode de travail | Savoir ce que tu vas construire et comment t'organiser | ＋ |
-| 1.0.2 | Installer Python et écrire ton premier script | Lancer un script `.py` dans le terminal | ♻ 2699 🎥 |
-| 1.0.3 | Variables, nombres et textes | Calculer un prix et afficher un message | ＋ |
-| 1.0.4 | Listes et dictionnaires | Ranger les zones de livraison et leurs tarifs | ＋ |
-| 1.0.5 | Conditions et boucles | Appliquer un tarif selon la zone, parcourir des courses | ＋ |
-| 1.0.6 | Les fonctions | Écrire `prix_course(zone, poids)` réutilisable | ＋ |
+| 1.0.1 | Bienvenue : le parcours, Baobab Livraison et ta méthode de travail | Savoir ce que tu vas construire et comment t'organiser | ✅ 2894 |
+| 1.0.2 | Installer Python et écrire ton premier script | Lancer un script `.py` dans le terminal | ✅ 2699 🎥 |
+| 1.0.3 | Variables, nombres et textes | Calculer un prix et afficher un message | ✅ 2895 |
+| 1.0.4 | Listes et dictionnaires | Ranger les zones de livraison et leurs tarifs | ✅ 2896 |
+| 1.0.5 | Conditions et boucles | Appliquer un tarif selon la zone, parcourir des courses | ✅ 2897 |
+| 1.0.6 | Les fonctions | Écrire `prix_course(zone, poids)` réutilisable | ✅ 2898 |
 
 ### Section « Linux et le terminal » (2700)
 | # | Leçon | Objectif | Fiche |
 |---|---|---|---|
-| 1.1.1 | Pourquoi Linux ? Installer Ubuntu ou WSL sous Windows | Avoir un terminal Linux qui marche | ♻ 1353 🎥 |
-| 1.1.2 | Se déplacer et manipuler des fichiers | `pwd`, `ls`, `cd`, `mkdir`, `cp`, `mv`, `rm` sans peur | ♻ 2701 |
-| 1.1.3 | Chercher et lire : `cat`, `less`, `grep`, `tail -f` | Retrouver une erreur dans un journal | ＋ |
-| 1.1.4 | Utilisateurs, droits, `sudo` et paquets `apt` | Installer un logiciel, comprendre « Permission denied » | ＋ |
-| 1.1.5 | Processus et ports | Régler « le port 8069 est déjà utilisé » | ＋ |
+| 1.1.1 | Pourquoi Linux ? Installer Ubuntu ou WSL sous Windows | Avoir un terminal Linux qui marche | ✅ 1353 🎥 |
+| 1.1.2 | Se déplacer et manipuler des fichiers | `pwd`, `ls`, `cd`, `mkdir`, `cp`, `mv`, `rm` sans peur | ✅ 2701 |
+| 1.1.3 | Chercher et lire : `cat`, `less`, `grep`, `tail -f` | Retrouver une erreur dans un journal | ✅ 2899 |
+| 1.1.4 | Utilisateurs, droits, `sudo` et paquets `apt` | Installer un logiciel, comprendre « Permission denied » | ✅ 2900 |
+| 1.1.5 | Processus et ports | Régler « le port 8069 est déjà utilisé » | ✅ 2901 |
 
 ### Section « Python pour Odoo » (2702)
 | # | Leçon | Objectif | Fiche |
 |---|---|---|---|
-| 1.2.1 | Environnement virtuel et `pip` | Isoler les dépendances d'un projet | ＋ |
-| 1.2.2 | Classes et objets | Lire `class Course(models.Model)` et comprendre `self` | ♻ 1352 |
-| 1.2.3 | Héritage de classes et `super()` | Comprendre ce que fera `_inherit` | ＋ |
-| 1.2.4 | Ce qu'Odoo utilise partout : décorateurs, compréhensions, `*args`/`**kwargs` | Lire `@api.depends(...)` sans être perdu | ＋ |
-| 1.2.5 | Dates, nombres et texte (fuseau de Dakar, F CFA, accents) | Éviter les erreurs classiques de dates et d'arrondis | ♻ 2703 |
-| 1.2.6 | Les erreurs et le débogage | Lire une trace d'erreur, utiliser `pdb` | ♻ 2704 🎥 |
+| 1.2.1 | Environnement virtuel et `pip` | Isoler les dépendances d'un projet | ✅ 2902 |
+| 1.2.2 | Classes et objets | Lire `class Course(models.Model)` et comprendre `self` | ✅ 1352 |
+| 1.2.3 | Héritage de classes et `super()` | Comprendre ce que fera `_inherit` | ✅ 2903 |
+| 1.2.4 | Ce qu'Odoo utilise partout : décorateurs, compréhensions, `*args`/`**kwargs` | Lire `@api.depends(...)` sans être perdu | ✅ 2904 |
+| 1.2.5 | Dates, nombres et texte (fuseau de Dakar, F CFA, accents) | Éviter les erreurs classiques de dates et d'arrondis | ✅ 2703 |
+| 1.2.6 | Les erreurs et le débogage | Lire une trace d'erreur, utiliser `pdb` | ✅ 2704 🎥 |
 
 ### Section « Les bases de données » (2705)
 | # | Leçon | Objectif | Fiche |
 |---|---|---|---|
-| 1.3.1 | Installer PostgreSQL, créer un utilisateur et une base | Se connecter avec `psql` | ＋ 🎥 |
-| 1.3.2 | Lire des données : `SELECT`, `WHERE`, `ORDER BY` | Interroger une table de courses | ♻ 1354 |
-| 1.3.3 | Écrire et relier : `INSERT`, `UPDATE`, `DELETE`, jointures | Relier courses et zones | ＋ |
-| 1.3.4 | Comment Odoo range ses données | Retrouver un modèle Odoo dans PostgreSQL (lecture seule !) | ♻ 2706 |
+| 1.3.1 | Installer PostgreSQL, créer un utilisateur et une base | Se connecter avec `psql` | ✅ 2905 🎥 |
+| 1.3.2 | Lire des données : `SELECT`, `WHERE`, `ORDER BY` | Interroger une table de courses | ✅ 1354 |
+| 1.3.3 | Écrire et relier : `INSERT`, `UPDATE`, `DELETE`, jointures | Relier courses et zones | ✅ 2906 |
+| 1.3.4 | Comment Odoo range ses données | Retrouver un modèle Odoo dans PostgreSQL (lecture seule !) | ✅ 2706 |
 
 ### Section « Git et l'environnement » (2707)
 | # | Leçon | Objectif | Fiche |
 |---|---|---|---|
-| 1.4.1 | Git : dépôt, commit, historique | Créer le dépôt `baobab_livraison` et faire ses premiers commits | ♻ 2708 🎥 |
-| 1.4.2 | Branches et fusion | Travailler sur une branche sans casser le reste | ＋ |
-| 1.4.3 | GitHub : envoyer, récupérer, demande de fusion, `.gitignore` | Publier son dépôt sans jamais y mettre de mot de passe | ＋ |
-| 1.4.4 | Installer Odoo 20 Community depuis les sources | Avoir Odoo qui démarre sur ton ordinateur | ♻ 2709 🎥 |
-| 1.4.5 | Variante : Odoo avec Docker | Lancer Odoo + PostgreSQL avec `docker compose` | ＋ 🎥 |
-| 1.4.6 | Lancer Odoo : fichier de configuration, base de test, mode développeur, journaux | Démarrer, créer une base, activer le mode développeur | ♻ 2710 |
-| 1.4.7 | L'éditeur de code : VS Code et son débogueur | Mettre un point d'arrêt dans Odoo | ＋ 🎥 |
+| 1.4.1 | Git : dépôt, commit, historique | Créer le dépôt `baobab_livraison` et faire ses premiers commits | ✅ 2708 🎥 |
+| 1.4.2 | Branches et fusion | Travailler sur une branche sans casser le reste | ✅ 2907 |
+| 1.4.3 | GitHub : envoyer, récupérer, demande de fusion, `.gitignore` | Publier son dépôt sans jamais y mettre de mot de passe | ✅ 2908 |
+| 1.4.4 | Installer Odoo 20 Community depuis les sources | Avoir Odoo qui démarre sur ton ordinateur | ✅ 2709 🎥 |
+| 1.4.5 | Variante : Odoo avec Docker | Lancer Odoo + PostgreSQL avec `docker compose` | ✅ 2909 🎥 |
+| 1.4.6 | Lancer Odoo : fichier de configuration, base de test, mode développeur, journaux | Démarrer, créer une base, activer le mode développeur | ✅ 2710 |
+| 1.4.7 | L'éditeur de code : VS Code et son débogueur | Mettre un point d'arrêt dans Odoo | ✅ 2910 🎥 |
 
 ### Section « Évaluation » (2711)
 - ♻ 2712 Travail à rendre : le dépôt Baobab Livraison et le script de tarifs (à rédiger)
@@ -290,11 +290,22 @@ Objectif : mettre le module en production, le faire évoluer et le surveiller sa
 
 | Bloc | Programme | Fiches rédigées | Quiz | Montré à Babacar | Publié |
 |---|---|---|---|---|---|
-| 1 | proposé 21/11 | 0 / 28 | 0 / 28 | — | — |
-| 2 | proposé 21/11 | 0 / 26 | 0 / 26 | — | — |
-| 3 | proposé 21/11 | 0 / 16 | 0 / 16 | — | — |
-| 4 | proposé 21/11 | 0 / 16 | 0 / 16 | — | — |
-| 5 | proposé 21/11 | 0 / 14 | 0 / 14 | — | — |
+| 1 | validé 21/11 | 28 / 28 (brouillon) | 28 / 28 | à faire | non |
+| 2 | validé 21/11 | 0 / 26 | 0 / 26 | — | — |
+| 3 | validé 21/11 | 0 / 16 | 0 / 16 | — | — |
+| 4 | validé 21/11 | 0 / 16 | 0 / 16 | — | — |
+| 5 | validé 21/11 | 0 / 14 | 0 / 14 | — | — |
 
 ## Journal
 - 21/11/2026 : état des lieux des cours 208 à 212, vérification des versions dans la documentation officielle, proposition de programme.
+- 21/11/2026 : Babacar valide le programme et le fil rouge Baobab Livraison ; Bloc 1 lancé.
+- 21-22/11/2026 : Bloc 1 rédigé (28 fiches + 84 questions), tout en brouillon. Code vérifié sur un vrai Odoo 20.0
+  (sources + Python 3.12 + PostgreSQL 16, et image Docker odoo:20 + postgres:16). Sources des fiches : `bloc1/*.py`,
+  gabarit : `outils/fiche.py`, identifiants : `outils/ids_bloc1.json`. Les 3 anciennes fiches « document » vides
+  (1352, 1353, 1354) sont devenues des articles. ✅ = fiche rédigée (avec son identifiant sur le site).
+
+## Bloc 1 — reste à faire avant publication
+- Relecture par Babacar.
+- Non testé ici, à tester sur un PC Windows : installation de WSL (1.1.1) et interface de VS Code (1.4.7).
+- Rédiger le « Travail à rendre » (2712) et relire le grand quiz de fin de bloc (2713, 20 questions déjà écrites).
+- Les sections sont publiées mais les leçons sont en brouillon : rien n'est visible des apprenants tant qu'on ne publie pas.
