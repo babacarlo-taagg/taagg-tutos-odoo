@@ -333,10 +333,11 @@ class Realisateur {
   }
 
   // dans une liste en cours de saisie (lignes de facture…), le champ visé est celui de la ligne ouverte
-  async saisieActive(nomChamp) {
+  async saisieActive(nomChamp, rang = 1) {
+    // rang : la case visée quand un champ en a plusieurs (période « début → fin » : rang 2 = la date de fin)
     const ligne = this.page.locator(`.o_selected_row .o_field_widget[name="${nomChamp}"]`);
-    if (await ligne.count()) return ligne.first().locator('input, textarea, [contenteditable="true"]').first();
-    return this.saisie(nomChamp);
+    if (await ligne.count()) return ligne.first().locator('input, textarea, [contenteditable="true"]').nth(rang - 1);
+    return rang === 1 ? this.saisie(nomChamp) : this.champ(nomChamp).locator('input, textarea, [contenteditable="true"]').nth(rang - 1);
   }
 
   async surligner(loc, secondes) {
@@ -381,7 +382,7 @@ class Realisateur {
     } else if ('onglet' in a) {
       await this.cliquer(p.locator('.o_notebook .nav-link').filter({ hasText: a.onglet }).first());
     } else if ('champ' in a && 'taper' in a) {
-      await this.taper(await this.saisieActive(a.champ), a.taper, a.entree);
+      await this.taper(await this.saisieActive(a.champ, a.rang ?? 1), a.taper, a.entree);
     } else if ('choisir' in a) {
       const { champ, valeur } = a.choisir;
       const select = this.champ(champ).locator('select');

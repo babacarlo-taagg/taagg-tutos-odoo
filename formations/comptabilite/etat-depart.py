@@ -649,8 +649,40 @@ def cpt_24():
     return odoo('account.move', 'read', facture, ['name', 'invoice_date', 'amount_total'], context=fr)[0], len(immos), len(modeles)
 
 
+def cpt_25():
+    # réglages « constatés d'avance » remis comme livrés (faux : 311100 et 151000, corrigés à l'écran en 476000 / 477000) ;
+    # facture fournisseur en brouillon d'Assurances du Plateau : assurance multirisque 1 200 000 F (625100, sans TVA),
+    # sans dates de début et de fin (saisies à l'écran) ; les factures et écritures d'étalement des tournages précédents
+    # sont supprimées
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    compte = lambda code: odoo('account.account', 'search', [['code', '=', code]], context=fr)[0]
+    odoo('res.company', 'write', [SOCIETE], {'deferred_expense_account_id': compte('311100'),
+                                            'deferred_revenue_account_id': compte('151000'),
+                                            'generate_deferred_expense_entries_method': 'on_validation',
+                                            'deferred_expense_amount_computation_method': 'month'}, context=fr)
+    assureur = odoo('res.partner', 'search', [['name', '=', 'Assurances du Plateau']], context=fr)
+    if not assureur:
+        assureur = [odoo('res.partner', 'create', {'name': 'Assurances du Plateau', 'is_company': True, 'city': 'Dakar',
+                                                    'country_id': odoo('res.country', 'search', [['code', '=', 'SN']])[0]}, context=fr)]
+    anciennes = odoo('account.move', 'search', [['partner_id', '=', assureur[0]], ['move_type', '=', 'in_invoice']], order='id desc', context=fr)
+    etalement = odoo('account.move', 'search', [['deferred_original_move_ids', 'in', anciennes]], context=fr) if anciennes else []
+    for m in etalement + anciennes:
+        if odoo('account.move', 'read', [m], ['state'], context=fr)[0]['state'] != 'draft':
+            odoo('account.move', 'button_draft', [m], context=fr)
+    for m in etalement + anciennes:
+        if odoo('account.move', 'search', [['id', '=', m]], context=fr):
+            odoo('account.move', 'unlink', [m], context=fr)
+    facture = odoo('account.move', 'create', {
+        'move_type': 'in_invoice', 'partner_id': assureur[0], 'ref': 'AP-2026-1145', 'invoice_date': '2026-11-01', 'date': '2026-11-01',
+        'invoice_date_due': '2026-11-30',
+        'invoice_line_ids': [[0, 0, {'name': 'Assurance multirisque de la boutique, 1er novembre 2026 au 31 octobre 2027',
+                                     'quantity': 1, 'price_unit': 1200000, 'account_id': compte('625100'), 'tax_ids': [[6, 0, []]]}]]},
+        context=fr)
+    return odoo('account.move', 'read', [facture], ['name', 'state', 'amount_total'], context=fr)[0], len(anciennes), len(etalement)
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19, 'CPT-20': cpt_20, 'CPT-21': cpt_21, 'CPT-22': cpt_22, 'CPT-23': cpt_23, 'CPT-24': cpt_24}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19, 'CPT-20': cpt_20, 'CPT-21': cpt_21, 'CPT-22': cpt_22, 'CPT-23': cpt_23, 'CPT-24': cpt_24, 'CPT-25': cpt_25}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''
