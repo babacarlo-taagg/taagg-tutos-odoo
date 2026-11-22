@@ -45,7 +45,7 @@ def bloc(element):
                 f'<thead><tr>{th}</tr></thead><tbody>{tr}</tbody></table></div>')
     raise ValueError(sorte)
 
-def fiche(objectif, intro, corps, exercice, retenir, duree="10 min"):
+def fiche(objectif, intro, corps, exercice, retenir, duree="10 min", titre_exercice="Exercice"):
     """Assemble une fiche : objectif, introduction, corps, exercice, « À retenir »."""
     morceaux = [
         f'<div style="font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:{TEXTE};line-height:1.6;font-size:15.5px;max-width:860px">',
@@ -55,7 +55,7 @@ def fiche(objectif, intro, corps, exercice, retenir, duree="10 min"):
         f'<p style="font-size:16.5px;color:{GRIS};margin:0 0 18px">{intro}</p>',
     ]
     morceaux += [bloc(e) for e in corps]
-    morceaux.append(f'<h2 style="font-size:20px;font-weight:700;color:{BLEU};margin:26px 0 10px">Exercice</h2>')
+    morceaux.append(f'<h2 style="font-size:20px;font-weight:700;color:{BLEU};margin:26px 0 10px">{titre_exercice}</h2>')
     morceaux += [bloc(e) for e in exercice]
     items = "".join(f'<li style="margin-bottom:6px">{r}</li>' for r in retenir)
     morceaux.append(f'<div style="background:{BLEU};color:#FFFFFF;border-radius:6px;padding:14px 18px;margin:24px 0 8px">'

@@ -307,5 +307,9 @@ Objectif : mettre le module en production, le faire évoluer et le surveiller sa
 ## Bloc 1 — reste à faire avant publication
 - Relecture par Babacar.
 - Non testé ici, à tester sur un PC Windows : installation de WSL (1.1.1) et interface de VS Code (1.4.7).
-- Rédiger le « Travail à rendre » (2712) et relire le grand quiz de fin de bloc (2713, 20 questions déjà écrites).
+- ~~Rédiger le « Travail à rendre » (2712) et relire le grand quiz (2713)~~ : fait le 22/11 (voir journal).
+- Préciser aux apprenants comment envoyer le lien de leur dépôt au formateur (e-mail ? formulaire ?).
 - Les sections sont publiées mais les leçons sont en brouillon : rien n'est visible des apprenants tant qu'on ne publie pas.
+- 22/11/2026 : « Travail à rendre » 2712 rédigé (script CSV, requêtes SQL, règles Git, barème sur 20), en brouillon.
+  Corrigé testé, **gardé hors du dépôt** (dépôt public) et transmis à Babacar. Quiz 2713 relu : 20 questions justes et
+  conformes aux fiches ; explication ajoutée à la question 19 (redémarrer / mettre à jour, vérifié sur Odoo 20).
