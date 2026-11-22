@@ -1,4 +1,5 @@
-// Essai complet sans vrai Odoo : sert un faux Odoo en local et tourne le scénario d'exemple, voix muette.
+// Essai complet sans vrai Odoo : sert un faux Odoo en local et tourne les scénarios d'exemple, voix muette
+// (01 : écran d'Odoo ; 02 : mode terminal).
 // Usage : npm test            (vidéo complète avec générique)
 //         npm test -- --brouillon
 import http from 'node:http';
@@ -16,12 +17,14 @@ const serveur = http.createServer((req, res) => {
 });
 serveur.listen(0, async () => {
   const env = { ...process.env, ODOO_URL: `http://127.0.0.1:${serveur.address().port}`, ODOO_LOGIN: '' };
-  const r = await new Promise((ok) => {
-    import('node:child_process').then(({ spawn }) => {
-      const p = spawn(process.execPath, [path.join(ICI, '..', 'tuto.mjs'), path.join(ICI, '..', 'scenarios', '01-creer-un-contact.yaml'), '--voix', 'muet', ...process.argv.slice(2)], { env, stdio: 'inherit' });
-      p.on('exit', ok);
-    });
+  const { spawn } = await import('node:child_process');
+  const tourner = (scenario) => new Promise((ok) => {
+    const p = spawn(process.execPath, [path.join(ICI, '..', 'tuto.mjs'), path.join(ICI, '..', 'scenarios', scenario), '--voix', 'muet', ...process.argv.slice(2)], { env, stdio: 'inherit' });
+    p.on('exit', ok);
   });
+  // 1. scénario Odoo (sur le faux Odoo), 2. scénario en mode terminal (commandes lancées pour de vrai)
+  let r = await tourner('01-creer-un-contact.yaml');
+  if (r === 0) r = await tourner('02-terminal-premiers-pas.yaml');
   serveur.close();
   process.exit(r);
 });

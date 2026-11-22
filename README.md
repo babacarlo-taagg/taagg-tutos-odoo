@@ -28,6 +28,11 @@ node tuto.mjs scenarios/01-creer-un-contact.yaml --remonter    # refaire seuleme
 
 Options : `--voix elevenlabs|openai|fichiers|muet`, `--sans-sous-titres`, `--visible` (voir le navigateur).
 
+**Mode terminal** : avec `mode: terminal` dans le scénario, l'outil filme un terminal Linux au lieu d'Odoo
+(commandes tapées au rythme de la voix, vrais résultats, éditeur façon nano). Exemple :
+`scenarios/02-terminal-premiers-pas.yaml` ; actions dans `.claude/skills/tuto-odoo-scenario/SKILL.md`.
+Si Playwright ne trouve pas son navigateur, indiquer un Chromium déjà installé : `TUTO_CHROMIUM=/chemin/vers/chrome`.
+
 ## Compétences Claude (`.claude/skills/`)
 
 | Compétence | Rôle |

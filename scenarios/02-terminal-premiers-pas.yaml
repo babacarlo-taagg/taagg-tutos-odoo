@@ -1,0 +1,70 @@
+# Exemple de scénario en mode terminal : on filme un terminal Linux au lieu d'Odoo.
+# Parcours « Consultant technique Odoo », Bloc 1, leçon 1.1.2 (Se déplacer et manipuler des fichiers).
+# « executer: oui » lance vraiment la commande dans un dossier d'essai vide (sortie/<scénario>/terminal)
+# et affiche son vrai résultat ; sinon on écrit le résultat attendu dans « sortie ».
+# Liste des actions : .claude/skills/tuto-odoo-scenario/SKILL.md (section « Mode terminal »).
+titre: Se déplacer dans le terminal
+sous_titre: Consultant technique Odoo — Bloc 1
+mode: terminal
+terminal:
+  utilisateur: awa
+  machine: baobab
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+  pwd: P W D
+  mkdir: make dir
+  ls: L S
+fin:
+  message: À toi de jouer !
+  lien: taagg-school.com
+
+etapes:
+  - chapitre: Où suis-je ?
+    texte: >
+      Dans le terminal, pas de souris : tu donnes des ordres. Première question à se poser :
+      où suis-je ? La commande pwd affiche le dossier où tu te trouves.
+    actions:
+      - attendre: 1
+      - commande: pwd
+        sortie: /home/awa
+
+  - chapitre: Créer des dossiers
+    texte: Créons le dossier de travail de Baobab Livraison, avec ses sous-dossiers scripts et addons.
+    actions:
+      - commande: mkdir -p baobab/scripts baobab/addons
+        executer: oui
+      - commande: ls
+        executer: oui
+
+  - texte: On entre dans le dossier baobab avec cd. Regarde l'invite, elle indique maintenant où tu es.
+    actions:
+      - commande: cd baobab
+        executer: oui
+      - commande: ls -l
+        executer: oui
+      - surligner_ligne: scripts
+        duree: 2
+
+  - chapitre: Créer un fichier
+    texte: Ouvrons l'éditeur nano pour écrire un tout petit script Python.
+    actions:
+      - commande: nano scripts/bonjour.py
+      - editeur:
+          fichier: scripts/bonjour.py
+          contenu: |
+            print("Bonjour Baobab Livraison !")
+        enregistrer: oui
+
+  - texte: On enregistre, on quitte l'éditeur, et on lance le script avec python3. Le résultat s'affiche juste en dessous.
+    actions:
+      - attendre: 1
+      - fermer_editeur: oui
+      - commande: python3 scripts/bonjour.py
+        executer: oui
+
+  - texte: Voilà ! Tu sais te repérer, créer des dossiers et lancer un script. À toi de jouer.
+    actions:
+      - attendre: 1

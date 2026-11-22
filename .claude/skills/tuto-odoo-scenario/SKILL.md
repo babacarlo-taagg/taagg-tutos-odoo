@@ -76,6 +76,42 @@ etapes:
 
 Le curseur glisse comme une main, chaque clic fait une onde verte : pas besoin d'en rajouter.
 
+## Mode terminal (filmer des commandes Linux, Python, Git…)
+
+Pour les leçons techniques (parcours « Consultant technique Odoo ») qui se passent dans un terminal et non dans Odoo.
+Exemple complet : `scenarios/02-terminal-premiers-pas.yaml`.
+
+```yaml
+titre: Se déplacer dans le terminal
+mode: terminal                  # au lieu de filmer Odoo, filme un faux terminal Linux
+terminal:
+  utilisateur: awa              # invite affichée : awa@baobab:~$
+  machine: baobab
+  titre: Terminal — awa@baobab  # facultatif (barre du haut)
+  dossier: ~/essai              # facultatif : dossier où lancer les commandes « executer » ;
+                                # par défaut un dossier d'essai vide, recréé à chaque tournage
+```
+
+| Action (mode terminal) | Effet |
+|---|---|
+| `commande: ls -l` + `executer: oui` | tape la commande lettre par lettre, la **lance pour de vrai** (bash, dans le dossier d'essai) et affiche son vrai résultat ; les `cd` font évoluer l'invite |
+| `commande: pwd` + `sortie: /home/awa` | tape la commande et affiche le résultat écrit dans le scénario (rien n'est lancé) ; `erreur: oui` l'affiche en rouge |
+| `afficher: "texte"` | affiche des lignes sans commande (ex. journal qui défile) |
+| `surligner_ligne: scripts` + `duree: 2` | cadre vert autour de la dernière ligne de résultat qui contient ce texte |
+| `editeur: {fichier: tarifs.py, contenu: "…"}` | ouvre un éditeur façon nano et y tape le contenu ; `enregistrer: oui` écrit aussi le fichier (pour l'exécuter ensuite) |
+| `fermer_editeur: oui` | referme l'éditeur (le mettre au début de l'étape suivante pour laisser lire le fichier) |
+| `effacer: oui` | vide l'écran (comme `clear`) |
+| `delai: 40` | (sur `commande` ou `editeur`) millisecondes par lettre tapée |
+| `attendre`, `touche` | comme en mode Odoo |
+
+Règles :
+- **Préférer `executer: oui`** : le résultat affiché est alors le vrai, jamais inventé. Utiliser `sortie` seulement pour
+  ce qui ne peut pas tourner sur la machine de tournage (`sudo …`, `apt install`, chemins de l'apprenant comme `/home/awa`).
+- Jamais de `sudo`, de commande qui modifie la machine, ni de secret dans une commande « executer ».
+- Le dossier d'essai et la sortie montrent le compte de l'apprenant (`awa awa` dans `ls -l`), pas celui du serveur.
+- Les actions d'Odoo (`menu`, `bouton`, `champ`…) sont refusées en mode terminal.
+- Si Playwright ne trouve pas son navigateur : `TUTO_CHROMIUM=/chemin/vers/chrome node tuto.mjs …`.
+
 ## Trouver les bons noms (Odoo 19 et 20, mêmes repères)
 
 - `node tuto.mjs explorer <chemin>` liste les **champs techniques** (`name — Nom (o_field_char)`),

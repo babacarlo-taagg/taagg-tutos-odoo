@@ -3,6 +3,7 @@
 // Un scénario YAML (texte dit + gestes à l'écran, étape par étape) devient une vidéo MP4 :
 //   1. voix      : chaque texte est lu (ElevenLabs, OpenAI, fichiers enregistrés, ou muet)
 //   2. tournage  : un navigateur rejoue les gestes dans Odoo, au rythme de la voix
+//                  (ou, avec « mode: terminal », tape des commandes dans un terminal filmé)
 //   3. montage   : ffmpeg pose la voix, les sous-titres, le générique TAAGG et la musique
 //
 // Usage :
@@ -15,10 +16,12 @@
 //   ODOO_URL, ODOO_BASE, ODOO_LOGIN, ODOO_MOT_DE_PASSE
 //   ELEVENLABS_API_KEY, ELEVENLABS_VOICE_ID, ELEVENLABS_MODELE
 //   OPENAI_API_KEY, OPENAI_VOIX
+//   TUTO_CHROMIUM (facultatif) : chemin d'un Chromium déjà installé, si Playwright ne trouve pas le sien
 
-import { execFileSync, spawn } from 'node:child_process';
+import { execFileSync, spawn, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import YAML from 'yaml';
@@ -118,6 +121,11 @@ function chargerScenario(fichier) {
   sc.ecran = sc.ecran || [1600, 900];
   sc.depart = sc.depart || '/odoo';
   sc.prononciation = sc.prononciation || {};
+  sc.mode = sc.mode || 'odoo';
+  if (!['odoo', 'terminal'].includes(sc.mode)) arreter(`Mode inconnu : ${sc.mode} (odoo ou terminal).`);
+  if (sc.mode === 'terminal') {
+    sc.terminal = { utilisateur: 'awa', machine: 'baobab', titre: null, dossier: null, ...(sc.terminal || {}) };
+  }
   sc.fichier = path.resolve(fichier);
   sc.nom = path.basename(fichier).replace(/\.ya?ml$/, '');
   return sc;
@@ -417,6 +425,182 @@ class Realisateur {
   }
 }
 
+// ---------------------------------------------------------------- terminal filmé (mode: terminal)
+// Une page qui imite un terminal Linux : les commandes sont tapées lettre par lettre au rythme de la voix,
+// leur résultat s'affiche ensuite. Le résultat est soit écrit dans le scénario (« sortie »),
+// soit obtenu en lançant vraiment la commande (« executer: oui ») dans un dossier d'essai.
+
+const PAGE_TERMINAL = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><style>
+  html,body{margin:0;height:100%;background:#0B2633;font-family:'JetBrains Mono','DejaVu Sans Mono','Ubuntu Mono',monospace}
+  #fenetre{position:absolute;inset:28px;display:flex;flex-direction:column;border-radius:12px;overflow:hidden;
+    box-shadow:0 18px 50px rgba(0,0,0,.45);background:#10202A;border:1px solid #23404F}
+  #barre{height:46px;flex:none;background:#0B415B;display:flex;align-items:center;padding:0 18px;gap:9px;color:#E6EEF2;font-size:17px}
+  #barre i{width:14px;height:14px;border-radius:50%;background:#A6A297;display:inline-block;opacity:.85}
+  #barre span{margin-left:14px;font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-weight:600}
+  #ecran{flex:1;overflow:hidden;padding:20px 26px;font-size:23px;line-height:1.45;color:#E8EEF1;white-space:pre-wrap;word-break:break-all}
+  .ligne{min-height:1.45em}
+  .invite{color:#A6A297;font-weight:700}.chemin{color:#8EC5DC;font-weight:700}
+  .sortie{color:#C9D3D8}.erreur{color:#F2A49B}
+  #curseur{display:inline-block;width:.6em;height:1.1em;background:#E8EEF1;vertical-align:text-bottom;animation:clig 1s steps(1) infinite}
+  @keyframes clig{50%{opacity:0}}
+  .ligne.marque{outline:3px solid #68C184;outline-offset:3px;border-radius:4px;background:rgba(104,193,132,.14);transition:all .3s}
+  #editeur{position:absolute;inset:0;display:none;flex-direction:column;background:#10202A}
+  #editeur .entete{background:#E8EEF1;color:#0B415B;text-align:center;font-size:18px;padding:4px 0;font-weight:700}
+  #editeur pre{flex:1;margin:0;padding:16px 26px;font:inherit;font-size:22px;line-height:1.45;color:#E8EEF1;white-space:pre-wrap;overflow:hidden}
+  #editeur .pied{background:#E8EEF1;color:#0B415B;font-size:16px;padding:4px 14px}
+</style></head><body><div id="fenetre"><div id="barre"><i></i><i></i><i></i><span id="titre"></span></div>
+<div style="position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden"><div id="ecran"></div>
+<div id="editeur"><div class="entete" id="ed-titre"></div><pre id="ed-texte"></pre><div class="pied">^O Enregistrer   ^X Quitter</div></div></div></div>
+<script>
+  const ecran = document.getElementById('ecran');
+  const T = window.__term = {
+    ligneCourante: null,
+    defiler() { ecran.scrollTop = ecran.scrollHeight; },
+    titre(t) { document.getElementById('titre').textContent = t; },
+    nouvelleLigne(cls) { const d = document.createElement('div'); d.className = 'ligne ' + (cls || ''); ecran.appendChild(d); return d; },
+    invite(u, m, c) {
+      document.getElementById('curseur')?.remove();
+      const d = T.nouvelleLigne('commande');
+      d.innerHTML = '<span class="invite"></span>:<span class="chemin"></span>$ <span class="saisie"></span><span id="curseur"></span>';
+      d.querySelector('.invite').textContent = u + '@' + m; d.querySelector('.chemin').textContent = c;
+      T.ligneCourante = d.querySelector('.saisie'); T.defiler();
+    },
+    lettre(c) { T.ligneCourante.textContent += c; },
+    afficher(texte, cls) {
+      document.getElementById('curseur')?.remove();
+      for (const l of String(texte).replace(/\\n$/, '').split('\\n')) T.nouvelleLigne(cls || 'sortie').textContent = l;
+      T.defiler();
+    },
+    effacer() { ecran.innerHTML = ''; },
+    surligner(texte, ms) {
+      // dernière ligne qui contient le texte (les résultats avant les commandes)
+      const lignes = [...ecran.querySelectorAll('.ligne')].filter((l) => l.textContent.includes(texte));
+      const l = lignes.filter((x) => !x.classList.contains('commande')).pop() || lignes.pop();
+      if (!l) return false;
+      l.classList.add('marque'); setTimeout(() => l.classList.remove('marque'), ms);
+      return true;
+    },
+    ouvrirEditeur(nom, contenu) {
+      document.getElementById('ed-titre').textContent = 'GNU nano      ' + nom;
+      document.getElementById('ed-texte').textContent = contenu || '';
+      document.getElementById('editeur').style.display = 'flex';
+    },
+    lettreEditeur(c) { const e = document.getElementById('ed-texte'); e.textContent += c; e.scrollTop = e.scrollHeight; },
+    fermerEditeur() { document.getElementById('editeur').style.display = 'none'; },
+  };
+</script></body></html>`;
+
+// Retire les couleurs ANSI d'une sortie de commande.
+const sansCouleurs = (t) => t.replace(/\x1b\[[0-9;?]*[ -\/]*[@-~]/g, '').replace(/\r/g, '');
+
+class Terminal {
+  constructor(sc, dossierTournage) {
+    const o = sc.terminal;
+    this.utilisateur = o.utilisateur;
+    this.machine = o.machine;
+    // Dossier « maison » où tournent les commandes réelles : un dossier d'essai vidé à chaque tournage,
+    // sauf si le scénario en donne un.
+    this.maison = o.dossier ? path.resolve(path.dirname(sc.fichier), o.dossier.replace(/^~(?=\/|$)/, os.homedir()))
+      : path.join(dossierTournage, 'terminal');
+    if (!o.dossier) { fs.rmSync(this.maison, { recursive: true, force: true }); fs.mkdirSync(this.maison, { recursive: true }); }
+    this.cwd = this.maison;
+    this.titre = o.titre || `Terminal — ${this.utilisateur}@${this.machine}`;
+  }
+
+  chemin() {
+    if (this.chemin_force) return this.chemin_force;
+    const rel = path.relative(this.maison, this.cwd);
+    return rel === '' ? '~' : rel.startsWith('..') ? this.cwd : `~/${rel}`;
+  }
+
+  // Lance vraiment la commande (bash), dans le dossier courant ; suit les « cd ».
+  executer(commande) {
+    const marque = '__TUTO_PWD__';
+    const r = spawnSync('bash', ['-c', `${commande}\nprintf '\\n${marque}%s' "$PWD"`], {
+      cwd: this.cwd, encoding: 'utf8', timeout: 120000,
+      env: { ...process.env, HOME: this.maison, TERM: 'dumb', COLUMNS: '90', LANG: 'C.UTF-8' },
+    });
+    let sortie = sansCouleurs((r.stdout || '') + (r.stderr || ''));
+    const i = sortie.lastIndexOf(marque);
+    if (i >= 0) {
+      const dossier = sortie.slice(i + marque.length).trim();
+      if (dossier && fs.existsSync(dossier)) this.cwd = dossier;
+      sortie = sortie.slice(0, i).replace(/\n$/, '');
+    }
+    // « ls -l » montre le compte de la machine qui tourne la vidéo : on affiche celui de l'apprenant.
+    const moi = os.userInfo().username;
+    let groupe = moi;
+    try { groupe = execFileSync('id', ['-gn'], { encoding: 'utf8' }).trim() || moi; } catch {}
+    sortie = sortie.replace(new RegExp(`(?<=\\s)${moi}\\s+${groupe}(?=\\s)`, 'g'), `${this.utilisateur} ${this.utilisateur}`);
+    return sortie;
+  }
+}
+
+class RealisateurTerminal extends Realisateur {
+  constructor(page, terminal) {
+    super(page);
+    this.t = terminal;
+  }
+
+  async preparer() {
+    await this.page.setContent(PAGE_TERMINAL);
+    await this.page.evaluate((t) => window.__term.titre(t), this.t.titre);
+    await this.invite();
+  }
+
+  async invite() {
+    await this.page.evaluate(([u, m, c]) => window.__term.invite(u, m, c), [this.t.utilisateur, this.t.machine, this.t.chemin()]);
+  }
+
+  async taperTexte(texte, fonction, delai) {
+    for (const c of String(texte)) {
+      await this.page.evaluate(([f, x]) => window.__term[f](x), [fonction, c]);
+      await pause(c === ' ' ? delai * 0.6 : delai * (0.7 + Math.random() * 0.6));
+    }
+  }
+
+  async jouer(a) {
+    const p = this.page;
+    if ('commande' in a) {
+      const sortie = a.executer ? this.t.executer(a.commande) : a.sortie;
+      await this.taperTexte(a.commande, 'lettre', a.delai ?? 55);
+      await pause(350);
+      if (sortie != null && String(sortie) !== '') {
+        await pause((a.attente ?? 0.3) * 1000);
+        await p.evaluate(([t, cls]) => window.__term.afficher(t, cls), [String(sortie), a.erreur ? 'erreur' : 'sortie']);
+      }
+      if (a.chemin) this.t.chemin_force = a.chemin;
+      await this.invite();
+      await pause(250);
+    } else if ('afficher' in a) {
+      await p.evaluate(([t, cls]) => window.__term.afficher(t, cls), [String(a.afficher), a.erreur ? 'erreur' : 'sortie']);
+      await this.invite();
+    } else if ('effacer' in a) {
+      await p.evaluate(() => window.__term.effacer());
+      await this.invite();
+    } else if ('editeur' in a) {
+      // ouvre un éditeur façon nano et y tape le contenu ; « enregistrer: oui » écrit aussi le fichier pour de vrai
+      const { fichier, contenu = '', deja = '' } = a.editeur;
+      await p.evaluate(([f, d]) => window.__term.ouvrirEditeur(f, d), [fichier, deja]);
+      await pause(400);
+      await this.taperTexte(contenu, 'lettreEditeur', a.delai ?? 28);
+      if (a.enregistrer) fs.writeFileSync(path.resolve(this.t.cwd, fichier), deja + contenu);
+      await pause(600);
+    } else if ('surligner_ligne' in a) {
+      const ms = (a.duree ?? 2.5) * 1000;
+      if (!(await p.evaluate(([t, d]) => window.__term.surligner(t, d), [String(a.surligner_ligne), ms]))) throw new Error(`aucune ligne ne contient « ${a.surligner_ligne} »`);
+      await pause(ms);
+    } else if ('fermer_editeur' in a) {
+      await p.evaluate(() => window.__term.fermerEditeur());
+      await pause(300);
+    } else if (['aller', 'menu', 'ouvrir_menu', 'onglet', 'champ', 'choisir', 'cocher', 'rechercher', 'enregistrer', 'bouton'].some((k) => k in a)) {
+      throw new Error(`action d'Odoo impossible en mode terminal : ${JSON.stringify(a)}`);
+    } else {
+      await super.jouer(a); // attendre, surligner_texte, survoler_texte, touche…
+    }
+  }
+}
+
 // Caméra : capture d'écran continue de Chromium (CDP), chaque image horodatée.
 // L'enregistrement vidéo intégré de Playwright prend du retard sur l'horloge (≈ 13 s après 3 min),
 // ce qui décale l'image par rapport à la voix. Ici on écrit 30 images par seconde d'horloge réelle :
@@ -465,8 +649,9 @@ class Camera {
 }
 
 async function tourner(sc, pistes, dossier, visible) {
-  const navigateur = await chromium.launch({ headless: !visible });
-  const etat = await connexion(navigateur, sc);
+  const navigateur = await chromium.launch({ headless: !visible, executablePath: process.env.TUTO_CHROMIUM || undefined });
+  const terminal = sc.mode === 'terminal';
+  const etat = terminal ? undefined : await connexion(navigateur, sc);
   const [l, h] = sc.ecran;
   const ctx = await navigateur.newContext({ viewport: { width: l, height: h }, locale: 'fr-FR', storageState: etat });
   await ctx.addInitScript(DECOR);
@@ -475,11 +660,15 @@ async function tourner(sc, pistes, dossier, visible) {
   const brut = path.join(dossier, 'brut.mp4');
   const camera = new Camera(page, brut, sc.ecran, t0);
   await camera.demarrer();
-  const r = new Realisateur(page);
+  const r = terminal ? new RealisateurTerminal(page, new Terminal(sc, dossier)) : new Realisateur(page);
   const horloge = () => (Date.now() - t0) / 1000;
 
-  await page.goto(urlOdoo(sc.depart));
-  await attendreOdoo(page);
+  if (terminal) {
+    await r.preparer();
+  } else {
+    await page.goto(urlOdoo(sc.depart));
+    await attendreOdoo(page);
+  }
   await pause(800);
   const debut = horloge();
   const journal = [];
@@ -689,7 +878,7 @@ function mmss(s) {
 
 async function explorer(chemin) {
   const sc = { ecran: [1600, 900] };
-  const navigateur = await chromium.launch();
+  const navigateur = await chromium.launch({ executablePath: process.env.TUTO_CHROMIUM || undefined });
   const etat = await connexion(navigateur, sc);
   const ctx = await navigateur.newContext({ viewport: { width: 1600, height: 900 }, locale: 'fr-FR', storageState: etat });
   const page = await ctx.newPage();
@@ -782,7 +971,7 @@ async function main() {
     if (prise.etapes.length !== sc.etapes.length) arreter('Le nombre d’étapes a changé depuis la prise : il faut retourner.');
     console.log('2/3 Tournage : on réutilise la prise précédente');
   } else {
-    console.log(`2/3 Tournage dans ${urlOdoo(sc.depart)}`);
+    console.log(sc.mode === 'terminal' ? '2/3 Tournage dans le terminal' : `2/3 Tournage dans ${urlOdoo(sc.depart)}`);
     prise = await tourner(sc, pistes, dossier, option('--visible'));
     fs.writeFileSync(fJournal, JSON.stringify(prise, null, 2));
   }
