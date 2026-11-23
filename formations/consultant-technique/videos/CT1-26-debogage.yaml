@@ -8,7 +8,7 @@ terminal: {utilisateur: awa, machine: baobab}
 voix: {moteur: elevenlabs, vitesse: 1.0}
 prononciation:
   TAAGG: Tag
-  KeyError: Kiye Erreur
+  KeyError: Ki Erreur
   pdb: P D B
   « breakpoint() »: « brèque point »
   « python3 »: « python trois »
@@ -54,8 +54,8 @@ etapes:
 
   - chapitre: Lire de bas en haut
     texte: >
-      On lit la trace de bas en haut. La dernière ligne dit quoi : « KeyError » Yoff.
-      La clé Yoff n'existe pas dans le dictionnaire des tarifs.
+      On lit la trace de bas en haut. La dernière ligne dit ce qui ne va pas : une KeyError, sur la clé Yoff.
+      Cette clé n'existe pas dans le dictionnaire des tarifs.
     actions:
       - surligner_ligne: "KeyError: 'Yoff'"
         duree: 3

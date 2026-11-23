@@ -32,8 +32,7 @@ etapes:
         sortie: …
         attente: 1
 
-  - chapitre: Télécharger Odoo 20
-    texte: >
+  - texte: >
       On télécharge le code d'Odoo depuis GitHub : la branche 20 point 0, sans tout l'historique. Compte environ 1,4 giga-octet.
     actions:
       - commande: git clone --depth 1 --branch 20.0 https://github.com/odoo/odoo.git ~/odoo

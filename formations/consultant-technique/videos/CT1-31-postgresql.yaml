@@ -49,8 +49,7 @@ etapes:
       - commande: createdb $USER
       - commande: createdb baobab_sql
 
-  - chapitre: Se connecter avec psql
-    texte: >
+  - texte: >
       On se connecte avec « psql ». L'invite change : tu parles maintenant à la base, en SQL.
     actions:
       - commande: psql -d baobab_sql
