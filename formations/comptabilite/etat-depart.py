@@ -681,8 +681,50 @@ def cpt_25():
     return odoo('account.move', 'read', [facture], ['name', 'state', 'amount_total'], context=fr)[0], len(anciennes), len(etalement)
 
 
+def livrer(picking_ids, fr):
+    # valide les réceptions / livraisons sans passer par l'écran (quantités faites = quantités prévues)
+    for pk in picking_ids:
+        if odoo('stock.picking', 'read', [pk], ['state'], context=fr)[0]['state'] in ('done', 'cancel'):
+            continue
+        odoo('stock.picking', 'action_assign', [pk], context=fr)
+        for mv in odoo('stock.move', 'search_read', [['picking_id', '=', pk]], fields=['product_uom_qty'], context=fr):
+            odoo('stock.move', 'write', [mv['id']], {'quantity': mv['product_uom_qty'], 'picked': True}, context=fr)
+        odoo('stock.picking', 'button_validate', [pk], context=dict(fr, skip_backorder=True, skip_sms=True))
+
+
+def cpt_26():
+    # un achat reçu et non facturé (Laiterie Ndiaye & Fils, 40 kg de beurre doux à 4 500 F, commande « Beurre de décembre »)
+    # et une vente livrée et non facturée (Traiteur, 6 fraisiers à 15 254 F, réf. client « Buffet de fin d'année »),
+    # créés une fois et gardés ; les écritures de régularisation faites à l'écran (et leurs extournes) sont supprimées
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    laiterie = odoo('res.partner', 'search', [['name', '=', 'Laiterie Ndiaye & Fils']], context=fr)
+    if not laiterie:
+        laiterie = [odoo('res.partner', 'create', {'name': 'Laiterie Ndiaye & Fils', 'is_company': True, 'city': 'Thiès',
+                                                    'country_id': odoo('res.country', 'search', [['code', '=', 'SN']])[0]}, context=fr)]
+    achat = odoo('purchase.order', 'search', [['partner_id', '=', laiterie[0]], ['partner_ref', '=', 'Beurre de décembre']], context=fr)
+    if not achat:
+        achat = [odoo('purchase.order', 'create', {'partner_id': laiterie[0], 'partner_ref': 'Beurre de décembre',
+                                                   'order_line': [[0, 0, {'product_id': 112, 'product_qty': 40, 'price_unit': 4500}]]}, context=fr)]
+        odoo('purchase.order', 'button_confirm', achat, context=fr)
+    livrer(odoo('purchase.order', 'read', achat, ['picking_ids'], context=fr)[0]['picking_ids'], fr)
+    traiteur = odoo('res.partner', 'search', [['name', '=', 'Traiteur Saveurs du Plateau']], context=fr)[0]
+    vente = odoo('sale.order', 'search', [['partner_id', '=', traiteur], ['client_order_ref', '=', "Buffet de fin d'année"]], context=fr)
+    if not vente:
+        vente = [odoo('sale.order', 'create', {'partner_id': traiteur, 'client_order_ref': "Buffet de fin d'année",
+                                               'order_line': [[0, 0, {'product_id': 95, 'product_uom_qty': 6, 'price_unit': 15254}]]}, context=fr)]
+        odoo('sale.order', 'action_confirm', vente, context=fr)
+    livrer(odoo('sale.order', 'read', vente, ['picking_ids'], context=fr)[0]['picking_ids'], fr)
+    noms = [odoo('purchase.order', 'read', achat, ['name'], context=fr)[0]['name'], odoo('sale.order', 'read', vente, ['name'], context=fr)[0]['name']]
+    regul = odoo('account.move', 'search', [['move_type', '=', 'entry'], '|', ['ref', 'ilike', noms[0]], ['ref', 'ilike', noms[1]]], context=fr)
+    for m in sorted(regul, reverse=True):
+        if odoo('account.move', 'read', [m], ['state'], context=fr)[0]['state'] != 'draft':
+            odoo('account.move', 'button_draft', [m], context=fr)
+        odoo('account.move', 'unlink', [m], context=fr)
+    return noms, len(regul)
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19, 'CPT-20': cpt_20, 'CPT-21': cpt_21, 'CPT-22': cpt_22, 'CPT-23': cpt_23, 'CPT-24': cpt_24, 'CPT-25': cpt_25}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19, 'CPT-20': cpt_20, 'CPT-21': cpt_21, 'CPT-22': cpt_22, 'CPT-23': cpt_23, 'CPT-24': cpt_24, 'CPT-25': cpt_25, 'CPT-26': cpt_26}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''

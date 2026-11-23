@@ -1,0 +1,155 @@
+# CPT-26 · Factures à recevoir et à émettre [E]
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-26`) :
+#   achat P000xx « Beurre de décembre » (Laiterie Ndiaye & Fils, 40 kg de beurre doux à 4 500 F = 180 000 F HT) reçu, non facturé ;
+#   vente S000xx « Buffet de fin d'année » (Traiteur Saveurs du Plateau, 6 fraisiers à 15 254 F = 91 524 F HT) livrée, non facturée ;
+#   aucune écriture de régularisation sur ces commandes (celles faites à l'écran sont supprimées).
+# Menus : Révision › Achats › Facture à recevoir ; Révision › Ventes › Factures à émettre (lignes groupées par partenaire,
+#   pas de recherche texte : on ouvre le groupe). Les autres groupes (Grands Moulins, Épicerie, Charcuterie) viennent de la base
+#   d'exercice : on n'y touche pas.
+# Ce que la capsule fait : deux écritures de régularisation au 30/11/2026 (408100 / 418100), extournées au 01/12/2026.
+titre: Factures à recevoir et à émettre
+sous_titre: Formation Comptabilité Odoo · CPT-26
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : la comptabilité analytique"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette vingt-sixième capsule. Fin novembre, la boutique a reçu quarante kilos de beurre,
+      mais la facture de la laiterie n'arrivera qu'en décembre. Pourtant, ce beurre est une charge de novembre.
+    actions:
+      - attendre: 1
+  - texte: >
+      C'est une facture à recevoir. À l'inverse, des gâteaux livrés en novembre mais facturés en décembre sont une facture
+      à émettre. À la fin de cette capsule, vous saurez les rattacher au bon mois, en quelques clics. C'est une fonction de la version Enterprise.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : facture à recevoir
+  - partie: "1. Les factures à recevoir"
+    texte: >
+      Ouvrez le menu Révision, puis Facture à recevoir. Odoo liste tout ce qui a été reçu, mais pas encore facturé,
+      fournisseur par fournisseur.
+    actions:
+      - ouvrir_menu: Révision
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Facture à recevoir")'
+      - attendre: 1.5
+      - surligner: '.o_list_renderer'
+        duree: 2.5
+  - texte: >
+      Ouvrez la laiterie : quarante kilos reçus, zéro facturé, cent quatre-vingt mille francs. Cochez la ligne, et cliquez
+      sur Créer des écritures de régularisation.
+    actions:
+      - cliquer: '.o_group_header:has-text("Laiterie Ndiaye")'
+      - attendre: 1
+      - surligner: '.o_data_row:has-text("Beurre de décembre")'
+        duree: 2
+      - cliquer: '.o_data_row:has-text("Beurre de décembre") td.o_list_record_selector'
+      - cliquer: '.o_control_panel button:has-text("Créer des écritures de régularisation")'
+      - attendre: 1.5
+  - texte: >
+      Le compte de régularisation : fournisseurs, factures non parvenues, quatre cent huit mille cent. La date : le dernier
+      jour du mois, le trente novembre. Et l'extourne, le lendemain : le premier décembre.
+    actions:
+      - choisir: {champ: account_id, valeur: "408100"}
+      - cliquer: '.modal .o_field_widget[name="date"] button, .modal .o_field_widget[name="date"] input'
+      - champ: date
+        taper: "30/11/2026"
+        entree: true
+      - cliquer: '.modal .o_field_widget[name="reversal_date"] button, .modal .o_field_widget[name="reversal_date"] input'
+      - champ: reversal_date
+        taper: "01/12/2026"
+        entree: true
+  - sous_titres: haut
+    texte: >
+      L'aperçu montre l'écriture : la charge d'achat au débit, la dette envers le fournisseur au crédit. Cliquez sur Créer une écriture.
+    actions:
+      - surligner: '.modal .o_field_widget[name="preview_data"]'
+        duree: 3.5
+      - cliquer: '.modal-footer button:has-text("Créer")'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ partie 2 : facture à émettre
+  - partie: "2. Les factures à émettre"
+    texte: >
+      Même chose pour les ventes. Ouvrez Révision, puis Factures à émettre. Les six fraisiers du traiteur sont livrés,
+      mais pas encore facturés : quatre-vingt-onze mille cinq cent vingt-quatre francs.
+    actions:
+      - ouvrir_menu: Révision
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Factures à émettre")'
+      - attendre: 1.5
+      - cliquer: '.o_group_header:has-text("Traiteur Saveurs du Plateau")'
+      - attendre: 1
+      - surligner: '.o_data_row:has-text("Fraisier")'
+        duree: 2.5
+  - texte: >
+      Cochez la ligne, créez l'écriture de régularisation, avec le compte clients, factures à émettre, quatre cent dix-huit mille cent,
+      et les mêmes dates.
+    actions:
+      - cliquer: '.o_data_row:has-text("Fraisier") td.o_list_record_selector'
+      - cliquer: '.o_control_panel button:has-text("régularisation")'
+      - attendre: 1.5
+      - choisir: {champ: account_id, valeur: "418100"}
+      - cliquer: '.modal .o_field_widget[name="date"] button, .modal .o_field_widget[name="date"] input'
+      - champ: date
+        taper: "30/11/2026"
+        entree: true
+      - cliquer: '.modal .o_field_widget[name="reversal_date"] button, .modal .o_field_widget[name="reversal_date"] input'
+      - champ: reversal_date
+        taper: "01/12/2026"
+        entree: true
+  - sous_titres: haut
+    texte: >
+      La vente est au crédit, la créance au débit : le chiffre d'affaires de novembre est complet. Créez l'écriture.
+    actions:
+      - surligner: '.modal .o_field_widget[name="preview_data"]'
+        duree: 3
+      - cliquer: '.modal-footer button:has-text("Créer")'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ partie 3 : en décembre
+  - partie: "3. Et en décembre ?"
+    texte: >
+      Le premier décembre, Odoo extourne ces écritures tout seul. Puis les vraies factures arrivent, et prennent le relais.
+      Novembre garde sa charge et sa vente ; décembre ne les compte pas deux fois.
+    actions:
+      - surligner: '.o_list_renderer, .o_form_view'
+        duree: 4
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : dater la régularisation du jour où on la fait. Elle doit porter la date de
+      fin du mois concerné.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : oublier l'extourne. La charge serait comptée deux fois : une fois par la régularisation, une fois par la facture.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : régulariser chaque petite livraison. Réservez-le aux clôtures de mois ou d'exercice, et aux montants qui comptent.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Dans Révision, Facture à recevoir liste ce qui est reçu sans facture, et Factures à émettre ce qui est
+      livré sans facture. On coche, on choisit le compte, la date de fin de mois, l'extourne au lendemain, et Odoo s'occupe du reste.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : à la fin du mois, ouvrez ces deux écrans dans votre entreprise, et régularisez ce qui doit l'être.
+      Dans la prochaine capsule, nous verrons la comptabilité analytique. À tout de suite !
+    actions:
+      - attendre: 1
