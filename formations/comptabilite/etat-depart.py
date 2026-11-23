@@ -721,7 +721,8 @@ def cpt_26():
         odoo('sale.order', 'action_confirm', vente, context=fr)
     livrer(odoo('sale.order', 'read', vente, ['picking_ids'], context=fr)[0]['picking_ids'], fr)
     noms = [odoo('purchase.order', 'read', achat, ['name'], context=fr)[0]['name'], odoo('sale.order', 'read', vente, ['name'], context=fr)[0]['name']]
-    regul = odoo('account.move', 'search', [['move_type', '=', 'entry'], '|', ['ref', 'ilike', noms[0]], ['ref', 'ilike', noms[1]]], context=fr)
+    # Odoo nomme ces écritures « Entrée cumulée Charge / Revenus au JJ/MM/AAAA » (et « Extourne de : … »)
+    regul = odoo('account.move', 'search', [['move_type', '=', 'entry'], ['ref', 'ilike', 'Entrée cumulée']], context=fr)
     for m in sorted(regul, reverse=True):
         if odoo('account.move', 'read', [m], ['state'], context=fr)[0]['state'] != 'draft':
             odoo('account.move', 'button_draft', [m], context=fr)
