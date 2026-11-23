@@ -122,11 +122,19 @@ etapes:
   # ------------------------------------------------------------------ partie 3 : en décembre
   - partie: "3. Et en décembre ?"
     texte: >
-      Le premier décembre, Odoo extourne ces écritures tout seul. Puis les vraies factures arrivent, et prennent le relais.
-      Novembre garde sa charge et sa vente ; décembre ne les compte pas deux fois.
+      Retrouvons ces écritures. Ouvrez Comptabilité, puis Pièces comptables. Retirez le filtre Comptabilisé, et cherchez : entrée cumulée.
     actions:
-      - surligner: '.o_list_renderer, .o_form_view'
-        duree: 4
+      - ouvrir_menu: Comptabilité
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Pièces comptables")'
+      - cliquer: '.o_searchview_facet:has-text("Comptabilisé") .o_facet_remove'
+      - rechercher: Entrée cumulée
+      - attendre: 1
+  - texte: >
+      Au trente novembre, les deux régularisations. Au premier décembre, leurs extournes. Odoo comptabilise chacune à sa date, tout seul.
+      Puis les vraies factures arrivent, et prennent le relais : novembre garde sa charge et sa vente, et décembre ne les compte pas deux fois.
+    actions:
+      - surligner: '.o_list_renderer'
+        duree: 6
 
   # ------------------------------------------------------------------ pièges fréquents
   - partie: "Les pièges à éviter"
