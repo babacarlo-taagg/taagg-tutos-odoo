@@ -283,7 +283,7 @@ tournage (`executer: oui`), soit copiées de vrais essais (Ubuntu 24.04, Odoo 20
 
 | Scénario | Leçon (fiche) | Contenu | État |
 |---|---|---|---|
-| `CT1-02-premier-script` | 1.0.2 (2699) | version de Python, nano, premier script, console | ✎ |
+| `CT1-02-premier-script` | 1.0.2 (2699) | version de Python, nano, premier script, console | 🎙 1:04 (23/11) |
 | `CT1-11-ubuntu-wsl` | 1.1.1 (1353) | PowerShell `wsl --install` (sans résultat inventé), apt update, versions | ✎ |
 | `scenarios/02-terminal-premiers-pas` | 1.1.2 (2701) | pwd, mkdir, cd, ls -l, nano, python3 (exemple de l'outil) | ✎ |
 | `CT1-26-debogage` | 1.2.6 (2704) | vraie trace d'erreur, lecture de bas en haut, séance pdb | ✎ |
@@ -294,7 +294,9 @@ tournage (`executer: oui`), soit copiées de vrais essais (Ubuntu 24.04, Odoo 20
 | — | 1.4.7 VS Code | interface graphique : enregistrement d'écran par Babacar | ☐ |
 
 Brouillons tournés et contrôlés image par image le 22/11/2026 (durées : 1 min 06 à 1 min 27, voix muette).
-Restent à décider : la voix (ElevenLabs ou voix clonée de Babacar) avant la version finale (crédits ElevenLabs).
+Voix retenue : celle de Babacar, clone « Babacar LO (naturel) » du compte ElevenLabs Creator (identifiant de voix
+`IPPenhJl2iBtfNN4nVa2` ; ce n'est pas un secret). L'autre compte ElevenLabs (clé de l'environnement) est bloqué pour impayé.
+CT1-02 : voix contrôlée par retranscription automatique le 23/11 (texte conforme).
 Commande pour une version finale : `node tuto.mjs formations/consultant-technique/videos/<scénario>.yaml`.
 
 ## Volume

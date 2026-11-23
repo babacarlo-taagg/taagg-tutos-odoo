@@ -54,8 +54,7 @@ etapes:
       - attendre: 1.2
       - fermer_editeur: oui
 
-  - chapitre: Lancer le script
-    texte: "Pour lancer le script, on tape « python3 », puis le nom du fichier."
+  - texte: "Pour lancer le script, on tape « python3 », puis le nom du fichier."
     actions:
       - commande: python3 premier.py
         executer: oui
