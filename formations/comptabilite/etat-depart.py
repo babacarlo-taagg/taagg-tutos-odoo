@@ -697,6 +697,12 @@ def cpt_26():
     # et une vente livrée et non facturée (Traiteur, 6 fraisiers à 15 254 F, réf. client « Buffet de fin d'année »),
     # créés une fois et gardés ; les écritures de régularisation faites à l'écran (et leurs extournes) sont supprimées
     fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    # Odoo n'accepte pour les régularisations que des comptes « passif courant » (achats) / « actif courant » (ventes) :
+    # 408100 et 418100 sont typés fournisseur / client dans la base. On ajoute deux sous-comptes dédiés (jamais retirés).
+    for code, nom, genre in (('408800', 'Fournisseurs, factures non parvenues (régularisations)', 'liability_current'),
+                             ('418800', 'Clients, factures à établir (régularisations)', 'asset_current')):
+        if not odoo('account.account', 'search', [['code', '=', code]], context=fr):
+            odoo('account.account', 'create', {'code': code, 'name': nom, 'account_type': genre}, context=fr)
     laiterie = odoo('res.partner', 'search', [['name', '=', 'Laiterie Ndiaye & Fils']], context=fr)
     if not laiterie:
         laiterie = [odoo('res.partner', 'create', {'name': 'Laiterie Ndiaye & Fils', 'is_company': True, 'city': 'Thiès',

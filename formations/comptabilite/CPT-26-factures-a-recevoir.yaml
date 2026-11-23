@@ -6,7 +6,9 @@
 # Menus : Révision › Achats › Facture à recevoir ; Révision › Ventes › Factures à émettre (lignes groupées par partenaire,
 #   pas de recherche texte : on ouvre le groupe). Les autres groupes (Grands Moulins, Épicerie, Charcuterie) viennent de la base
 #   d'exercice : on n'y touche pas.
-# Ce que la capsule fait : deux écritures de régularisation au 30/11/2026 (408100 / 418100), extournées au 01/12/2026.
+# Comptes : Odoo n'accepte que des comptes « passif courant » (achats) / « actif courant » (ventes) ; 408100 et 418100 sont
+#   typés fournisseur / client dans la base, d'où les sous-comptes 408800 et 418800 créés par etat-depart.py.
+# Ce que la capsule fait : deux écritures de régularisation au 30/11/2026 (408800 / 418800), extournées au 01/12/2026.
 titre: Factures à recevoir et à émettre
 sous_titre: Formation Comptabilité Odoo · CPT-26
 depart: /odoo/accounting
@@ -57,10 +59,11 @@ etapes:
       - cliquer: '.o_control_panel button:has-text("Créer des écritures de régularisation")'
       - attendre: 1.5
   - texte: >
-      Le compte de régularisation : fournisseurs, factures non parvenues, quatre cent huit mille cent. La date : le dernier
-      jour du mois, le trente novembre. Et l'extourne, le lendemain : le premier décembre.
+      Le compte de régularisation : fournisseurs, factures non parvenues. Odoo veut ici un sous-compte réservé aux
+      régularisations : quatre cent huit mille huit cents. La date : le dernier jour du mois, le trente novembre.
+      Et l'extourne, le lendemain : le premier décembre.
     actions:
-      - choisir: {champ: account_id, valeur: "408100"}
+      - choisir: {champ: account_id, valeur: "408800"}
       - cliquer: '.modal .o_field_widget[name="date"] button, .modal .o_field_widget[name="date"] input'
       - champ: date
         taper: "30/11/2026"
@@ -92,13 +95,13 @@ etapes:
       - surligner: '.o_data_row:has-text("Fraisier")'
         duree: 2.5
   - texte: >
-      Cochez la ligne, créez l'écriture de régularisation, avec le compte clients, factures à émettre, quatre cent dix-huit mille cent,
+      Cochez la ligne, créez l'écriture de régularisation, avec le compte clients, factures à établir, quatre cent dix-huit mille huit cents,
       et les mêmes dates.
     actions:
       - cliquer: '.o_data_row:has-text("Fraisier") td.o_list_record_selector'
       - cliquer: '.o_control_panel button:has-text("régularisation")'
       - attendre: 1.5
-      - choisir: {champ: account_id, valeur: "418100"}
+      - choisir: {champ: account_id, valeur: "418800"}
       - cliquer: '.modal .o_field_widget[name="date"] button, .modal .o_field_widget[name="date"] input'
       - champ: date
         taper: "30/11/2026"
