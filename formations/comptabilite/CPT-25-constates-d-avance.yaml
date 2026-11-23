@@ -73,7 +73,7 @@ etapes:
       - cliquer: '.o_data_row:has-text("Assurances du Plateau") td.o_data_cell'
       - attendre: 1
   - texte: >
-      Une seule ligne, sur le compte des assurances. Pour l'étaler, affichez la colonne Date de report : elle est cachée.
+      La facture n'a qu'une ligne, sur le compte des assurances. Pour l'étaler, affichez la colonne Date de report : elle est cachée.
     actions:
       - surligner: '.o_field_widget[name="invoice_line_ids"] .o_data_row'
         duree: 2

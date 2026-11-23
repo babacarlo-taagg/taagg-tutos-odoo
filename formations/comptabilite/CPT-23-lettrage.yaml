@@ -18,7 +18,7 @@ voix:
 prononciation:
   SYSCOHADA: Syscoada
   TAAGG: Tag
-  Lettrer: Lettré
+  Lettrer: lettrer
 fin:
   message: "Prochaine capsule : les immobilisations et les amortissements"
   lien: taagg-gui.com
