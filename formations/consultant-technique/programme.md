@@ -284,19 +284,21 @@ tournage (`executer: oui`), soit copiées de vrais essais (Ubuntu 24.04, Odoo 20
 | Scénario | Leçon (fiche) | Contenu | État |
 |---|---|---|---|
 | `CT1-02-premier-script` | 1.0.2 (2699) | version de Python, nano, premier script, console | 🎙 1:04 (23/11) |
-| `CT1-11-ubuntu-wsl` | 1.1.1 (1353) | PowerShell `wsl --install` (sans résultat inventé), apt update, versions | ✎ |
+| `CT1-11-ubuntu-wsl` | 1.1.1 (1353) | PowerShell `wsl --install` (sans résultat inventé), apt update, versions | 🎙 1:17 (23/11) |
 | `scenarios/02-terminal-premiers-pas` | 1.1.2 (2701) | pwd, mkdir, cd, ls -l, nano, python3 (exemple de l'outil) | ✎ |
-| `CT1-26-debogage` | 1.2.6 (2704) | vraie trace d'erreur, lecture de bas en haut, séance pdb | ✎ |
-| `CT1-31-postgresql` | 1.3.1 (2905) | installation, createuser, psql, CREATE/INSERT/SELECT | ✎ |
-| `CT1-41-git` | 1.4.1 (2708) | config, init, status, add, commit, log, diff | ✎ |
-| `CT1-44-installer-odoo` | 1.4.4 (2709) | apt, git clone, venv, pip, premier démarrage d'Odoo 20 | ✎ |
-| `CT1-45-docker` | 1.4.5 (2909) | compose.yaml, up, ps, version, journal, down | ✎ |
+| `CT1-26-debogage` | 1.2.6 (2704) | vraie trace d'erreur, lecture de bas en haut, séance pdb | 🎙 1:19 (23/11) |
+| `CT1-31-postgresql` | 1.3.1 (2905) | installation, createuser, psql, CREATE/INSERT/SELECT | 🎙 1:20 (23/11) |
+| `CT1-41-git` | 1.4.1 (2708) | config, init, status, add, commit, log, diff | 🎙 1:09 (23/11) |
+| `CT1-44-installer-odoo` | 1.4.4 (2709) | apt, git clone, venv, pip, premier démarrage d'Odoo 20 | 🎙 1:15 (23/11) |
+| `CT1-45-docker` | 1.4.5 (2909) | compose.yaml, up, ps, version, journal, down | 🎙 1:06 (23/11) |
 | — | 1.4.7 VS Code | interface graphique : enregistrement d'écran par Babacar | ☐ |
 
 Brouillons tournés et contrôlés image par image le 22/11/2026 (durées : 1 min 06 à 1 min 27, voix muette).
 Voix retenue : celle de Babacar, clone « Babacar LO (naturel) » du compte ElevenLabs Creator (identifiant de voix
 `IPPenhJl2iBtfNN4nVa2` ; ce n'est pas un secret). L'autre compte ElevenLabs (clé de l'environnement) est bloqué pour impayé.
-CT1-02 : voix contrôlée par retranscription automatique le 23/11 (texte conforme).
+Les 7 vidéos : voix contrôlée par retranscription automatique le 23/11. Le clone ajoute parfois un « euh » :
+les phrases concernées ont été régénérées (et une reformulée, CT1-26 étape 3) jusqu'à 0 hésitation.
+Fichiers vidéo : `sortie/` (hors Git, trop lourds) — à ranger sur Drive puis à placer sur les fiches.
 Commande pour une version finale : `node tuto.mjs formations/consultant-technique/videos/<scénario>.yaml`.
 
 ## Volume
