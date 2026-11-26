@@ -1,0 +1,193 @@
+# CPT-27 · La comptabilité analytique
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-27`) :
+#   aucune dimension « Activités » (la dimension « Projet » de la base reste, on n'y touche pas) ;
+#   facture fournisseur en brouillon de SCI Corniche Ouest « Loyer novembre 2026 », 450 000 F sur 622200, sans TVA, sans analytique.
+# Menus : Configuration › Dimensions analytiques (/odoo/analytic-plans) ; Configuration › Modèles de répartition analytique ;
+#   Analyse › Rapport Analytique.
+# Fenêtre de répartition (clic sur la case Analytique d'une ligne) : .analytic_distribution_popup, une colonne par dimension
+#   (Projet = account_id, la nouvelle = x_planN_id, N change à chaque création), case percentage ; la 2e ligne prend seule le reste.
+# Ce que la capsule crée : dimension « Activités » (Boutique, Traiteur), loyer réparti 70 / 30 et confirmé, modèle
+#   « Traiteur Saveurs du Plateau → 100 % Traiteur », une facture client au traiteur (2 fraisiers). etat-depart.py supprime tout.
+titre: La comptabilité analytique
+sous_titre: Formation Comptabilité Odoo · CPT-27
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+  Confirmer: Confirmé
+fin:
+  message: "Prochaine capsule : les budgets"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette vingt-septième capsule. La pâtisserie a deux activités : la boutique, et le service
+      traiteur. La comptabilité générale donne un seul résultat. Mais laquelle des deux gagne de l'argent ?
+    actions:
+      - attendre: 1
+  - texte: >
+      La comptabilité analytique répond à cette question : chaque vente et chaque dépense reçoit une étiquette, boutique ou traiteur.
+      À la fin de cette capsule, vous saurez créer ces étiquettes, répartir une dépense, et automatiser le classement.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : la dimension
+  - partie: "1. Créer une dimension"
+    texte: >
+      Ouvrez Configuration, puis Dimensions analytiques. Une dimension est une façon de découper vos chiffres : ici, par activité.
+      Cliquez sur Nouveau, nommez-la Activités, et enregistrez.
+    actions:
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Dimensions analytiques")'
+      - bouton: Nouveau
+      - champ: name
+        taper: Activités
+      - enregistrer: oui
+  - texte: >
+      Ajoutez-lui ses comptes analytiques. Cliquez sur Comptes analytiques, puis Nouveau : Boutique. Enregistrez.
+    actions:
+      - cliquer: '.o_control_panel button:has-text("Comptes analytiques"), .oe_button_box button:has-text("Comptes analytiques")'
+      - attendre: 1
+      - bouton: Nouveau
+      - champ: name
+        taper: Boutique
+      - enregistrer: oui
+  - texte: >
+      Puis un second : Traiteur.
+    actions:
+      - bouton: Nouveau
+      - champ: name
+        taper: Traiteur
+      - enregistrer: oui
+      - cliquer: '.breadcrumb-item a:has-text("Comptes analytiques")'
+      - attendre: 1
+      - surligner: '.o_list_renderer'
+        duree: 2
+
+  # ------------------------------------------------------------------ partie 2 : répartir une dépense
+  - partie: "2. Répartir une dépense"
+    texte: >
+      Le loyer du local sert aux deux activités : la boutique occupe soixante-dix pour cent de la surface, la cuisine du traiteur
+      trente. Ouvrez Fournisseurs, puis Factures fournisseurs, et la facture du loyer.
+    actions:
+      - aller: /odoo/accounting
+      - ouvrir_menu: Fournisseurs
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Factures fournisseurs")'
+      - rechercher: SCI Corniche Ouest
+      - cliquer: '.o_data_row:has-text("SCI Corniche Ouest") td.o_data_cell'
+      - attendre: 1
+  - texte: >
+      Cliquez dans la colonne Analytique de la ligne. Dans la colonne Activités, choisissez Boutique, à soixante-dix pour cent.
+    actions:
+      - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_data_row td[name="analytic_distribution"]'
+      - attendre: 1
+      - taper_dans: '.analytic_distribution_popup tbody tr:nth-child(1) .o_field_widget[name^="x_plan"] input'
+        taper: Boutique
+      - cliquer: '.o-autocomplete--dropdown-item:has-text("Boutique")'
+      - taper_dans: '.analytic_distribution_popup tbody tr:nth-child(1) .o_field_widget[name="percentage"] input'
+        taper: "70"
+      - touche: Tab
+  - texte: >
+      Ajoutez une ligne : Traiteur. Odoo complète tout seul avec les trente pour cent qui restent : cent trente-cinq mille francs.
+    actions:
+      - cliquer: '.analytic_distribution_popup a:has-text("Ajouter une ligne"), .analytic_distribution_popup button:has-text("Ajouter une ligne")'
+      - taper_dans: '.analytic_distribution_popup tbody tr:nth-child(2) .o_field_widget[name^="x_plan"] input'
+        taper: Traiteur
+      - cliquer: '.o-autocomplete--dropdown-item:has-text("Traiteur")'
+      - attendre: 1
+      - surligner: '.analytic_distribution_popup'
+        duree: 3
+  - texte: >
+      Fermez la fenêtre, et confirmez la facture.
+    actions:
+      - cliquer: '.o_form_sheet h1'
+      - cliquer: '.o_statusbar_buttons button[name="action_post"]'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ partie 3 : automatiser
+  - partie: "3. Automatiser le classement"
+    texte: >
+      Tout ce qu'on vend au traiteur Saveurs du Plateau relève de l'activité traiteur. Plutôt que de le choisir à chaque fois,
+      créez un modèle. Ouvrez Configuration, puis Modèles de répartition analytique, et cliquez sur Nouveau.
+    actions:
+      - ouvrir_menu: Configuration
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Modèles de répartition analytique")'
+      - attendre: 1
+      - bouton: Nouveau
+      - attendre: 1
+  - texte: >
+      Le partenaire : Traiteur Saveurs du Plateau. Et la répartition : cent pour cent Traiteur.
+    actions:
+      - choisir: {champ: partner_id, valeur: Traiteur Saveurs du Plateau}
+      - cliquer: '.o_field_widget[name="analytic_distribution"]'
+      - attendre: 1
+      - taper_dans: '.analytic_distribution_popup tbody tr:nth-child(1) .o_field_widget[name^="x_plan"] input'
+        taper: Traiteur
+      - cliquer: '.o-autocomplete--dropdown-item:has-text("Traiteur")'
+      - attendre: 1
+      - cliquer: '.o_form_sheet, .o_control_panel .breadcrumb'
+      - enregistrer: oui
+  - texte: >
+      Vérifions. Ouvrez Clients, puis Factures clients, et créez une facture pour le traiteur : deux fraisiers.
+    actions:
+      - ouvrir_menu: Clients
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Factures clients")'
+      - bouton: Nouveau
+      - choisir: {champ: partner_id, valeur: Traiteur Saveurs du Plateau}
+      - cliquer: '.o_field_widget[name="invoice_line_ids"] .o_field_x2many_list_row_add a'
+      - choisir: {champ: product_id, valeur: Fraisier}
+      - champ: quantity
+        taper: "2"
+      - cliquer: '.o_form_sheet h1'
+  - texte: >
+      La colonne Analytique s'est remplie toute seule : cent pour cent Traiteur. Confirmez.
+    actions:
+      - surligner: '.o_field_widget[name="invoice_line_ids"] .o_data_row td[name="analytic_distribution"]'
+        duree: 2.5
+      - cliquer: '.o_statusbar_buttons button[name="action_post"]'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ partie 4 : le résultat
+  - partie: "4. Lire le résultat par activité"
+    texte: >
+      Ouvrez Analyse, puis Rapport Analytique. Chaque compte analytique montre ses produits et ses charges : la boutique,
+      le traiteur, et ce qui reste à classer.
+    actions:
+      - ouvrir_menu: Analyse
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Rapport Analytique")'
+      - attendre: 3
+      - surligner: '.o_content'
+        duree: 5
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : créer trop de comptes analytiques. Commencez par deux ou trois activités, pas vingt.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : oublier les dépenses communes. Si le loyer n'est pas réparti, une activité paraît plus rentable qu'elle ne l'est.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : classer à la main ce qui se répète. Un modèle de répartition fait le travail, sans oubli.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Une dimension découpe vos chiffres, ses comptes analytiques sont les étiquettes. On les pose sur chaque ligne,
+      on répartit les dépenses communes, et un modèle de répartition classe tout seul ce qui revient.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : créez une dimension pour les activités de votre entreprise, et classez les factures du mois.
+      Dans la prochaine capsule, nous verrons les budgets. À tout de suite !
+    actions:
+      - attendre: 1
