@@ -113,7 +113,7 @@ etapes:
   - partie: "3. Automatiser le classement"
     texte: >
       Tout ce qu'on vend au traiteur Saveurs du Plateau relève de l'activité traiteur. Plutôt que de le choisir à chaque fois,
-      créez un modèle. Ouvrez Configuration, puis Modèles de répartition analytique, et cliquez sur Nouveau.
+      créez un modèle. Ouvrez Configuration, puis Modèles de répartition analytique, et cliquez sur Nouveau : une ligne s'ouvre.
     actions:
       - ouvrir_menu: Configuration
       - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Modèles de répartition analytique")'
@@ -121,7 +121,7 @@ etapes:
       - bouton: Nouveau
       - attendre: 1
   - texte: >
-      Le partenaire : Traiteur Saveurs du Plateau. Et la répartition : cent pour cent Traiteur.
+      Le partenaire : Traiteur Saveurs du Plateau. Et la répartition : cent pour cent Traiteur. Cliquez à côté : la ligne est enregistrée.
     actions:
       - choisir: {champ: partner_id, valeur: Traiteur Saveurs du Plateau}
       - cliquer: '.o_field_widget[name="analytic_distribution"]'
@@ -130,8 +130,8 @@ etapes:
         taper: Traiteur
       - cliquer: '.o-autocomplete--dropdown-item:has-text("Traiteur")'
       - attendre: 1
-      - cliquer: '.o_form_sheet, .o_control_panel .breadcrumb'
-      - enregistrer: oui
+      - cliquer: '.o_control_panel .o_breadcrumb'
+      - attendre: 1.5
   - texte: >
       Vérifions. Ouvrez Clients, puis Factures clients, et créez une facture pour le traiteur : deux fraisiers.
     actions:
@@ -155,14 +155,20 @@ etapes:
   # ------------------------------------------------------------------ partie 4 : le résultat
   - partie: "4. Lire le résultat par activité"
     texte: >
-      Ouvrez Analyse, puis Rapport Analytique. Chaque compte analytique montre ses produits et ses charges : la boutique,
-      le traiteur, et ce qui reste à classer.
+      Ouvrez Analyse, puis Rapport Analytique. Cliquez sur la ligne Total, et choisissez Activités.
     actions:
       - ouvrir_menu: Analyse
       - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Rapport Analytique")'
-      - attendre: 3
-      - surligner: '.o_content'
-        duree: 5
+      - attendre: 2
+      - cliquer: 'tbody .o_pivot_header_cell_closed'
+      - cliquer: '.dropdown-item:text-is("Activités")'
+      - attendre: 1.5
+  - texte: >
+      Voici chaque activité. La boutique porte sa part du loyer. Le traiteur, la sienne, moins la vente des deux fraisiers.
+      Au fil des mois, avec toutes les ventes et toutes les dépenses classées, vous saurez laquelle gagne vraiment de l'argent.
+    actions:
+      - surligner: '.o_pivot table'
+        duree: 6
 
   # ------------------------------------------------------------------ pièges fréquents
   - partie: "Les pièges à éviter"
