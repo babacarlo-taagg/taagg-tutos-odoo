@@ -730,8 +730,51 @@ def cpt_26():
     return noms, len(regul)
 
 
+def cpt_27():
+    # facture du loyer de novembre (SCI Corniche Ouest, 450 000 F sur 622200, sans TVA) en brouillon, sans analytique ;
+    # aucune dimension « Activités » : on supprime celle créée à l'écran, ses comptes Boutique / Traiteur, le modèle de
+    # répartition du traiteur et les pièces qui les utilisent (le loyer et la facture du traiteur saisie à l'écran)
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    plans = odoo('account.analytic.plan', 'search', [['name', '=', 'Activités']], context=fr)
+    comptes = odoo('account.analytic.account', 'search', [['plan_id', 'in', plans]], context=fr) if plans else []
+    pieces = []
+    if comptes:
+        lignes = odoo('account.move.line', 'search_read', [['distribution_analytic_account_ids', 'in', comptes]], fields=['move_id'], context=fr)
+        pieces = sorted({l['move_id'][0] for l in lignes}, reverse=True)
+        modeles = odoo('account.analytic.distribution.model', 'search', [], context=fr)
+        a_retirer = [mdl['id'] for mdl in odoo('account.analytic.distribution.model', 'read', modeles, ['analytic_distribution'], context=fr)
+                     if any(str(c) in (mdl['analytic_distribution'] or {}) for c in comptes)]
+        if a_retirer:
+            odoo('account.analytic.distribution.model', 'unlink', a_retirer, context=fr)
+    proprio = odoo('res.partner', 'search', [['name', '=', 'SCI Corniche Ouest']], context=fr)
+    if not proprio:
+        proprio = [odoo('res.partner', 'create', {'name': 'SCI Corniche Ouest', 'is_company': True, 'city': 'Dakar',
+                                                   'country_id': odoo('res.country', 'search', [['code', '=', 'SN']])[0]}, context=fr)]
+    pieces += [m for m in odoo('account.move', 'search', [['partner_id', '=', proprio[0]], ['move_type', '=', 'in_invoice']], context=fr) if m not in pieces]
+    for m in pieces:
+        etat = odoo('account.move', 'read', [m], ['state', 'move_type'], context=fr)[0]
+        paiements = odoo('account.payment', 'search', [['reconciled_invoice_ids', 'in', [m]]], context=fr)
+        if paiements:
+            odoo('account.payment', 'action_draft', paiements, context=fr)
+            odoo('account.payment', 'unlink', paiements, context=fr)
+        if etat['state'] != 'draft':
+            odoo('account.move', 'button_draft', [m], context=fr)
+        odoo('account.move', 'unlink', [m], context=fr)
+    if comptes:
+        odoo('account.analytic.account', 'unlink', comptes, context=fr)
+    if plans:
+        odoo('account.analytic.plan', 'unlink', plans, context=fr)
+    loyer = odoo('account.move', 'create', {
+        'move_type': 'in_invoice', 'partner_id': proprio[0], 'ref': 'Loyer novembre 2026', 'invoice_date': '2026-11-01',
+        'date': '2026-11-01', 'invoice_date_due': '2026-11-05',
+        'invoice_line_ids': [[0, 0, {'name': 'Loyer du local (boutique et cuisine), novembre 2026', 'quantity': 1, 'price_unit': 450000,
+                                     'account_id': odoo('account.account', 'search', [['code', '=', '622200']], context=fr)[0],
+                                     'tax_ids': [[6, 0, []]]}]]}, context=fr)
+    return loyer, len(plans), len(comptes), len(pieces)
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19, 'CPT-20': cpt_20, 'CPT-21': cpt_21, 'CPT-22': cpt_22, 'CPT-23': cpt_23, 'CPT-24': cpt_24, 'CPT-25': cpt_25, 'CPT-26': cpt_26}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19, 'CPT-20': cpt_20, 'CPT-21': cpt_21, 'CPT-22': cpt_22, 'CPT-23': cpt_23, 'CPT-24': cpt_24, 'CPT-25': cpt_25, 'CPT-26': cpt_26, 'CPT-27': cpt_27}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''

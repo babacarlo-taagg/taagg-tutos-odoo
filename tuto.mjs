@@ -383,6 +383,9 @@ class Realisateur {
       await this.cliquer(p.locator('.o_menu_sections .dropdown-toggle').filter({ hasText: a.ouvrir_menu }).first());
     } else if ('onglet' in a) {
       await this.cliquer(p.locator('.o_notebook .nav-link').filter({ hasText: a.onglet }).first());
+    } else if ('taper_dans' in a) {
+      // saisie dans un élément visé par un sélecteur (cases sans nom de champ stable : fenêtre de répartition analytique…)
+      await this.taper(p.locator(a.taper_dans).first(), a.taper, a.entree);
     } else if ('champ' in a && 'taper' in a) {
       await this.taper(await this.saisieActive(a.champ), a.taper, a.entree);
     } else if ('choisir' in a) {

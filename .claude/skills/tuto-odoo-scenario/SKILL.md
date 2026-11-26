@@ -65,6 +65,7 @@ etapes:
 | `champ: name` + `taper: Awa Diop` | tape lettre par lettre dans le champ technique `name` (`entree: true` pour valider) |
 | `choisir: {champ: country_id, valeur: Sénégal}` | liste déroulante ou champ relié : tape puis choisit dans la liste (marche aussi pour les listes de choix d'Odoo 19, ex. `{champ: type, valeur: Espèces}`) |
 | `champ: deferred_end_date` + `taper:` | date de fin d'une période « début → fin » (ligne de facture) : la 2e case est trouvée par son `data-field` |
+| `taper_dans: '<sélecteur>'` + `taper:` (+ `entree: true`) | tape dans l'élément visé (case sans nom de champ stable, ex. la fenêtre de répartition analytique `.analytic_distribution_popup tbody tr:nth-child(1) .o_field_widget[name^="x_plan"] input`) |
 | `cocher: is_company` | coche une case |
 | `onglet: Notes internes` | ouvre un onglet de la fiche |
 | `rechercher: Awa` | tape dans la barre de recherche + Entrée |
