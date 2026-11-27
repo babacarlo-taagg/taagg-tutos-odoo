@@ -16,7 +16,6 @@ voix:
 prononciation:
   SYSCOHADA: Syscoada
   TAAGG: Tag
-  Confirmer: Confirmé
 fin:
   message: "Prochaine capsule : la déclaration de TVA"
   lien: taagg-gui.com
@@ -75,7 +74,7 @@ etapes:
         taper: "150000"
       - cliquer: '.o_form_sheet h1, .o_form_sheet .oe_title'
   - texte: >
-      Le budget est prêt. Cliquez sur Confirmer pour l'ouvrir.
+      Le budget est prêt. Cliquez sur Ouvrir.
     actions:
       - cliquer: '.o_statusbar_buttons button[name="action_budget_confirm"]'
       - attendre: 2
