@@ -108,7 +108,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 2.1.2
-dict(code="2.1.2", id=None, seq=12, minutes=10,
+dict(code="2.1.2", id=2912, seq=12, minutes=10,
 titre="Le manifeste ligne par ligne",
 description="Écrire le __manifest__.py de Baobab Livraison et comprendre chaque clé.",
 html=fiche(
@@ -217,7 +217,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 2.1.4
-dict(code="2.1.4", id=None, seq=14, minutes=10,
+dict(code="2.1.4", id=2913, seq=14, minutes=10,
 titre="Mettre à jour un module : quand redémarrer, quand faire -u",
 description="Savoir exactement quoi faire après chaque modification pour qu'Odoo en tienne compte.",
 html=fiche(

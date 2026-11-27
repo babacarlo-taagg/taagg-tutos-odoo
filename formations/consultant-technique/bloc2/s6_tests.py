@@ -94,7 +94,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 2.6.2
-dict(code="2.6.2", id=None, seq=62, minutes=10,
+dict(code="2.6.2", id=2920, seq=62, minutes=10,
 titre="Lancer ses tests et lire le résultat",
 description="--test-tags, lire la ligne de résultat, comprendre et corriger un test qui échoue.",
 html=fiche(

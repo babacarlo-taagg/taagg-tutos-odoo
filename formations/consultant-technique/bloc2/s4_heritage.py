@@ -106,7 +106,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 2.4.2
-dict(code="2.4.2", id=None, seq=42, minutes=10,
+dict(code="2.4.2", id=2914, seq=42, minutes=10,
 titre="Surcharger une méthode avec super()",
 description="Ajouter une règle à create ou à la suppression sans casser le comportement d'Odoo.",
 html=fiche(

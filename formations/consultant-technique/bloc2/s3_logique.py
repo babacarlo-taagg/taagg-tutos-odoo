@@ -200,7 +200,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 2.3.3
-dict(code="2.3.4", id=None, seq=34, minutes=10,
+dict(code="2.3.4", id=2911, seq=34, minutes=10,
 titre="Séquences et actions planifiées",
 description="Numéroter les courses BL/2026/0001 et relancer chaque jour les courses en retard.",
 html=fiche(

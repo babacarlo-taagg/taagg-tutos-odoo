@@ -123,54 +123,54 @@ Objectif : un module `baobab_livraison` installable, avec ses modèles, ses calc
 ### « Le module » (2714)
 | # | Leçon | Objectif | Fiche |
 |---|---|---|---|
-| 2.1.1 | Anatomie d'un module | Reconnaître chaque dossier et fichier | ♻ 2715 |
-| 2.1.2 | Le manifeste ligne par ligne | Écrire `__manifest__.py` (version, dépendances, data, démo, licence) | ＋ |
-| 2.1.3 | Créer `baobab_livraison` et l'installer | Voir son module dans Applications | ♻ 2716 🎥 |
-| 2.1.4 | Mettre à jour un module : quand redémarrer, quand faire `-u` | Ne plus se demander pourquoi « ça ne change pas » | ＋ |
+| 2.1.1 | Anatomie d'un module | Reconnaître chaque dossier et fichier | ✅ 2715 |
+| 2.1.2 | Le manifeste ligne par ligne | Écrire `__manifest__.py` (version, dépendances, data, démo, licence) | ✅ 2912 |
+| 2.1.3 | Créer `baobab_livraison` et l'installer | Voir son module dans Applications | ✅ 2716 🎥 |
+| 2.1.4 | Mettre à jour un module : quand redémarrer, quand faire `-u` | Ne plus se demander pourquoi « ça ne change pas » | ✅ 2913 |
 
 ### « Le modèle (ORM) » (2717)
 | # | Leçon | Objectif | Fiche |
 |---|---|---|---|
-| 2.2.1 | Premier modèle : `baobab.course` | `_name`, `_description`, premiers champs | ♻ 1355 |
-| 2.2.2 | Les types de champs | Char, Text, Integer, Float, Monetary, Date, Datetime, Boolean, Selection | ＋ |
-| 2.2.3 | Les relations : Many2one, One2many, Many2many | Relier courses, zones et livreurs | ＋ |
-| 2.2.4 | Le droit minimum pour voir son modèle | Premier `ir.access.csv` (20) / `ir.model.access.csv` (18-19) | ＋ |
-| 2.2.5 | Chercher, créer, modifier : `search`, `create`, `write`, domaines | Manipuler les courses depuis le shell Odoo | ♻ 2718 🎥 |
-| 2.2.6 | Les recordsets : boucles, `mapped`, `filtered`, `sorted` | Travailler sur plusieurs fiches d'un coup | ＋ |
-| 2.2.7 | Champs calculés, liés et enregistrés | Calculer le prix d'une course | ♻ 2719 |
-| 2.2.8 | Contraintes et valeurs par défaut | Interdire un poids négatif (`models.Constraint`, `@api.constrains`) | ♻ 2720 |
+| 2.2.1 | Premier modèle : les zones (`baobab.zone`) | `_name`, `_description`, premiers champs, `odoo-bin shell` | ✅ 1355 |
+| 2.2.2 | Les types de champs | Char, Text, Integer, Float, Monetary, Date, Datetime, Boolean, Selection | ✅ 2915 |
+| 2.2.3 | Les relations : Many2one, One2many, Many2many | Relier courses, zones et livreurs | ✅ 2916 |
+| 2.2.4 | Le droit minimum pour voir son modèle | Premier `ir.access.csv` (20) / `ir.model.access.csv` (18-19) | ✅ 2917 |
+| 2.2.5 | Chercher, créer, modifier : `search`, `create`, `write`, domaines | Manipuler les courses depuis le shell Odoo | ✅ 2718 🎥 |
+| 2.2.6 | Les recordsets : boucles, `mapped`, `filtered`, `sorted` | Travailler sur plusieurs fiches d'un coup | ✅ 2919 |
+| 2.2.7 | Champs calculés, liés et enregistrés | Calculer le prix d'une course | ✅ 2719 |
+| 2.2.8 | Contraintes et valeurs par défaut | Interdire un poids négatif (`models.Constraint`, `@api.constrains`) | ✅ 2720 |
 
 ### « La logique métier » (2721)
 | # | Leçon | Objectif | Fiche |
 |---|---|---|---|
-| 2.3.1 | Statuts et boutons d'action | Brouillon → en route → livrée, avec des méthodes `action_…` | ♻ 1356 |
-| 2.3.2 | Les onchange | Proposer le tarif dès qu'on choisit la zone | ♻ 2722 |
-| 2.3.3 | Séquences et actions planifiées | Numéroter les courses, relancer les courses en retard | ＋ |
-| 2.3.4 | Contexte, utilisateur, société et `sudo` | Savoir qui agit et avec quels droits | ♻ 2723 |
-| 2.3.5 | Discussion, activités et suivi des changements | Ajouter le chatter aux courses | ♻ 2724 |
+| 2.3.1 | Statuts et boutons d'action | Brouillon → en route → livrée, avec des méthodes `action_…` | ✅ 1356 |
+| 2.3.2 | Les onchange | Proposer le tarif dès qu'on choisit la zone | ✅ 2722 |
+| 2.3.3 | Discussion, activités et suivi des changements | Ajouter le chatter aux courses | ✅ 2724 |
+| 2.3.4 | Séquences et actions planifiées | Numéroter les courses, relancer les courses en retard | ✅ 2911 |
+| 2.3.5 | Contexte, utilisateur, société et `sudo` | Savoir qui agit et avec quels droits | ✅ 2723 |
 
 ### « L'héritage » (2725)
 | # | Leçon | Objectif | Fiche |
 |---|---|---|---|
-| 2.4.1 | `_inherit` : ajouter un champ à un modèle existant | Marquer un contact comme livreur | ♻ 1357 |
-| 2.4.2 | Surcharger une méthode avec `super()` | Ajouter une règle à `create` sans casser Odoo | ＋ |
-| 2.4.3 | Héritage par délégation et mixins | Savoir quand utiliser `_inherits` et `mail.thread` | ♻ 2726 |
-| 2.4.4 | Étendre les ventes | Une commande confirmée crée une course | ♻ 2727 |
+| 2.4.1 | `_inherit` : ajouter un champ à un modèle existant | Marquer un contact comme livreur | ✅ 1357 |
+| 2.4.2 | Surcharger une méthode avec `super()` | Ajouter une règle à `create` sans casser Odoo | ✅ 2914 |
+| 2.4.3 | Héritage par délégation et mixins | Savoir quand utiliser `_inherits` et `mail.thread` | ✅ 2726 |
+| 2.4.4 | Étendre les ventes | Une commande confirmée crée une course | ✅ 2727 |
 
 ### « Les données » (2728)
 | # | Leçon | Objectif | Fiche |
 |---|---|---|---|
-| 2.5.1 | Fichiers de données XML et CSV, identifiants externes | Charger les zones de Dakar avec le module | ♻ 2729 |
-| 2.5.2 | Données de démonstration et `noupdate` | Préparer une base de test réaliste | ＋ |
-| 2.5.3 | Scripts de migration du module (pré et post) | Changer un champ sans perdre les données | ♻ 2730 |
+| 2.5.1 | Fichiers de données XML et CSV, identifiants externes | Charger les zones de Dakar avec le module | ✅ 2729 |
+| 2.5.2 | Données de démonstration et `noupdate` | Préparer une base de test réaliste | ✅ 2918 |
+| 2.5.3 | Scripts de migration du module (pré et post) | Changer un champ sans perdre les données | ✅ 2730 |
 
 ### « Les tests » (2731)
 | # | Leçon | Objectif | Fiche |
 |---|---|---|---|
-| 2.6.1 | Écrire un premier test | Vérifier le calcul du prix avec `TransactionCase` | ♻ 2732 |
-| 2.6.2 | Lancer ses tests et lire le résultat | `--test-tags`, comprendre un test qui échoue | ＋ |
+| 2.6.1 | Écrire un premier test | Vérifier le calcul du prix avec `TransactionCase` | ✅ 2732 |
+| 2.6.2 | Lancer ses tests et lire le résultat | `--test-tags`, comprendre un test qui échoue | ✅ 2920 |
 
-### « Évaluation » (2733) : ♻ 2734 travail à rendre · ♻ 2735 quiz (25 questions existantes à relire)
+### « Évaluation » (2733) : ✅ 2734 travail à rendre (option express, zone archivée refusée, zones en `noupdate` ; corrigé testé, 12 tests verts, transmis à Babacar hors dépôt) · ✅ 2735 quiz (25 questions relues : 1 réponse reformulée pour `models.Constraint`, 1 commentaire ajouté)
 
 ## Bloc 3 — Interface et rapports (cours 210)
 
@@ -323,12 +323,14 @@ Commande pour une version finale : `node tuto.mjs formations/consultant-techniqu
 | 5 | validé 21/11 | 0 / 14 | 0 / 14 | — | — |
 
 ## Journal
+
 - 21/11/2026 : état des lieux des cours 208 à 212, vérification des versions dans la documentation officielle, proposition de programme.
 - 21/11/2026 : Babacar valide le programme et le fil rouge Baobab Livraison ; Bloc 1 lancé.
 - 21-22/11/2026 : Bloc 1 rédigé (28 fiches + 84 questions), tout en brouillon. Code vérifié sur un vrai Odoo 20.0
   (sources + Python 3.12 + PostgreSQL 16, et image Docker odoo:20 + postgres:16). Sources des fiches : `bloc1/*.py`,
   gabarit : `outils/fiche.py`, identifiants : `outils/ids_bloc1.json`. Les 3 anciennes fiches « document » vides
   (1352, 1353, 1354) sont devenues des articles. ✅ = fiche rédigée (avec son identifiant sur le site).
+- 27/11/2026 — Bloc 2 rédigé : 26 fiches + travail à rendre, en brouillon sur le cours 209 (10 fiches créées, 17 refaites ; les anciennes fiches « document » 1355, 1356, 1357 converties en articles). Tout le code vérifié sur Odoo 20 (module de référence : 8 tests verts ; module pont ventes : 2 tests verts ; état intermédiaire de la leçon 2.3.1 installé). Ordre corrigé : chatter (2.3.3) avant l'action planifiée (2.3.4).
 
 ## Bloc 1 — reste à faire avant publication
 - Relecture par Babacar.

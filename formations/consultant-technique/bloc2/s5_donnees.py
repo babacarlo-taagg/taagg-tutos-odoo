@@ -84,7 +84,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 2.5.2
-dict(code="2.5.2", id=None, seq=52, minutes=10,
+dict(code="2.5.2", id=2918, seq=52, minutes=10,
 titre="Données de démonstration et noupdate",
 description="Préparer une base de test réaliste, et protéger les données que le client modifie.",
 html=fiche(

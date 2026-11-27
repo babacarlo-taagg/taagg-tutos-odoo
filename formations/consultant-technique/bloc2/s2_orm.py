@@ -95,7 +95,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 2.2.2
-dict(code="2.2.2", id=None, seq=22, minutes=10,
+dict(code="2.2.2", id=2915, seq=22, minutes=10,
 titre="Les types de champs",
 description="Texte, nombres, dates, montants, listes de choix : choisir le bon type de champ.",
 html=fiche(
@@ -156,7 +156,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 2.2.3
-dict(code="2.2.3", id=None, seq=23, minutes=10,
+dict(code="2.2.3", id=2916, seq=23, minutes=10,
 titre="Les relations : Many2one, One2many, Many2many",
 description="Relier une course à son client, à sa zone, à ses étiquettes.",
 html=fiche(
@@ -223,7 +223,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 2.2.4
-dict(code="2.2.4", id=None, seq=24, minutes=10,
+dict(code="2.2.4", id=2917, seq=24, minutes=10,
 titre="Le droit minimum pour voir son modèle (ir.access.csv)",
 description="Donner aux utilisateurs le droit de lire et modifier les courses : le fichier ir.access.csv d'Odoo 20.",
 html=fiche(
@@ -361,7 +361,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 2.2.6
-dict(code="2.2.6", id=None, seq=26, minutes=10,
+dict(code="2.2.6", id=2919, seq=26, minutes=10,
 titre="Les recordsets : boucles, mapped, filtered, sorted",
 description="Travailler sur plusieurs fiches à la fois avec les outils de l'ORM.",
 html=fiche(
