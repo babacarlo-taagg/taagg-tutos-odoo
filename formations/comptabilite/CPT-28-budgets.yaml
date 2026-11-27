@@ -1,0 +1,140 @@
+# CPT-28 · Les budgets [E]
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-28`) :
+#   dimension « Activités » (Boutique, Traiteur) ; loyer de novembre (SCI Corniche Ouest, 450 000 F, 622200) comptabilisé et
+#   réparti 70 / 30 (Boutique 315 000 F, Traiteur 135 000 F) ; aucune autre pièce dans ces activités ; aucun budget.
+# Menus : Comptabilité › Budget analytique ; Analyse › Rapport de budget.
+# Un budget Odoo 19 est analytique : une ligne par compte analytique (colonne « Activités » = champ x_planN_id, N change si
+#   la dimension est recréée → taper_dans sur name^="x_plan"). La colonne « Théorique » dépend du jour : on ne la cite pas.
+# Ce que la capsule crée : budget « Charges de novembre 2026 » (Dépense, 01/11 → 30/11/2026) : Boutique 300 000 F,
+#   Traiteur 150 000 F, confirmé. etat-depart.py le supprime.
+titre: Les budgets
+sous_titre: Formation Comptabilité Odoo · CPT-28
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+  Confirmer: Confirmé
+fin:
+  message: "Prochaine capsule : la déclaration de TVA"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette vingt-huitième capsule. Un budget, c'est ce qu'on prévoit de dépenser, ou de gagner.
+      Le comparer chaque mois à la réalité permet de réagir à temps, avant que les dépenses ne dérapent.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez créer un budget par activité, suivre le réalisé, et lire le rapport de budget.
+      Les budgets font partie de la version Enterprise, et s'appuient sur la comptabilité analytique vue dans la capsule précédente.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : créer le budget
+  - partie: "1. Créer un budget"
+    texte: >
+      Ouvrez le menu Comptabilité, puis Budget analytique, et cliquez sur Nouveau. Le nom : charges de novembre deux mille vingt-six.
+    actions:
+      - ouvrir_menu: Comptabilité
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Budget analytique")'
+      - bouton: Nouveau
+      - champ: name
+        taper: Charges de novembre 2026
+  - texte: >
+      Un budget de dépenses, pour le mois de novembre : du premier au trente.
+    actions:
+      - choisir: {champ: budget_type, valeur: Dépense}
+      - cliquer: '.o_field_widget[name="date_from"] button, .o_field_widget[name="date_from"] input'
+      - champ: date_from
+        taper: "01/11/2026"
+      - champ: date_to
+        taper: "30/11/2026"
+      - cliquer: '.o_form_sheet h1, .o_form_sheet .oe_title'
+  - texte: >
+      Une ligne par activité. La boutique : trois cent mille francs.
+    actions:
+      - cliquer: '.o_field_widget[name="budget_line_ids"] .o_field_x2many_list_row_add a'
+      - taper_dans: '.o_selected_row .o_field_widget[name^="x_plan"] input'
+        taper: Boutique
+      - cliquer: '.o-autocomplete--dropdown-item:has-text("Boutique")'
+      - champ: budget_amount
+        taper: "300000"
+  - texte: >
+      Le traiteur : cent cinquante mille francs.
+    actions:
+      - cliquer: '.o_field_widget[name="budget_line_ids"] .o_field_x2many_list_row_add a'
+      - taper_dans: '.o_selected_row .o_field_widget[name^="x_plan"] input'
+        taper: Traiteur
+      - cliquer: '.o-autocomplete--dropdown-item:has-text("Traiteur")'
+      - champ: budget_amount
+        taper: "150000"
+      - cliquer: '.o_form_sheet h1, .o_form_sheet .oe_title'
+  - texte: >
+      Le budget est prêt. Cliquez sur Confirmer pour l'ouvrir.
+    actions:
+      - cliquer: '.o_statusbar_buttons button[name="action_budget_confirm"]'
+      - attendre: 2
+
+  # ------------------------------------------------------------------ partie 2 : le réalisé
+  - partie: "2. Comparer au réalisé"
+    sous_titres: haut
+    texte: >
+      Odoo remplit tout seul la colonne Réalisé, avec les dépenses classées dans chaque activité : ici, le loyer réparti
+      dans la capsule précédente. La boutique a déjà dépensé trois cent quinze mille francs : elle dépasse son budget.
+      Le traiteur reste en dessous.
+    actions:
+      - surligner: '.o_field_widget[name="budget_line_ids"]'
+        duree: 8
+  - texte: >
+      Un dépassement n'est pas une faute : c'est un signal. Ici, la répartition du loyer est peut-être à revoir, ou le budget
+      de la boutique trop serré.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 3 : le rapport
+  - partie: "3. Le rapport de budget"
+    texte: >
+      Pour suivre tous les budgets d'un coup d'œil, ouvrez Analyse, puis Rapport de budget.
+    actions:
+      - ouvrir_menu: Analyse
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Rapport de budget")'
+      - attendre: 3
+  - texte: >
+      Pour chaque ligne : le montant budgété, et le réalisé. Chaque mois, un coup d'œil suffit pour repérer ce qui dérape.
+    actions:
+      - surligner: '.o_content'
+        duree: 5
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : faire un budget sans analytique. Odoo ne peut rien comparer si les factures
+      ne sont pas classées par activité.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : un budget annuel sans le découper. Un dépassement découvert en décembre arrive trop tard ; faites-le par mois.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : modifier le budget en cours de route sans trace. Utilisez Réviser : Odoo garde l'ancienne version.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Un budget se crée dans Comptabilité, Budget analytique : une période, puis une ligne par activité.
+      Odoo remplit le réalisé à partir de l'analytique, et le rapport de budget montre les écarts.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : préparez le budget du mois prochain pour chacune de vos activités, et comparez-le au réalisé en fin de mois.
+      Dans la prochaine capsule, nous ouvrirons le dernier parcours, avec la déclaration de TVA. À tout de suite !
+    actions:
+      - attendre: 1

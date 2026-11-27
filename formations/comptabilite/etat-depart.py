@@ -773,8 +773,49 @@ def cpt_27():
     return loyer, len(plans), len(comptes), len(pieces)
 
 
+def cpt_28():
+    # dimension « Activités » (Boutique, Traiteur) en place ; loyer de novembre (450 000 F, 622200) comptabilisé et réparti
+    # 70 / 30 ; aucune autre pièce classée dans ces activités (la facture du traiteur et le modèle de CPT-27 sont retirés) ;
+    # aucun budget « Charges de novembre 2026 » (créé à l'écran, supprimé ici avec ses révisions)
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    budgets = odoo('budget.analytic', 'search', [['name', 'ilike', 'Charges de novembre 2026']], context=fr)
+    if budgets:
+        odoo('budget.analytic', 'write', budgets, {'state': 'draft'}, context=fr)
+        odoo('budget.analytic', 'unlink', sorted(budgets, reverse=True), context=fr)
+    plan = odoo('account.analytic.plan', 'search', [['name', '=', 'Activités']], context=fr)
+    if not plan:
+        plan = [odoo('account.analytic.plan', 'create', {'name': 'Activités'}, context=fr)]
+    comptes = {}
+    for nom in ('Boutique', 'Traiteur'):
+        c = odoo('account.analytic.account', 'search', [['name', '=', nom], ['plan_id', '=', plan[0]]], context=fr)
+        comptes[nom] = c[0] if c else odoo('account.analytic.account', 'create', {'name': nom, 'plan_id': plan[0]}, context=fr)
+    modeles = odoo('account.analytic.distribution.model', 'search', [], context=fr)
+    a_retirer = [mdl['id'] for mdl in odoo('account.analytic.distribution.model', 'read', modeles, ['analytic_distribution'], context=fr)
+                 if any(str(c) in (mdl['analytic_distribution'] or {}) for c in comptes.values())]
+    if a_retirer:
+        odoo('account.analytic.distribution.model', 'unlink', a_retirer, context=fr)
+    lignes = odoo('account.move.line', 'search_read', [['distribution_analytic_account_ids', 'in', list(comptes.values())]], fields=['move_id'], context=fr)
+    proprio = odoo('res.partner', 'search', [['name', '=', 'SCI Corniche Ouest']], context=fr)
+    loyer = odoo('account.move', 'search', [['partner_id', 'in', proprio], ['ref', '=', 'Loyer novembre 2026']], context=fr) if proprio else []
+    for m in sorted({l['move_id'][0] for l in lignes} - set(loyer), reverse=True):
+        if odoo('account.move', 'read', [m], ['state'], context=fr)[0]['state'] != 'draft':
+            odoo('account.move', 'button_draft', [m], context=fr)
+        odoo('account.move', 'unlink', [m], context=fr)
+    if not loyer:
+        cpt_27_loyer = cpt_27  # recrée le loyer en brouillon (et nettoie) puis on recrée la dimension ci-dessous
+        cpt_27_loyer()
+        return cpt_28()
+    m = loyer[0]
+    if odoo('account.move', 'read', [m], ['state'], context=fr)[0]['state'] != 'draft':
+        odoo('account.move', 'button_draft', [m], context=fr)
+    ligne = odoo('account.move.line', 'search', [['move_id', '=', m], ['display_type', '=', 'product']], context=fr)
+    odoo('account.move.line', 'write', ligne, {'analytic_distribution': {str(comptes['Boutique']): 70, str(comptes['Traiteur']): 30}}, context=fr)
+    odoo('account.move', 'action_post', [m], context=fr)
+    return comptes, len(budgets)
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19, 'CPT-20': cpt_20, 'CPT-21': cpt_21, 'CPT-22': cpt_22, 'CPT-23': cpt_23, 'CPT-24': cpt_24, 'CPT-25': cpt_25, 'CPT-26': cpt_26, 'CPT-27': cpt_27}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19, 'CPT-20': cpt_20, 'CPT-21': cpt_21, 'CPT-22': cpt_22, 'CPT-23': cpt_23, 'CPT-24': cpt_24, 'CPT-25': cpt_25, 'CPT-26': cpt_26, 'CPT-27': cpt_27, 'CPT-28': cpt_28}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''
