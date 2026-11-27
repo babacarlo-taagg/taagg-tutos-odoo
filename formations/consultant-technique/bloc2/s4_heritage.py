@@ -52,6 +52,17 @@ objectif="ajouter des champs à un modèle d'Odoo (les contacts) sans modifier s
 intro="Les livreurs de Baobab sont des contacts Odoo : ils ont un nom, un téléphone, une adresse. Il manque juste une case « Livreur Baobab ». On ne touche <b>jamais</b> au code d'Odoo : on le complète depuis notre module. C'est l'<b>héritage</b>, la compétence n° 1 du développeur Odoo.",
 corps=[
 ("code", PARTENAIRE, "models/res_partner.py"),
+("p", "Maintenant que les contacts savent dire qui est livreur, on complète la course : le champ livreur ne propose que les livreurs, et la contrainte de la leçon 2.2.8 refuse un contact qui n'en est pas un."),
+("code", """livreur_id = fields.Many2one(
+    "res.partner", string="Livreur", tracking=True,
+    domain=[("est_livreur", "=", True)],     # ne propose que les livreurs
+)
+
+@api.constrains("livreur_id")
+def _check_livreur(self):
+    for course in self:
+        if course.livreur_id and not course.livreur_id.est_livreur:
+            raise ValidationError(self.env._("%s n'est pas un livreur.", course.livreur_id.name))""", "models/course.py (compléments)"),
 ("liste", [
   "<code>_inherit = \"res.partner\"</code> <b>sans</b> <code>_name</code> : on complète le modèle des contacts. Pas de nouvelle table : les colonnes sont ajoutées à <code>res_partner</code>.",
   "Tous les modules voient les nouveaux champs : un contact a maintenant <code>est_livreur</code>, partout dans Odoo.",
@@ -68,7 +79,7 @@ corps=[
 ("version", "Ce mécanisme est identique d'Odoo 8 à Odoo 20. C'est aussi lui qu'Odoo utilise en interne : le module Ventes ajoute des champs aux contacts exactement de cette façon."),
 ],
 exercice=[
-("p", "Crée <code>models/res_partner.py</code> (et l'import), mets à jour. Dans le terminal d'Odoo, coche <code>est_livreur</code> sur un contact, puis crée une course en le choisissant comme livreur. Essaie ensuite avec un contact qui n'est pas livreur : quelle erreur ? (Indice : la contrainte de la leçon 2.2.8.)"),
+("p", "Crée <code>models/res_partner.py</code> (et l'import), mets à jour. Dans le terminal d'Odoo, coche <code>est_livreur</code> sur un contact, puis crée une course en le choisissant comme livreur. Ajoute le <code>domain</code> et la contrainte <code>_check_livreur</code> à la course. Essaie ensuite avec un contact qui n'est pas livreur : quelle erreur ?"),
 ],
 retenir=[
   "<code>_inherit</code> sans <code>_name</code> : on complète un modèle existant.",
@@ -254,7 +265,21 @@ corps=[
   "Le client de la course est l'adresse de livraison de la commande (<code>partner_shipping_id</code>).",
   "On renvoie <code>resultat</code> : Odoo peut en avoir besoin (ouvrir une fenêtre, par exemple).",
 ]),
-("p", "Pour le champ « Zone de livraison » dans le devis, un petit fichier d'héritage de vue est fourni (expliqué au Bloc 3)."),
+("p", "Pour le champ « Zone de livraison » dans le devis, un petit fichier d'héritage de vue est fourni (expliqué au Bloc 3) :"),
+("code", """<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Fourni au Bloc 2 : l'héritage de vues (xpath) est expliqué au Bloc 3. -->
+    <record id="view_order_form_baobab" model="ir.ui.view">
+        <field name="name">sale.order.form.baobab</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="zone_livraison_id"/>
+            </field>
+        </field>
+    </record>
+</odoo>""", "baobab_livraison_vente/views/sale_order_views.xml (fichier fourni)"),
 ("attention", "Lire le code avant de surcharger", "Avant de surcharger une méthode d'Odoo, lis-la dans le code source (<code>addons/sale/models/sale_order.py</code>) : que renvoie-t-elle ? Que fait-elle sur plusieurs commandes ? On ne surcharge bien que ce qu'on a compris."),
 ],
 exercice=[

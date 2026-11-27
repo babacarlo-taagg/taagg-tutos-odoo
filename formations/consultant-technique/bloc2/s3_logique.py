@@ -51,7 +51,7 @@ corps=[
   "<code>UserError</code> affiche un message clair à l'utilisateur et annule tout ce que la méthode avait commencé.",
 ]),
 ("h", "Les boutons dans l'écran (fichier fourni)"),
-("p", "Les écrans s'apprennent au Bloc 3. Pour l'instant, recopie le fichier <code>views/baobab_course_views.xml</code> fourni dans le dossier de l'exercice. Voici sa partie haute :"),
+("p", "Les écrans s'apprennent au Bloc 3. Pour l'instant, recopie le fichier <code>views/baobab_course_views.xml</code> donné en entier à la fin de cette fiche. Voici sa partie haute :"),
 ("code", BOUTONS, "views/baobab_course_views.xml (extrait)"),
 ("liste", [
   "<code>name=\"action_demarrer\"</code> + <code>type=\"object\"</code> : le bouton appelle la méthode du même nom.",
@@ -62,7 +62,59 @@ corps=[
 ("version", "En Odoo 17 et suivants, on écrit directement <code>invisible=\"state != 'brouillon'\"</code>. En Odoo 16 et avant, on utilisait <code>attrs=\"{'invisible': [...]}\"</code> ou <code>states=\"brouillon\"</code> : ces attributs ne sont plus acceptés."),
 ],
 exercice=[
-("p", "Ajoute les trois méthodes et le fichier d'écran fourni. À l'écran : crée une course sans livreur et clique sur « Démarrer » (message attendu) ; choisis Ibou comme livreur, démarre, puis livre. Vérifie que « Livrée le » est rempli et que le bouton « Annuler » a disparu."),
+("p", "Ajoute les trois méthodes et le fichier d'écran fourni. À l'écran : crée une course sans livreur et clique sur « Démarrer » (message attendu) ; choisis un contact comme livreur, démarre, puis livre. Vérifie que « Livrée le » est rempli et que le bouton « Annuler » a disparu."),
+("code", """<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Fourni au Bloc 2 : recopie ce fichier tel quel. On apprend à écrire les vues au Bloc 3. -->
+    <record id="view_baobab_course_list" model="ir.ui.view">
+        <field name="name">baobab.course.list</field>
+        <field name="model">baobab.course</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="date_course"/>
+                <field name="client_id"/>
+                <field name="zone_id"/>
+                <field name="livreur_id"/>
+                <field name="prix" sum="Total"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_baobab_course_form" model="ir.ui.view">
+        <field name="name">baobab.course.form</field>
+        <field name="model">baobab.course</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_demarrer" type="object" string="Démarrer" class="btn-primary" invisible="state != 'brouillon'"/>
+                    <button name="action_livrer" type="object" string="Livrée" class="btn-primary" invisible="state != 'en_route'"/>
+                    <button name="action_annuler" type="object" string="Annuler" invisible="state in ('livree', 'annulee')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="brouillon,en_route,livree"/>
+                </header>
+                <sheet>
+                    <h1><field name="name"/></h1>
+                    <group>
+                        <group>
+                            <field name="client_id"/>
+                            <field name="zone_id"/>
+                            <field name="poids"/>
+                            <field name="prix"/>
+                        </group>
+                        <group>
+                            <field name="date_course"/>
+                            <field name="livreur_id"/>
+                            <field name="etiquette_ids" widget="many2many_tags"/>
+                            <field name="date_livraison"/>
+                        </group>
+                    </group>
+                    <field name="consigne" placeholder="Consigne pour le livreur…"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>""", "views/baobab_course_views.xml (fichier fourni ; ajoute-le dans data du manifeste, avant baobab_menus.xml)"),
 ],
 retenir=[
   "Un statut = un champ <code>Selection</code> ; une étape = une méthode <code>action_…</code>.",
@@ -148,7 +200,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 2.3.3
-dict(code="2.3.3", id=None, seq=33, minutes=10,
+dict(code="2.3.4", id=None, seq=34, minutes=10,
 titre="Séquences et actions planifiées",
 description="Numéroter les courses BL/2026/0001 et relancer chaque jour les courses en retard.",
 html=fiche(
@@ -227,7 +279,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 2.3.4
-dict(code="2.3.4", id=2723, seq=34, minutes=10,
+dict(code="2.3.5", id=2723, seq=35, minutes=10,
 titre="Contexte, utilisateur, société et sudo",
 description="Savoir qui agit, dans quelle langue, pour quelle société, et avec quels droits.",
 html=fiche(
@@ -299,7 +351,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 2.3.5
-dict(code="2.3.5", id=2724, seq=35, minutes=10,
+dict(code="2.3.3", id=2724, seq=33, minutes=10,
 titre="Discussion, activités et suivi des changements",
 description="Ajouter le chatter aux courses : messages, activités et historique des changements de statut.",
 html=fiche(
@@ -327,7 +379,7 @@ corps=[
         ...
     </sheet>
     <chatter/>
-</form>""", "views/baobab_course_views.xml (déjà présent dans le fichier fourni)"),
+</form>""", "views/baobab_course_views.xml : ajoute la ligne &lt;chatter/&gt; juste après &lt;/sheet&gt;"),
 ("version", "<code>&lt;chatter/&gt;</code> s'écrit ainsi depuis Odoo 18. En Odoo 17 et avant, on écrivait <code>&lt;div class=\"oe_chatter\"&gt;</code> avec trois champs (<code>message_follower_ids</code>, <code>activity_ids</code>, <code>message_ids</code>). Tu le verras encore dans de vieux modules."),
 ("h", "3. Écrire dans le fil depuis le code"),
 ("code", """course.message_post(body=self.env._("Le client a appelé : livraison après 17 h."))
@@ -336,11 +388,11 @@ course.activity_schedule(
     summary=self.env._("Course en retard"),
     note=self.env._("Appelle le livreur %s.", course.livreur_id.name or ""),
 )""", "Poster un message, créer une activité"),
-("p", "C'est exactement ce que fait l'action planifiée de la leçon précédente : sur une course en retard, l'activité « Course en retard » apparaît dans le fil, et l'utilisateur la voit dans son menu d'activités."),
+("p", "C'est exactement ce que fera l'action planifiée de la leçon suivante : sur une course en retard, l'activité « Course en retard » apparaît dans le fil, et l'utilisateur la voit dans son menu d'activités."),
 ("astuce", "Ne suis pas tout", "Mets <code>tracking=True</code> sur les champs importants pour le métier (statut, client, livreur), pas sur tous : un fil rempli de petits changements devient illisible."),
 ],
 exercice=[
-("p", "Ajoute l'héritage, <code>mail</code> dans les dépendances et <code>tracking=True</code> sur le statut, le client et le livreur. Mets à jour. Démarre une course : le fil affiche le changement de statut. Écris un message, puis programme une activité « Appeler le client » pour demain."),
+("p", "Ajoute l'héritage, <code>mail</code> dans les dépendances, <code>tracking=True</code> sur le statut, le client et le livreur, et la ligne <code>&lt;chatter/&gt;</code> dans le formulaire. Mets à jour. Démarre une course : le fil affiche le changement de statut. Écris un message, puis programme une activité « Appeler le client » pour demain."),
 ],
 retenir=[
   "<code>_inherit = [\"mail.thread\", \"mail.activity.mixin\"]</code> + dépendance <code>mail</code>.",

@@ -166,10 +166,7 @@ corps=[
 ("h", "Many2one : « plusieurs courses → un client »"),
 ("code", """client_id = fields.Many2one("res.partner", string="Client", required=True)
 zone_id = fields.Many2one("baobab.zone", string="Zone", required=True)
-livreur_id = fields.Many2one(
-    "res.partner", string="Livreur",
-    domain=[("est_livreur", "=", True)],     # ne propose que les livreurs (leçon sur l'héritage)
-)""", "models/course.py"),
+livreur_id = fields.Many2one("res.partner", string="Livreur")   # complété en 2.4.1""", "models/course.py"),
 ("p", "Dans la base, c'est une colonne <code>client_id</code> qui contient l'<code>id</code> du client, avec une clé étrangère. Par convention, le nom finit par <code>_id</code>."),
 ("h", "One2many : « une zone → plusieurs courses »"),
 ("code", """course_ids = fields.One2many("baobab.course", "zone_id", string="Courses")""", "models/zone.py"),
@@ -199,7 +196,7 @@ etiquette_ids = fields.Many2many("baobab.etiquette", string="Étiquettes")""", "
 ("astuce", "Command", "Pour modifier un One2many ou un Many2many, on utilise <code>Command</code> : <code>Command.link(id)</code> ajoute, <code>Command.unlink(id)</code> retire, <code>Command.set([ids])</code> remplace tout, <code>Command.create({...})</code> crée et relie. Dans un fichier Python : <code>from odoo.fields import Command</code>."),
 ],
 exercice=[
-("p", "Ajoute le modèle <code>baobab.etiquette</code> (nouveau fichier, import, mise à jour), puis les champs <code>client_id</code>, <code>zone_id</code> et <code>etiquette_ids</code> à la course, et <code>course_ids</code> à la zone. Dans le terminal d'Odoo, crée une course pour Mermoz avec l'étiquette Fragile, puis affiche <code>zone.course_ids</code> pour la zone Mermoz."),
+("p", "Ajoute le modèle <code>baobab.etiquette</code> (nouveau fichier, import, mise à jour), puis les champs <code>client_id</code>, <code>zone_id</code>, <code>livreur_id</code> et <code>etiquette_ids</code> à la course, et <code>course_ids</code> à la zone. Dans le terminal d'Odoo, crée une course pour Mermoz avec l'étiquette Fragile, puis affiche <code>zone.course_ids</code> pour la zone Mermoz."),
 ],
 retenir=[
   "Many2one (<code>…_id</code>) : une colonne qui pointe vers une autre fiche.",
@@ -255,7 +252,24 @@ access_baobab_course_user,Courses : utilisateurs,baobab.course,base.group_user,c
 ("astuce", "Pour la suite", "Ici, tout le monde a tous les droits sur les courses. Au Bloc 4, on créera les groupes Livreur et Responsable, et un livreur ne verra que ses propres courses (colonne <code>domain</code>)."),
 ],
 exercice=[
-("p", "Crée <code>security/ir.access.csv</code> pour tes trois modèles, ajoute-le au manifeste et mets à jour. Ajoute aussi les deux fichiers d'écrans fournis (voir la leçon « Statuts et boutons d'action »). Connecte-toi en admin : le menu Baobab Livraison apparaît et tu peux créer une zone à l'écran."),
+("p", "Crée <code>security/ir.access.csv</code> pour tes trois modèles, ajoute-le au manifeste et mets à jour. Ajoute aussi le fichier des menus ci-dessous (après <code>ir.access.csv</code> dans <code>data</code>). Connecte-toi en admin : le menu Baobab Livraison apparaît et tu peux créer une zone à l'écran. Odoo fabrique tout seul des écrans simples ; les vrais écrans arrivent à la leçon « Statuts et boutons d'action »."),
+("code", """<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Fourni au Bloc 2 sans explication détaillée : les vues, actions et menus sont l'objet du Bloc 3. -->
+    <record id="action_baobab_course" model="ir.actions.act_window">
+        <field name="name">Courses</field>
+        <field name="res_model">baobab.course</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_baobab_zone" model="ir.actions.act_window">
+        <field name="name">Zones</field>
+        <field name="res_model">baobab.zone</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_baobab_root" name="Baobab Livraison" sequence="10"/>
+    <menuitem id="menu_baobab_course" name="Courses" parent="menu_baobab_root" action="action_baobab_course" sequence="10"/>
+    <menuitem id="menu_baobab_zone" name="Zones" parent="menu_baobab_root" action="action_baobab_zone" sequence="20"/>
+</odoo>""", "views/baobab_menus.xml (fichier fourni : les menus s'apprennent au Bloc 3)"),
 ],
 retenir=[
   "Dans Odoo, tout est interdit par défaut : un modèle sans droit est invisible.",
@@ -526,7 +540,7 @@ currency_id = fields.Many2one("res.currency", default=lambda self: self.env.comp
 ("astuce", "self.env._(…)", "Les messages affichés à l'utilisateur passent par <code>self.env._(\"…\")</code> : ils pourront être traduits. C'est la forme utilisée dans le code d'Odoo 20."),
 ],
 exercice=[
-("p", "Ajoute les trois <code>models.Constraint</code> et la contrainte sur le livreur. Mets à jour, puis essaie à l'écran : une zone en double, un tarif négatif, un poids à 0. Note les messages. Puis essaie dans le terminal d'Odoo de créer une course avec <code>poids=-2</code> : quelle erreur obtiens-tu ?"),
+("p", "Ajoute les trois <code>models.Constraint</code> (la contrainte sur le livreur viendra à la leçon 2.4.1, quand les contacts sauront dire qui est livreur). Mets à jour, puis essaie à l'écran : une zone en double, un tarif négatif, un poids à 0. Note les messages. Puis essaie dans le terminal d'Odoo de créer une course avec <code>poids=-2</code> : quelle erreur obtiens-tu ?"),
 ],
 retenir=[
   "<code>models.Constraint(\"CHECK(...)\" ou \"UNIQUE(...)\", \"message\")</code> : règle vérifiée par PostgreSQL.",
