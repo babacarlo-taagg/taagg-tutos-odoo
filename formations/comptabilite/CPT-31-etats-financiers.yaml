@@ -102,11 +102,15 @@ etapes:
   # ------------------------------------------------------------------ partie 3 : flux et export
   - partie: "3. Trésorerie et export"
     texte: >
-      Le menu Analyse propose aussi le tableau des flux de trésorerie : d'où vient l'argent, et où il est allé.
+      Le menu Analyse propose aussi le tableau des flux de trésorerie : d'où vient l'argent, et où il est allé. Choisissez la période,
+      ici l'année.
     actions:
       - ouvrir_menu: Analyse
       - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Flux de trésorerie")'
       - attendre: 3
+      - cliquer: '.o_control_panel button:has(.fa-calendar)'
+      - cliquer: '.o-dropdown--menu :text-is("Année")'
+      - attendre: 2.5
       - surligner: '.o_content table'
         duree: 3
   - texte: >
