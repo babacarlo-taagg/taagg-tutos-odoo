@@ -49,7 +49,8 @@ etapes:
     actions:
       - surligner: '.o_control_panel button:has(.fa-calendar)'
         duree: 2.5
-  - texte: >
+  - sous_titres: haut
+    texte: >
       Descendez jusqu'en bas. Le total des débits est égal au total des crédits : c'est la première vérification d'une comptabilité saine.
     actions:
       - defiler: 3000
