@@ -1,0 +1,117 @@
+# Consultant technique Odoo — Bloc 2, leçon 2.1.3 « Créer le module baobab_livraison et l'installer » (fiche 2716).
+# Mode terminal. Les dossiers et fichiers sont créés pour de vrai (executer) dans le dossier d'essai. L'installation
+# n'est pas lancée pendant le tournage : sa sortie est copiée d'une vraie installation sur Odoo 20 (28/11/2026,
+# base baobab_dev, module tel qu'écrit ici). « … » = lignes coupées. Le ls -R est celui du vrai dossier avant installation.
+titre: Créer ton premier module Odoo
+sous_titre: Consultant technique Odoo — Bloc 2
+mode: terminal
+terminal: {utilisateur: awa, machine: baobab}
+voix: {moteur: elevenlabs, vitesse: 1.0}
+prononciation:
+  TAAGG: Tag
+  « odoo-bin »: « odoo bine »
+  « addons_path »: « addonce path »
+  « -i »: « moins i »
+  « __manifest__ »: « manifeste »
+  « __init__ »: « init »
+  LGPL: L G P L
+fin: {message: À toi de jouer !, lien: taagg-school.com}
+
+etapes:
+  - chapitre: Le dossier du module
+    texte: >
+      Un module Odoo, c'est un dossier rangé d'une façon précise. On crée celui de Baobab Livraison,
+      avec son sous-dossier models.
+    actions:
+      - commande: mkdir -p baobab/addons/baobab_livraison/models
+        executer: oui
+      - commande: cd baobab/addons/baobab_livraison
+        executer: oui
+      - commande: touch __init__.py models/__init__.py
+        executer: oui
+
+  - texte: >
+      Le fichier « __init__ » du module importe le dossier models. Une seule ligne.
+    actions:
+      - commande: echo "from . import models" > __init__.py
+        executer: oui
+      - commande: cat __init__.py
+        executer: oui
+
+  - chapitre: Le manifeste
+    texte: >
+      Maintenant, la carte d'identité du module : le fichier « __manifest__ ». Son nom, sa version qui commence par 20,
+      son auteur, sa licence, et ses dépendances : pour l'instant, seulement base.
+    actions:
+      - commande: nano __manifest__.py
+      - editeur:
+          fichier: __manifest__.py
+          contenu: |
+            {
+                "name": "Baobab Livraison",
+                "summary": "Courses de livraison à moto : zones, tarifs, livreurs",
+                "version": "20.0.1.0.0",
+                "category": "Services",
+                "author": "Awa Diop",
+                "license": "LGPL-3",
+                "depends": ["base"],
+                "data": [],
+                "application": True,
+            }
+          enregistrer: oui
+          delai: 25
+
+  - texte: "On vérifie le contenu du dossier : le module est prêt."
+    actions:
+      - fermer_editeur: oui
+      - commande: ls -R
+        sortie: |
+          .:
+          __init__.py
+          __manifest__.py
+          models
+
+          ./models:
+          __init__.py
+
+  - chapitre: Dire à Odoo où chercher
+    texte: >
+      Odoo ne cherche les modules que dans les dossiers listés par « addons_path », dans le fichier de configuration.
+      On y ajoute notre dossier addons, après une virgule.
+    actions:
+      - commande: grep addons_path ~/baobab/odoo.conf
+        sortie: addons_path = /home/awa/odoo/addons,/home/awa/baobab/addons
+      - surligner_ligne: /home/awa/baobab/addons
+        duree: 3
+
+  - chapitre: Installer
+    texte: >
+      On installe avec « odoo-bin », l'option « -i » suivie du nom du module, et stop after init pour qu'Odoo s'arrête à la fin.
+    actions:
+      - commande: cd ~/odoo && source ~/venv-odoo/bin/activate
+      - invite: (venv-odoo) awa@baobab:~/odoo$
+      - commande: python3 odoo-bin -c ~/baobab/odoo.conf -i baobab_livraison --stop-after-init
+        delai: 30
+        sortie: |
+          2026-11-28 07:37:51,704 250 INFO ? odoo: Odoo version 20.0
+          2026-11-28 07:37:51,704 250 INFO ? odoo: Using configuration file at /home/awa/baobab/odoo.conf
+          …
+          2026-11-28 07:38:09,505 250 INFO baobab_dev odoo.modules.loading: loading 18 modules...
+          2026-11-28 07:38:10,108 250 INFO baobab_dev odoo.modules.loading: Loading module baobab_livraison (18/18)
+          2026-11-28 07:38:10,226 250 INFO baobab_dev odoo.modules.loading: Module baobab_livraison loaded in 0.12s, 12 queries (+12 other)
+          2026-11-28 07:38:10,387 250 INFO baobab_dev odoo.modules.loading: Modules loaded.
+          …
+        attente: 1.5
+
+  - texte: >
+      Dans le journal, on cherche la ligne Loading module baobab livraison. Odoo a trouvé notre module et l'a installé.
+    actions:
+      - surligner_ligne: Loading module baobab_livraison
+        duree: 3.5
+
+  - texte: >
+      Relance Odoo, va dans Applications, retire le filtre et cherche Baobab : ton module est là. Pense aussi à le committer dans Git.
+      À chaque étape du Bloc 2, un commit.
+    actions:
+      - afficher: "→ Applications › retirer le filtre « Applications » › chercher « Baobab »"
+      - attendre: 1.5
