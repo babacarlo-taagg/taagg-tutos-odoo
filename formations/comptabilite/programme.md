@@ -61,7 +61,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 | CPT-25 | Charges et produits constatés d'avance **[E]** | étaler une charge ou un produit sur plusieurs mois | Écritures de régularisation | 🎙 3:24 |
 | CPT-26 | Factures à recevoir et à émettre **[E]** | régularisations de fin de période liées aux achats et ventes | Révision › Achats / Ventes | 🎙 3:25 |
 | CPT-27 | Comptabilité analytique | dimensions, comptes analytiques, modèles de répartition | Comptabilité analytique | 🎙 4:14 |
-| CPT-28 | Les budgets **[E]** | créer un budget, suivre le réalisé, rapport de budget | Budget analytique, Rapport de budget | ✎ 3:01 |
+| CPT-28 | Les budgets **[E]** | créer un budget, suivre le réalisé, rapport de budget | Budget analytique, Rapport de budget | 🎙 3:01 |
 
 ## Parcours 6 — Fiscalité, clôture et rapports
 
@@ -193,3 +193,4 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 - **CPT-27** (26 novembre 2026) : brouillon muet, 4 min 19 s, 19 étapes. Dimension « Activités » (Boutique, Traiteur) créée à l'écran ; loyer de SCI Corniche Ouest (450 000 F, 622200) réparti 70 / 30 dans la fenêtre de répartition (.analytic_distribution_popup : colonne de la nouvelle dimension = x_planN_id, N change à chaque création → nouvelle action tuto.mjs `taper_dans`) ; modèle de répartition (liste éditable, enregistrée en cliquant à côté) partenaire Traiteur → 100 % Traiteur ; facture de 2 fraisiers au traiteur ; Analyse › Rapport Analytique (tableau croisé : clic sur « Total » puis « Activités »). etat-depart.py supprime dimension, comptes, modèle et pièces liées.
 - **CPT-27** (27 novembre 2026) : version finale avec voix, 4 min 14 s, −16 LUFS ; « euh » régénérés (étapes 3, 11, 15). Conteneur renouvelé ce jour : le .env (non versionné) est à recréer à chaque nouvelle machine (ODOO_BASE, ELEVENLABS_API_KEY, ELEVENLABS_VOICE_ID, CHROMIUM_CHEMIN=/opt/pw-browsers/chromium car le Playwright du dépôt ne trouve pas le navigateur du conteneur) ; tant que la variable d'environnement cloud garde l'ancienne clé, lancer avec `env -u ELEVENLABS_API_KEY`.
 - **CPT-28** (27 novembre 2026) : brouillon muet, environ 3 min, 15 étapes. Odoo 19 : budget analytique (une ligne par compte analytique, colonne de la dimension = x_planN_id), bouton « Ouvrir » (action_budget_confirm). État de départ : dimension Activités et loyer de novembre réparti 70 / 30 comptabilisé → réalisé Boutique 315 000 F (au-dessus des 300 000 F budgétés), Traiteur 135 000 F (sous les 150 000 F). Colonne « Théorique » dépendante du jour : non citée. Analyse › Rapport de budget (tableau croisé budget / engagé / réalisé).
+- **CPT-28** (28 novembre 2026) : version finale avec voix, 3 min 01 s, −16 LUFS, aucune piste à refaire. Parcours 5 terminé.
