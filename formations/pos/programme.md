@@ -19,7 +19,7 @@ Avancement : ☐ à écrire · 📝 scénario écrit · ✎ brouillon muet OK ·
 
 | Code | Capsule | Ce qu'on apprend | Écrans | Fiches liées | État |
 |---|---|---|---|---|---|
-| POS-01 | Créer la caisse et ses modes de paiement | le point de vente « Comptoir Médina » ; les modes Espèces, Wave, Orange Money, chacun relié à **son** journal ; les réglages utiles (taxes, connexion des employés, écart maximum autorisé) | Point de Vente › Configuration | 1.2, 1.8 | ✎ 3:34 (brouillon muet le 28/11) |
+| POS-01 | Créer la caisse et ses modes de paiement | le point de vente « Comptoir Médina » ; les modes Espèces, Wave, Orange Money, chacun relié à **son** journal ; les réglages utiles (taxes, connexion des employés, écart maximum autorisé) | Point de Vente › Configuration | 1.2, 1.8 | 🎙 3:29 (voix OK le 28/11, à publier) |
 | POS-02 | Préparer les produits pour la caisse | la case « Disponible dans le PdV » ; 3 catégories de caisse (Boissons, Pâtisseries, Snacks) ; la taxe « 18 % TTC » ; le suivi du stock pour les jus seulement ; vérifier dans la caisse | Ventes › Produits, la caisse | 1.2 | ☐ |
 | POS-03 | Une matinée de caisse : ouvrir et encaisser | l'ouverture avec un fond de caisse de 25 000 F ; une vente en espèces et la monnaie rendue ; un paiement partagé espèces + Wave ; une remise de 10 % sur une ligne ; une sortie d'espèces de 2 000 F pour les sachets | la caisse | 1.5, 1.6 | ☐ |
 | POS-04 | Retour, facture et fermeture de la caisse | rembourser un jus depuis la vente d'origine ; une facture pour un client professionnel ; fermer la caisse : comptage, écart de −500 F expliqué, clôture | la caisse, Point de Vente › Sessions | 1.5, 1.6 | ☐ |
@@ -69,5 +69,5 @@ restaurant installé ni d'imprimante sur la base.
 
 ## Crédit de voix
 
-Compte de secours : à vérifier avant la première voix finale. 6 capsules ≈ 19 000 caractères, plus les reprises.
+Compte « Babacar LO » (voix IPPenh…, clé fournie le 28/11, à supprimer après la formation) : 84 811 caractères avant POS-01. 6 capsules ≈ 19 000 caractères, plus les reprises.
 Avant chaque voix finale : crédit vérifié, consommation annoncée, accord de Babacar (« c bon on peut générer »).
