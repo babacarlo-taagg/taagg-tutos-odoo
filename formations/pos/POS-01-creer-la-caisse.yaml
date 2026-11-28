@@ -1,0 +1,189 @@
+# POS-01 · Créer la caisse et ses modes de paiement
+# État de départ (`python3 formations/pos/etat-depart.py POS-01 --oui`) : aucun point de vente, aucun mode de paiement ;
+#   les journaux de banque « Wave Comptoir » et « Orange Money Comptoir » existent (préparés par l'API, comme le ferait
+#   le comptable). Le compte « Formateur TAAGG » a les droits Point de Vente / Administrateur.
+# Ce que la capsule crée : le point de vente « Comptoir Médina » (Odoo ajoute alors tout seul les journaux « Point de
+#   Vente » et « Espèces » et les modes Espèces, Carte, Compte client), puis les modes Wave et Orange Money.
+#   Les cartes « Choisissez votre magasin » de l'écran d'accueil ne sont PAS cliquées : elles chargent des produits
+#   d'exemple dans la base partagée.
+titre: "Créer la caisse et ses modes de paiement"
+sous_titre: Formation Point de Vente Odoo · POS-01
+depart: /odoo/point-of-sale
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+fin:
+  message: "Prochaine capsule : préparer les produits pour la caisse"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour. Maïmouna ouvre un comptoir de vente dans sa pâtisserie de la Médina. Ses clients paient en espèces,
+      par Wave et par Orange Money, et elle veut savoir chaque soir où est passé chaque franc.
+    actions:
+      - attendre: 1
+  - texte: >
+      Dans cette capsule, nous créons sa caisse dans Odoo, avec un mode de paiement pour chaque moyen réel, chacun
+      relié au bon journal.
+    actions:
+      - attendre: 1
+  - texte: >
+      Odoo propose ici des modèles de magasin. Ils sont pratiques pour une démonstration, mais ils ajoutent des
+      produits d'exemple. Sur la base d'un vrai client, on passe par la configuration.
+    actions:
+      - surligner: '.o_action_manager'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 1 : le point de vente
+  - partie: "1. Créer le point de vente"
+    texte: "Menu Configuration, Point de vente, puis Nouveau."
+    actions:
+      - ouvrir_menu: Configuration
+      - attendre: 0.8
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Point de vente")'
+      - attendre: 1
+      - bouton: Nouveau
+      - attendre: 1
+  - texte: >
+      Un nom que les vendeuses reconnaissent tout de suite : Comptoir Médina. Enregistrez.
+    actions:
+      - champ: name
+        taper: Comptoir Médina
+      - enregistrer: oui
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 2 : les modes de paiement
+  - partie: "2. Un mode de paiement par moyen réel"
+    texte: >
+      Allons voir les modes de paiement. Odoo en a créé trois tout seul : Espèces, avec son journal de caisse,
+      Carte, et Compte client.
+    actions:
+      - ouvrir_menu: Configuration
+      - attendre: 0.8
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Modes de paiement")'
+      - attendre: 1.5
+      - surligner: '.o_list_renderer'
+        duree: 3
+  - texte: >
+      Ajoutons Wave. Le journal, c'est Wave Comptoir : le compte de banque que le comptable a créé pour le compte
+      marchand Wave de la boutique.
+    actions:
+      - bouton: Nouveau
+      - attendre: 1
+      - champ: name
+        taper: Wave
+      - choisir: {champ: journal_id, valeur: Wave Comptoir}
+      - attendre: 0.5
+      - surligner_champ: journal_id
+        duree: 2
+      - enregistrer: oui
+      - attendre: 0.8
+  - texte: "Même chose pour Orange Money, avec son propre journal."
+    actions:
+      - bouton: Nouveau
+      - attendre: 1
+      - champ: name
+        taper: Orange Money
+      - choisir: {champ: journal_id, valeur: Orange Money Comptoir}
+      - attendre: 0.5
+      - enregistrer: oui
+      - attendre: 0.8
+  - texte: >
+      Un journal par opérateur : c'est ce qui permettra, plus tard, de comparer la caisse avec chaque relevé.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 3 : les réglages de la caisse
+  - partie: "3. Les réglages de la caisse"
+    texte: >
+      Dans Configuration, Paramètres, la caisse Comptoir Médina est sélectionnée en haut. Ses modes de paiement :
+      retirons Carte et Compte client, Maïmouna n'a pas de terminal de carte et ne fait pas crédit au comptoir.
+    actions:
+      - ouvrir_menu: Configuration
+      - attendre: 0.8
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Paramètres")'
+      - attendre: 2
+      - surligner_champ: pos_config_id
+        duree: 1.5
+      - cliquer: '.o_field_widget[name="pos_payment_method_ids"] .o_tag:has-text("Carte") .o_delete'
+      - attendre: 0.5
+      - cliquer: '.o_field_widget[name="pos_payment_method_ids"] .o_tag:has-text("Compte client") .o_delete'
+      - attendre: 0.5
+  - texte: "Et ajoutons Wave et Orange Money."
+    actions:
+      - choisir: {champ: pos_payment_method_ids, valeur: Wave}
+      - attendre: 0.5
+      - choisir: {champ: pos_payment_method_ids, valeur: Orange Money}
+      - attendre: 0.5
+      - surligner_champ: pos_payment_method_ids
+        duree: 2
+  - texte: >
+      Cochez Fixer l'écart maximum, et mettez mille francs. Au-delà, une vendeuse ne pourra pas fermer la caisse
+      seule : un responsable devra valider.
+    actions:
+      - cocher: pos_set_maximum_difference
+      - attendre: 0.8
+      - champ: pos_amount_authorized_diff
+        taper: "1000"
+      - surligner: '.o_setting_box:has(.o_field_widget[name="pos_set_maximum_difference"])'
+        duree: 2.5
+  - texte: >
+      Enfin, cochez Se connecter avec Employés : chaque vendeuse ouvrira la caisse sous son nom, avec son code.
+      Le soir, on saura qui a encaissé quoi. Enregistrez.
+    actions:
+      - defiler: 350
+      - attendre: 0.5
+      - cocher: pos_module_pos_hr
+      - attendre: 0.5
+      - survoler: '.o_control_panel'
+      - attendre: 0.5
+      - surligner: '.o_setting_box:has(.o_field_widget[name="pos_module_pos_hr"])'
+        duree: 2.5
+      - cliquer: '.o_control_panel button:has-text("Enregistrer")'
+      - attendre: 2.5
+
+  # ------------------------------------------------------------------ partie 4 : prête
+  - partie: "4. La caisse est prête"
+    texte: >
+      Retour au tableau de bord : la carte Comptoir Médina est prête à être ouverte. Nous l'ouvrirons dans la
+      troisième capsule, une fois les produits préparés.
+    actions:
+      - aller: /odoo/point-of-sale
+      - attendre: 1.5
+      - surligner: '.o_kanban_record:has-text("Comptoir Médina")'
+        duree: 3
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : enregistrer un paiement Wave en Espèces. Le soir, le tiroir est
+      toujours en manque, et personne ne comprend pourquoi.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : un seul mode Mobile money pour Wave et Orange Money. Impossible ensuite de comparer avec
+      chaque relevé.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : cliquer sur un modèle de magasin dans la base du client. Il faudra ensuite retirer des
+      dizaines de produits d'exemple.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Un point de vente au nom clair ; un mode de paiement par moyen réel, chacun relié à son journal ;
+      un écart maximum ; et une connexion par vendeuse.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : créez la caisse d'un stand de foire, avec seulement Espèces et Wave. Dans la prochaine
+      capsule, nous préparerons les produits pour la caisse. À tout de suite !
+    actions:
+      - attendre: 1
