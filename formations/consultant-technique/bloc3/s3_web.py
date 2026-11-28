@@ -263,6 +263,7 @@ corps=[
 ("code", PAGE, "baobab_livraison_site/views/suivi_templates.xml"),
 ("p", "<code>website.layout</code> ajoute l'en-tête et le pied de page du site. Le menu « Suivre mon colis » se crée avec une fiche <code>website.menu</code> (url <code>/suivre-mon-colis</code>, parent <code>website.main_menu</code>)."),
 ("attention", "sudo() et données personnelles", "Un visiteur n'a aucun droit sur les courses : on cherche avec <code>sudo()</code>. C'est justifié ici, mais alors <b>c'est toi</b> qui protèges : la page n'affiche que la référence, le statut, la zone et la date, <b>jamais</b> le nom, le téléphone ou l'adresse du client. Un test automatique le vérifie (le nom du client n'apparaît pas dans la page)."),
+("attention", "Une référence se devine", "Les références se suivent : quelqu'un qui connaît BL/2026/0001 peut essayer BL/2026/0002, 0003… et voir le statut des courses des autres. C'est pourquoi la page ne montre rien de personnel. La vraie protection : un <b>code de suivi secret</b> imprimé sur le bordereau et demandé en plus de la référence. C'est une des demandes du travail à rendre."),
 ("p", "Vérifié : <code>bl/2026/0001</code> tapé en minuscules trouve bien BL/2026/0001 (grâce à <code>.upper()</code>) ; une référence inconnue affiche « Aucune course ne porte la référence BL/2026/9999 »."),
 ],
 exercice=[

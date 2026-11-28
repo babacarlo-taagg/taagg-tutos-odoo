@@ -251,6 +251,7 @@ corps=[
   ["Pas d'en-tête ni de pied de page ; journal : <code>--header-html, is not support using unpatched qt</code>", "wkhtmltopdf non patché (celui d'Ubuntu)", "installer 0.12.6.1 « with patched qt »"],
   ["Imprimer plusieurs courses d'un coup : « Tentative de conversion de plusieurs documents dans wkhtmltopdf avec une version non patchée de QT »", "même cause", "même solution (ou imprimer une à une)"],
   ["Des valeurs manquent dans le PDF, sans erreur", "<code>t-esc</code> / <code>t-raw</code> dans le modèle", "remplacer par <code>t-out</code>"],
+  ["Les codes-barres (<code>/report/barcode/…</code>) ne s'affichent pas ; journal : <code>RenderPMError: cannot import desired renderPM backend rlPyCairo</code>", "installation depuis les sources sous Linux : le complément de dessin de reportlab manque (le fichier <code>requirements.txt</code> ne l'installe que sous Windows)", "dans l'environnement virtuel d'Odoo : <code>pip install rl-renderPM==4.0.3</code>, puis redémarrer Odoo (vérifié)"],
 ]),
 ("h", "La méthode"),
 ("liste", [
