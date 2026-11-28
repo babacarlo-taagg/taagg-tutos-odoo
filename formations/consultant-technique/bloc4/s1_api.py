@@ -207,7 +207,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 4.1.2
-dict(code="4.1.2", id=None, seq=12, minutes=10,
+dict(code="4.1.2", id=2943, seq=12, minutes=10,
 titre="Créer une clé d'API et faire un premier appel JSON-2",
 description="Générer une clé d'API dans Odoo 20 et lire les courses depuis un script Python.",
 html=fiche(
@@ -266,7 +266,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 4.1.3
-dict(code="4.1.3", id=None, seq=13, minutes=10,
+dict(code="4.1.3", id=2945, seq=13, minutes=10,
 titre="Créer et modifier des données depuis l'extérieur",
 description="Créer une course, la modifier et appeler une action depuis un autre logiciel, et gérer les refus.",
 html=fiche(
@@ -379,7 +379,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 4.1.5
-dict(code="4.1.5", id=None, seq=15, minutes=10,
+dict(code="4.1.5", id=2948, seq=15, minutes=10,
 titre="Recevoir un webhook",
 description="Recevoir l'avis d'un service extérieur : vérifier la signature, ne pas traiter deux fois le même avis.",
 html=fiche(
@@ -478,7 +478,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 4.1.7
-dict(code="4.1.7", id=None, seq=17, minutes=10,
+dict(code="4.1.7", id=2950, seq=17, minutes=10,
 titre="Envoyer des e-mails automatiques",
 description="Un modèle d'e-mail « Votre colis est livré », envoyé au client dès la livraison.",
 html=fiche(

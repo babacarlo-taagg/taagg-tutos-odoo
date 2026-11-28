@@ -57,6 +57,8 @@ officielle (odoo.com/documentation, pages 19.0 et master) et dans le code Odoo 2
 | Rapports | `report_file` | `report_file` | `report_file` n'existe plus (installation refusée) ; `t-esc`/`t-raw` n'affichent plus rien | essais Odoo 20 |
 | OWL | OWL 2 (`useState`, `static props`) | OWL 2 | **OWL 3.0.0-alpha.50** : `proxy`, `useProps`, `signal`, `this.` dans les modèles ; plus de `useState`/`useRef` | navigateur, Odoo 20 |
 | Portail | carte par héritage de `portal.portal_my_home` | idem | fiches `portal.entry` + `_prepare_portal_counter_values` | code Odoo 20 (module sale) |
+| API : clés et routes | clé d'API | clé d'API | clés à portée (`scope`), `rpc` pour JSON-2 ; non-admin : expiration obligatoire, durée max par groupe (`api_key_duration`) ; routes `auth="bearer"` + `bearer_scope` | essais Odoo 20 |
+| Groupes | `category_id`, `users` | `privilege_id` (`res.groups.privilege`), `user_ids` | idem 19 | code Odoo 20 (sales_team) |
 | Codes-barres (sources, Linux) | — | — | `pip install rl-renderPM==4.0.3` sinon `RenderPMError … rlPyCairo` | essai Odoo 20 |
 
 À vérifier au moment d'écrire les leçons concernées : Odoo.sh, image Docker officielle (moteur PDF et OWL : vérifiés au Bloc 3).
@@ -217,32 +219,32 @@ Objectif : ouvrir le module à l'appli des livreurs et au paiement mobile, sans 
 ### « Les API » (2747)
 | # | Leçon | Objectif | Fiche |
 |---|---|---|---|
-| 4.1.1 | Les API d'Odoo : JSON-2 et les anciennes XML-RPC / JSON-RPC | Choisir la bonne API selon la version | ♻ 1361 |
-| 4.1.2 | Créer une clé d'API et faire un premier appel JSON-2 | Lire les courses depuis un script Python | ＋ 🎥 |
-| 4.1.3 | Créer et modifier des données depuis l'extérieur | Créer une course depuis un autre logiciel | ＋ |
-| 4.1.4 | Créer ses propres adresses web (contrôleurs HTTP) | L'API de l'appli des livreurs | ♻ 2748 |
-| 4.1.5 | Recevoir un webhook | Vérifier la signature, ne pas traiter deux fois | ＋ |
-| 4.1.6 | Appeler un service extérieur : délais, erreurs, nouvelles tentatives | Ne pas bloquer Odoo quand le service est en panne | ♻ 2749 |
-| 4.1.7 | Envoyer des e-mails automatiques | Modèle d'e-mail « Votre colis est livré » | ＋ |
+| 4.1.1 | Les API d'Odoo : JSON-2 et les anciennes XML-RPC / JSON-RPC | Choisir la bonne API selon la version | ✅ 1361 |
+| 4.1.2 | Créer une clé d'API et faire un premier appel JSON-2 | Lire les courses depuis un script Python | ✅ 2943 🎥 |
+| 4.1.3 | Créer et modifier des données depuis l'extérieur | Créer une course depuis un autre logiciel | ✅ 2945 |
+| 4.1.4 | Créer ses propres adresses web (contrôleurs HTTP) | L'API de l'appli des livreurs | ✅ 2748 |
+| 4.1.5 | Recevoir un webhook | Vérifier la signature, ne pas traiter deux fois | ✅ 2948 |
+| 4.1.6 | Appeler un service extérieur : délais, erreurs, nouvelles tentatives | Ne pas bloquer Odoo quand le service est en panne | ✅ 2749 |
+| 4.1.7 | Envoyer des e-mails automatiques | Modèle d'e-mail « Votre colis est livré » | ✅ 2950 |
 
 ### « Le paiement mobile » (2750)
 | # | Leçon | Objectif | Fiche |
 |---|---|---|---|
-| 4.2.1 | Comment marche un paiement mobile | Demande, confirmation, notification, remboursement | ♻ 1363 |
-| 4.2.2 | Exercice : un faux service de paiement | Payer une course et la marquer payée | ♻ 2751 |
-| 4.2.3 | Échecs, doublons et rapprochement | Que faire quand la confirmation n'arrive jamais | ＋ |
+| 4.2.1 | Comment marche un paiement mobile | Demande, confirmation, notification, remboursement | ✅ 1363 |
+| 4.2.2 | Exercice : un faux service de paiement | Payer une course et la marquer payée | ✅ 2751 |
+| 4.2.3 | Échecs, doublons et rapprochement | Que faire quand la confirmation n'arrive jamais | ✅ 2944 |
 
 ### « La sécurité » (2752)
 | # | Leçon | Objectif | Fiche |
 |---|---|---|---|
-| 4.3.1 | Groupes d'utilisateurs | Créer « Livreur » et « Responsable » | ＋ |
-| 4.3.2 | Droits d'accès : `ir.access` (20) et `ir.model.access` (18-19) | Qui peut lire, créer, modifier, supprimer | ♻ 1362 |
-| 4.3.3 | Restreindre par fiche : un livreur ne voit que ses courses | Domaine dans `ir.access` (20) / `ir.rule` (18-19) | ＋ |
-| 4.3.4 | Protéger un champ ou un bouton | `groups="…"` sur les champs et les boutons | ＋ |
-| 4.3.5 | Les erreurs de sécurité les plus courantes | `sudo` mal placé, données exposées par une API, injection SQL | ♻ 2753 |
-| 4.3.6 | Données personnelles : ce que demande la loi sénégalaise | Les obligations du développeur (CDP) | ♻ 2754 |
+| 4.3.1 | Groupes d'utilisateurs | Créer « Livreur » et « Responsable » | ✅ 2946 |
+| 4.3.2 | Droits d'accès : `ir.access` (20) et `ir.model.access` (18-19) | Qui peut lire, créer, modifier, supprimer | ✅ 1362 |
+| 4.3.3 | Restreindre par fiche : un livreur ne voit que ses courses | Domaine dans `ir.access` (20) / `ir.rule` (18-19) | ✅ 2947 |
+| 4.3.4 | Protéger un champ ou un bouton | `groups="…"` sur les champs et les boutons | ✅ 2949 |
+| 4.3.5 | Les erreurs de sécurité les plus courantes | `sudo` mal placé, données exposées par une API, injection SQL | ✅ 2753 |
+| 4.3.6 | Données personnelles : ce que demande la loi sénégalaise | Les obligations du développeur (CDP) | ✅ 2754 |
 
-### « Évaluation » (2755) : ♻ 2756 travail à rendre · ♻ 2757 quiz (20 questions existantes)
+### « Évaluation » (2755) : ✅ 2756 travail à rendre (API démarrer, annulation réservée, surveillance des paiements, durée de conservation, SECURITE.md ; corrigé 26 tests verts, transmis hors dépôt) · ✅ 2757 quiz (20 questions relues : 3 réponses mises à jour pour Odoo 20 — JSON-2, ir.access, pas d'avertissement à l'installation — et 1 commentaire)
 
 ## Bloc 5 — Déploiement (cours 212)
 
@@ -346,6 +348,7 @@ en retard. Dès qu'un compte qui porte la voix clonée fonctionne : `node tuto.m
   (1352, 1353, 1354) sont devenues des articles. ✅ = fiche rédigée (avec son identifiant sur le site).
 - 27/11/2026 — Bloc 2 rédigé : 26 fiches + travail à rendre, en brouillon sur le cours 209 (10 fiches créées, 17 refaites ; les anciennes fiches « document » 1355, 1356, 1357 converties en articles). Tout le code vérifié sur Odoo 20 (module de référence : 8 tests verts ; module pont ventes : 2 tests verts ; état intermédiaire de la leçon 2.3.1 installé). Ordre corrigé : chatter (2.3.3) avant l'action planifiée (2.3.4).
 - 28/11/2026 — Bloc 3 rédigé : 16 fiches + travail à rendre, en brouillon sur le cours 210 (8 créées, 9 refaites ; 1358, 1359, 1360 converties en articles). Modules de référence vérifiés sur Odoo 20 dans Chromium (vues, filtres, glisser-déposer kanban, widget OWL 3, PDF, site, portail) : 12 tests verts. Découvertes Odoo 20 : `report_file` supprimé, `t-esc` muet, OWL 3 sans `useState`, `portal.entry`, panne des codes-barres (rl-renderPM).
+- 28/11/2026 — Bloc 4 rédigé : 16 fiches + travail à rendre, en brouillon sur le cours 211 (8 créées, 9 refaites ; 1361, 1362, 1363 converties en articles). Vérifié sur Odoo 20 : JSON-2 avec vraie clé (curl, Python), XML-RPC déprécié, API des livreurs à portée de clé, CSRF, webhook signé et doublons avec un faux opérateur PayDem (fictif, outil dans `bloc4/faux_paydem.py`), rapprochement, droits par fiche vus dans Chromium, injection SQL, `neutralize`. Référence : 22 tests verts.
 
 ## Bloc 1 — reste à faire avant publication
 - Relecture par Babacar.

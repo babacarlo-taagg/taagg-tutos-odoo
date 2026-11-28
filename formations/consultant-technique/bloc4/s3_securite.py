@@ -46,7 +46,7 @@ access_baobab_etiquette_responsable,Étiquettes : responsable,baobab.etiquette,g
 
 LECONS = [
 # ---------------------------------------------------------------- 4.3.1
-dict(code="4.3.1", id=None, seq=31, minutes=10,
+dict(code="4.3.1", id=2946, seq=31, minutes=10,
 titre="Groupes d'utilisateurs",
 description="Créer les groupes « Livreur » et « Responsable » et les donner aux utilisateurs.",
 html=fiche(
@@ -147,7 +147,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 4.3.3
-dict(code="4.3.3", id=None, seq=33, minutes=10,
+dict(code="4.3.3", id=2947, seq=33, minutes=10,
 titre="Restreindre par fiche : un livreur ne voit que ses courses",
 description="Le domaine dans ir.access (Odoo 20) ou une règle ir.rule (Odoo 18-19) pour limiter les fiches visibles.",
 html=fiche(
@@ -198,7 +198,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 4.3.4
-dict(code="4.3.4", id=None, seq=34, minutes=10,
+dict(code="4.3.4", id=2949, seq=34, minutes=10,
 titre="Protéger un champ ou un bouton",
 description="groups=\"…\" sur les champs, les boutons et les menus : cacher le prix et la configuration aux livreurs.",
 html=fiche(

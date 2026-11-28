@@ -201,7 +201,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 4.2.3
-dict(code="4.2.3", id=None, seq=23, minutes=10,
+dict(code="4.2.3", id=2944, seq=23, minutes=10,
 titre="Échecs, doublons et rapprochement",
 description="Que faire quand la confirmation n'arrive jamais, quand l'opérateur ne répond pas ou envoie deux fois le même avis.",
 html=fiche(
