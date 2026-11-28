@@ -301,6 +301,16 @@ les phrases concernées ont été régénérées (et une reformulée, CT1-26 ét
 Fichiers vidéo : `sortie/` (hors Git, trop lourds) — à ranger sur Drive puis à placer sur les fiches.
 Commande pour une version finale : `node tuto.mjs formations/consultant-technique/videos/<scénario>.yaml`.
 
+## Vidéos du Bloc 2 (mode terminal de tuto.mjs)
+
+| Leçon | Scénario | État |
+|---|---|---|
+| 2.1.3 Créer le module et l'installer (2716) | `videos/CT2-13-creer-module.yaml` | 🔇 image prête (1:27, voix muette) — voix de Babacar à poser |
+| 2.2.5 Chercher et modifier avec l'ORM (2718) | `videos/CT2-25-orm-shell.yaml` | 🔇 image prête (1:36, voix muette) — voix de Babacar à poser |
+
+Voix en attente (28/11/2026) : le compte ElevenLabs de l'environnement (clé et connecteur) est bloqué pour un paiement
+en retard. Dès qu'un compte qui porte la voix clonée fonctionne : `node tuto.mjs <scénario>` (voix ElevenLabs par défaut).
+
 ## Volume
 
 | Bloc | Leçons | dont à créer | Questions de quiz (3 par leçon) |
