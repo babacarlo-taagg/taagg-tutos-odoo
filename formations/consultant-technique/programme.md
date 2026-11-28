@@ -53,9 +53,13 @@ officielle (odoo.com/documentation, pages 19.0 et master) et dans le code Odoo 2
 | Vues | `<list>` et `<chatter/>` ; plus de `attrs` (`invisible="…"` directement) | idem | idem | page View architectures (master) |
 | Champs binaires | base64 | base64 | `BinaryValue` (Online 19.3, 20.0) | changelog ORM |
 | Python / PostgreSQL | — | Python ≥ 3.10, PostgreSQL ≥ 13 | Python ≥ 3.12, PostgreSQL ≥ 16 | page Installation depuis les sources (19.0 et master) |
+| Moteur PDF | wkhtmltopdf intégré à `base` | idem | modules `base_report_wkhtmltox` (auto, par défaut) et `base_report_paper_muncher` (option) ; paramètre `report.pdf_engine_default` | code Odoo 20 (vérifié 28/11/2026) |
+| Rapports | `report_file` | `report_file` | `report_file` n'existe plus (installation refusée) ; `t-esc`/`t-raw` n'affichent plus rien | essais Odoo 20 |
+| OWL | OWL 2 (`useState`, `static props`) | OWL 2 | **OWL 3.0.0-alpha.50** : `proxy`, `useProps`, `signal`, `this.` dans les modèles ; plus de `useState`/`useRef` | navigateur, Odoo 20 |
+| Portail | carte par héritage de `portal.portal_my_home` | idem | fiches `portal.entry` + `_prepare_portal_counter_values` | code Odoo 20 (module sale) |
+| Codes-barres (sources, Linux) | — | — | `pip install rl-renderPM==4.0.3` sinon `RenderPMError … rlPyCairo` | essai Odoo 20 |
 
-À vérifier au moment d'écrire les leçons concernées (pas encore lu) : moteur de rapports PDF en 20
-(« modularize reporting engines / paper-muncher », Online 19.4), OWL (version et syntaxe), Odoo.sh, image Docker officielle.
+À vérifier au moment d'écrire les leçons concernées : Odoo.sh, image Docker officielle (moteur PDF et OWL : vérifiés au Bloc 3).
 Règle : aucun code dans une fiche sans l'avoir fait tourner sur un Odoo 20 de test.
 
 ---
