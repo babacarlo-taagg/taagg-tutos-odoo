@@ -1,0 +1,161 @@
+# CPT-29 · La déclaration de TVA [E]
+# État de départ attendu (remis par `python3 formations/comptabilite/etat-depart.py CPT-29`) :
+#   déclarations fiscales configurées une fois le 28/11/2026 (date d'ouverture 01/11/2026, mensuel) : Odoo a créé lui-même
+#   « Taxe octobre 2026 », « Taxe novembre 2026 »… et refuse de les supprimer. Contrôles d'octobre remis comme au départ :
+#   « Données de l'entreprise » et « Pièces jointes factures » en Anomalie, les trois autres en Revu.
+# Choix de Babacar (28/11/2026) : on montre sans valider ni soumettre (base partagée : la soumission passerait l'écriture
+#   de TVA et verrouillerait octobre). Les montants du rapport d'octobre viennent en partie d'une autre session : on ne les cite pas.
+# Menus : Comptabilité › Déclarations fiscales ; dans la déclaration, bouton « Déclaration TVA (SN) » (rapport).
+titre: La déclaration de TVA
+sous_titre: Formation Comptabilité Odoo · CPT-29
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+  DGID: D G I D
+fin:
+  message: "Prochaine capsule : la balance et les grands livres"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans le dernier parcours : fiscalité, clôture et rapports. Chaque mois, l'entreprise déclare la TVA
+      : celle qu'elle a facturée à ses clients, moins celle qu'elle a payée à ses fournisseurs. La différence revient à l'État.
+    actions:
+      - attendre: 1
+  - texte: >
+      À la fin de cette capsule, vous saurez retrouver la déclaration du mois, faire les contrôles qu'Odoo propose, et lire
+      le rapport de TVA. Les déclarations fiscales font partie de la version Enterprise.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : les déclarations
+  - partie: "1. Les déclarations du mois"
+    texte: >
+      Ouvrez le menu Comptabilité, puis Déclarations fiscales. La première fois, Odoo demande la date de départ et la périodicité :
+      mensuelle, au Sénégal. Il prépare ensuite une déclaration pour chaque mois.
+    actions:
+      - ouvrir_menu: Comptabilité
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Déclarations fiscales")'
+      - attendre: 2
+  - texte: >
+      Voici celle d'octobre, avec sa date limite. Trois étapes : examiner, soumettre, puis payer.
+    actions:
+      - surligner_texte: Taxe octobre 2026
+        duree: 2
+      - surligner_texte: Examiner
+        duree: 1.5
+      - surligner_texte: Soumettre
+        duree: 1
+      - surligner_texte: Paiement
+        duree: 1
+
+  # ------------------------------------------------------------------ partie 2 : examiner
+  - partie: "2. Examiner : les contrôles"
+    texte: >
+      Ouvrez la déclaration. Odoo a déjà fait cinq contrôles. En vert, ce qui va bien : les écritures en brouillon, le rapprochement bancaire.
+    actions:
+      - cliquer_texte: Taxe octobre 2026
+      - attendre: 2
+      - surligner_texte: Écritures en brouillon
+        duree: 2
+  - texte: >
+      En rouge, deux anomalies. Il manque des données de la société, comme son numéro d'identification fiscale. Et une facture
+      n'a pas sa pièce jointe : en cas de contrôle, il faudra la montrer.
+    actions:
+      - surligner_texte: Données de l’entreprise
+        duree: 3
+      - surligner_texte: Pièces jointes factures
+        duree: 3
+  - texte: >
+      Une fois chaque anomalie corrigée, ou vérifiée, marquez-la Revu. Odoo garde la trace de qui a contrôlé quoi.
+    actions:
+      - cliquer: 'button:has-text("Anomalie") >> nth=0'
+      - cliquer: '.dropdown-item:has-text("Revu")'
+      - attendre: 1
+      - cliquer: 'button:has-text("Anomalie") >> nth=0'
+      - cliquer: '.dropdown-item:has-text("Revu")'
+      - attendre: 1.5
+  - texte: >
+      Tous les contrôles sont revus : le bouton Valider apparaît. Avant de valider, lisons le rapport de TVA.
+    actions:
+      - surligner: 'button:has-text("Valider")'
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 3 : le rapport
+  - partie: "3. Lire le rapport de TVA"
+    texte: >
+      Cliquez sur Déclaration TVA, SN.
+    actions:
+      - cliquer: 'button:has-text("Déclaration TVA (SN)")'
+      - attendre: 3
+  - sous_titres: haut
+    texte: >
+      En haut, les ventes du mois et la TVA facturée aux clients : c'est la TVA collectée.
+    actions:
+      - surligner_texte: Montant total des opérations
+        duree: 4
+  - sous_titres: haut
+    texte: >
+      Plus bas, la TVA payée sur les achats : la TVA déductible.
+    actions:
+      - surligner_texte: Déductible
+        duree: 3.5
+  - sous_titres: haut
+    texte: >
+      Et en bas, la différence : le solde à payer à l'État. Si les achats l'emportent, c'est un crédit de TVA, reporté sur le mois suivant.
+    actions:
+      - surligner_texte: Solde Total Exigible
+        duree: 3
+      - surligner_texte: Crédit de TVA à reporter
+        duree: 2.5
+
+  # ------------------------------------------------------------------ partie 4 : soumettre et payer
+  - partie: "4. Soumettre et payer"
+    texte: >
+      Revenez à la déclaration. Après Valider, l'étape Soumettre passe l'écriture de TVA à payer, et verrouille le mois :
+      plus personne ne peut modifier une facture déjà déclarée.
+    actions:
+      - cliquer: '.breadcrumb-item a:has-text("Déclaration TVA")'
+      - attendre: 2
+      - surligner_texte: Soumettre
+        duree: 3
+  - texte: >
+      Vous déposez ensuite la déclaration auprès de la DGID, et l'étape Paiement enregistre le règlement. Ici, nous nous arrêtons
+      avant de soumettre : la base de démonstration sert à d'autres capsules.
+    actions:
+      - surligner_texte: Paiement
+        duree: 3
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : marquer une anomalie Revu sans la corriger. Le contrôle est là pour vous protéger.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : oublier des factures en brouillon. Elles ne comptent pas dans la déclaration ; validez-les avant.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : déclarer en retard. La date limite est affichée sur chaque déclaration : les pénalités, elles, ne préviennent pas.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Chaque mois, Odoo prépare la déclaration de TVA. On examine les contrôles, on lit le rapport : TVA collectée,
+      moins TVA déductible, égale le solde à payer. Puis on valide, on soumet, et on paie.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : ouvrez la déclaration du mois dernier dans votre entreprise, et expliquez chacune de ses anomalies.
+      Dans la prochaine capsule, nous verrons la balance et les grands livres. À tout de suite !
+    actions:
+      - attendre: 1

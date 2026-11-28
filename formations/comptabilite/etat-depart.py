@@ -814,8 +814,27 @@ def cpt_28():
     return comptes, len(budgets)
 
 
+def cpt_29():
+    # les déclarations fiscales ont été configurées une fois (28/11/2026 : date d'ouverture 01/11/2026, périodicité mensuelle) ;
+    # Odoo crée alors lui-même les déclarations et refuse de les supprimer : la capsule part de là, sans refaire ce réglage.
+    # Elle ouvre « Taxe octobre 2026 », marque ses contrôles « Revu » et lit le rapport, sans valider ni soumettre (base partagée).
+    # Ici : on remet les contrôles d'octobre comme au départ (deux anomalies) et on vérifie que rien n'a été soumis.
+    fr = {'lang': 'fr_FR', 'allowed_company_ids': [SOCIETE]}
+    octobre = odoo('account.return', 'search', [['date_from', '=', '2026-10-01'], ['type_id.name', '=', 'Taxe']], context=fr)
+    if not octobre:
+        sys.exit("Déclaration « Taxe octobre 2026 » introuvable : configurer les périodes (carte Déclarations fiscales du tableau de bord)")
+    etat = odoo('account.return', 'read', octobre, ['state', 'closing_move_ids'], context=fr)[0]
+    if etat['closing_move_ids'] or etat['state'] != 'new':
+        sys.exit('La déclaration d\'octobre a été validée ou soumise : à défaire à la main avant de retourner CPT-29 : ' + str(etat))
+    anomalies = ('Données de l’entreprise', 'Pièces jointes factures')
+    for c in odoo('account.return.check', 'search_read', [['return_id', '=', octobre[0]]], fields=['name', 'result'], context=fr):
+        voulu = 'anomaly' if c['name'] in anomalies else 'reviewed'
+        if c['result'] != voulu:
+            odoo('account.return.check', 'write', [c['id']], {'result': voulu}, context=fr)
+    return odoo('account.return.check', 'search_read', [['return_id', '=', octobre[0]]], fields=['name', 'result'], context=fr)
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19, 'CPT-20': cpt_20, 'CPT-21': cpt_21, 'CPT-22': cpt_22, 'CPT-23': cpt_23, 'CPT-24': cpt_24, 'CPT-25': cpt_25, 'CPT-26': cpt_26, 'CPT-27': cpt_27, 'CPT-28': cpt_28}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19, 'CPT-20': cpt_20, 'CPT-21': cpt_21, 'CPT-22': cpt_22, 'CPT-23': cpt_23, 'CPT-24': cpt_24, 'CPT-25': cpt_25, 'CPT-26': cpt_26, 'CPT-27': cpt_27, 'CPT-28': cpt_28, 'CPT-29': cpt_29}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''
