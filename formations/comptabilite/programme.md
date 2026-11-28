@@ -67,7 +67,7 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 
 | Code | Capsule | Ce qu'on apprend | Écrans | État |
 |---|---|---|---|---|
-| CPT-29 | La déclaration de TVA **[E]** | rapport de taxes, clôture de la période de TVA, écriture de TVA à payer | Déclarations fiscales | ✎ 3:22 |
+| CPT-29 | La déclaration de TVA **[E]** | rapport de taxes, clôture de la période de TVA, écriture de TVA à payer | Déclarations fiscales | 🎙 3:17 |
 | CPT-30 | Balance et grands livres **[E]** | lire la balance, le grand livre général et partenaires, filtrer, exporter | Grands livres | ☐ |
 | CPT-31 | Les états financiers SYSCOHADA **[E]** | bilan, compte de résultat, flux de trésorerie, rapport Syscohada | Analyse › Syscohada, Comptes annuels | ☐ |
 | CPT-32 | Contrôles et révision **[E]** | audit du journal, contrôles, dossiers de travail, piste d'audit | Révision | ☐ |
@@ -197,3 +197,4 @@ Avancement : ☐ à écrire · ✎ brouillon OK · 🎙 voix OK · ✅ publiée
 - Leçons taagg-school.com CPT-23 à 28 (28 novembre 2026, brouillon, cours 238) : vidéos 2921 à 2926 (3 questions chacune, sans lien : vidéos pas encore sur le Drive), fiches 2927 à 2932. État du cours : CPT-01 à 12 en ligne ; vidéos CPT-13 à 22 en brouillon (attendent « publie » ; CPT-18 porte le lien de CPT-19) ; fiches CPT-19 à 22 en brouillon.
 - 28 novembre 2026 : publiés (sans prévenir les apprenants) les vidéos CPT-13 à 17 et 19 à 22 et les fiches CPT-19 à 22, liens Drive vérifiés. Restent en brouillon : vidéo CPT-18 (lien à corriger par Babacar) et toutes les leçons CPT-23 à 28 (vidéos pas encore sur le Drive).
 - **CPT-29** (28 novembre 2026) : brouillon muet, 3 min 22 s, 19 étapes. Odoo 19 : Comptabilité › Déclarations fiscales (account.return), étapes Examiner / Soumettre / Paiement, contrôles automatiques (Revu / Anomalie), bouton « Déclaration TVA (SN) » pour le rapport. Périodes configurées une fois le 28/11 (ouverture 01/11/2026, mensuel) : Odoo refuse de supprimer les déclarations qu'il crée, donc ce réglage reste et la capsule l'explique sans le refaire. Choix de Babacar : on montre sans valider ni soumettre (base partagée). etat-depart.py remet les deux anomalies d'octobre et nettoie l'historique de la déclaration ; montants d'octobre non cités (en partie issus d'une autre session).
+- **CPT-29** (28 novembre 2026) : version finale avec voix, 3 min 17 s, −16 LUFS ; « euh » régénérés (étapes 6, 7, 14, 18). Le tableau de bord montre maintenant deux journaux ajoutés par une autre session (« Orange Money Comptoir », « Wave Comptoir »).
