@@ -294,7 +294,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 3.3.4
-dict(code="3.3.4", id=None, seq=34, minutes=10,
+dict(code="3.3.4", id=2941, seq=34, minutes=10,
 titre="Le portail client",
 description="Le client connecté voit toutes ses courses dans « Mon compte », et seulement les siennes.",
 html=fiche(

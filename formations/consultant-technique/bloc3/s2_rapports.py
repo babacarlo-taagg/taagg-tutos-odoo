@@ -134,7 +134,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 3.2.2
-dict(code="3.2.2", id=None, seq=22, minutes=10,
+dict(code="3.2.2", id=2935, seq=22, minutes=10,
 titre="Premier rapport PDF : le bordereau de livraison",
 description="Créer le bordereau de livraison et l'imprimer depuis le menu Actions d'une course.",
 html=fiche(
@@ -235,7 +235,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 3.2.4
-dict(code="3.2.4", id=None, seq=24, minutes=10,
+dict(code="3.2.4", id=2937, seq=24, minutes=10,
 titre="Quand le PDF ne sort pas : pannes courantes",
 description="Diagnostiquer le moteur PDF d'Odoo 20 : wkhtmltopdf absent, PDF sans style, impression groupée, t-esc.",
 html=fiche(

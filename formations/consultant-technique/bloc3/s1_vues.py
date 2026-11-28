@@ -249,7 +249,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 3.1.2
-dict(code="3.1.2", id=None, seq=12, minutes=10,
+dict(code="3.1.2", id=2934, seq=12, minutes=10,
 titre="La vue liste",
 description="Lister les courses avec un total, des couleurs par statut et des colonnes facultatives.",
 html=fiche(
@@ -295,7 +295,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 3.1.3
-dict(code="3.1.3", id=None, seq=13, minutes=10,
+dict(code="3.1.3", id=2936, seq=13, minutes=10,
 titre="La vue recherche : filtres et regroupements",
 description="Créer les filtres « Courses du jour », « Mes courses », « À livrer » et les regroupements par zone.",
 html=fiche(
@@ -399,7 +399,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 3.1.5
-dict(code="3.1.5", id=None, seq=15, minutes=10,
+dict(code="3.1.5", id=2938, seq=15, minutes=10,
 titre="Champs dynamiques : invisible, readonly, required, widgets",
 description="Afficher, bloquer ou exiger un champ selon le statut, sans l'ancien attrs ; choisir le bon widget.",
 html=fiche(
@@ -501,7 +501,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 3.1.7
-dict(code="3.1.7", id=None, seq=17, minutes=10,
+dict(code="3.1.7", id=2939, seq=17, minutes=10,
 titre="Calendrier, pivot et graphique",
 description="Voir les courses par jour, et le chiffre d'affaires par zone et par statut.",
 html=fiche(
@@ -546,7 +546,7 @@ quiz=[
 ]),
 
 # ---------------------------------------------------------------- 3.1.8
-dict(code="3.1.8", id=None, seq=18, minutes=10,
+dict(code="3.1.8", id=2940, seq=18, minutes=10,
 titre="Hériter d'une vue avec xpath",
 description="Ajouter la case « Livreur Baobab » dans la fiche contact d'Odoo, sans toucher à sa vue.",
 html=fiche(

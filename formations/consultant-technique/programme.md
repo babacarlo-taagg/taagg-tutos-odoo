@@ -183,32 +183,32 @@ Objectif : des écrans clairs, un bordereau PDF et une page web « Suivre mon co
 ### « Les vues » (2736)
 | # | Leçon | Objectif | Fiche |
 |---|---|---|---|
-| 3.1.1 | La vue formulaire | Organiser la fiche course (groupes, onglets, en-tête) | ♻ 1358 🎥 |
-| 3.1.2 | La vue liste (`<list>`, ex-`<tree>`) | Lister les courses, totaux, couleurs | ＋ |
-| 3.1.3 | La vue recherche : filtres et regroupements | « Mes courses du jour », regrouper par zone | ＋ |
-| 3.1.4 | Actions et menus | Créer le menu Baobab Livraison | ♻ 2738 |
-| 3.1.5 | Champs dynamiques : `invisible`, `readonly`, `required`, widgets | Remplacer l'ancien `attrs` | ＋ |
-| 3.1.6 | La vue kanban | Le tableau des courses par statut | ♻ 2737 🎥 |
-| 3.1.7 | Calendrier, pivot et graphique | Voir l'activité par jour et par zone | ＋ |
-| 3.1.8 | Hériter d'une vue avec `xpath` | Ajouter un champ dans la fiche contact | ＋ |
+| 3.1.1 | La vue formulaire | Organiser la fiche course (groupes, onglets, en-tête) | ✅ 1358 🎥 |
+| 3.1.2 | La vue liste (`<list>`, ex-`<tree>`) | Lister les courses, totaux, couleurs | ✅ 2934 |
+| 3.1.3 | La vue recherche : filtres et regroupements | « Mes courses du jour », regrouper par zone | ✅ 2936 |
+| 3.1.4 | Actions et menus | Créer le menu Baobab Livraison | ✅ 2738 |
+| 3.1.5 | Champs dynamiques : `invisible`, `readonly`, `required`, widgets | Remplacer l'ancien `attrs` | ✅ 2938 |
+| 3.1.6 | La vue kanban | Le tableau des courses par statut | ✅ 2737 🎥 |
+| 3.1.7 | Calendrier, pivot et graphique | Voir l'activité par jour et par zone | ✅ 2939 |
+| 3.1.8 | Hériter d'une vue avec `xpath` | Ajouter un champ dans la fiche contact | ✅ 2940 |
 
 ### « Les rapports » (2739)
 | # | Leçon | Objectif | Fiche |
 |---|---|---|---|
-| 3.2.1 | QWeb : la langue des modèles | `t-if`, `t-foreach`, `t-out`, `t-field` | ♻ 1359 |
-| 3.2.2 | Premier rapport PDF : le bordereau de livraison | Imprimer une course depuis le bouton Imprimer | ＋ 🎥 |
-| 3.2.3 | Mise en page, logo, en-tête de la société, traductions | Un bordereau propre en français | ♻ 2740 |
-| 3.2.4 | Quand le PDF ne sort pas : pannes courantes | Diagnostiquer le moteur PDF (à vérifier en 20) | ＋ |
+| 3.2.1 | QWeb : la langue des modèles | `t-if`, `t-foreach`, `t-out`, `t-field` | ✅ 1359 |
+| 3.2.2 | Premier rapport PDF : le bordereau de livraison | Imprimer une course depuis le bouton Imprimer | ✅ 2935 🎥 |
+| 3.2.3 | Mise en page, logo, en-tête de la société, traductions | Un bordereau propre en français | ✅ 2740 |
+| 3.2.4 | Quand le PDF ne sort pas : pannes courantes | Diagnostiquer le moteur PDF d'Odoo 20 (pannes reproduites) | ✅ 2937 |
 
 ### « L'interface web » (2741)
 | # | Leçon | Objectif | Fiche |
 |---|---|---|---|
-| 3.3.1 | OWL : composant, modèle, état | Comprendre l'interface web d'Odoo | ♻ 1360 |
-| 3.3.2 | Un petit composant : le suivi d'une course | Afficher un compteur qui se met à jour | ♻ 2742 |
-| 3.3.3 | Une page du site : « Suivre mon colis » | Contrôleur + modèle QWeb public | ♻ 2743 🎥 |
-| 3.3.4 | Le portail client | Le client voit ses courses dans « Mon compte » | ＋ |
+| 3.3.1 | OWL : composant, modèle, état | Comprendre l'interface web d'Odoo | ✅ 1360 |
+| 3.3.2 | Un petit composant : le suivi d'une course | Afficher un compteur qui se met à jour | ✅ 2742 |
+| 3.3.3 | Une page du site : « Suivre mon colis » | Contrôleur + modèle QWeb public | ✅ 2743 🎥 |
+| 3.3.4 | Le portail client | Le client voit ses courses dans « Mon compte » | ✅ 2941 |
 
-### « Évaluation » (2744) : ♻ 2745 travail à rendre · ♻ 2746 quiz (20 questions existantes)
+### « Évaluation » (2744) : ✅ 2745 travail à rendre (filtres, code-barres, code de suivi secret + migration, widget ; corrigé testé, 17 tests verts, transmis hors dépôt) · ✅ 2746 quiz (20 questions relues : réponse `useState` remplacée par `proxy`, 1 commentaire ajouté)
 
 ## Bloc 4 — Intégrations et sécurité (cours 211)
 
@@ -345,6 +345,7 @@ en retard. Dès qu'un compte qui porte la voix clonée fonctionne : `node tuto.m
   gabarit : `outils/fiche.py`, identifiants : `outils/ids_bloc1.json`. Les 3 anciennes fiches « document » vides
   (1352, 1353, 1354) sont devenues des articles. ✅ = fiche rédigée (avec son identifiant sur le site).
 - 27/11/2026 — Bloc 2 rédigé : 26 fiches + travail à rendre, en brouillon sur le cours 209 (10 fiches créées, 17 refaites ; les anciennes fiches « document » 1355, 1356, 1357 converties en articles). Tout le code vérifié sur Odoo 20 (module de référence : 8 tests verts ; module pont ventes : 2 tests verts ; état intermédiaire de la leçon 2.3.1 installé). Ordre corrigé : chatter (2.3.3) avant l'action planifiée (2.3.4).
+- 28/11/2026 — Bloc 3 rédigé : 16 fiches + travail à rendre, en brouillon sur le cours 210 (8 créées, 9 refaites ; 1358, 1359, 1360 converties en articles). Modules de référence vérifiés sur Odoo 20 dans Chromium (vues, filtres, glisser-déposer kanban, widget OWL 3, PDF, site, portail) : 12 tests verts. Découvertes Odoo 20 : `report_file` supprimé, `t-esc` muet, OWL 3 sans `useState`, `portal.entry`, panne des codes-barres (rl-renderPM).
 
 ## Bloc 1 — reste à faire avant publication
 - Relecture par Babacar.
