@@ -18,4 +18,4 @@ Formation Point de Vente Odoo — TAAGG School : https://www.taagg-school.com
 2:37 Les pièges à éviter
 3:03 Récapitulatif
 
-**Leçon taagg-school :** cours 236, section « 1. Point de Vente (POS) » — leçon vidéo en brouillon, lien Drive à coller.
+**Leçon taagg-school :** cours 236, section « 1. Point de Vente (POS) » — leçon 2933, publiée le 28/11 (3 questions de quiz).
