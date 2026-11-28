@@ -7,6 +7,7 @@ BLOCS = {
     "1": ("bloc1", 208, ["s0_python_bases", "s1_linux", "s2_python_odoo", "s3_bases_de_donnees", "s4_git_environnement", "s5_evaluation"]),
     "2": ("bloc2", 209, ["s1_module", "s2_orm", "s3_logique", "s4_heritage", "s5_donnees", "s6_tests", "s7_evaluation"]),
     "3": ("bloc3", 210, ["s1_vues", "s2_rapports", "s3_web", "s4_evaluation"]),
+    "4": ("bloc4", 211, ["s1_api", "s2_paiement", "s3_securite", "s4_evaluation"]),
 }
 def lecons(bloc):
     dossier, canal, mods = BLOCS[bloc]
