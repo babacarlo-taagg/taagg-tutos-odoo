@@ -1,0 +1,171 @@
+# POS-02 · Préparer les produits pour la caisse
+# État de départ (`python3 formations/pos/etat-depart.py POS-02 --oui`) : la caisse « Comptoir Médina » de POS-01 ;
+#   les catégories de caisse « Pâtisseries » et « Snacks » ; 6 produits préparés par l'API (taxe « 18% TTC ») :
+#   Part de fraisier, Part d'opéra, Croissant du comptoir, Beignet, Thiakry (pot) disponibles en caisse, et
+#   « Fataya » NON disponible en caisse (l'oubli corrigé à l'écran). Aucun produit existant de la base n'est touché.
+# Ce que la capsule crée : la catégorie « Boissons », le produit « Jus de bissap 33 cl » ; « Fataya » devient
+#   disponible en caisse.
+titre: "Préparer les produits pour la caisse"
+sous_titre: Formation Point de Vente Odoo · POS-02
+depart: /odoo/point-of-sale
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  TAAGG: Tag
+  TTC: té té cé
+  Thiakry: tiakri
+  Fataya: fataya
+fin:
+  message: "Prochaine capsule : une matinée de caisse"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ introduction
+  - chapitre: Introduction
+    texte: >
+      Bonjour. La caisse du comptoir Médina est créée. Mais une caisse sans produits bien préparés, c'est une vendeuse
+      qui cherche, un client qui attend, et une TVA fausse.
+    actions:
+      - attendre: 1
+  - texte: >
+      Aujourd'hui, nous préparons les produits du comptoir : des catégories pour les trouver vite, le bon prix
+      toutes taxes comprises, et la case qu'on oublie toujours.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : les catégories
+  - partie: "1. Des catégories pour trouver vite"
+    texte: >
+      Dans Configuration, Catégories de produits du point de vente. Pâtisseries et Snacks existent déjà.
+      Ajoutons Boissons.
+    actions:
+      - ouvrir_menu: Configuration
+      - attendre: 0.8
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("Catégories de produits du PdV")'
+      - attendre: 1.5
+      - surligner: '.o_list_renderer'
+        duree: 2
+      - bouton: Nouveau
+      - attendre: 1
+      - champ: name
+        taper: Boissons
+      - enregistrer: oui
+      - attendre: 0.8
+  - texte: >
+      Trois à six catégories suffisent : ce sont les gros boutons que la vendeuse touchera toute la journée.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 2 : un produit
+  - partie: "2. Créer un produit pour la caisse"
+    texte: "Menu Produits, puis Nouveau. Le jus de bissap, en bouteille de trente-trois centilitres."
+    actions:
+      - ouvrir_menu: Produits
+      - attendre: 0.8
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Produits")'
+      - attendre: 1.5
+      - bouton: Nouveau
+      - attendre: 1.5
+      - champ: name
+        taper: Jus de bissap 33 cl
+  - texte: >
+      Créé depuis le Point de Vente, le produit a déjà la case Point de Vente cochée. Gardez-la en tête :
+      nous allons y revenir.
+    actions:
+      - surligner_champ: available_in_pos
+        duree: 2.5
+  - texte: >
+      Le prix : cinq cents francs, le prix que paie le client. La taxe proposée est dix-huit pour cent hors taxe :
+      remplacez-la par dix-huit pour cent TTC. Odoo calculera la TVA à l'intérieur des cinq cents francs.
+    actions:
+      - champ: list_price
+        taper: "500"
+      - cliquer: '.o_field_widget[name="taxes_id"] .o_tag .o_delete'
+      - attendre: 0.5
+      - choisir: {champ: taxes_id, valeur: 18% TTC}
+      - attendre: 0.5
+      - surligner_champ: taxes_id
+        duree: 2
+  - texte: >
+      Les bouteilles se comptent : cochez Suivre l'inventaire. Chaque vente fera baisser le stock. Pour un gâteau
+      fait maison, on peut s'en passer.
+    actions:
+      - cocher: is_storable
+      - attendre: 0.8
+  - texte: "Dans l'onglet Point de Vente, la catégorie : Boissons. Enregistrez."
+    actions:
+      - onglet: Point de Vente
+      - attendre: 0.5
+      - choisir: {champ: pos_categ_ids, valeur: Boissons}
+      - attendre: 0.5
+      - enregistrer: oui
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 3 : l'oubli
+  - partie: "3. L'oubli le plus fréquent"
+    texte: >
+      Revenons à la liste des produits de la caisse. Il manque les fatayas ! Ils ont été créés depuis l'application
+      Ventes, où la case Point de Vente n'est pas cochée d'office.
+    actions:
+      - ouvrir_menu: Produits
+      - attendre: 0.8
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Produits")'
+      - attendre: 1.5
+      - surligner: '.o_kanban_renderer'
+        duree: 3
+  - texte: "Retirez le filtre, cherchez Fataya, et ouvrez la fiche."
+    actions:
+      - cliquer: '.o_searchview_facet .o_facet_remove'
+      - attendre: 1
+      - rechercher: Fataya
+      - cliquer: '.o_kanban_record:has-text("Fataya")'
+      - attendre: 1.5
+  - texte: "Cochez Point de Vente, et enregistrez. Le produit apparaît maintenant à la caisse."
+    actions:
+      - cocher: available_in_pos
+      - attendre: 0.5
+      - surligner_champ: available_in_pos
+        duree: 1.5
+      - enregistrer: oui
+      - attendre: 1
+  - texte: >
+      Les sept produits du comptoir sont prêts, chacun dans sa catégorie, avec un prix toutes taxes comprises.
+    actions:
+      - ouvrir_menu: Produits
+      - attendre: 0.8
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Produits")'
+      - attendre: 1.5
+      - surligner: '.o_kanban_renderer'
+        duree: 3
+
+  # ------------------------------------------------------------------ pièges
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : la case Point de Vente non cochée. « Mon produit n'apparaît pas
+      en caisse » : c'est presque toujours elle.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : garder la taxe hors taxe. Le ticket affiche alors cinq cent quatre-vingt-dix francs au lieu de
+      cinq cents, et le client conteste.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : trente catégories. La vendeuse se perd dans les boutons. Gardez-en peu, avec des noms
+      courts.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Quelques catégories de caisse ; pour chaque produit, la case Point de Vente, un prix toutes
+      taxes comprises avec la bonne taxe, et le suivi du stock seulement quand on compte les unités.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : créez le jus de bouye et le jus de gingembre, dans la catégorie Boissons. Dans la prochaine
+      capsule, nous ouvrons la caisse pour une matinée de ventes. À tout de suite !
+    actions:
+      - attendre: 1

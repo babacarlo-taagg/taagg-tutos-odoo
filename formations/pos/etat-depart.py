@@ -96,14 +96,56 @@ def preparer_pos01():
     return ', '.join(faits)
 
 
-CAPSULES = {'POS-01': pos_01}
+CATEGORIES_POS = ['Boissons', 'Pâtisseries', 'Snacks']  # « Boissons » est créée à l'écran (POS-02)
+TAXE_TTC = '18% TTC'  # taxe existante de la base, prix TTC
+# Produits préparés pour POS-02 : nom, prix TTC, catégorie de caisse, disponible en caisse.
+# « Fataya » est volontairement NON disponible en caisse : c'est l'oubli corrigé à l'écran.
+PRODUITS_POS02 = [('Part de fraisier', 1500, 'Pâtisseries', True), ("Part d'opéra", 1500, 'Pâtisseries', True),
+                  ('Croissant du comptoir', 350, 'Pâtisseries', True), ('Beignet', 250, 'Snacks', True),
+                  ('Thiakry (pot)', 750, 'Snacks', True), ('Fataya', 250, 'Snacks', False)]
+PRODUITS_ECRAN = ['Jus de bissap 33 cl']  # créés à l'écran
+
+
+def pos_02():
+    # POS-02 crée à l'écran la catégorie « Boissons » et le produit « Jus de bissap 33 cl », et rend « Fataya »
+    # disponible en caisse. État de départ : la caisse de POS-01 ; les 6 produits et 2 catégories préparés.
+    noms = [p[0] for p in PRODUITS_POS02] + PRODUITS_ECRAN
+    retirer('product.template', chercher('product.template', [['name', 'in', noms]]), 'produits du comptoir')
+    retirer('pos.category', chercher('pos.category', [['name', 'in', CATEGORIES_POS]]), 'catégories de caisse')
+    return preparer_pos02()
+
+
+def preparer_pos02():
+    if not (OUI or PREPARER):
+        return 'produits et catégories à préparer'
+    if not chercher('pos.config', [['name', '=', CAISSE]]):
+        return 'ATTENTION : la caisse « Comptoir Médina » manque (tourner POS-01 d\'abord)'
+    categ = {}
+    for nom in ['Pâtisseries', 'Snacks']:
+        ids = chercher('pos.category', [['name', '=', nom]])
+        categ[nom] = ids[0] if ids else odoo('pos.category', 'create', {'name': nom})
+    taxe = odoo('account.tax', 'search', [['name', '=', TAXE_TTC], ['type_tax_use', '=', 'sale']])
+    faits = 0
+    for nom, prix, cat, en_caisse in PRODUITS_POS02:
+        if chercher('product.template', [['name', '=', nom]]):
+            continue
+        pid = odoo('product.template', 'create', {'name': nom, 'list_price': prix, 'type': 'consu',
+                                                   'is_storable': False, 'taxes_id': [[6, 0, taxe]],
+                                                   'pos_categ_ids': [[6, 0, [categ[cat]]]]})
+        # Odoo coche « Point de Vente » dès qu'une catégorie de caisse est posée : on fixe la case après coup.
+        odoo('product.template', 'write', [pid], {'available_in_pos': en_caisse})
+        faits += 1
+    return f'{faits} produits créés, catégories Pâtisseries et Snacks prêtes'
+
+
+CAPSULES = {'POS-01': pos_01, 'POS-02': pos_02}
 
 if __name__ == '__main__':
     code = next((a for a in sys.argv[1:] if not a.startswith('--')), '')
     if code not in CAPSULES:
         sys.exit(f"Capsule inconnue : {code} (connues : {', '.join(CAPSULES)})")
     if PREPARER:
-        print(code, '— préparation (création seulement) :', preparer_pos01() if code == 'POS-01' else '')
+        print(code, '— préparation (création seulement) :', {'POS-01': preparer_pos01, 'POS-02': preparer_pos02}[code]())
         sys.exit(0)
     print(code, '— ' + ('remise à zéro' if OUI else "aperçu (rien n'est modifié ; ajouter --oui pour défaire)"))
     print(code, 'prête :', CAPSULES[code]())
