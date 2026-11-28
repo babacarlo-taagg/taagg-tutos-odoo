@@ -837,8 +837,18 @@ def cpt_29():
         odoo('mail.message', 'unlink', messages[1:])
     return odoo('account.return.check', 'search_read', [['return_id', '=', octobre[0]]], fields=['name', 'result'], context=fr)
 
+def cpt_30():
+    # balance et grands livres : la capsule ne fait que lire des rapports, rien à remettre en place
+    return 'rien à remettre (lecture seule)'
+
+
+def cpt_31():
+    # états financiers SYSCOHADA : la capsule ne fait que lire des rapports, rien à remettre en place
+    return 'rien à remettre (lecture seule)'
+
+
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
-            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19, 'CPT-20': cpt_20, 'CPT-21': cpt_21, 'CPT-22': cpt_22, 'CPT-23': cpt_23, 'CPT-24': cpt_24, 'CPT-25': cpt_25, 'CPT-26': cpt_26, 'CPT-27': cpt_27, 'CPT-28': cpt_28, 'CPT-29': cpt_29}
+            'CPT-08': cpt_08, 'CPT-09': cpt_09, 'CPT-10': cpt_10, 'CPT-11': cpt_11, 'CPT-12': cpt_12, 'CPT-13': cpt_13, 'CPT-14': cpt_14, 'CPT-15': cpt_15, 'CPT-16': cpt_16, 'CPT-17': cpt_17, 'CPT-18': cpt_18, 'CPT-19': cpt_19, 'CPT-20': cpt_20, 'CPT-21': cpt_21, 'CPT-22': cpt_22, 'CPT-23': cpt_23, 'CPT-24': cpt_24, 'CPT-25': cpt_25, 'CPT-26': cpt_26, 'CPT-27': cpt_27, 'CPT-28': cpt_28, 'CPT-29': cpt_29, 'CPT-30': cpt_30, 'CPT-31': cpt_31}
 
 if __name__ == '__main__':
     code = sys.argv[1] if len(sys.argv) > 1 else ''

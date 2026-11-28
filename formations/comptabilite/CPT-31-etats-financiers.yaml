@@ -1,0 +1,147 @@
+# CPT-31 · Les états financiers SYSCOHADA [E]
+# État de départ : rien à préparer (lecture seule).
+# Menus : Analyse › Bilan, Compte de résultat, Flux de trésorerie ; bouton « Rapport: … » › version « (SYSCOHADA) ».
+# La base est partagée (autres sessions) : la voix ne cite que nos propres exemples (le four : 3 000 000 F à la ligne AM),
+#   aucun total. Pas d'amortissement comptabilisé à ce jour (dotations datées du 31/12) : la colonne Amortissement est vide.
+titre: Les états financiers SYSCOHADA
+sous_titre: Formation Comptabilité Odoo · CPT-31
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+  OHADA: Oada
+  DSF: D S F
+fin:
+  message: "Prochaine capsule : contrôles et révision"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette trente et unième capsule. En fin d'exercice, l'entreprise présente ses états financiers :
+      le bilan, ce qu'elle possède et ce qu'elle doit, et le compte de résultat, ce qu'elle a gagné ou perdu.
+    actions:
+      - attendre: 1
+  - texte: >
+      Dans l'espace OHADA, ils suivent le modèle SYSCOHADA, ligne par ligne. Odoo les prépare tout seul, à partir des écritures.
+      Ces rapports font partie de la version Enterprise.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : le bilan
+  - partie: "1. Le bilan SYSCOHADA"
+    texte: >
+      Ouvrez le menu Analyse, puis Bilan. Par défaut, Odoo montre un bilan simplifié. Cliquez sur Rapport, et choisissez Bilan SYSCOHADA.
+    actions:
+      - ouvrir_menu: Analyse
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Bilan")'
+      - attendre: 3
+      - cliquer: '.o_control_panel button:has-text("Rapport:")'
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("SYSCOHADA")'
+      - attendre: 3
+  - texte: >
+      Voici le modèle officiel, avec ses codes : A pour l'actif immobilisé, B pour l'actif circulant et la trésorerie. Pour chaque ligne,
+      la valeur brute, les amortissements, et la valeur nette.
+    actions:
+      - surligner_texte: AI | IMMOBILISATIONS CORPORELLES
+        duree: 2.5
+      - surligner_texte: Amortissement
+        duree: 2
+  - texte: >
+      Le four acheté dans la capsule vingt-quatre est là, à la ligne AM : matériel, trois millions de francs. Ses amortissements
+      apparaîtront ici à chaque dotation.
+    actions:
+      - surligner_texte: AM | Matériel, mobilier et actifs biologiques
+        duree: 3.5
+  - texte: >
+      Plus bas, le passif : les capitaux propres, avec le résultat net de l'exercice, puis les dettes, comme celles envers les fournisseurs.
+    actions:
+      - defiler: 'text=CJ | Résultat net de l''exercice'
+      - surligner_texte: CJ | Résultat net de l'exercice
+        duree: 2.5
+      - surligner_texte: DJ | Fournisseurs d'exploitations
+        duree: 2
+
+  # ------------------------------------------------------------------ partie 2 : le compte de résultat
+  - partie: "2. Le compte de résultat SYSCOHADA"
+    texte: >
+      Ouvrez Analyse, puis Compte de résultat, et choisissez, de la même façon, la version SYSCOHADA.
+    actions:
+      - ouvrir_menu: Analyse
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Compte de résultat")'
+      - attendre: 3
+      - cliquer: '.o_control_panel button:has-text("Rapport:")'
+      - cliquer: '.o-dropdown--menu .dropdown-item:has-text("SYSCOHADA")'
+      - attendre: 3
+  - texte: >
+      Il se lit de haut en bas, par soldes successifs. Les ventes de marchandises, moins leurs achats, donnent la marge commerciale.
+      Puis le chiffre d'affaires.
+    actions:
+      - surligner_texte: TA | Ventes de marchandises
+        duree: 2
+      - surligner_texte: XA | MARGE COMMERCIALE
+        duree: 2.5
+      - surligner_texte: XB | CHIFFRE D'AFFAIRES
+        duree: 2.5
+  - texte: >
+      Viennent ensuite la valeur ajoutée, l'excédent brut d'exploitation, le résultat d'exploitation, le résultat financier,
+      et tout en bas, le résultat net.
+    actions:
+      - defiler: 'text=XI | RESULTAT NET'
+      - surligner_texte: XD | EXCEDENT BRUT D'EXPLOITATION
+        duree: 2
+      - surligner_texte: XE | RESULTAT D'EXPLOITATION
+        duree: 2
+      - surligner_texte: XI | RESULTAT NET
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 3 : flux et export
+  - partie: "3. Trésorerie et export"
+    texte: >
+      Le menu Analyse propose aussi le tableau des flux de trésorerie : d'où vient l'argent, et où il est allé.
+    actions:
+      - ouvrir_menu: Analyse
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Flux de trésorerie")'
+      - attendre: 3
+      - surligner: '.o_content table'
+        duree: 3
+  - texte: >
+      Chaque état s'exporte en PDF ou en Excel. Ce sont ces chiffres que l'expert-comptable reprend dans la déclaration statistique
+      et fiscale, la DSF.
+    actions:
+      - surligner: '.o_control_panel button:has-text("PDF")'
+        duree: 1.5
+      - surligner: '.o_control_panel button:has-text("XLSX")'
+        duree: 2
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : présenter le bilan simplifié d'Odoo. Pour l'espace OHADA, choisissez la version SYSCOHADA.
+    actions:
+      - attendre: 1
+  - texte: >
+      Deuxième piège : éditer les états avant d'avoir tout passé : amortissements, régularisations, constatés d'avance. Le résultat serait faux.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : un compte rangé à la mauvaise ligne. Si un montant semble mal placé, vérifiez le compte utilisé dans le grand livre.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. Dans Analyse, le bilan et le compte de résultat existent en version SYSCOHADA : les codes officiels, ligne par ligne,
+      calculés à partir des écritures. Avec le flux de trésorerie, ils s'exportent en PDF ou en Excel.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : éditez le compte de résultat SYSCOHADA de votre entreprise, et retrouvez votre chiffre d'affaires et votre résultat net.
+      Dans la prochaine capsule, nous verrons les contrôles et la révision. À tout de suite !
+    actions:
+      - attendre: 1

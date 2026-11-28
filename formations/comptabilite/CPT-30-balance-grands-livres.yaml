@@ -1,0 +1,143 @@
+# CPT-30 · Balance et grands livres [E]
+# État de départ : rien à préparer (lecture seule) ; les rapports montrent les opérations des capsules précédentes :
+#   caisse de CPT-20 (compte 571001), historique du traiteur (factures, avoir, paiements, lettrage).
+# Menus : Analyse › Balance comptable, Grand livre général, Grand livre partenaires.
+# La base est partagée (autres sessions) : la voix ne cite aucun total ; la période par défaut est le mois en cours
+#   (balance et grand livre) : tourner en novembre 2026, ou adapter le texte.
+titre: Balance et grands livres
+sous_titre: Formation Comptabilité Odoo · CPT-30
+depart: /odoo/accounting
+voix:
+  moteur: elevenlabs
+  vitesse: 1.0
+prononciation:
+  SYSCOHADA: Syscoada
+  TAAGG: Tag
+  XLSX: Excel
+fin:
+  message: "Prochaine capsule : les états financiers SYSCOHADA"
+  lien: taagg-gui.com
+
+etapes:
+  # ------------------------------------------------------------------ accroche
+  - chapitre: Introduction
+    texte: >
+      Bonjour et bienvenue dans cette trentième capsule. Toutes les écritures des capsules précédentes sont là. Mais comment
+      vérifier que tout est juste, et retrouver le détail d'un compte en quelques secondes ?
+    actions:
+      - attendre: 1
+  - texte: >
+      Trois rapports y répondent : la balance, le grand livre général, et le grand livre des partenaires. Ils font partie de la version Enterprise.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 1 : la balance
+  - partie: "1. La balance"
+    texte: >
+      Ouvrez le menu Analyse, puis Balance comptable. Chaque compte utilisé, sur une ligne : le solde au début de la période,
+      les débits et les crédits du mois, et le solde à la fin.
+    actions:
+      - ouvrir_menu: Analyse
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Balance comptable")'
+      - attendre: 3
+      - surligner_texte: Solde initial
+        duree: 1.5
+      - surligner_texte: Solde final
+        duree: 1.5
+  - texte: >
+      La période se choisit en haut : un mois, un trimestre, l'année.
+    actions:
+      - surligner: '.o_control_panel button:has(.fa-calendar)'
+        duree: 2.5
+  - texte: >
+      Descendez jusqu'en bas. Le total des débits est égal au total des crédits : c'est la première vérification d'une comptabilité saine.
+    actions:
+      - defiler: 3000
+      - surligner_texte: Total
+        duree: 4
+
+  # ------------------------------------------------------------------ partie 2 : le grand livre général
+  - partie: "2. Le grand livre général"
+    texte: >
+      Le grand livre donne le détail. Ouvrez Analyse, puis Grand livre général, et cliquez sur le compte de la caisse.
+    actions:
+      - ouvrir_menu: Analyse
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Grand livre général")'
+      - attendre: 3
+      - cliquer_texte: 571001 Caisse boutique
+      - attendre: 2
+  - texte: >
+      Voici chaque mouvement de la caisse, dans l'ordre : les ventes au comptoir, l'encaissement des Almadies, le gaz, le versement
+      à la banque, l'écart de caisse. Et à droite, le solde, ligne après ligne.
+    actions:
+      - surligner_texte: VENTES COMPTOIR DU 1er AU 4 NOVEMBRE
+        duree: 2
+      - surligner_texte: ACHAT BONBONNE DE GAZ
+        duree: 2
+      - surligner_texte: ECART DE CAISSE
+        duree: 2.5
+  - texte: >
+      Un clic sur une ligne ouvre la pièce d'origine. Au moindre doute, on remonte ainsi jusqu'à la facture ou au relevé.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ partie 3 : le grand livre partenaires
+  - partie: "3. Le grand livre des partenaires"
+    texte: >
+      Pour un client ou un fournisseur, ouvrez Analyse, puis Grand livre partenaires. Un partenaire par ligne, avec ce qu'il doit, ou ce qu'on lui doit.
+    actions:
+      - ouvrir_menu: Analyse
+      - cliquer: '.o-dropdown--menu .dropdown-item:text-is("Grand livre partenaires")'
+      - attendre: 3
+      - surligner: '.o_content table'
+        duree: 2.5
+  - texte: >
+      Ouvrez le traiteur. Toute son histoire de l'année : les factures, l'avoir, les paiements, et la colonne Lettrage, qui relie
+      chaque facture à son règlement. Son solde est à zéro : il ne doit plus rien.
+    actions:
+      - cliquer_texte: Traiteur Saveurs du Plateau
+      - attendre: 2
+      - surligner_texte: Lettrage
+        duree: 2.5
+      - surligner_texte: Traiteur Saveurs du Plateau
+        duree: 3
+
+  # ------------------------------------------------------------------ partie 4 : exporter
+  - partie: "4. Exporter"
+    texte: >
+      Chaque rapport s'exporte en PDF, ou en Excel, pour votre expert-comptable ou pour un contrôle.
+    actions:
+      - surligner: '.o_control_panel button:has-text("PDF")'
+        duree: 1.5
+      - surligner: '.o_control_panel button:has-text("XLSX")'
+        duree: 2
+
+  # ------------------------------------------------------------------ pièges fréquents
+  - partie: "Les pièges à éviter"
+    texte: >
+      Trois pièges fréquents. Premier piège : ignorer le bandeau bleu. Il signale des pièces encore en brouillon : elles ne comptent pas dans les rapports.
+    actions:
+      - surligner_texte: des pièces non comptabilisées
+        duree: 2.5
+  - texte: >
+      Deuxième piège : lire un rapport sur la mauvaise période. Vérifiez toujours les dates, en haut, avant de conclure.
+    actions:
+      - attendre: 1
+  - texte: >
+      Troisième piège : laisser passer un solde anormal. Une caisse négative, un client qui vous doit de l'argent en négatif :
+      c'est le signe d'une erreur de saisie.
+    actions:
+      - attendre: 1
+
+  # ------------------------------------------------------------------ récapitulatif et exercice
+  - chapitre: Récapitulatif
+    texte: >
+      Récapitulons. La balance vérifie que tout est équilibré. Le grand livre général détaille chaque compte, et le grand livre
+      des partenaires, chaque client et chaque fournisseur. Tous s'exportent en PDF ou en Excel.
+    actions:
+      - attendre: 0.5
+  - texte: >
+      Votre exercice : éditez la balance du mois dans votre entreprise, et expliquez le solde de votre caisse à l'aide du grand livre.
+      Dans la prochaine capsule, nous verrons les états financiers SYSCOHADA. À tout de suite !
+    actions:
+      - attendre: 1
