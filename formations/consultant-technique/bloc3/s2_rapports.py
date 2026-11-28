@@ -139,7 +139,7 @@ titre="Premier rapport PDF : le bordereau de livraison",
 description="Créer le bordereau de livraison et l'imprimer depuis le menu Actions d'une course.",
 html=fiche(
 objectif="créer le bordereau de livraison d'une course et l'imprimer en PDF depuis Odoo.",
-intro="Le livreur part avec un bordereau papier : référence, client, zone, poids, prix, et deux cases pour les signatures. Un rapport Odoo, c'est deux choses : une <b>action</b> (le menu Imprimer) et un <b>modèle QWeb</b> (le contenu).",
+intro="Le livreur part avec un bordereau papier : référence, client, zone, poids, prix, et deux cases pour les signatures. Un rapport Odoo, c'est deux choses : une <b>action</b> (l'entrée du menu Actions) et un <b>modèle QWeb</b> (le contenu).",
 corps=[
 ("code", RAPPORT, "report/baobab_course_report.xml (à ajouter dans data du manifeste)"),
 ("h", "L'action ir.actions.report"),
