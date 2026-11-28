@@ -831,6 +831,10 @@ def cpt_29():
         voulu = 'anomaly' if c['name'] in anomalies else 'reviewed'
         if c['result'] != voulu:
             odoo('account.return.check', 'write', [c['id']], {'result': voulu}, context=fr)
+    # historique (à droite) : on ne garde que « Déclaration comptable créé », pas les changements de statut des tournages
+    messages = odoo('mail.message', 'search', [['model', '=', 'account.return'], ['res_id', '=', octobre[0]]], order='id asc')
+    if len(messages) > 1:
+        odoo('mail.message', 'unlink', messages[1:])
     return odoo('account.return.check', 'search_read', [['return_id', '=', octobre[0]]], fields=['name', 'result'], context=fr)
 
 CAPSULES = {'CPT-02': cpt_02, 'CPT-03': cpt_03, 'CPT-04': cpt_04, 'CPT-05': cpt_05, 'CPT-06': cpt_06, 'CPT-07': cpt_07,
